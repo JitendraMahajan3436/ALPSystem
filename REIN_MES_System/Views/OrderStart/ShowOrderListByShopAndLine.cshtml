@@ -1,0 +1,242 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper;
+
+
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+
+    int plantId = ((FDSession)this.Session["FDSession"]).plantId;
+    int shopId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).shopId);
+    var orderCount = 0;
+    var cnt = 0;
+
+    RS_Partgroup partGroup = ViewBag.PartGroup;
+    string orderCounts = Convert.ToString(ViewBag.allordercount);
+    string totalordercount = Convert.ToString(ViewBag.totalordercount);
+
+    if (ViewBag.allordercount > 0)
+    {
+        <div id="showMainCount" hidden>
+            <b>Main Count<br />&nbsp;@orderCounts</b>
+        </div>
+    }
+    if (ViewBag.totalordercount > 0)
+    {
+        <div id="showTotalCount" hidden>
+            <b>/Total Count<br />&nbsp;@totalordercount</b>
+        </div>
+    }
+    //string orderCounts = Convert.ToString(ViewBag.allordercount);
+
+}
+<input type="hidden" id="MainCountTemp" value=@ViewBag.allordercount />
+<input type="hidden" id="TotalCountTemp" value=@ViewBag.totalordercount />
+
+<table class="table table-bordered table-striped order-start-tbl">
+
+    <tbody>
+        @if (Model != null)
+        {
+            string partno = "";
+            int r = 180;
+            int g = 190;
+            int b = 255;
+            Random rnd = new Random();
+
+            foreach (var item in Model)
+            {
+                if (!partno.Equals(item.partno, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    r = rnd.Next(40, 225);
+                    g = rnd.Next(40, 225);
+                    b = rnd.Next(40, 225);
+                }
+                partno = item.partno;
+
+                if (item.Order_Type.Trim() == "Trial")
+                {
+                    <tr style="background:rgba(255, 26, 26, 0.98)">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Order_No)
+                        </td>
+                        @{
+                            var biwPartNo = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.BIW_Part_No).FirstOrDefault();
+                            if (biwPartNo != null)
+                            {
+                                <td>
+                                    @biwPartNo
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.partno)
+                            </td>*@
+
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+                            </td>*@
+                        @{
+                            var colorCode = item.Model_Color;
+                            var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                            <td>
+                                @colorName
+                            </td>
+                        }
+                        <td>@{ @item.Order_Type}<</td>
+                        <td></td>
+                        <td></td>
+                        <td>s</td>
+                        <td></td>
+                        <td>
+                            @{
+                                if (cnt == 0)
+                                {
+                                    <input type="hidden" id="hdnIsKitting" name="IsKitting" value="@TempData[" Is_Kitting"]" />
+                                    <a class="start_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-order-type="@item.Order_Type">Order Start</a>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (cnt == 0)
+                                {
+                                    @*if (partGroup.Order_Create == true)
+                                   // {
+                                     //   <a class="hold_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-order-type="@item.Order_Type">Hold Order</a>
+                                    }*@
+                                    cnt = cnt + 1;
+                                }
+                            }
+                        </td>
+
+                    </tr>
+                                }
+                                else
+                                {
+                                    <tr style="background:rgba(@r,@g,@b,0.5)">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Order_No)
+                                        </td>
+                                        @{
+                                            var biwPartNo = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.Model_Code).FirstOrDefault();
+                                            if (biwPartNo != null)
+                                            {
+                                                <td>
+                                                    @biwPartNo
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+                                        }
+                                        @*<td>
+                                            @Html.DisplayFor(modelItem => item.partno)
+                                        </td>*@
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+                                            </td>*@
+                                        @*<td>
+                                        </td>*@
+                                        @{
+                                            var colorCode = item.Model_Color;
+                                            var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                                            <td>
+                                                @colorName
+                                            </td>
+                                        }
+                                        <td>@{ @item.Order_Type}</td>
+                                        @*<td></td>*@
+                                        @{
+                                            var autoRemark = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.Auto_Remarks).FirstOrDefault();
+                                            if (autoRemark != null)
+                                            {
+                                                //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                                                <td>
+                                                    @autoRemark
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                            }
+                                        }
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                        <td>
+                                            @{
+                                                if (cnt == 0)
+                                                {
+                                                    <input type="hidden" id="hdnIsKitting" name="IsKitting" value="@TempData[" Is_Kitting"]" />
+                                                    <a class="start_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-order-type="@item.Order_Type">Order Start</a>
+                                                    cnt = cnt + 1;
+                                                }
+                                            }
+                                        </td>
+                                        @*<td>*@
+                                            @{
+                                                //if (cnt == 0)
+                                                //{
+                                                    @*if (partGroup.Order_Create == true)
+                                                    {
+                                                        <a class="hold_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-order-type="@item.Order_Type">Hold Order</a>
+                                                    }*@
+                                                    
+                                                }
+                                            @*}
+                                        </td>*@
+                                        
+                                      
+                                    </tr>
+                                                        }
+
+                                                    }
+                                                }
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Release Order</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" id="releasedOrdersBody">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        var mainCount = document.getElementById("MainCountTemp").value;
+        var totalCount = document.getElementById("TotalCountTemp").value;
+        if (mainCount > 0) {
+            document.getElementById("MainCount").innerHTML = document.getElementById("showMainCount").innerHTML
+        }
+        else {
+            document.getElementById("MainCount").innerHTML = "<input type='hidden' id='MainCount' />";
+        }
+        if (totalCount > 0) {
+            document.getElementById("TotalCount").innerHTML = document.getElementById("showTotalCount").innerHTML
+        }
+        else {
+            document.getElementById("TotalCount").innerHTML = "<input type='hidden' id='TotalCount' />";
+        }
+    })
+</script>

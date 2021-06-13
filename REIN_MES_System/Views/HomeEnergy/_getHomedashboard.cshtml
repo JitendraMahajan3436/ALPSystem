@@ -1,0 +1,121 @@
+﻿@model IEnumerable<REIN_MES_System.Models.ShopWiseConsumption1>
+<br />
+@*<div class="col-md-4 col-md-offset-4">
+
+
+        <div class="panel">
+            <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                <h style="color:white;font-size:15px"><b>Yesterday's Data </b> </h>
+            </div>
+        </div>
+    </div>*@
+<div class="row" style="margin-left:2%;margin-right:2%">
+    <div class="col-md-12">
+      
+            <div class="col-md-offset-2 col-sm-offset-2 col-lg-offset-2 col-md-4 col-sm-4 col-lg-4">
+                 @*<div class="col-sm-5 col-lg-5 col-md-offset-4 col-sm-offset-4 col-sm-offset-4" style="margin-left: 61%;">*@
+                        <div class="panel" style="padding-bottom:0px">
+                            <div class="panel-heading" style="background-color:darkcyan; text-align:left;">
+                                @*<h style="color:white;font-size:15px"><b>@ViewBag.PlantName</b> </h><br />*@
+                                <label style="text-align:left;color:white;">Plant Total: </label> <h style="color:white;"><b>@ViewBag.PlantToatal @ViewBag.Tag</b></h>
+                              </div>
+                         </div>
+                    </div>
+            
+         
+       
+        @*<div class="col-sm-5 col-lg-5 col-md-offset-4 col-sm-offset-4 col-sm-offset-4">*@
+       
+            <div class="col-md-3 col-sm-3 col-lg-3">
+              
+                  
+                <a href="~/EnergyDashbord/Index">
+                    <div class="panel" style="padding-bottom:0px">
+                        <div class="panel-heading" style="background-color:darkcyan; text-align:center">
+                          
+                       
+                            <label style="text-align:center;color:white;">Graph at a Glance </label> 
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+       
+    </div>
+
+   
+    <div class="row">
+    @*<div class="col-md-12 col-sm-12 col-lg-12" style="overflow-y:auto; margin-top: 25px">*@
+
+    @foreach (var item in Model.GroupBy(c => c.ShopsCat_ID))
+    {
+        foreach (var data in item.Distinct())
+        {
+
+
+            <div class="col-md-3 col-sm-3 col-lg-3">
+
+                <div class="panel" style="border:1px solid darkcyan">
+
+                    <div class="panel-heading" style="background-color:darkcyan;text-align:left; padding-bottom:0px">
+                        <p style="color:white">
+                            <b>@data.ShopsCategory_Name :</b>
+                            <b> @data.totalconsumption @ViewBag.Tag</b>
+                        </p>
+                    </div>
+                    <div class="table-responsive" style="height:140px">
+                        <table class="table  table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Shop Name
+                                    </th>
+                                    <th>
+                                        @ViewBag.Tag
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item1 in ViewData["ShopwiseData"] as IList<REIN_MES_System.Models.ShopWiseConsumption1>)
+                                {
+                                    if (data.ShopsCat_ID == item1.ShopsCat_ID)
+                                    {
+                                        <tr>
+                                            @*<td class="boxshadow" onclick="realtime(@item1.ShopId)">*@
+                                            <td>
+
+                                                @*@item1.ShopName*@
+                                                <button class="boxshadow" onclick="realtime(@item1.ShopId)" value="@item1.ShopName">@item1.ShopName</button>
+
+                                            </td>
+                                            <td>
+                                                @item1.totalconsumption
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    }
+
+
+
+    </div>
+</div>
+<script type="text/javascript">
+    function realtime(shopId) {
+     
+        var path = "/RealTimeParameter/Index?Shop_ID=" + shopId;
+        window.location.href = path;
+    }
+
+
+</script>

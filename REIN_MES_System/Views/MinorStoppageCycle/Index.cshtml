@@ -1,0 +1,488 @@
+﻿@model REIN_MES_System.Models.MM_MT_MinorStoppageCycle
+@using REIN_MES_System.App_LocalResources;
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-4">
+
+            @Html.Label("Shop_ID", "Shop Name", htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+            @Html.DropDownList("Shop_ID", (SelectList)ViewBag.Shop_ID, "Select Shop", new { @class = "form-control" })
+            @Html.ValidationMessage("Shop_ID")
+        </div>
+
+        <div class="col-md-4">
+
+            @Html.Label("Line_ID", "Line Name", htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+            @Html.DropDownList("Line_ID", (SelectList)ViewBag.Line_ID, "Select Line ", new { @class = "form-control" })
+            @Html.ValidationMessage("Line_ID")
+
+        </div>
+
+        <div class="col-md-4" id="LineIDBox">
+            @Html.Label("Machine_ID", "Machine Name", htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+            @Html.DropDownList("Machine_ID", Enumerable.Empty<SelectListItem>(), "Select Machine", new { @class = "form-control" })
+            @Html.ValidationMessage("Machine_ID")
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.Label("Data_Retention_Period", "Data Retention Period (In Months)", htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Data_Retention_Period, new { @class = "form-control" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-5">
+            <div class="box box-primary" id="machineCycleBox">
+                <div class="box-header bg-aqua-active">
+                    <h3 class="box-title">Machine Cycle</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body" id="sortableCycle">
+
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info btn-flat" type="button" id="add-cycle"><i class="fa fa-plus"></i> Add Cycle</button>
+                        </span>
+                    </div><br />
+                    <div><button class="btn btn-primary" id="saveCycle">Save Cycle</button></div>
+                    @*<input type="text" name="newCycle" class="form-control" />
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add Cycle</button>
+                        </div>*@
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel">EDIT CYCLE FORM</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive" id="editCycleForm">
+                <div class="col-md-10 col-md-offset-2">
+                    @Html.Hidden("MS_CycleStep_ID", "")
+                    @Html.Label("CycleStep_Name", "Cycle Name *", htmlAttributes: new { @class = "control-label" })
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                @Html.TextBox("CycleStep_Name", String.Empty, htmlAttributes: new { @class = "form-control" })
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary btn-secondary btn-EditCycle" type="button">Save</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel">Delete CYCLE FORM</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive" id="deleteCycleForm">
+                <input type="hidden" name="cycleId" id="cycleId" value="" />
+                <div id="deleteCycle">
+
+                </div>
+                <div style="float:right">
+                    <button type="button" class="btn btn-success" onclick="DeleteStep()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/jquery_ui")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$("#Machine_ID").select2({
+            //   allowClear: true
+            //});
+            $("#machineCycleBox").hide();
+            //$('#Shop_ID').change(function () {
+            //    var shopid = $(this).val();
+            //    if (shopid.length > 0) {
+            //        $("#machineCycleBox").hide();
+            //        $.getJSON('/MinorStoppageCycle/getMachineList', { shopId: shopid }, function (data) {
+            //            // Ajax success callback function.
+            //            // Populate dropdown from Json data returned from server.
+            //            $('#Machine_ID option').remove();
+            //            $('#Machine_ID').append('<option value=""></option>');
+            //            for (i = 0; i < data.length; i++) {
+            //                $('#Machine_ID').append('<option value="' +
+            //                data[i].Machine_ID + '">' + data[i].Machine_Name + '</option>');
+            //            }
+            //            //$("#Machine_ID").select2({
+            //            //    allowClear: true
+            //            //});
+            //        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //            // Ajax fail callback function.
+            //            alert('Error getting Machines!');
+            //        });
+            //    }
+
+            //});
+
+            //$('#Shop_ID').change(function () {
+            //    debugger
+            //    var shopId = $("#Shop_ID").val();
+            //    if (shopId) {
+            //        var url = "/MinorStoppageCycle/getMachineList";
+            //        ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showMachineShopID, "json");
+
+            //    }
+            //    else {
+            //        // clear the line type and shop
+            //        clearSelectBox("Machine_ID");
+            //        $("#machineCycleBox").hide();
+            //    }
+            //});
+
+
+            $('#Shop_ID').change(function () {
+
+                clearSelectBox("Line_ID");
+                clearSelectBox("Machine_ID");
+                $("#Data_Retention_Period").val("");
+                $("#machineCycleBox").hide();
+
+                var shopId = $("#Shop_ID").val();
+                if (shopId) {
+
+                    var url = "/MinorStoppageCycle/getLineNameList";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showLineAgainstShopID, "json");
+
+                }
+                else {
+                    // clear the line type and shop
+                    clearSelectBox("Line_ID");
+                    clearSelectBox("Machine_ID");
+                    $("#machineCycleBox").hide();
+                }
+            });
+
+
+            $('#Line_ID').change(function () {
+
+                clearSelectBox("Machine_ID");
+                $("#Data_Retention_Period").val("");
+                $("#machineCycleBox").hide();
+                debugger
+                var lineId = $("#Line_ID").val();
+                if (lineId) {
+
+                    var url = "/MinorStoppageCycle/getMachineList";
+                    ajaxpack.getAjaxRequest(url, "lineId=" + $("#Line_ID").val() + "", showMachineShopID, "json");
+
+                }
+                else {
+                    // clear the line type and shop
+                    clearSelectBox("Machine_ID");
+                    $("#machineCycleBox").hide();
+                }
+            });
+
+
+
+            function showLineAgainstShopID() {
+                debugger
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) {
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Line_ID");
+                    }
+                }
+            }
+
+
+
+
+            function showMachineShopID() {
+                debugger
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) {
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Machine_ID");
+                    }
+                }
+            }
+
+
+
+            function SelectOptionHTML(jsonRes, targetId) {
+                var res = "";
+                for (var i = 0; i < jsonRes.length; i++) {
+                    res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+                }
+
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+                $("#" + targetId).html(res);
+            }
+
+            function clearSelectBox(targetId) {
+                var res = "";
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+                $("#" + targetId).html(res);
+            }
+
+
+
+            $('#Machine_ID').change(function () {
+                debugger
+                var machineid = $(this).val();
+                //$("#Data_Retention_Period").val("");
+                if (machineid.length > 0) {
+                    $("#machineCycleBox").show();
+                    $('#sortableCycle').html("");
+                    $.getJSON('/MinorStoppageCycle/getCycleList', { machineId: machineid }, function (data) {
+                        var htmlString = '<ul class="cycle-list todo-list ui-sortable">';
+
+                        for (i = 0; i < data.length; i++) {
+                            debugger
+                            $("#Data_Retention_Period").val(data[i].Data_Retention_Period);
+                            htmlString += '<li data-cycleid = "' + data[i].MS_CycleStep_ID + '">' +
+                                '<span class="handle">' +
+                                '<i class="fa fa-ellipsis-v"></i>' +
+                                '<i class="fa fa-ellipsis-v"></i>' +
+                                '<span class="text" title="' + data[i].MS_CycleStep_ID + '">' + data[i].CycleStep_Name + '</span>' +
+                                '</span><div class="tools">' +
+                                '<i class="fa fa-edit" data-toggle="modal" data-target="#myModal" data-cycleid = "' + data[i].MS_CycleStep_ID + '"></i>' +
+                                '<i class="fa fa-trash-o" data-toggle="modal" data-target="#deleteModal" data-cycleid = "' + data[i].MS_CycleStep_ID + '"></i>' +
+                                '</div>' +
+                                '</li>';
+                        }
+                        htmlString += '</ul>';
+                        $('#sortableCycle').html(htmlString);
+
+                        $('#sortableCycle .cycle-list').sortable({
+                            placeholder: "sort-highlight",
+                            handle: ".handle",
+                            forcePlaceholderSize: true,
+                            zIndex: 999999
+                        });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Cycle List!');
+                    });
+                } else {
+                    $("#machineCycleBox").hide();
+                }
+            });
+
+            $("#add-cycle").on('click', function () {
+                var machineid = $("#Machine_ID").val();
+                var lineid = $("#Line_ID").val();
+                var DataRetationPeriod = $("#Data_Retention_Period").val();
+                debugger;
+
+                var $this = $(this);
+                var cyclename = $this.parent().prev().val();
+                if (machineid.length > 0 && cyclename.length > 0) {
+                    $this.text("Loading ...");
+                    $.post('/MinorStoppageCycle/addCycle', { machineId: machineid, cycleName: cyclename, DataRetationPeriod: DataRetationPeriod }, function (data) {
+                        if (data == true) {
+                            $('#Machine_ID').change();
+                            $this.parent().prev().val("");
+                            $this.html('<i class="fa fa-check"></i> Add Cycle');
+                            $this.find('i').fadeIn(1000).delay(2000).fadeOut(1000);
+                        } else {
+                            $this.html('<i class="fa fa-times"></i> Add Cycle');
+                            $this.find('i').fadeIn(1000).delay(2000).fadeOut(1000);
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        $this.text("Add Cycle");
+                        // Ajax fail callback function.
+                        alert('Error adding Cycle !');
+                    });
+                }
+            });
+
+
+
+            //$('#sortableCycle').on('click', '.fa-trash-o', function () {
+            //    var $this = $(this);
+            //    var cyclename = $this.parent().prev().find('.text').text();
+            //    var cycleid = $this.data('cycleid');
+            //    if (cycleid > 0 && confirm("Are you sure you want to Delete Step : '" + cyclename + "' ?") == true) {
+            //        $.post('/MinorStoppageCycle/removeCycle', { cycleID: cycleid }, function (data) {
+            //            if (data == true) {
+            //                $('#Machine_ID').change();
+            //            }
+            //        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //            // Ajax fail callback function.
+            //            alert('Error removing Cycle !');
+            //        });
+            //    }
+            //});
+
+            $('#saveCycle').on('click', function () {
+                debugger
+                var newCycleList = new Array();
+                var machineID = $('#Machine_ID').val();
+                $("#sortableCycle .cycle-list").find("li").each(function () {
+                    newCycleList.push($(this).data('cycleid'));
+                });
+                var DataRetationPeriod = $("#Data_Retention_Period").val();
+                if (newCycleList.length > 0 && machineID.length > 0) {
+                    $.post('/MinorStoppageCycle/saveNewCycleList', $.param({ cycleList: newCycleList, DataRetationPeriod: DataRetationPeriod }, true), function (data) {
+                        $('.content-wrapper div.myalert').remove();
+                        if (data.status == true) {
+
+                            alertHtml = '<div class="box-body myalert">' +
+                                '<div class="alert alert-success alert-dismissable">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                '<h4><i class="icon fa fa-check"></i>Success</h4>' +
+                                '<p>' + data.message + '</p>' +
+                                '</div></div>';
+
+                            //clearSelectBox("Shop_ID");
+                            //clearSelectBox("Line_ID");
+                            //clearSelectBox("Machine_ID");
+                            //$("#Data_Retention_Period").val("");
+                            //$("#machineCycleBox").hide();
+
+                            //window.location.href = "MinorStoppageCycle/Index";
+
+                            //alertHtml =""
+                            location.reload();
+
+                        } else {
+                            alertHtml = '<div class="box-body myalert">' +
+                                '<div class="alert alert-warning alert-dismissable">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                                '<p>' + data.message + '</p>' +
+                                '</div></div>';
+                        }
+
+
+                        $('.content-wrapper .content').before(alertHtml);
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                    }).error(function (d, textStatus, errorThrown) {
+                        if (errorThrown == "forbidden") {
+                            location.reload();
+                        } else {
+                            $("#saveCycle").click();
+                        }
+                    });
+                }
+            });
+
+            $('.btn-EditCycle').on('click', function () {
+                thisBtn = $(this);
+                var cycleStepID = $("#MS_CycleStep_ID").val();
+                var cycleStepName = $("#CycleStep_Name").val();
+                if (cycleStepID.length > 0 && cycleStepName.length > 0) {
+                    thisBtn.html('<i class="fa fa-times fa-spin"></i> Save');
+                    $('.content-wrapper div.myalert').remove();
+                    $.post('/MinorStoppageCycle/editCycle', { cycleId: cycleStepID, cycleName: cycleStepName }, function (data) {
+                        if (data.status == true) {
+                            alertHtml = '<div class="box-body myalert">' +
+                                '<div class="alert alert-success alert-dismissable">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                '<h4><i class="icon fa fa-check"></i>Success</h4>' +
+                                '<p>' + data.message + '</p>' +
+                                '</div></div>';
+                        } else {
+                            alertHtml = '<div class="box-body myalert">' +
+                                '<div class="alert alert-warning alert-dismissable">' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                                '<p>' + data.message + '</p>' +
+                                '</div></div>';
+                        }
+                        $('#Machine_ID').change();
+                        $('#myModal').modal('hide');
+                        thisBtn.html('Save');
+                        $('.content-wrapper .content').before(alertHtml);
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                    }).error(function (d, textStatus, errorThrown) {
+                        if (errorThrown == "forbidden") {
+                            location.reload();
+                        } else {
+                            thisBtn.click();
+                        }
+                    });
+                }
+            });
+
+            $('#myModal').on('shown.bs.modal', function (e) {
+                var $this = $(e.relatedTarget);
+                var cyclename = $this.parent().prev().find('.text').text();
+                var cycleid = $this.data('cycleid');
+                $("#MS_CycleStep_ID").val(cycleid);
+                $("#CycleStep_Name").val(cyclename).focus();
+            });
+            $('#deleteModal').on('shown.bs.modal', function (e) {
+                var $this = $(e.relatedTarget);
+                var cyclename = $this.parent().prev().find('.text').text();
+                var cycleid = $this.data('cycleid');
+                $("#MS_CycleStep_ID").val(cycleid);
+                $("#CycleStep_Name").val(cyclename).focus();
+                var message = "Are you sure you want to Delete Step " + cyclename + " ?";
+                $("#deleteCycle").html(message);
+            });
+        });
+
+        function DeleteStep() {
+            var cycleid = $("#MS_CycleStep_ID").val();
+            $.post('/MinorStoppageCycle/removeCycle', { cycleID: cycleid }, function (data) {
+                if (data == true) {
+                    $('#Machine_ID').change();
+                    $("#deleteModal").modal("hide");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Error removing Cycle !');
+                var message = "Error removing Cycle !";
+                alertHtml = '<div class="box-body myalert">' +
+                    '<div class="alert alert-danger alert-dismissable">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i>Error</h4>' +
+                    '<p>' + message + '</p>' +
+                    '</div></div>';
+                $('.content-wrapper .content').before(alertHtml);
+            });
+        }
+    </script>
+}
+
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+    <link href="~/Content/theme/minorStoppages.css" rel="stylesheet" />
+}
+
+
+
+
+

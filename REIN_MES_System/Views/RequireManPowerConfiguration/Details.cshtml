@@ -1,0 +1,68 @@
+﻿@model REIN_MES_System.Models.RS_ManPower_Required
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<br />
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Plant Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Setup Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Setup.Setup_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Require Direct ManPower")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Direct_MP_Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Require InDirect ManPower")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Indirect_MP_Quantity)
+        </dd>
+
+    </dl>
+</div>
+<p>
+
+
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.MPR_ID }, new { @class = "btn btn-primary" })
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>
+

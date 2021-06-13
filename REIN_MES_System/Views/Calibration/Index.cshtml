@@ -1,0 +1,127 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Calibration>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Calibration")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+          
+            <th>
+                @Html.DisplayName("Shop Name")
+                    
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            <th>
+                @Html.DisplayName("Station Name")
+            </th>
+            <th>
+                @Html.DisplayName("Calibration Tool")
+            </th>
+            <th>
+                @Html.DisplayName("Calibration Description")
+            </th>
+            <th>
+                @Html.DisplayName("Scheduled Date")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Last_Maintenance_Date)
+                </th>*@
+            <th>
+                @Html.DisplayName("Cycle(Months)")
+            </th>
+            @*<th>
+                @Html.DisplayName("Receipent Email")
+            </th>*@
+            
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Calibration_Tool)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Calibration_Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Scheduled_Date)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Last_Maintenance_Date)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cycle_Period)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Receipent_Email)
+                </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Is_Deleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Transfered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Host)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Host)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee2.Employee_Name)
+                    </td>*@
+
+                <td>
+
+                    <a href="@Url.Action("Edit", "Calibration", new { id = item.C_Tool_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "Calibration", new { id = item.C_Tool_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "Calibration", new { id = item.C_Tool_ID })"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

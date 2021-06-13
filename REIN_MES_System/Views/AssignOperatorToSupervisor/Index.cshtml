@@ -1,0 +1,100 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Assign_OperatorToSupervisor>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssignedOperator_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Is_Deleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignedOperator_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Is_Deleted)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Is_Transfered)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Is_Purgeable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inserted_User_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inserted_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Updated_User_ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Updated_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OTS_ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OTS_ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OTS_ID })
+        </td>
+    </tr>
+}
+
+</table>

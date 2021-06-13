@@ -1,0 +1,23 @@
+﻿@model REIN_MES_System.Models.MM_MT_Parameter
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div class="col-md-12">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Parameter Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Parameter_Name)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Parameter_ID }, new { @class = "btn btn-primary" }) |
+    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+</p>

@@ -1,0 +1,1097 @@
+﻿@model REIN_MES_System.Models.RS_Route_Configurations
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    string ip_address = ViewBag.ip_address;
+    var lineCount = ViewBag.Setup1.Count;
+
+}
+
+
+
+<style>
+    .demo {
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    .messageflow_msg {
+        padding: .5em .5em .5em .5em;
+        height: 3em;
+        width: 300px !important;
+    }
+
+    #testy {
+        z-index: 99999;
+    }
+
+    /*.NoWrap {
+        font-weight: 600;
+        font-size:12px;
+        text-overflow: ellipsis;
+    }*/
+
+    .users-list > li {
+        width: 32%;
+        float: left;
+        padding: 10px;
+        text-align: left;
+    }
+</style>
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div id="dashboardIndex" class="form-horizontal route_configuration">
+
+        <div id="testy"></div>
+        <div class="box-body">
+
+            <div class="col-sm-2" style="display:none">
+                <input type="hidden" value="0" name="hdnSelectedStation" id="hdnSelectedStation" />
+                <input type="hidden" value="" name="hdnSelectedOperator" id="hdnSelectedOperator" />
+                <input type="hidden" value="" name="hdnRouteConfigurationDisplay" id="hdnRouteConfigurationDisplay" />
+                <input type="hidden" value="@ip_address" name="hdnip" id="ip_address" />
+                <input type="hidden" value="@lineCount" name="hdnlc" id="lineCount" />
+                <input type="hidden" value="" name="hdnSelectedSetup" id="hdnSelectedSetup" />
+                @*<input type="hidden" value="@host_name" name="hdnip" id="host_name" />
+                    <input type="hidden" value="@hostName2" name="hdnip" id="hostName2" />*@
+                @Html.LabelFor(model => model.Shop_ID, ResourceShop.Shop_Label_Shop_Select, new { @class = "" })
+                @Html.DropDownList("Shop_ID", null, "Shop", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID)
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error oShopID" })
+            </div>
+            @* <div class="col-sm-2" >
+                     HiddenFor(model => model.Line_ID,new { id="Line_ID"})
+                     <input type="hidden" id="Line_ID" value="@ViewBag.Setup11" />
+                     @Html.DropDownList("Line_ID", (SelectList)ViewBag.Line_ID, ResourceLine.Line_Label_Name, htmlAttributes: new { @class = "form-control" })
+                     @Html.DropDownList("Line_ID", null,  htmlAttributes: new { @class = "form-control", @Style = "width:100%" })
+                @Html.TextBox("Line_ID")
+                     @Html.ValidationMessageFor(model => model.Line_ID)
+                     @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+                 </div>
+                 <input type="hidden" id="Line_ID" value="@ViewBag.Line_ID" />*@
+            <div class="col-sm-2" style="display:none">
+                @Html.LabelFor(model => model.Line_ID, ResourceLine.Line_Label_Line_Select, new { @class = "" })
+                @Html.DropDownList("Line_ID", null, "", htmlAttributes: new { @class = "form-control", @Style = "width:100%" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+            </div>
+            <div class="col-sm-2" style="display:none">
+                @Html.LabelFor(model => model.Setup_ID, ResourceLine.Line_Label_Line_Select, new { @class = "" })
+                @Html.DropDownList("Setup_ID", null, "", htmlAttributes: new { @class = "form-control", @Style = "width:100%" })
+                @Html.ValidationMessageFor(model => model.Setup_ID, null, new { @class = "validation_error olineID" })
+            </div>
+            <div class="col-sm-2" style="display:none">
+                @Html.Label("Shift", new { @class = "" })
+                @Html.DropDownList("Shift1", null, ResourceDisplayName.Shift, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators hidden">
+                    @if (ViewBag.Setup1 != null)
+                {
+                    int i = 0;
+                    foreach (var line in ViewBag.Setup1)
+                    {
+                        if (i == 0)
+                        {
+                                <li class="active" data-target="#myCarousel" data-slide-to="0"></li>
+                            }
+                            else
+                            {
+
+                                <li data-target="#myCarousel" data-slide-to=@i></li>
+                            }
+                            i++;
+                        }
+                    }
+
+                </ol>
+                @if (ViewBag.Setup1 != null)
+                {
+                    int i = 0;
+                    foreach (dynamic line in ViewBag.Setup1)
+                    {
+
+                        i = i + 1;
+
+
+                                <div class="container new" id="hd" style="background-color: skyblue;margin-top:-4%;text-align:center;"><span class="h3">@line</span></div>
+
+                                <div id="Maxi1_@i" style="margin-right: -16%;">
+
+
+                                    <div>
+
+
+                                        <div class="row" id="maxi" style="margin-right:-1%">
+
+
+                                            @foreach (var item in ViewBag.Name)
+
+                                            {
+                                                if (item.Line_Name == line)
+                                                {
+                                                    var name = item.Employee_Name.Split(',');
+                                                    var name1 = name[0];
+
+                                                    <div class="col-md-2 manage" @*id="manage*@>
+
+                                                        <div class="box effect8 card card-shadow" style="    width: 109%;height: 89Px;">
+                                                            <div class="row">
+
+                                                                <div class="col-md-12 col-lg-12 col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="page-headers text-center">
+                                                                            @if (item.Station_Type_ID == "3")
+                                                                            {
+                                                                            <span class="stationname" style="color:black;background-color:orange;"><b>@item.Station_Name</b></span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span class="stationname"><b>@item.Station_Name</b></span>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-12" style="display:none">
+                                                                        @if (item.Image_Content == null)
+                                                                        {
+
+
+                                                                            <img src="~/Content/theme/dist/img/face-facial-hair-fine-looking-614810.jpg" class="imgemp" />
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img class="imgemp" src="data:image; base64,@System.Convert.ToBase64String(item.Image_Content)" />
+                                                                        }
+
+
+
+                                                                    </div>
+                                                                    <div class="col-md-8" id="mymenu">
+                                                                        @if(item.IsOJT == true)
+                                                                        {
+
+                                                                        <span class="Imagename" style="color:blue;">@name1</span><br />
+
+
+                                                                        <span class="empToken" style="color:blue;"><b>@item.Employee_No</b></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="Imagename">@name1</span><br />
+
+
+                                                                            <span class="empToken"><b>@item.Employee_No</b></span>
+                                                                        }
+
+                                                                        @*<div class="col-md-2">
+
+                                                                            </div>*@
+
+                                                                    </div>
+                                                                </div>
+
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                           
+                        }
+
+                    }
+
+                
+
+            </div>
+            @*<div class="col-sm-2">
+
+                   @Html.Label(ipAddress, new { @class = "" })
+                </div>*@
+            @*<div class="col-sm-2">
+                    <div class="site_trash_box">
+                        <i class="fa fa-fw fa-trash"></i>
+                    </div>
+                </div>*@
+        </div>
+
+
+
+        @*<div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <label>Line Allocation</label>
+                        <div id="configuration_errors" class="validation_error"></div>
+                        <div class="" style="width: 100%; height:691px ;">
+                            <div class="route_station_list" id="route_station_list"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>*@
+
+
+    </div>
+}
+
+<div class="modal" id="WeeklyOperator" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header box-solid">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Weekly Operator Assign</h4>
+            </div>
+            <div class="modal-body">
+                <p style="display:none;">Following defect will be marked as no defect.&hellip;</p>
+                <div class="row">
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+                        @*<div class="col-sm-3" style="display:none">
+                                @Html.LabelFor(model => model.Week, "Week", new { @class = "" })
+                                @Html.DropDownList("weeks2", null, ResourceDisplayName.Week, htmlAttributes: new { @class = "form-control" })
+
+                            </div>*@
+                        @*<div class="col-sm-3">
+                                @Html.LabelFor(model => model.Week, "Assign Week", new { @class = "" })
+                                @Html.DropDownList("weeks3", null, ResourceDisplayName.Week, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Week2, null, new { @class = "validation_error eWeek2" })
+                            </div>*@
+
+                        <div class="col-sm-3">
+                            @Html.LabelFor(model => model.FromDate, "From Date", new { @class = "" })
+                            <input type="text" id="txtFromDate" class="form-control" placeholder="From Date" min="2018-01-10" />
+                            @Html.ValidationMessageFor(model => model.FromDate, null, new { @class = "validation_error fromDate" })
+                        </div>
+
+                        <div class="col-sm-3">
+                            @Html.LabelFor(model => model.ToDate, "To Date", new { @class = "" })
+                            <input type="text" id="txtToDate" class="form-control" placeholder="To Date" min="2018-01-10" />
+                            @Html.ValidationMessageFor(model => model.FromDate, null, new { @class = "validation_error toDate" })
+                        </div>
+
+                        @*<div class="col-sm-3">
+                                @Html.LabelFor(model => model.Week, ResourceDisplayName.Shift, new { @class = "" })
+                                @Html.DropDownList("Shift3", null, ResourceDisplayName.Shift, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Shift3, null, new { @class = "validation_error eShift3" })
+                            </div>*@
+                        <div class="col-sm-3" style="padding-top: 3%;">
+                            @*<input type="button" id="btnAssign" value="Assign" class="btn btn-primary has-spinner" />*@
+                            <button class="btn btn-primary has-spinner" id="btnAssign">Assign</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="demo">
+                            <table id="Weekly_Operator_table" style="margin-top:3%;"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                @*<button class="btn btn-default has-spinner" id="one">Button1</button>*@
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<script src="~/Scripts/Dashboard.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script src="~/Content/Loader/jquery.buttonLoader.js"></script>
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+@*<script src="~/Scripts/ajaxroutine.js"></script>*@
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jquery_ui")
+    @Scripts.Render("~/fdtheme/notification_js")
+
+    @Styles.Render("~/fdtheme/notification_css");
+    <link href="~/Content/tablecss.css" rel="stylesheet" />
+    <link href="~/Content/Loader/buttonLoader.css" rel="stylesheet" />
+    @*@Scripts.Render("~/bundles/DailyReportManagement_file")*@
+    <script type="text/javascript" src="~/Scripts/jquery.simplyscroll.min.js"></script>
+
+}
+
+
+<script>
+
+
+    //$("#Shop_ID").change(function () {
+    //    if ($("#Shop_ID").val() != "Please select") {
+    //        var options = {};
+    //        options.url = "/dailyreportforsupervisor/getlinebyshopid";
+    //        options.type = "POST";
+    //        options.data = JSON.stringify({ shopId: $("#Shop_ID").val() });
+    //        options.dataType = "json";
+    //        options.contentType = "application/json";
+    //        options.success = function (test) {
+    //            $("#Line_ID").empty();
+    //            $("#Line_ID").append($('<option>', { value: 0, text: '----Select---- ' }));
+    //            $.each(test, function (i, data) {
+    //                $("#Line_ID").append(
+    //                    $('<option></option>').val(data.Line_ID).html(data.Line_Name));
+    //            });
+    //            $("#Line_ID").prop("disabled", false);
+    //        };
+
+    //        options.error = function () { };
+    //        $.ajax(options);
+
+    //        setTimeout(function () {
+    //            debugger;
+    //            var options = {};
+    //            options.url = "/dailyreportforsupervisor/GetCurrentShift";
+    //            options.type = "POST";
+    //            options.data = JSON.stringify({ shopId: $("#Shop_ID").val() });
+    //            options.dataType = "json";
+    //            options.contentType = "application/json";
+    //            options.success = function (test) {
+    //                $("#Shift1").empty();
+    //                $("#Shift1").append($('<option>', { value: 0, text: '----Select---- ' }));
+    //                $.each(test, function (i, data) {
+    //                    $("#Shift1").append(
+    //                        $('<option></option>').val(data.Shift_ID).html(data.Shift_Name));
+    //                });
+    //                $("#Shift1").prop("disabled", false);
+    //            };
+
+    //            options.error = function () { };
+    //            $.ajax(options);
+    //        }, 2000)
+    //    };
+
+    //});
+
+    //$(document).on("click", ".box-tools", function () {
+    //    debugger;
+    //    //End
+    //    var options = {};
+    //    var stationis = $("input[name='select_station']:checked").val();
+    //    options.url = "/dailyreportforsupervisor/GetPresentSkilledEmployeeAgainstSelectedStation";
+    //    options.type = "POST";
+    //    options.data = JSON.stringify({ stationis: stationis });
+    //    options.dataType = "json";
+    //    options.contentType = "application/json";
+    //    options.success = function (test) {
+    //        debugger;
+    //        var jsonRes = $.parseJSON(myajax.responseText);
+    //        var res = "<ul class='users-list clearfix'>";
+    //        for (var i = 0; i < jsonRes.length; i++) {
+    //            res += '<li id="' + jsonRes[i].Employee_No + '">';
+    //            //alert(jsonRes[i].Employee_No);
+    //            res += '<img alt="User Image" src="content/theme/dist/img/user1-128x128.jpg">';
+    //            res += '<a href="#" class="users-list-name">' + jsonRes[i].Employee_Name + '</a>';
+    //            res += '<span class="users-list-date">' + jsonRes[i].Employee_No + '</span>';
+    //            res += '</li>';
+    //        }
+    //        $("#operator_present_list").html(res);
+    //        res += '</ul>';
+    //        presentOperatorDraggable();
+    //    };
+
+    //    options.error = function () { };
+    //    $.ajax(options);
+    //});
+
+
+
+
+
+    //$("#shop_id").on("change", function (e) {
+    //    debugger;
+    //    var stationid = $("#shop_id").val();
+    //    if (stationid) {
+    //        var url = "/dailyreportforsupervisor/getlinebyshopid";
+    //        ajaxpack.getajaxrequest(url, "shopid=" + $("#shop_id").val() + "", showlineshopid, "json");
+
+    //    }
+    //    else {
+    //        clearselectbox("line_id");
+    //    }
+    //});
+
+
+
+
+    $(document).on("change", "[data-toggle='toggle']", function () {
+        $(this).parents().next('.hide_content').toggle();
+    });
+
+    $("#txtFromDate").datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            startDate: '+0d',
+            autoclose: true
+        });
+    $("#txtToDate").datepicker(
+        {
+            format: 'yyyy-mm-dd',
+            startDate: '+0d',
+            autoclose: true
+        }
+   );
+
+    //$(document).ready(function () {
+    //    alert("host 1" + $("#ip_address").val());
+    //});
+    //$(document).ready(function () {
+    //    alert("Host 3"+$("#host_name").val());
+    //});
+    //$(document).ready(function () {
+    //    alert("Host 2" + $("#hostName2").val());
+    //});
+    //    $(document).ready(function () {
+
+    //    });
+    //    function cache_clear()
+    //    {
+
+    //            //url = "/DailyReportForSupervisor/GetCurrentShiftOperatorAgainstStationListByLineID";
+    //            ////ajaxpack.getAjaxRequest(url, "lineId=" + $("#Line_ID").val() + "", showStationLineID, "json");
+    //            //ajaxpack.getAjaxRequest(url, "lineId=" + $("#Line_ID").val() + "&shiftID=" + $("#Shift1").val() + "&Day=" + $("#Day option:selected").text(), showStationLineID, "json");
+    //        var shiftid1 = $("#Shift1").val();
+    //        lineId = $("#Line_ID").val();
+
+    //        if (lineId > 0) {
+    //            //$('#Shift1').change();
+    //            url = "/DailyReportForSupervisor/GetCurrentShiftOperatorAgainstStationListByLineID";
+
+    //            ajaxpack.getAjaxRequest(url, "lineId=" + $("#Line_ID").val() + "&shiftID=" + $("#Shift1").val() + "&Day=" + $("#Day option:selected").text(), showStationLineID, "json");
+    //        }
+    //       // window.location.href = "Dashboard/GetCurrentShiftOperatorAgainstStationListByLineID?lineId="+$("#Line_ID").val() ;
+    //    }
+
+    //    function showStationLineID() {
+    //        var myajax = ajaxpack.ajaxobj
+    //        var myfiletype = ajaxpack.filetype
+    //        if (myajax.readyState == 4) {
+    //            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+    //                //$(".route_station_list").html("");
+    //                var jsonRes = $.parseJSON(myajax.responseText);
+
+    //                //$("#station_" + jsonRes[i].Station_ID).find("li").html("");
+    //                $(".station_operator").find("li").remove("li");
+    //                for (var i = 0; i < jsonRes.str5.length; i++) {
+    //                        if (jsonRes.str5[i].Absent.length > 1) {
+    //                            //res += '<a style="color:red;" href="#" class="users-list-name" id="IsPresent">' + jsonRes.str5[i].Employee_Name.split(",")[0] + '</a>';
+    //                            //res += '<span style="color:red;" class="users-list-date">' + jsonRes.str5[i].Employee_Token + '</span>';
+    //                        }
+    //                        else {
+    //                            var res = "";
+    //                            var buffer = jsonRes.str5[i].Image_Content;
+    //                            var bytes = arrayBufferToBase64(buffer);
+    //                            // $("#station_" + jsonRes[i].Station_ID).find("ul").html("");
+
+    //                            res = '<li id="assigned_operator_' + jsonRes.str5[i].Station_ID + '_' + jsonRes.str5[i].Employee_Token + '" >';
+    //                            if (jsonRes.str5[i].Image_Content == null)
+    //                                res += '<img alt="user image" style="width:60px;height:70px" src="content/theme/dist/img/face-facial-hair-fine-looking-614810.jpg">';
+    //                            else
+    //                                res += '<img id="ItemPreview" alt="user image" style="width:60px;height:70px" src="data:image/png;base64,' + bytes + '">';
+    //                            res += '<a style="color:green;" href="#" class="users-list-name" id="IsPresent">' + jsonRes.str5[i].Employee_Name.split(",")[0] + '</a>';
+    //                            res += '<span style="color:green;" class="users-list-date">' + jsonRes.str5[i].Employee_Token + '</span>';
+    //                            res += '</li>';
+    //                            $("#station_" + jsonRes.str5[i].Station_ID).html(res + $("#station_" + jsonRes.str5[i].Station_ID).html());
+    //                        }
+
+
+
+    //                }
+    //                upperOperatorDraggable();
+    //                operatorDroppable();
+    //            }
+    //        }
+    //    }
+
+    //    function upperOperatorDraggable() {
+    //        $(".users-list li").draggable({
+    //            cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+    //            revert: "invalid", // when not dropped, the item will revert back to its initial position
+    //            containment: "document",
+    //            helper: "clone",
+    //            cursor: "move"
+    //        });
+    //    }
+    //    function operatorDroppable() {
+
+    //        $("#route_station_list .station_operator ul").droppable({
+    //            accept: "#operator_present_list .users-list li,#extra_operator_list .users-list li",
+    //            activeClass: "ui-state-highlight",
+    //            drop: function (event, ui) {
+
+    //                var shiftID = $('#Shift1').val();
+    //                var draggableId = ui.draggable.attr("id");//123
+    //                var droppableId = $(this).attr("id");//4
+    //                var shopId = $("#Shop_ID").val();
+    //                var lineId = $("#Line_ID").val();
+    //                var stid = $("#route_station_list input[name='select_station']:checked").parent().parent().data('station-id');
+    //                var stsid = droppableId.split('_');
+    //                $("#hdnSelectedStation").val(droppableId);
+    //                $("#hdnSelectedOperator").val(draggableId);
+
+    //                //url = "/Dashboard/CheckIsValidSkillForCriticalStation";
+    //                //ajaxpack.getAjaxRequest(url, "Employee_No=" + ui.draggable.attr("id") + "&Station_Id=" + $(this).attr("id"),
+    //                //    vaildStationData(ui.draggable.attr("id"), $(this).attr("id"), $("#Shop_ID").val(), $("#Line_ID").val(), $("#Shift1").val(), $("#FromDay").val(), $("#Day").val(), draggableId, droppableId),
+    //                //    "json");
+
+    //                $.ajax(
+    //{
+    //    url: url = "/DailyReportForSupervisor/CheckIsValidSkillForCriticalStation?Employee_No=" + ui.draggable.attr("id") + "&Station_Id=" + $(this).attr("id"),
+    //    type: 'GET',
+    //    data: "",
+    //    contentType: 'application/json; charset=utf-8',
+    //    success: function (data) {
+    //        if (data.msg == true && data.success == "True") {
+
+    //            if (draggableId) {
+    //                if (stsid[1] == stid) {
+    //                    if (shiftID != "") {
+    //                        // alert($("#Day").val());
+    //                        url = "/DailyReportForSupervisor/saveAssociateAllocation";
+    //                        // ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "", "stationId=" + $(this).attr("id") + "", showLineStationType, "json");
+    //                        ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "&stationId=" + droppableId + "&shopId=" + $("#Shop_ID").val() + "&lineId=" + $("#Line_ID").val() + "&shift=" + $("#Shift1").val() + "&FromDay=" + $("#FromDay").val() + "&ToDay=" + $("#Day").val(), SaveData, "json");
+    //                    }
+    //                    else {
+    //                        //alert("Please select Shift");
+    //                        $('#testy').toastee({
+    //                            type: 'error',
+    //                            width: '100px',
+    //                            height: '100px',
+    //                            message: 'Please select shift...',
+    //                        });
+    //                    }
+
+    //                }
+    //                else {
+    //                    //alert("In valid station to save ");
+    //                    $('#testy').toastee({
+    //                        type: 'error',
+    //                        width: '100px',
+    //                        height: '100px',
+    //                        message: 'Invalid station to save...',
+    //                    });
+    //                }
+    //            }
+    //        } else if (data.msg == false && data.success == "True") {
+    //            $('#testy').toastee({
+    //                type: 'error',
+    //                width: '100px',
+    //                height: '100px',
+    //                message: 'You cannot assign  employee whose skillset less than 3...',
+    //            });
+    //        } else {
+    //            $('#testy').toastee({
+    //                type: 'error',
+    //                width: '100px',
+    //                height: '100px',
+    //                message: 'Error occured...',
+    //            });
+    //        }
+    //    }
+    //});
+    //                //if (draggableId) {
+    //                //    if (stsid[1] == stid) {
+    //                //        if (shiftID != "") {
+    //                //            // alert($("#Day").val());
+    //                //            url = "/Dashboard/saveAssociateAllocation";
+    //                //            // ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "", "stationId=" + $(this).attr("id") + "", showLineStationType, "json");
+    //                //            ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "&stationId=" + $(this).attr("id") + "&shopId=" + $("#Shop_ID").val() + "&lineId=" + $("#Line_ID").val() + "&shift=" + $("#Shift1").val() + "&FromDay=" + $("#FromDay").val() + "&ToDay=" + $("#Day").val(), SaveData, "json");
+    //                //        }
+    //                //        else {
+    //                //            //alert("Please select Shift");
+    //                //            $('#testy').toastee({
+    //                //                type: 'error',
+    //                //                width: '100px',
+    //                //                height: '100px',
+    //                //                message: 'Please select shift...',
+    //                //            });
+    //                //        }
+
+    //                //    }
+    //                //    else {
+    //                //        //alert("In valid station to save ");
+    //                //        $('#testy').toastee({
+    //                //            type: 'error',
+    //                //            width: '100px',
+    //                //            height: '100px',
+    //                //            message: 'Invalid station to save...',
+    //                //        });
+    //                //    }
+    //                //}
+
+
+
+    //                // var operator_html = $("#" + draggableId).html();
+    //                // $("#" + $(this).attr("id")).html("<li class='station_assigned_operator' id='assigned_operator_" + draggableId + "_" + droppableId + "''>" + operator_html + "</li>" + $("#" + $(this).attr("id")).html());
+    //                // stationAssignedOperatorDraggable();
+
+
+
+
+    //                //ui.draggable.remove();
+
+    //                //if ($("#" + $(this).attr("id")).html() == null || $("#" + $(this).attr("id")).html() == "") {
+    //                //    if (ui.draggable.attr("class").indexOf("station_items") > 0) {
+    //                //        $("#" + $(this).attr("id")).html("<div id='" + draggableId + "' class='bg-aqua color-palette station_items'><span>" + station_name + "</span></div>");
+    //                //        ui.draggable.remove();
+    //                //    }
+    //                //    else {
+    //                //        if (ui.draggable.attr("class").indexOf("station_icon_items") > 0) {
+
+
+
+
+    //                //        }
+    //                //    }
+
+    //                //}
+
+
+    //            }
+    //        });
+    //    }
+
+    //    function SaveData() {
+
+    //        var myajax = ajaxpack.ajaxobj
+    //        var myfiletype = ajaxpack.filetype
+
+    //        if (myajax.readyState == 4) {
+
+
+    //            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+    //                var jsonRes = $.parseJSON(myajax.responseText);
+    //                //alert(jsonRes);
+    //                //check json res t or f
+
+    //                if (jsonRes.result == "Success") {
+    //                    //allocaed suss
+    //                    var selectedStationId = $("#hdnSelectedStation").val();
+    //                    var selectedOperator = $("#hdnSelectedOperator").val();
+    //                    //alert("Data Saved Sucessfully");
+
+    //                    $('#testy').toastee({
+    //                        type: 'success',
+    //                        width: '100px',
+    //                        height: '100px',
+    //                        message: 'Operator Assign Successfully...',
+    //                    });
+    //                    var stationId = selectedStationId.replace("station_", "");
+    //                    if (selectedOperator.length > 8) {
+    //                        var values = selectedOperator.split('_');
+    //                        var prevStationId = values[2];
+    //                        $("#" + selectedStationId).html("<li class='station_assigned_operator' id='assigned_operator_" + stationId + "_" + values[3] + "''>" + $("#" + selectedOperator).html() + "</li>" + $("#" + selectedStationId).html());
+    //                        $("#" + selectedOperator).remove();
+    //                    }
+
+    //                    else
+    //                        $("#" + selectedStationId).html("<li class='station_assigned_operator' id='assigned_operator_" + stationId + "_" + selectedOperator + "''>" + $("#" + selectedOperator).html() + "</li>" + $("#" + selectedStationId).html());
+    //                    stationAssignedOperatorDraggable();
+    //                    $('#Shift1').change();
+
+    //                }
+    //                else if (jsonRes.result == "Allready") {
+    //                    //already allocated
+    //                    // alert("This Employee Already Allocated to This Station");
+    //                    $('#testy').toastee({
+    //                        type: 'error',
+    //                        width: '300px',
+    //                        height: '100px',
+    //                        message: 'This Employee Already Allocated to This Station...',
+    //                    });
+
+    //                    stationAssignedOperatorDraggable();
+    //                }
+    //                else if (jsonRes.result == "dateerror") {
+    //                    $('#testy').toastee({
+    //                        type: 'error',
+    //                        width: '320px',
+    //                        height: '100px',
+    //                        message: 'To Day should be greater than From Day or Current Day...',
+    //                    });
+    //                }
+
+    //                else {
+
+    //                    $('#testy').toastee({
+    //                        type: 'error',
+    //                        width: '300px',
+    //                        height: '100px',
+    //                        message: 'Previous allocation not allow...',
+    //                    });
+    //                }
+
+    //            }
+
+    //            //loademp();
+    //        }
+    //        //   loademp();
+    //        // operatorDroppable();
+    //    }
+
+
+    //    function arrayBufferToBase64(buffer) {
+    //        var binary = '';
+    //        var bytes = new Uint8Array(buffer);
+    //        var len = bytes.byteLength;
+    //        for (var i = 0; i < len; i++) {
+    //            binary += String.fromCharCode(bytes[i]);
+    //        }
+    //        return window.btoa(binary);
+    //    }
+
+</script>
+
+
+
+<style type="text/css">
+    .skin-yellow .main-header .logo {
+        background-color: white;
+    }
+
+    .main-footer {
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        padding: 22px 0;
+        width: 79px;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        height: 72px;
+        min-height: 72px;
+        min-width: 72px;
+        padding: 0;
+    }
+
+
+
+
+
+    .station_items {
+        height: 72px;
+        padding: 0;
+        width: 72px;
+        z-index: 9999999;
+    }
+
+
+    .station_icon_items {
+        /* width: 36px; */
+        text-align: center;
+        width: 72px;
+        z-index: 99;
+    }
+
+    td .station_items {
+        font-size: 12px;
+    }
+
+    .station_icon_items.line_arrow_down, .station_icon_items.line_arrow_up {
+        height: 72px;
+        margin: 0 22px;
+        width: 25px;
+    }
+
+    /* td .station_icon_items.line_arrow_down, td .station_icon_items.line_arrow_up {
+                        height: 99px;
+                        margin: 0 23px;
+                        width: 25px;
+                    } */
+
+    .site_trash_box {
+        border: 1px solid #cccccc;
+        font-size: 34px;
+        padding: 5%;
+        text-align: center;
+    }
+
+
+
+    .station_operator ul {
+        height: 140px;
+        overflow-y: scroll;
+    }
+
+    .station_operator .remove {
+        display: none;
+        position: absolute;
+        top: 81px;
+    }
+
+    li.remove-button {
+    }
+
+    #mymenu {
+        margin-top: -1%;
+        font-size: 1vw;
+        margin-left: -3%;
+        font-weight: 800;
+        color: green;
+        width: 105%;
+        height: 107Px;
+        font-family: inherit;
+    }
+
+    .effect8 {
+        flex: 0 0 auto;
+    }
+
+    div#maxi {
+        width: 95%;
+    }
+
+    .box {
+        height: 134px;
+        width: 110%;
+        border: 2px solid #C2493D;
+        border-style: solid;
+        /*border: 4px solid #c2493d;
+            border-style: inset;*/
+    }
+
+    .effect8 {
+        position: relative;
+        -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    }
+
+        .effect8:before, .effect8:after {
+            /*content: "";
+            position: absolute;
+            z-index: -1;
+            -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            -moz-box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            top: 10px;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            -moz-border-radius: 100px / 10px;
+            border-radius: 100px / 10px;*/
+            border-left: 15px solid rgba(179, 179, 179, 1);
+            border-right: 15px solid rgba(250, 250, 250, 1);
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-position: 0 0, 0 100%;
+            background-repeat: no-repeat;
+            background-size: 100% 20px;
+            background-image: linear-gradient(to right, rgba(179, 179, 179, 1) 0%, rgba(250, 250, 250, 1) 100%), linear-gradient(to right, rgba(179, 179, 179, 1) 0%, rgba(250, 250, 250, 1) 100%);
+        }
+
+
+
+        .effect8:after {
+            right: 10px;
+            left: auto;
+            -webkit-transform: skew(8deg) rotate(3deg);
+            -moz-transform: skew(8deg) rotate(3deg);
+            -ms-transform: skew(8deg) rotate(3deg);
+            -o-transform: skew(8deg) rotate(3deg);
+            transform: skew(8deg) rotate(3deg);
+        }
+
+    .imgemp {
+        box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+        height: 72px;
+        margin-top: -9px;
+        margin-left: 2px;
+        width: 59px;
+        border: 1px solid;
+        border-radius: 4px;
+    }
+
+    .stationname {
+        /*font-size: 120%;*/
+        font-family: -webkit-body;
+        background-color: #aff9f2;
+        text-decoration-line: underline;
+    }
+
+    .page-headers {
+        /* padding-bottom: 9px; */
+        margin: -2px 0 20px;
+        word-wrap:break-word;
+        margin-bottom: 8px;
+    }
+
+    body {
+        background: #e2e1e0;
+        /*text-align: center;*/
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 2px;
+        display: inline-block;
+        /*height: 300px;*/
+        margin: 1rem;
+        position: relative;
+        padding-top: 5px;
+        border-radius: 10px;
+        /*width: 300px;*/
+        box-shadow: 0 15px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    }
+
+        /*.card {
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+                transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+            }*/
+
+
+
+        .card:hover {
+            box-shadow: 0 34px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        }
+</style>
+<style type="text/css">
+        .h3, h3 {
+            font-size: 210%;
+            font-weight: 900;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+
+        /* Container DIV - automatically generated */
+        .simply-scroll-container {
+            position: relative;
+        }
+
+        /* Clip DIV - automatically generated */
+        .simply-scroll-clip {
+            position: relative;
+            overflow: hidden;
+            /*width:1480px;*/
+            padding-left: initial;
+        }
+
+        /*Custom class modifications - adds to / overrides above
+
+    Vertical scroller example, with custom base class*/
+
+        /* Container DIV */
+        .vert {
+            /*width: 1480px;*/ /* wider than clip for custom button pos. */
+            height: auto !important;
+            margin-bottom: 1.5em;
+        }
+
+            /* Clip DIV */
+            .vert .simply-scroll-clip {
+                height: 700px !important;
+            }
+
+
+        .simply-scroll-btn-down:hover{
+            background-position: -42px -88px;
+        }
+
+        .simply-scroll-btn-up:hover {
+            background-position: -126px -88px;
+        }
+
+        .simply-scroll-btn-right:hover {
+            background-position: 84px -88px;
+        }
+
+        .simply-scroll-btn-left:hover {
+            background-position: 0 -88px;
+        }
+
+        .simply-scroll-btn-left.disabled {
+            background-position: 0 0 !important;
+        }
+
+        .simply-scroll-btn-right.disabled {
+            background-position: 84px 0 !important;
+        }
+
+
+        #scroller tr td, #scroller tr td {
+            width: 25%;
+            font-size: x-large;
+        }
+
+        #scroller1 tr th, #scroller1 tr th {
+            width: 25%;
+            font-size: x-large;
+        }
+
+        .manage {
+            width: 18%;
+        }
+</style>
+<script type="text/javascript">
+
+    window.onload = setupRefresh;
+    function setupRefresh() {
+        
+        setTimeout("refreshPage()", 60000);//millisecond
+    }
+    function refreshPage(){
+        window.location=location.href;
+    }
+
+
+
+
+    $(document).ready(
+    function () { //on DOM ready
+        // alert("hi");
+        
+        var count = $("#lineCount").val();
+        var linec = parseInt(count);
+        for (var j = 1; j <= linec; j++) {
+            
+            $("#Maxi1_" + j).simplyScroll({
+                customClass: 'vert',
+                orientation: 'vertical',
+                auto: true,
+                manualMode: 'loop',
+                //frameRate: 24,
+                speed: 2.5
+            });
+        }
+
+       
+    })
+
+
+
+
+</script>

@@ -1,0 +1,131 @@
+﻿@model REIN_MES_System.Models.Shop_Index_Config
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Shop_Index_Config</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TagIndex)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TagIndex)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TagBoolean)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TagBoolean)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shop_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Plant_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Transferred)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transferred)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Config_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

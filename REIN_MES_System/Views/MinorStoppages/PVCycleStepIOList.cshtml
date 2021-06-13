@@ -1,0 +1,39 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_Machine_IO_Alarm_Relation>
+
+<div class="row">
+    <div class="col-md-12">
+        @if (Model != null)
+        {
+            if (Model.Count() > 0)
+            {
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>SrNo</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int i = 0;}
+                        @foreach (var item in Model)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.MM_MT_Machine_IO.IO_Name</td>
+                                <td>@((item.MM_MT_Machine_IO.IO_Type == "I") ? "Input" : "Output")</td>
+                                <td class='@((item.MM_MT_Machine_IO.Is_Faulty == true) ? "bg-faulty" : "bg-success")'></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <h4 class="bg-gray-active text-center"> No IO found for this Alarm </h4>
+            }
+        }
+    </div>
+</div>

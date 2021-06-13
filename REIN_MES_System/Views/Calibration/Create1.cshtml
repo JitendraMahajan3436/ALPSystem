@@ -1,0 +1,238 @@
+﻿@model REIN_MES_System.Models.RS_MT_Calibration
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+
+}
+
+
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class="col-md-4" style="display:none">
+                @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Plant_ID, (IEnumerable<SelectListItem>)ViewBag.Plant_ID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "Validation-error" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Shop_ID, (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "Validation-error" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Line_ID, "Line Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(), "-Select Line--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "Validation-error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Station_ID, "Station Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Station_ID, Enumerable.Empty<SelectListItem>(), "--Select Station--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "Validation-error" })
+
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Calibration_Tool, "Calibration Tool", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Calibration_Tool, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Calibration_Tool, null, new { @class = "Validation-error" })
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Calibration_Description, "Calibration Description", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.Calibration_Description, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Calibration_Description, null, new { @class = "Validation-error" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Scheduled_Date, "Scheduled Date", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.Scheduled_Date, htmlAttributes: new { @class = "form-control datepicker" })
+                @Html.ValidationMessageFor(model => model.Scheduled_Date, null, new { @class = "Validation-error" })
+
+            </div>
+        </div>
+
+        <div class="row">
+
+
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Cycle_Period, "Cycle(Months)", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.Cycle_Period, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Cycle_Period, null, new { @class = "Validation-error" })
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.users, "Maintenance User", htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.users, (IEnumerable<SelectListItem>)ViewBag.Maintenance_User_ID, "--Select User--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.users, null, new { @class = "Validation-error" })
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.mails, htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.mails, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.mails, null, new { @class = "Validation-error" })
+
+            </div>
+        </div>
+
+        @*<div class="row">
+
+            </div>*@
+        <br />
+        <div class="row">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+    }
+</div>
+@*<div>
+        @Html.ActionLink("Show All", "Index")
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui-1.10.3.min.js"></script>
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui-1.10.3.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#mails').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var t = $("#mails").select2('val');
+                    valid(t);
+                }
+            });
+
+            $("#mails").select2({
+                allowClear: true,
+                multiple: 'multiple',
+                tags: true,
+                placeholder: 'select an email',
+                tokenSeparators: [',', ';']
+
+            });
+
+            $("#users").select2({
+                allowClear: true,
+                placeholder: 'select a user',
+                multiple: 'multiple'
+            });
+
+            $("#Scheduled_Date").datepicker({ format: 'dd-mm-yyyy' });
+
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Calibration/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Line are not present in current Shop")
+                        }
+                    });
+                }
+            });
+
+            $("#Line_ID").on("change", function () {
+                $("#Station_ID").html("");
+                var Shop_ID = $('#Line_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Calibration/GetStationByLineID', { lineid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Station_ID option').remove();
+                            $('#Station_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Station_ID').append('<option value="' +
+                                           data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Stations are not present in current Line")
+                        }
+                    });
+                }
+            });
+
+
+        });
+
+        function valid(value) {
+            if (value && value.length != 0) {
+                var emailText = "";
+                var isValidEmail = true;
+                var isEmailLengthValid = true;
+                for (var i in value) {
+                    var email = value[i];
+                    isValidEmail = validateEmail(email);
+                    if (isValidEmail == false) {
+                        break;
+                    } else {
+                        emailText = (i == 0) ? emailText : ", " + emailText;
+                        if (emailText.length > 250) {
+                            isEmailLengthNotValid = false;
+                            break;
+                        }
+                    }
+                    if (isValidEmail == false) {
+                        return 'Enter a valid email Address';
+
+                    } else if (isEmailLengthValid == false) {
+                        return "Maximum 250 Character allowed";
+                    }
+
+
+                }
+            }
+
+        }
+
+        function validateEmail(email) {
+            var re = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+            return re.text(re);
+        }
+    </script>
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}
+
+
+

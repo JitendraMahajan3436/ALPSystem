@@ -1,0 +1,95 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MinorStoppagesHistorData>
+<div class="modal-body no-padding table-responsive" id="MinorStoppagesModal">
+    <div class="header" style="background-color:cadetblue">
+        @*<marquee direction="right">*@
+       <p  style="text-align:center;color: white; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" >Minor Stoppage data from @ViewBag.fromDate To @ViewBag.toDate</p> 
+            @*</marquee>*@
+    </div>
+    <div class="table-responsive">
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                        Sr.No
+                    </th>
+                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                        Machine Name
+                    </th>
+                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                        Cycle Step Name
+                    </th>
+                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                        Date Time
+                    </th>
+                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; ">
+                        Alarm
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int i = 1;
+                }
+                @foreach (var Obj in Model)
+                {
+                <tr>
+                    <td style="text-align:center">
+                        @(i += 1)
+                    </td>
+                    <td>
+                        @Obj.Machine
+                    </td>
+                    <td>
+                        @Obj.Cycle
+                    </td>
+                    <td>
+                        @Obj.Date
+                    </td>
+                    <td>
+                        @Obj.Alaram
+                    </td>
+                    @*<td data-target="#CycleHistory" data-toggle="modal" data-id="@ViewBag.CycleID" onclick="MyFunction4(@CycleObj.CycleID, @CycleObj.MachineID)" style="cursor:pointer">
+                            @CycleObj.CycleCount
+
+                        </td>*@
+
+                </tr>
+                }
+            </tbody>
+        </table>
+                    }
+                    else
+                    {
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                                        Sr.No
+                                    </th>
+                                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                                        Machine Name
+                                    </th>
+                                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                                        Cycle Step Name
+                                    </th>
+                                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                                        Date Time
+                                    </th>
+                                    <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; ">
+                                        Alarm
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td style="text-align:center" colspan="5">
+                                           No Data Available
+                                        </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                                    }
+    </div>
+</div>
+

@@ -1,0 +1,683 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<style>
+    .boxshadow {
+        box-shadow: 0 1px 0px rgba(0,0,0,0.12), 3px 4px 1px rgba(66,59,59,0.24);
+        border-radius: 7px;
+    }
+
+    .shopchartbtn:hover {
+        background-color: darkgreen;
+        color: white;
+    }
+
+    .shopchartbtn {
+        background-color: darkcyan;
+        border-color: black;
+        color: black;
+    }
+
+    table.table1 {
+        font-family: "Trebuchet MS", sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 1.4em;
+        font-style: normal;
+        border-collapse: separate;
+    }
+
+    .table1 thead th {
+        padding: 15px;
+        color: #fff;
+        text-shadow: 1px 1px 1px #568F23;
+        border: 1px solid #93CE37;
+        border-bottom: 3px solid #9ED929;
+        background-color: #9DD929;
+        background: -webkit-gradient( linear, left bottom, left top, color-stop(0.02, rgb(123,192,67)), color-stop(0.51, rgb(139,198,66)), color-stop(0.87, rgb(158,217,41)) );
+        background: -moz-linear-gradient( center bottom, rgb(123,192,67) 2%, rgb(139,198,66) 51%, rgb(158,217,41) 87% );
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius: 5px 5px 0px 0px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        /*border: 1px solid black;*/
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+
+    .lebal-font {
+        font-size: 12px;
+    }
+</style>
+
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+<link href="~/Content/theme/plugins/timepicker1/timepickerCSS.css" rel="stylesheet" />
+
+<div class="row">
+
+    <div class="col-md-12 col-lg-12 col-sm-12">
+
+
+
+        <div class="panel">
+
+
+
+
+            <div class="col-lg-2 col-md-2 col-sm-2" style="display:none">
+                @*<div class="form-group">*@
+                <label class="lebal-font">CategoryType</label>
+                <br />
+                @*@Html.DropDownList("Plant_ID", null,  htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })*@
+                @*@Html.DropDownList("Category", new SelectList(new List<object> { new { value = "1", text = "kWh" }, new { value = "2", text = "kWh/Vehicle" } }, "value", "text", 2), new {@class="form-control select2"})*@
+
+                <input type="button" value="kWh" id="btnkWh" class="btn btn-success  generate" style="margin-top:0px" />&nbsp; &nbsp; &nbsp;
+                &nbsp;
+                <input type="button" value="kWh/Vehicle" id="btnkWhVehicle" class="btn btn-default  generate" style="margin-top:0px" />
+                @*</div>*@
+                @*@Html.DropDownList("Parameter", null, "Select Category", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%", })*@
+
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3" style="padding:0px">
+                <div class="col-md-5 col-lg-5 col-sm-5">
+                    <div class="form-group">
+                        <label class="lebal-font">Parameter</label>
+                        @*@Html.DropDownList("Parameter", new SelectList(new List<object> { new { value = true, text = "kWh" }, new { value = false, text = "kVAh" } }, "value", "text", true), new { @class = "form-control select2" })*@
+
+                        @Html.DropDownList("Parameter", null, htmlAttributes: new { @class = "form-control", @style = "max-width:100%", })
+                    </div>
+                </div>
+
+                <div class="col-md-7 col-lg-7 col-sm-7">
+                    <div class="form-group">
+                        <label class="lebal-font">Category</label>
+                        @Html.DropDownList("Category", new SelectList(new List<object> { new { value = "1", text = "Consumption" }, new { value = "2", text = "Specifc Consumption" } }, "value", "text", 1), new { @class = "form-control select2" })
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <div class="form-group">
+                    <label class="lebal-font">Date Range</label>
+                    @Html.DropDownList("ddlDateRange", null, htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%", @autocomplete = "off" })
+
+                </div>
+            </div>
+
+            <div class="col-md-7 col-lg-7 col-sm-7" style="margin-left: -3%">
+
+
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <label class="lebal-font"> From Date</label>
+                        @Html.TextBox("StartDate", null, new { @class = "StartDate form-control example1", @style = "max-width:100%", ReadOnly = "true", disabled = "false", @autocomplete = "off" })
+
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <label class="lebal-font">To Date</label>
+                        @Html.TextBox("EndDate", null, new { @class = "EndDate form-control example1", @style = "max-width:100%", ReadOnly = "true", disabled = "false", @autoComplete = "off" })
+                    </div>
+                </div>
+
+                <div class="col-md-2" style="margin-left:0%;">
+                    <div class="form-group">
+                        <label class="lebal-font">Shift</label>
+                        @Html.DropDownList("Shift", null, "ALL", htmlAttributes: new { @class = "form-control", @style = "max-width:100%", })
+                        <span class="error" id="EndDateId" style="color:red;display:none">To Date field is required</span>
+                    </div>
+                </div>
+
+                <div class="col-md-2" style="margin-left:0% ; display:none" id="NOWorkingDay">
+                    <div class="form-group">
+                        <label class="lebal-font">NPD</label>
+                        @*@Html.DropDownList("Reason_ID", null, "ALL", htmlAttributes: new { @class = "form-control", @style = "max-width:100%", })*@
+
+
+                        @Html.DropDownList("Reason_ID", null, htmlAttributes: new { @class = "form-control", @style = "max-width:100%", })
+                        <span class="error" id="EndDateId" style="color:red;display:none">To Date field is required</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-2">
+
+                    <input type="button" value="Submit" id="Submit" class="btn btn-primary btnsumbit" style="margin-top:23px" />
+                    @*<button class="btn btn-primary" value="Submit"></button>*@
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12" id="unloading">
+        <div id="showPlantHome">
+
+        </div>
+    </div>
+
+    <div id="loading" class="col-md-offset-4" style="display:none">
+        <div class="center-block">
+            <img src="~/content/images/loader/gears.gif" style="height:200px;" />
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.min.js"></script>
+    <script src="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.full.min.js"></script>
+    <link href="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+
+}
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+
+        window.onload = function () {
+            //$("#bodyid").addClass('sidebar-collapse');
+            debugger;
+            $("#loading").show();
+            $("#bodyid").addClass('sidebar-collapse');
+
+
+            if ($("#ddlDateRange").val() == "2") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+
+
+
+            homeEnergy();
+        }
+        $(".select2").select2();
+        $("#Reason_ID").select2({
+
+            allowClear: false,
+            // multiple: 'multiple',
+            width: '-webkit-fill-available'
+        });
+        $('#Reason_ID option').prop("selected", false);
+
+        $("#ddlDateRange").change(function () {
+            //$("#loading").show();
+            //$("#unloading").hide();
+            debugger;
+
+            if ($("#ddlDateRange").val() == "1") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $("#StartDate").prop('disabled', true);
+                $("#EndDate").prop('disabled', true);
+
+                $("#StartDate").attr('disabled', 'disabled');
+                $("#EndDate").attr('disabled', 'disabled');
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate());
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+                //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+                //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+
+            }
+            else if ($("#ddlDateRange").val() == "2") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $("#StartDate").prop('disabled', true);
+                $("#EndDate").prop('disabled', true);
+
+                $("#StartDate").attr('disabled', 'disabled');
+                $("#EndDate").attr('disabled', 'disabled');
+
+
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+
+            else if ($("#ddlDateRange").val() == "3") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $("#StartDate").prop('disabled', true);
+                $("#EndDate").prop('disabled', true);
+
+                $("#StartDate").attr('disabled', 'disabled');
+                $("#EndDate").attr('disabled', 'disabled');
+                $today = new Date();
+                $startDate = new Date($today);
+                //$startDate.setDate($today.getDate() - $today.getDay());
+                $endDate = new Date($today);
+                //$endDate.setDate($startDate.getDate() + 7);
+
+
+                var $mm = $startDate.getMonth() + 1;
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+
+            else if ($("#ddlDateRange").val() == "4") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $("#StartDate").prop('disabled', true);
+                $("#EndDate").prop('disabled', true);
+
+                $("#StartDate").attr('disabled', 'disabled');
+                $("#EndDate").attr('disabled', 'disabled');
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+                //******************* Added by Ajay 01012019
+                var prevDate = new Date($startDate.getFullYear(), $startDate.getMonth() - 1, 1);
+                var $mm = prevDate.getMonth() + 1;
+                var $yyyy = prevDate.getFullYear();
+
+                if ($mm < 10) { $mm = '0' + $mm } prevDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val(prevDate);
+                //******************* Added by Ajay 01012019
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth(), 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+
+            else {
+                $("#StartDate").datetimepicker(
+                    {
+                        format: 'm/d/y H:i',
+                        defaultDate: new Date(),
+                        timepickerScrollbar: true,
+                        hours12: false
+                    });
+                $("#EndDate").datetimepicker(
+                    {
+                        format: 'm/d/Y H:i',
+                        defaultDate: new Date(),
+                        timepickerScrollbar: true,
+                        hours12: false
+                    });
+
+                //$("#Minutes").hide();
+                //$('#NOWorkingDay').show();
+
+                $("#StartDate").prop('readonly', false);
+                $("#EndDate").prop('readonly', false);
+                $("#StartDate").prop('disabled', false);
+                $("#EndDate").prop('disabled', false);
+
+
+                var date1 = new Date();
+                var toDate = new Date();
+                toDate = moment(toDate).format("MM/DD/YY HH:mm");
+
+
+                var time = moment().toDate();  // This will return a copy of the Date that the moment uses
+
+                time.setHours(06);
+                time.setMinutes(30);
+                time.setSeconds(0);
+                time.setMilliseconds(0);
+                date1 = moment(time).format("MM/DD/YY HH:mm");
+                $('#StartDate').val(date1);
+                $('#EndDate').val(toDate);
+
+
+
+            }
+
+
+            //homeEnergy();
+
+        });
+
+        $(function () {
+            $("#btnkWhVehicle").click(function () {
+                debugger
+
+                $('#btnkWh').removeClass("btn-success").addClass("btn-default");
+                $('#btnkWhVehicle').addClass("btn-success").removeClass("btn-default");
+
+
+                $("#loading").show();
+                $("#unloading").hide();
+                var StartDate = $("#StartDate").val();
+                var EndDate = $("#EndDate").val();
+                var ddlDateRange = $("#ddlDateRange").val();
+                if (ddlformat == "5") {
+                    debugger;
+                    dt1 = new Date(Formdate);
+                    dt2 = new Date(Todate);
+                    Formdate = moment(Formdate).format("DD/MM/YY HH:mm");
+                    Todate = moment(Todate).format("DD/MM/YY HH:mm");
+                    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+                    diff /= (60 * 60);
+                    var diffval = diff;
+
+                    if (diffval <= 24) {
+                        Minute = '60';
+                    }
+                }
+                $.ajax({
+                    url: '/HomeEnergy/GetkWhvechicle?StartDate=' + StartDate + "&EndDate=" + EndDate + "&ddlDateRange=" + ddlDateRange,
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json;charset-utf-8',
+                    success: function (data) {
+                        $("#loading").hide();
+                        $("#unloading").show();
+
+                        $("#showPlantHome").html();
+                        $("#showPlantHome").empty();
+
+                        if (data != "") {
+
+                            $("#showPlantHome").html(data);
+                        }
+                    }
+                });
+            });
+            $("#btnkWh").click(function () {
+                debugger;
+
+                $('#btnkWh').removeClass("btn-default").addClass("btn-success");
+                $('#btnkWhVehicle').removeClass("btn-success").addClass("btn-default");
+                $("#loading").show();
+                $("#unloading").hide();
+                var Categoryid = $("#Category").val();
+                var StartDate = $("#StartDate").val();
+                var EndDate = $("#EndDate").val();
+                var ddlDateRange = $("#ddlDateRange").val();
+                if (ddlformat == "5") {
+                    debugger;
+                    dt1 = new Date(Formdate);
+                    dt2 = new Date(Todate);
+                    Formdate = moment(Formdate).format("DD/MM/YY HH:mm");
+                    Todate = moment(Todate).format("DD/MM/YY HH:mm");
+                    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+                    diff /= (60 * 60);
+                    var diffval = diff;
+
+                    if (diffval <= 24) {
+                        Minute = '60';
+                    }
+                }
+
+
+                // if (Categoryid == 1) {
+                $.ajax({
+                    url: '/HomeEnergy/Gethomedashoard?StartDate=' + StartDate + "&EndDate=" + EndDate + "&ddlDateRange=" + ddlDateRange,
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json;charset-utf-8',
+                    success: function (data) {
+                        $("#loading").hide();
+                        $("#unloading").show();
+
+                        $("#showPlantHome").html();
+                        $("#showPlantHome").empty();
+
+                        if (data != "") {
+
+                            $("#showPlantHome").html(data);
+                        }
+                    }
+                });
+
+                // }
+                //else {
+                //    $.ajax({
+                //        url: '/HomeEnergy/GetkWhvechicle?Categoryid=' + Categoryid + "&StartDate=" + StartDate + "&EndDate=" + EndDate + "&ddlDateRange=" + ddlDateRange,
+                //        type: 'GET',
+                //        data: "",
+                //        contentType: 'application/json;charset-utf-8',
+                //        success: function (data) {
+                //            $("#loading").hide();
+                //            $("#unloading").show();
+
+                //            $("#showPlantHome").html();
+                //            $("#showPlantHome").empty();
+                //            debugger;
+                //            if (data != "") {
+                //                debugger;
+                //                $("#showPlantHome").html(data);
+                //            }
+                //        }
+                //    });
+                //}
+            });
+
+
+
+            $('.btnsumbit').click(function () {
+
+                $("#loading").show();
+                $("#unloading").hide();
+                homeEnergy();
+                //var Category = $("#Category").val();
+                //if (Category == 1) {
+                //    $('#btnkWh').click();
+                //}
+                //else {
+                //    $('#btnkWhVehicle').click();
+                //}
+                //if ($('#btnkWh').hasClass("btn-success")) {
+
+                //}
+                //else if ($('#btnkWhVehicle').hasClass("btn-success")) {
+
+                //}
+            });
+
+
+        });
+
+
+        function homeEnergy() {
+            debugger;
+            var Categoryid = $("#Category").val();
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+            var ddlDateRange = $("#ddlDateRange").val();
+            var Shift = $("#Shift").val();
+            var Holiday = $("#Reason_ID").val();
+            var Type = $("#Parameter").val();
+            var Category = $("#Category").val();
+
+            if (ddlDateRange == "5") {
+                debugger;
+                dt1 = new Date(StartDate);
+                dt2 = new Date(EndDate);
+                StartDate = moment(StartDate).format("DD/MM/YY HH:mm");
+                EndDate = moment(EndDate).format("DD/MM/YY HH:mm");
+                var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+                diff /= (60 * 60);
+                var diffval = diff;
+
+
+            }
+
+            if (Category == 1) {
+                $.ajax({
+                    url: '/HomeEnergy/Gethomedashoard',
+                    type: 'GET',
+                    data: ({ StartDate: StartDate, EndDate: EndDate, ddlDateRange: ddlDateRange, ConsumptionId: Type, shift: Shift, Holiday: Holiday }),
+                    contentType: 'application/json;charset-utf-8',
+                    success: function (data) {
+                        $("#loading").hide();
+                        $("#unloading").show();
+
+                        $("#showPlantHome").html();
+                        $("#showPlantHome").empty();
+
+                        if (data != "") {
+
+                            $("#showPlantHome").html(data);
+                        }
+                        else {
+
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: '/HomeEnergy/GetkWhvechicle',
+                    type: 'GET',
+                    data: ({ StartDate: StartDate, EndDate: EndDate, ddlDateRange: ddlDateRange, ConsumptionId: Type, shift: Shift, Holiday: Holiday }),
+                    contentType: 'application/json;charset-utf-8',
+                    success: function (data) {
+                        $("#loading").hide();
+                        $("#unloading").show();
+
+                        $("#showPlantHome").html();
+                        $("#showPlantHome").empty();
+
+                        if (data != "") {
+
+                            $("#showPlantHome").html(data);
+                        }
+                    }
+                });
+            }
+
+        }
+
+        function realtime(shopId) {
+            debugger
+            var path = "/RealTimeParameter/Index?Shop_ID=" + shopId;
+            window.location.href = path;
+        }
+    });
+
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        //var date = new Date();
+        //var maxdate = new Date(date.getFullYear(), date.getMonth() + 1, -0);
+        ////var date1=$(this).datepicker('getdate');
+
+        //date.setDate(date.getDate());
+        //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' });
+        //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' });
+        //var start = $("#StartDate").val();
+        //$("#StartDate").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy',
+        //        autoclose: true,
+        //        endDate: '+0d'
+        //    })
+
+        //$("#EndDate").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy',
+        //        startDate: start,
+        //        endDate: '+0d'
+        //    });
+
+        //$("#EndDate").change(function () {
+        //    debugger
+        //    var startDate = (document.getElementById("StartDate").value);
+        //    var fromDate = new Date(startDate);
+        //    var maxDate = new Date(fromDate.getFullYear(), fromDate.getMonth() + 1, -0);
+        //    var dateformat = [(maxDate.getDate()), (maxDate.getMonth() + 1), maxDate.getFullYear()].join('/');
+
+
+        //    var endDate = document.getElementById("EndDate").value;
+        //    var to = new Date(endDate);
+        //    var todate = [(to.getDate()), (to.getMonth() + 1), to.getFullYear()].join('/');
+
+        //    //    if (startDate != "" && endDate != "") {s
+        //    if ((Date.parse(endDate) > Date.parse(dateformat))) {
+        //        $('.EndDate').html("To date should be greater than or equal to From date");
+        //        document.getElementById("EndDate").value = "";
+        //    }
+        //    else if ((Date.parse(startDate) > Date.parse(endDate))) {
+
+        //        $('.EndDate').html("To date should be greater than or equal to From date");
+        //        document.getElementById("EndDate").value = "";
+        //    }
+        //    else {
+        //        $('.EndDate').html(null);
+        //    }
+        //    //    }
+        //    //})
+        //});
+    })
+
+</script>
+

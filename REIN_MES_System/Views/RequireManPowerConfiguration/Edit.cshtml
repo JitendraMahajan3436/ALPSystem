@@ -1,0 +1,99 @@
+﻿@model REIN_MES_System.Models.RS_ManPower_Required
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<br />
+<div class="col-md-12">
+    <div class="plant-setup">
+        @using (Html.BeginForm("Edit", "RequireManPowerConfiguration", FormMethod.Post, new { id = "Edit_Manpower" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.MPR_ID)
+                <div class="form-group" style="display:none;">
+                    @Html.Label("Plant Name", new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.Label("Shop Name", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("Line Name", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("Setup Name", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Setup_ID, null, "Select Setup", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Setup_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.Label("Require Direct ManPower", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Direct_MP_Quantity, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Direct_MP_Quantity)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("Require Indirect ManPower", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Indirect_MP_Quantity, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Indirect_MP_Quantity)
+                    </div>
+                </div>
+                <br />
+               
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                        @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/master_plant_setup_file")
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Edit_Manpower").validate({
+            //ignore: [],
+            rules: {
+
+                Shop_ID: "required",
+                Line_ID: "required",
+                Setup_ID: "required",
+                Direct_MP_Quantity: "required",
+                Indirect_MP_Quantity: "required",
+
+            }
+        });
+
+    })
+</script>

@@ -1,0 +1,966 @@
+﻿@model REIN_MES_System.Models.RS_MT_Machines
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.Models
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+
+<script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+
+
+
+<style>
+
+    #testy {
+        z-index: 99999;
+    }
+
+
+    table {
+        border: 1px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        table .tr > td {
+            text-wrap: initial;
+            text-align: center;
+        }
+
+        table tr.progress-signal {
+            background-color: yellow;
+            text-align: center;
+            color: black;
+            font-weight: bold;
+        }
+
+    .table-scroll {
+        height: 240px !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden;
+        padding-right: 0px;
+    }
+
+    .form-control {
+        border-radius: 10px !important;
+    }
+
+    .babyclass {
+        padding: 11% !important;
+    }
+</style>
+<div class="col-md-12 col-lg-12 col-sm-12">
+
+    @using (Html.BeginForm("Edit", "Machines", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+    {
+
+        // @Html.Hiddenfor("Machine_ID")
+
+        @Html.HiddenFor(model => model.Machine_ID)
+
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="form-horizontal">
+            <div class="row breakClass">
+                <div class="row">
+                    <div class="col-md-3 col-lg-3 col-sm-3" style="display:none;">
+                        @Html.LabelFor(model => model.Plant_ID, new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Plant_ID, null, ResourceDisplayName.Select_Plant, htmlAttributes: new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Line_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Station_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Station_ID, null, ResourceDisplayName.Select_Station, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Number, ResourceDisplayName.Machine_No, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Machine_Number, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Machine_Number, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Name, ResourceDisplayName.Machine_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Machine_Name, htmlAttributes: new { @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.Machine_Name, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Description, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Machine_Description, htmlAttributes: new { @class = "form-control", @maxlength = "200" })
+                    @Html.ValidationMessageFor(model => model.Machine_Description, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Category_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Machine_Category_ID, null, ResourceDisplayName.Select_Category, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Machine_Category_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Manufaturing_Year, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Manufaturing_Year, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Manufaturing_Year, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <div class="row breakClass">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.M_Type_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.M_Type_ID, null, "Select Machine Category", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.M_Type_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Make, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Machine_Make, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Machine_Make, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.Machine_Model, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Machine_Model, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Machine_Model, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.FMEA_Document, htmlAttributes: new { @class = "" })
+                    <input type="file" name="files" multiple="multiple" />
+                    @Html.ValidationMessageFor(model => model.FMEA_Document, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-3 col-lg-3 col-sm-3">
+                        @Html.LabelFor(model => model.Mail_Trigger_In, "Mail Trigger In", htmlAttributes: new { @class = " " })
+                        @Html.TextBoxFor(model => model.Mail_Trigger_In, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Mail_Trigger_In, null, new { @class = "validation_error" })
+                    </div>*@
+            </div>
+
+            <div class="row breakClass">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.M_Asset_Number, htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.M_Asset_Number, null, htmlAttributes: new { @class = "form-control", @maxlength = "25" })
+                    @Html.ValidationMessageFor(model => model.M_Asset_Number, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.IP_Address, ResourceDisplayName.Station_IP_Address, htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.IP_Address, null, htmlAttributes: new { @class = "form-control", @maxlength = "15" })
+                    @Html.ValidationMessageFor(model => model.IP_Address, null, new { @class = "validation_error" })
+                </div>
+
+
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.Label("Image_Content", "Machine Image", htmlAttributes: new { @class = "control-label" })
+                    <input type="file" id="Image_Content" name="upload" />
+                    @Html.ValidationMessage("Image_Content", null, new { @class = "validation_error" })
+                </div>
+
+
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.Label("Shift Configuration", "Shift Configuration", htmlAttributes: new { @class = "control-label" })
+                    @*&nbsp;*@
+                    <i class="=glyphicon glyphicon-th " style="font-size:2em" id="MachineShiftConfig" title="Click Here To Assign Shift"></i>
+                    @*<span> click me </span>*@
+
+                </div>
+
+                <div id="testy"></div>
+
+            </div>
+
+            <div class="row breakClass">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <input type="checkbox" id="IsCBM" checked="checked" name="CheckboxGroup" class="CheckboxGroup" />
+                    @*@Html.CheckBox("IsCBM")*@
+                    @Html.Label(ResourceDisplayName.IsCBM, new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsCBM)
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <input type="checkbox" id="IsTBM" name="CheckboxGroup" class="CheckboxGroup" />
+                    @*@Html.CheckBox("IsTBM")*@
+                    @Html.Label(ResourceDisplayName.IsTBM, new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsTBM)
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @*@Html.CheckBox("IsMinorStoppage")*@
+                    <input type="checkbox" id="IsMinorStoppage" name="CheckboxGroup" class="CheckboxGroup" />
+                    @Html.Label(ResourceDisplayName.IsMinorStoppage, new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsMinorStoppage)
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.EditorFor(model => model.IsActive)
+                    @Html.LabelFor(model => model.IsActive, new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsActive)
+                </div>
+            </div>
+
+            <div class="row breakClass" id="CBMRow1" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Matrix1, ResourceDisplayName.CBM_Matrix1, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Matrix1, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.CBM_Matrix1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Email1, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Email1, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @*@Html.CheckBox("IsCBM")*@
+                    @Html.ValidationMessageFor(model => model.CBM_Email1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_SMS1, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_SMS1, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.CBM_SMS1, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass" id="TBMRow1" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Matrix1, ResourceDisplayName.TBM_Matrix1, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Matrix1, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.TBM_Matrix1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Email1, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Email1, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @*@Html.CheckBox("IsCBM")*@
+                    @Html.ValidationMessageFor(model => model.TBM_Email1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_SMS1, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_SMS1, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.TBM_SMS1, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass" id="MSRow1" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Matrix1, ResourceDisplayName.MS_Matrix1, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Matrix1, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Matrix1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Occurences1, ResourceDisplayName.MS_Occurences, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Occurences1, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Occurences1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Email1, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Email1, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @*@Html.CheckBox("IsCBM")*@
+                    @Html.ValidationMessageFor(model => model.MS_Email1, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_SMS1, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_SMS1, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.MS_SMS1, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <div class="row breakClass" id="CBMRow2" style="display:none">
+                
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Matrix2, ResourceDisplayName.CBM_Matrix2, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Matrix2, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.CBM_Matrix2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Email2, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Email2, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.CBM_Email2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_SMS2, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_SMS2, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.CBM_SMS2, null, new { @class = "validation_error" })
+                </div>
+
+            </div>
+            <div class="row breakClass" id="TBMRow2" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Matrix2, ResourceDisplayName.TBM_Matrix2, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Matrix2, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.TBM_Matrix2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Email2, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Email2, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.TBM_Email2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_SMS2, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_SMS2, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.TBM_SMS2, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass" id="MSRow2" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Matrix2, ResourceDisplayName.MS_Matrix2, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Matrix2, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Matrix2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Occurences2, ResourceDisplayName.MS_Occurences, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Occurences2, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Occurences2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Email2, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Email2, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.MS_Email2, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_SMS2, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_SMS2, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.MS_SMS2, null, new { @class = "validation_error" })
+                </div>
+                <br />
+            </div>
+
+            <div class="row breakClass" id="CBMRow3" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Matrix3, ResourceDisplayName.CBM_Matrix3, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Matrix3, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.CBM_Matrix3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_Email3, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_Email3, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.CBM_Email3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.CBM_SMS3, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.CBM_SMS3, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.CBM_SMS3, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass" id="TBMRow3" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Matrix3, ResourceDisplayName.TBM_Matrix3, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Matrix3, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.TBM_Matrix3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_Email3, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_Email3, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.TBM_Email3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.TBM_SMS3, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.TBM_SMS3, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.TBM_SMS3, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="row breakClass" id="MSRow3" style="display:none">
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Matrix3, ResourceDisplayName.MS_Matrix3, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Matrix3, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Matrix3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Occurences3, ResourceDisplayName.MS_Occurences, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Occurences3, new { onchange = "", @class = "form-control", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.MS_Occurences3, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_Email3, ResourceDisplayName.Email_ID, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_Email3, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.MS_Email3, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.LabelFor(model => model.MS_SMS3, ResourceDisplayName.Mobile_No, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.MS_SMS3, new { onchange = "", @class = "form-control", @maxlength = "10" })
+                    @Html.ValidationMessageFor(model => model.MS_SMS3, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+
+
+            <br />
+            <div class="row">
+
+                <div class="col-md-offset-0 col-sm-offset-0 col-lg-offset-0 col-md-10 col-sm-10 col-lg-10">
+                    <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                </div>
+
+            </div>
+        </div>
+
+
+        @*<div class="modal fade" id="ShiftPOPUP" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+                <div class="modal-dialog" style="padding: 4px -60px 54px 85px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title classModalTitle" style="text-align:center">Shift Configuration </h4>
+                        </div>
+
+
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.Label("From Time", new { @class = "babyclass" })
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.Label("To Time", new { @class = "babyclass" })
+                                </div>
+                            </div>
+
+                            <div class="row breakClass">
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                                    <input type="checkbox" id="ShiftACHK" checked="checked">
+
+
+                                    @Html.Label("Shift A", new { @class = "" })
+
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                                    @Html.TextBox("FromTime", null, new { @class = "form-control" })
+                                    @Html.ValidationMessage("FromTime", null, new { @class = "validation_error txtFullyReject " })
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                                    @Html.TextBox("ToTime", null, new { @class = "form-control" })
+                                    @Html.ValidationMessage("ToTime", null, new { @class = "validation_error txtFullyReject" })
+                                </div>
+                            </div>
+
+                            <div class="row breakClass">
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                                    <input type="checkbox" id="ShiftBCHK" checked="checked">
+                                    @Html.Label("Shift B", new { @class = "" })
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.TextBox("FromTime1", null, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.TextBox("ToTime1", null, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="row breakClass">
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    <input type="checkbox" id="ShiftCCHK" checked="checked">
+                                    @Html.Label("Shift C", new { @class = "" })
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.TextBox("FromTime2", null, new { @class = "form-control" })
+                                </div>
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    @Html.TextBox("ToTime2", null, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="row breakClass">
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    <input type="checkbox" id="ShiftPM" checked="checked">
+                                    @Html.Label("PMActivity", new { @class = "" })
+                                </div>
+
+                            </div>
+
+                            <div class="row breakClass">
+                                <input type="button" name="Save" value="Save" id="btnSaveShiftdata" class="btn btn-linkedin" style="position:absolute; left:501px">
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <div style="float:right">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="modal fade" id="ShiftPOPUP" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+            <div class="modal-dialog" style="padding: 4px -60px 54px 85px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title classModalTitle" style="text-align:center">Shift Configuration </h4>
+                    </div>
+
+
+                    <div class="modal-body">
+                        @if (ViewBag.Shifts != null)
+                                    {
+                                        var i = 0;
+                                        foreach (var shiftObj in ViewBag.Shifts)
+                                        {
+                                            string shiftname = shiftObj.Shift_Name;
+                        <div class="row breakClass">
+                            <div class="col-md-3 col-lg-3 col-sm-3">
+                                <input type="checkbox" id="Shift_@i" value="@shiftObj.Shift_ID">
+                                @Html.Label(shiftname, new { @class = "" })
+                            </div>
+                        </div>
+                                i = i + 1;
+                            }
+
+                        }
+                            <div class="row breakClass">
+
+                                <div class="col-md-3 col-lg-3 col-sm-3">
+                                    <input type="checkbox" id="ShiftPM" checked="checked">
+                                    @Html.Label("PMActivity", new { @class = "" })
+                                </div>
+
+                            </div>
+
+                            <div class="row breakClass">
+                                <input type="button" name="Save" value="Save" id="btnSaveShiftdata" class="btn btn-linkedin" style="position:absolute; left:501px">
+
+
+                            </div>
+
+                        </div>
+
+                            <div class="modal-footer">
+
+                                <div style="float:right">
+
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+
+
+
+
+
+    }
+</div>
+
+<div id="dialog" title="Error"></div>
+
+@section Scripts {
+
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css")
+    @Scripts.Render("~/bundles/jqueryval")
+    @*<script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>*@
+    @Scripts.Render("~/bundles/Select2scripts")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    @*<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>*@
+
+
+
+}
+
+<script>
+
+    window.onload = function () {
+        $('#CBMRow1').css('display', 'block');
+        $('#CBMRow2').css('display', 'block');
+        $('#CBMRow3').css('display', 'block');
+    };
+
+
+    $(document).ready(function () {
+        debugger
+
+        // var MachineName = $('#Machine_Name').val();
+
+        $("#MachineShiftConfig").click(function () {
+            debugger
+
+            //$("#ShiftACHK").prop('checked', false);
+            //$("#ShiftBCHK").prop('checked', false);
+            //$("#ShiftCCHK").prop('checked', false);
+            var Shifts = $('[id^="Shift_"]').length;
+           
+            for (var i = 0; i < Shifts; i++) {
+                $("#Shift_" + i).prop('checked',false);
+            }
+
+            $("#ShiftPM").prop('checked', false);
+
+
+
+            //$("#ShiftPOPUP").modal("show");
+
+            var machineid = $("#Machine_ID").val();
+            //  var Starttime1 = db.MM_Machine_Shift_Data.Where(m => m.MachineID == machineid).Select(m => m.ShiftA_StartTime).FirstOrDefault();
+
+            debugger
+            $.ajax({
+                url: "/Machines/GETShiftDetails/",
+
+                type: 'Get',
+                data: { Row_id: machineid },
+
+                success: function (data) {
+                    debugger
+                    if (data.Result.length > 0) {
+                        var IsPM = data.IsPM;
+                        for (var i = 0; i < data.Result.length; i++) {
+                            $("#Shift_" + i).prop('checked', true);
+                        }
+                        if (IsPM == true) {
+                            $("#ShiftPM").prop('checked', true);
+                        }
+                      
+                    }
+                    else {
+                        if (data.Result.length == 0) {
+
+                        }
+                        else if (data == false) {
+                            alert("error occured");
+                        }
+                    }
+                    
+                } ,
+                error: function (data) {
+                    debugger
+                }
+            });
+
+           // var checkeda = document.getElementById('ShiftACHK').checked
+
+     
+            $("#ShiftPOPUP").modal("show");
+
+        });
+
+        //$(".timepicker").datetimepicker(
+        //    {
+        //        format: "HH:mm:ss",
+        //        allowInputToggle: true,
+        //        //maxDate: '0',
+        //        collapse: true,
+        //    });
+
+       
+        //if (document.getElementById('ShiftACHK').checked) {
+            
+        //} 
+
+        $("#FromTime").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+                
+            });
+       
+
+
+        $("#ToTime").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+
+        $("#FromTime1").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+        $("#ToTime1").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+
+        $("#FromTime2").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+        $("#ToTime2").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+
+
+        $("#btnSaveShiftdata").click(function () {
+            debugger
+
+            // var ckbox = $('#IsStatus').val();
+            //var ShiftA = $('#ShiftACHK').val();
+            //var ShiftB = $('#ShiftBCHK').val();
+            //var ShiftC = $('#ShiftCCHK').val();
+            //var PMActivity = $('#ShiftPM').val();
+
+
+            //var ShiftA = $('#ShiftACHK').is(':checked');
+            //var ShiftB = $('#ShiftBCHK').is(':checked');
+            //var ShiftC = $('#ShiftCCHK').is(':checked');
+            var PMActivity = $('#ShiftPM').is(':checked');
+            var Shifts = $('[id^="Shift_"]').length;
+            var id = "";
+            for (var i = 0; i < Shifts; i++) {
+                var checked = $("#Shift_" + i).prop("checked");
+                if (checked == true && id.length == 0)
+                    id = $("#Shift_" + i).val();
+                else if (checked == true)
+                    id = id + "," + $("#Shift_" + i).val();
+            }
+
+            //var ShiftA_StartTime = $("#FromTime").val();
+            //var ShiftA_EndTime = $("#ToTime").val();
+            //var ShiftB_StartTime = $("#FromTime1").val();
+            //var ShiftB_EndTime = $("#ToTime1").val();
+            //var ShiftC_StartTime = $("#FromTime2").val();
+            //var ShiftC_EndTime = $("#ToTime2").val();
+            var machineid = $("#Machine_ID").val();
+
+            
+            debugger
+            $.ajax({
+                url: "/Machines/SaveShiftData/",
+
+                type: 'post',
+                data: {
+
+                    MachineID: machineid,
+                     PMactivity: PMActivity,
+                    ID: id
+
+                },
+
+                success: function (data) {
+
+                    debugger
+                    if (data == true) {
+                        $('#testy').toastee({
+                            type: 'success',
+                            width: '200px',
+                            height: '100px',
+
+                            message: 'shift data saved Successfully...',
+                        });
+
+                        $('#ShiftPOPUP').modal('hide');
+
+
+                    }
+                }
+
+            });
+
+
+        })
+       
+
+
+
+
+
+
+
+
+        //$("#Line_ID").select2();
+        //$("#Station_ID").select2();
+        $(".CheckboxGroup").click(function () {
+            debugger;
+            $(".CheckboxGroup").removeAttr("checked");
+            $(this).removeClass("CheckboxGroup");
+            $(this).prop('checked', true);
+
+            var value = this;
+            var value1 = value.toString().replace('input#', '');
+            if (value1 == 'IsCBM') {
+                $('#CBMRow1').css('display', 'block');
+                $('#CBMRow2').css('display', 'block');
+                $('#CBMRow3').css('display', 'block');
+                $('#TBMRow1').css('display', 'none');
+                $('#TBMRow2').css('display', 'none');
+                $('#TBMRow3').css('display', 'none');
+                $('#MSRow1').css('display', 'none');
+                $('#MSRow2').css('display', 'none');
+                $('#MSRow3').css('display', 'none');
+            }
+            if (value1 == 'IsTBM') {
+                $('#TBMRow1').css('display', 'block');
+                $('#TBMRow2').css('display', 'block');
+                $('#TBMRow3').css('display', 'block');
+                $('#CBMRow1').css('display', 'none');
+                $('#CBMRow2').css('display', 'none');
+                $('#CBMRow3').css('display', 'none');
+                $('#MSRow1').css('display', 'none');
+                $('#MSRow2').css('display', 'none');
+                $('#MSRow3').css('display', 'none');
+            }
+            if (value1 == 'IsMinorStoppage') {
+                $('#MSRow1').css('display', 'block');
+                $('#MSRow2').css('display', 'block');
+                $('#MSRow3').css('display', 'block');
+                $('#CBMRow1').css('display', 'none');
+                $('#CBMRow2').css('display', 'none');
+                $('#CBMRow3').css('display', 'none');
+                $('#TBMRow1').css('display', 'none');
+                $('#TBMRow2').css('display', 'none');
+                $('#TBMRow3').css('display', 'none');
+            }
+            else {
+                $('#CBMRow1').css('display', 'none');
+                $('#CBMRow2').css('display', 'none');
+                $('#CBMRow3').css('display', 'none');
+                $('#TBMRow1').css('display', 'none');
+                $('#TBMRow2').css('display', 'none');
+                $('#TBMRow3').css('display', 'none');
+                $('#MSRow1').css('display', 'none');
+                $('#MSRow2').css('display', 'none');
+                $('#MSRow3').css('display', 'none');
+            }
+            $(this).addClass("CheckboxGroup");
+        });
+        $('#IsCBM').change(function () {
+            debugger;
+            if (this.checked) {
+                $('#CBMRow1').css('display', 'block');
+                $('#CBMRow2').css('display', 'block');
+                $('#CBMRow3').css('display', 'block');
+            }
+            else {
+                $('#CBMRow1').css('display', 'none');
+                $('#CBMRow2').css('display', 'none');
+                $('#CBMRow3').css('display', 'none');
+            }
+        });
+        $('#IsTBM').change(function () {
+            if (this.checked) {
+                $('#TBMRow1').css('display', 'block');
+                $('#TBMRow2').css('display', 'block');
+                $('#TBMRow3').css('display', 'block');
+            }
+            else {
+                $('#TBMRow1').css('display', 'none');
+                $('#TBMRow2').css('display', 'none');
+                $('#TBMRow3').css('display', 'none');
+            }
+        });
+        $('#IsMinorStoppage').change(function () {
+            if (this.checked) {
+                $('#MSRow1').css('display', 'block');
+                $('#MSRow2').css('display', 'block');
+                $('#MSRow3').css('display', 'block');
+            }
+            else {
+                $('#MSRow1').css('display', 'none');
+                $('#MSRow2').css('display', 'none');
+                $('#MSRow3').css('display', 'none');
+            }
+        });
+
+        $('#Manufaturing_Year').datepicker({
+            format: 'yyyy/mm/dd'
+        });
+
+        $("#Mail_Trigger_In").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //  minDate: new Date(),
+                //maxDate: '0',
+                collapse: true,
+            });
+
+        $("#Shop_ID").on("change", function () {
+            //$("#Line_ID").html("");
+            //$("#Station_ID").html("");
+            var Shop_ID = $('#Shop_ID').val();
+            if (Shop_ID != "") {
+                //alert(Shop_ID);
+                $.getJSON('/Machines/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                    //  alert(data);
+                    if (data.length > 0) {
+                        $('#Line_ID option').remove();
+                        $('#Line_ID').append('<option value=""></option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#Line_ID').append('<option value="' +
+                                data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                        }
+                    }
+
+                });
+            }
+            else {
+                $("#Line_ID").html("");
+                $("#Station_ID").html("");
+            }
+        });
+
+        $("#Line_ID").on("change", function () {
+            //$("#Station_ID").html("");
+            var Line_ID = $('#Line_ID').val();
+            if (Line_ID != "") {
+                //alert(Shop_ID);
+                $.getJSON('/Machines/GetStationsByLineID', { lineid: Line_ID }, function (data) {
+                    //  alert(data);
+                    if (data.length > 0) {
+                        $('#Station_ID option').remove();
+                        $('#Station_ID').append('<option value=""></option>');
+                        for (var i = 0; i < data.length; i++) {
+                            $('#Station_ID').append('<option value="' +
+                                data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                        }
+                    }
+                });
+            }
+            else {
+                $('#Station_ID option').remove();
+                $('#Station_ID').append('<option value=""></option>');
+            }
+        });
+    });
+
+
+
+</script>

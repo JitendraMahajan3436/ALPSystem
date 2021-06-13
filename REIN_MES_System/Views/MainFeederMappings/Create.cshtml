@@ -1,0 +1,861 @@
+﻿@model REIN_MES_System.Models.UtilityMainFeederMapping
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+    <style>
+        input.metercheckbox {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 20px
+        }
+
+        #tblParameter {
+            counter-reset: serial-number; /* Set the serial number counter to 0 */
+        }
+
+            #tblParameter td:first-child:before {
+                counter-increment: serial-number; /* Increment the serial number counter */
+                content: counter(serial-number); /* Display the counter */
+            }
+
+        #tblParameter {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        #tblParameter, th, td {
+            border: 1px solid #cdcdcd;
+            text-align: center;
+        }
+
+            #tblParameter th, #tblLoss td {
+                padding: 10px;
+                text-align: left;
+            }
+
+        .panel-primary > .panel-heading {
+            color: #fff;
+            height: 46px;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        #testy {
+            z-index: 99999;
+        }
+    </style>
+
+    <link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+}
+@*@using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Shop Name *</label>
+                        @Html.DropDownList("Shop_ID", null, "Select Shop ", new { @class = "form-control", @style = "max-width:100%" })
+
+                        @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger shop" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Category Name </label>
+                        @*@Html.DropDownList("Category_ID", null, "Select Category ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                        @Html.DropDownListFor(model => model.Category_ID, null, ResourceDisplayName.Select_Category, htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.Category_ID, "", new { @class = "text-danger Category" })
+                    </div>
+
+                </div>
+               
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Feeder Name *</label>
+                        @*@Html.EditorFor(model => model.FeederName, new { htmlAttributes = new { @class = "form-control ", @style = "max-width:100%" } })*@
+                        @Html.DropDownListFor(model => model.Feeder_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Feeder_ID, "", new { @class = "text-danger feeder" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Feeder Desc </label>
+                        @*@Html.DropDownList("Category_ID", null, "Select Category ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                        @Html.TextBox("FeederDesc", null, ResourceDisplayName.Select_Category, htmlAttributes: new { @class = "form-control", ReadOnly = "true", disabled = "false" })
+                      
+                    </div>
+
+                </div>
+           
+
+            </div>
+               
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Area Name </label>
+                        @*@Html.DropDownList("Category_ID", null, "Select Category ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                        @Html.DropDownListFor(model => model.Area_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.Area_ID, "", new { @class = "text-danger Area" })
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Meter Type *</label>
+                        @Html.DropDownList("Meter_ID", null, "Select Meter ", new { @class = "form-control ", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(model => model.Meter_ID, "", new { @class = "text-danger Meter" })
+                    </div>
+                </div>
+
+            
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Load Type *</label>
+                        @Html.DropDownList("Load_ID", null, "Select Load ", new { @class = "form-control ", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(model => model.Load_ID, "", new { @class = "text-danger Meter" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Rated Load </label>
+                        @Html.TextBox("Ratedload", null, new { @class = "form-control ", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(model => model.Ratedload, "", new { @class = "text-danger Meter" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Ideal consumption</label>
+                        @Html.TextBox("Ideal", null, new { @class = "form-control ", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(model => model.Ideal, "", new { @class = "text-danger Meter" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    @Html.CheckBox("Active")
+                    <label>Shared Feeder</label>
+                    @Html.CheckBox("ManualMeter")
+                    <label>Manual Meter</label>
+                    @*@Html.CheckBox("ConsumptionType")
+            <label>/1000</label>
+            @Html.CheckBox("Is_Incomer")
+            <label>IS_Incomer</label>*@
+                    @Html.Hidden("Plant_ID")
+                </div>
+
+
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+
+
+                    <div class="panel" style="width:100%">
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Parameter Name *</label>
+                                @*@Html.DropDownList("Parameter_ID", null, "Select Parameter ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                                @Html.DropDownListFor(model => model.Parameter_ID, null, ResourceDisplayName.Select_Parameter, htmlAttributes: new { @class = "form-control select2", onchange = "ContainsData()", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Parameter_ID, "", new { @class = "text-danger onlydigit" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+
+                                <label> Unit *</label>
+                                @Html.DropDownListFor(model => model.Unit_ID, Enumerable.Empty<SelectListItem>(), "select Unit", htmlAttributes: new { @class = "form-control", onchange = "ContainsData()", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Unit_ID, "", new { @class = "text-danger onlydigit1" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>TagIndex *</label>
+                                @Html.Editor("TagIndex", new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%",  autocomplete = "off", @type = "number" } })
+                                @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger onlydigit2" })
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Tag Name *</label>
+                                @Html.EditorFor(model => model.TagName, new { htmlAttributes = new { @class = "form-control", onkeyup = "ContainsData()", autocomplete = "off", @style = "max-width:100%" } })
+                                @Html.ValidationMessageFor(model => model.TagName, "", new { @class = "text-danger onlydigit3" })
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Live Monitoring *</label>
+                                @*@Html.EditorFor(model => model.Consider, new { htmlAttributes = new { @class = "form-control select2", @style = "max-width:100%" } })*@
+                                @Html.DropDownListFor(model => model.Consider, new SelectList(new List<object> { new { value = "", text = "Select" }, new { value = "True", text = "Enable" }, new { value = "False", text = "disable" } }, "value", "text", 2), new { @class = "form-control", onchange = "ContainsData()", autocomplete = "off" })
+                                @Html.ValidationMessageFor(model => model.Consider, null, new { @class = "validation_error onlydigit4" })
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <input type="button" class="btn btn-primary " style="margin-top:26px" value="Add" name="Add" id="btnAdd">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+
+                    <div class="panel panel-primary">
+                        <!-- Development and Action Plan Review -->
+                        <div class="panel-heading">
+                            <h4 style="margin-top:0%;">Parameter Table</h4>
+                        </div>
+                        <div class="bs-example">
+                            <div class="Container">
+                                <table id="tblParameter">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No</th>
+                                            <th>Parameter Name</th>
+                                            <th>Unit</th>
+                                            <th>TagIndex</th>
+                                            <th>Tag Name</th>
+                                            <th>Live Monitoring</th>
+                                            <th style="display:none">ParameterId</th>
+                                            <th style="display:none">UnitId</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="display:none"><input type="checkbox" name="record"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <input type="button" name="Delete Select Row" value="Delete Select Row" id="btnlosssDelete" class="delete-row btn btn-danger" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Save" id="btnSubmit" class="btn btn-linkedin" />
+                    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="testy">
+
+    </div>
+</div>
+
+@*}*@
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <link href="~/Content/theme/plugins/toastee/css/styles.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/toastee/js/jquery.toastee.0.1.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".select2").select2();
+            $("#btnAdd").click(function () {
+
+                debugger
+
+                $('.onlydigit2').html("");
+
+                var Parameter = $("#Parameter_ID").val();
+                var unit = $("#Unit_ID").val();
+                var Tag_Index = $("#TagIndex").val();
+                var Tag_Name = $("#TagName").val();
+                var Active = $("#Consider").val();
+
+                if (Parameter != "" && unit != "" && Tag_Index > 0 && Tag_Name != "" && Active != "") {
+                    $(".Lossaccpet1").html(null);
+                    var ParameterName = $("#Parameter_ID").children("option:selected").text();
+                    var unitName = $("#Unit_ID").children("option:selected").text();
+                    var Live = $("#Consider").children("option:selected").text();
+                    //var res = "";
+                    //res += '';
+                    //res += ' <tr>';
+                    //res += ' <td >'; res += '</td>';
+                    //res += ' <td >'; res += '' + ParameterName; res += '</td>';
+                    //res += ' <td >'; res += '' + unitName; res += '</td>';
+                    //res += ' <td >'; res += '' + Tag_Index; res += '</td>';
+                    //res += ' <td >'; res += '' + Tag_Name; res += '</td>';
+                    //res += ' <td >'; res += '' + Active; res += '</td>';
+                    //res += '</td >'; '<input type="checkbox" name="record" ">'; res +='</td>';
+                    //res += ' <td style="display: none">'; res += '' + Parameter; res += '</td>';
+                    //res += ' <td style="display: none">'; res += '' + unit; res += '</td>';
+                    //res += ' </tr>';
+                    //$("#tblParameter tbody").append(res);
+
+                    var Meterdetils = new Array();
+                    var Parameterresult = true;
+                    var TagIndexresult = true;
+
+                    $("#tblParameter TBODY TR").each(function () {
+
+
+                        var row = $(this);
+                        var Meterdetil = {};
+
+                        Meterdetil.Parameter = row.find("TD").eq(7).html();
+                        Meterdetil.ParameterName = row.find("TD").eq(1).html();
+                        var Tag = row.find("TD").eq(3).html();
+                        Meterdetil.TagIndex = Tag.trim();
+                        Meterdetils.push(Meterdetil);
+                    });
+
+                    for (var i = 0; i < Meterdetils.length; i++) {
+                        debugger
+
+                        if (Meterdetils[i].Parameter == Parameter) {
+                            Parameterresult = false;
+                        }
+                        else if (Meterdetils[i].TagIndex == Tag_Index) {
+                            TagIndexresult = false;
+
+                        }
+                    }
+
+                    if (TagIndexresult) {
+
+
+                        if (Parameterresult) {
+                            var options = {};
+                            var TagINDex = Tag_Index;
+                            options.url = "/CommanMethod/ShopTagIndexconfig";
+                            options.type = "POST";
+                            options.data = JSON.stringify({ Tag_Index: TagINDex });
+                            options.contentType = "application/json";
+                            options.dataType = "json";
+                            options.success = function (result) {
+
+                                var count = result.length;
+                                if (count > 0) {
+                                    $('.onlydigit2').html("alredy exist TagIndex so please enter another TagIndex");
+                                    $('#TagIndex').focus();
+                                }
+                                else {
+                                    var markup = "<tr><td></td><td>" + ParameterName + "</td><td>" + unitName + "</td><td>" + Tag_Index + " </td><td>" + Tag_Name + "</td><td>" + Live + "</td> <td><input type='checkbox' value='" + Parameter + "' id='" + Tag_Index + "' name='record'></td><td style='display:none'>" + Parameter + "</td><td style='display:none'>" + unit + "</td></tr>"
+                                    $("#tblParameter tbody").append(markup);
+                                }
+                            };
+                            options.error = function () {
+                                alert("Invalid tagINdex ");
+                            };
+                            $.ajax(options);
+
+
+                        }
+                        else {
+                            $('.onlydigit').html("Allreday exist Parameter");
+                        }
+                    }
+                    else {
+                        $('.onlydigit2').html("Allreday exist TagIndex");
+                        $('#TagIndex').focus();
+                    }
+                }
+
+                else
+
+                    if (Parameter == "" && unit == "" && Tag_Index == "" && Tag_Name == "" && Active == "") {
+                        debugger
+                        //$('#testy').toastee({
+                        //    type: 'error',
+                        //    width: '200px',
+                        //    height: '100px',
+                        //    message: 'Please Select LossName & LossCount First...',
+                        //});
+
+                        $('.onlydigit').html("Please Select Parameter");
+                        $('#Parameter_ID').focus();
+
+                        $('.onlydigit1').html("Please Select Unit");
+                        $('#Unit_ID').focus();
+
+                        $('.onlydigit2').html("Please Enter  TagIndex");
+                        $('.onlydigit3').html("Please Enter  TagName");
+                        $('.onlydigit4').html("Please Select Live Monitoring");
+                        $('#Consider').focus();
+
+
+
+                    }
+                    else {
+                        if (Parameter == "") {
+                            $('.onlydigit').html("Please Select Parameter");
+                            $('#Parameter_ID').focus();
+
+                        }
+
+                        if (Tag_Name == "") {
+                            debugger
+
+                            $('.onlydigit3').html("Please Enter Tag Name");
+                            $('#TagName').focus();
+
+                        }
+                        if (Tag_Index <= 0 || Tag_Index == "") {
+
+                            $('.onlydigit2').html("Please Enter  TagIndex");
+                            $('#TagIndex').focus();
+                        }
+
+                        if (unit == "") {
+                            debugger
+
+                            $('.onlydigit1').html("Please Select Unit");
+                            $('#Unit_ID').focus();
+
+                        }
+                        if (Active == "") {
+                            debugger
+
+                            $('.onlydigit4').html("Please Select Live Monitoring");
+                            $('#Consider').focus();
+
+                        }
+
+
+                    }
+
+
+
+            });
+            $(".delete-row").click(function () {
+
+                debugger;
+                $("#tblParameter tbody").find('input[name="record"]').each(function () {
+                    if ($(this).is(":checked")) {
+                        debugger;
+                        // var row = $(this);
+                        var Rorid = $(this).val();
+                        $(this).parents("tr").remove();
+                        var count = parseInt($("#hdnlosscount").val()) + parseInt(Rorid);
+                        $("#hdnlosscount").val(count);
+                    }
+                });
+            });
+
+        })
+        function ContainsData() {
+            var Parameter = $("#Parameter_ID").val();
+            var unit = $("#Unit_ID").val();
+            var Tag_Index = $("#TagIndex").val();
+            var Tag_Name = $("#TagName").val();
+            var Active = $("#Consider").val();
+
+
+            if (Parameter != "") {
+
+                $('.onlydigit').html("");
+            }
+            else {
+                $('.onlydigit').html("Please Select Loss Name");
+                $('#LossNameid').focus();
+            }
+            if (unit != "") {
+                debugger
+                $('.onlydigit1').html("");
+            }
+            else {
+                $('.onlydigit1').html("Please Select Unit");
+                $('#Loss').focus();
+
+
+            }
+            if (Tag_Index != "0") {
+
+                $('.onlydigit2').html("");
+            }
+            else {
+                $('.onlydigit2').html("Please enter TagIndex ");
+                $('#TagIndex').focus();
+            }
+            if (Tag_Name != "") {
+
+                $('.onlydigit3').html("");
+            }
+            else {
+                $('.onlydigit3').html("Please Enter Tag Name");
+                $('#TagName').focus();
+            }
+            if (Active != "") {
+
+                $('.onlydigit4').html("");
+            }
+            else {
+                $('.onlydigit4').html("Please Select Live Monitoring");
+                $('#Consider').focus();
+            }
+
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Plant_ID").change(function () {
+
+                var Plant_ID = $("#Plant_ID").val();
+
+                var options = {};
+                options.url = "/CommanMethod/PlantwiseShopconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Plant_ID: Plant_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $("#Shop_ID").html(""); // clear before appending new list
+                    $("#Shop_ID").html();
+                    $.each(id, function (i, test) {
+                        $("#Shop_ID").append(
+
+
+                            $('<option></option>').val(test.Shop_ID).html(test.Shop_Name).prop('selected', true));
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid Shop ");
+                };
+                $.ajax(options);
+
+                Category();
+                ParameterConfig();
+            });
+            function Category() {
+                var Plant_ID = $("#Plant_ID").val();
+
+                var options = {};
+                options.url = "/CommanMethod/PlantwiseCategoryconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Plant_ID: Plant_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $("#Category_ID").html(""); // clear before appending new list
+                    $("#Category_ID").html();
+                    $.each(id, function (i, test) {
+                        $("#Category_ID").append(
+
+
+                            $('<option></option>').val(test.Category_Id).html(test.Category_Name).prop('selected', true));
+
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid Shop ");
+                };
+                $.ajax(options);
+            }
+
+            function ParameterConfig() {
+                var Plant_ID = $("#Plant_ID").val();
+
+                var options = {};
+                options.url = "/CommanMethod/PlantwiseParameterconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Plant_ID: Plant_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $("#Parameter_ID").html(""); // clear before appending new list
+                    $("#Parameter_ID").html();
+
+                    $.each(id, function (i, test) {
+
+                        $("#Parameter_ID").append(
+
+
+                            $('<option></option>').val(test.Prameter_ID).html(test.Prameter_Name).prop('selected', true));
+
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid Parameter ");
+                };
+                $.ajax(options);
+            }
+
+
+
+
+            $("#Shop_ID").change(function () {
+
+                var Shop_Id = $("#Shop_ID").val();
+                debugger;
+                var options = {};
+                options.url = "/CommanMethod/ShopwiseFeeder";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: Shop_Id });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    //  $('#Feeder option').remove();
+                    $("#Feeder_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Feeder_ID").append(
+
+
+                            $('<option></option>').val(test.Feeder_ID).html(test.FeederName).prop('selected', false));
+                    });
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+                Area(Shop_Id)
+
+            })
+            function Area(shop) {
+                var options = {};
+                options.url = "/CommanMethod/ShopwiseArea";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: shop });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    //  $('#Feeder option').remove();
+                    $("#Area_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Area_ID").append(
+
+
+                            $('<option></option>').val(test.Area_Id).html(test.Area_Name).prop('selected', true));
+                    });
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+            }
+            $("#Feeder_ID").change(function () {
+
+                var Feeder_ID = $("#Feeder_ID").val();
+                debugger;
+                var options = {};
+                options.url = "/CommanMethod/Feederwisedesc";
+                options.type = "POST";
+                options.data = JSON.stringify({ Feeder_ID: Feeder_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    //  $('#Feeder option').remove();
+                    $("#FeederDesc").html(""); // clear before appending new list
+                    $("#FeederDesc").val(id);
+
+
+                };
+               
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+
+
+            })
+            $("#Parameter_ID").change(function () {
+                $("#Unit_ID").html("");
+                $("#Unit_ID").empty();
+                var Parameter_ID = $("#Parameter_ID").val();
+                debugger;
+                var options = {};
+                options.url = "/CommanMethod/ParameterwiseUnit";
+                options.type = "POST";
+                options.data = JSON.stringify({ Parameter_ID: Parameter_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+                    debugger;
+                    $('#Unit_ID option').remove();
+                    $("#Unit_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Unit_ID").append(
+
+
+                            $('<option></option>').val(test.Unit_ID).html(test.Data_Unit));
+                    });
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Unit ");
+                };
+                $.ajax(options);
+
+
+            })
+            $('#btnSubmit').click(function () {
+                debugger;
+                var status = true;
+                var shopId = $("#Shop_ID").val();
+                var RatedLoad = $("#Ratedload").val();
+                var FeederId = $("#Feeder_ID").val();
+                var CategoryId = $("#Category_ID").val();
+                var AreaId = $("#Area_ID").val();
+                var MeterId = $("#Meter_ID").val();
+                var Active = document.getElementById("Active").checked;
+                var ManualMeter = document.getElementById("ManualMeter").checked;
+                var Load = $("#Load_ID").val();
+                var rowCount = $('#tblParameter tr').length;
+
+                if (shopId == "") {
+                    $('.shop').html("please select Shop Name");
+                    status = false;
+
+                }
+                if (FeederId == "") {
+                    $('.feeder').html("please select Feeder ");
+                    status = false;
+                }
+                if (CategoryId == "") {
+                    $('.feeder').html("please select Feeder ");
+                    status = false;
+                }
+                //if (AreaId == "") {
+                //    $('.Area').html("please select Area ");
+                //    status = false;
+                //}
+                if (MeterId == "") {
+                    $('.Mete').html("please select Meter type ");
+                    status = false;
+                }
+                if (rowCount <= 2) {
+                    $('#testy').toastee({
+                        type: 'error',
+                        width: '200px',
+                        height: '100px',
+
+                        message: 'atlest 1 parameter added',
+                    });
+                    status = false;
+                }
+                var Resultlist = Array()
+                if (status) {
+
+
+                    $("#tblParameter TBODY TR").each(function () {
+
+
+                        var row = $(this);
+                        var result = {};
+
+                        debugger;
+                        result.Shop = shopId;
+                        result.feeder = FeederId;
+                        result.Category = CategoryId;
+                        result.Area = AreaId;
+                        result.Meter = MeterId;
+                        result.sharedfeeder = Active;
+                        result.Manualfeeder = ManualMeter;
+                        result.RatedLoad = RatedLoad;
+                        result.Load_ID = Load;
+                        result.Prameter = row.find("TD").eq(7).html();
+                        result.Unit = row.find("TD").eq(8).html();
+                        result.TagIndex = row.find("TD").eq(3).html();
+                        result.TagName = row.find("TD").eq(4).html();
+                        var result1 = row.find("TD").eq(5).html();
+                        if (result1 == 'Enable') {
+                            result.Active = true;
+                        }
+                        else {
+                            result.Active = false;
+                        }
+                        Resultlist.push(result);
+                    });
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/MainFeederMappings/addFeeder",
+                        data: JSON.stringify(Resultlist),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            $('#testy').toastee({
+                                type: 'success',
+                                width: '300px',
+                                height: '100px',
+                                message: data.Message,
+                            });
+                            setTimeout(function () {
+                                location.reload();
+                            }, 3000);
+                        }
+                    });
+                }
+
+            });
+        })
+
+
+    </script>
+
+}
+
+

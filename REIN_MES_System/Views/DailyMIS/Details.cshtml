@@ -1,0 +1,163 @@
+﻿@model REIN_MES_System.Models.RS_Daily_MIS
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RS_Daily_MIS</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Log_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Log_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.From_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.From_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.To_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.To_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Total_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Total_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Owner)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Active)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee1.Employee_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Row_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

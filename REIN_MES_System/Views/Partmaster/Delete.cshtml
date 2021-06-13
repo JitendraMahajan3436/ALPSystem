@@ -1,0 +1,123 @@
+﻿@model REIN_MES_System.Models.RS_Partmaster
+@using REIN_MES_System.App_LocalResources
+@using REIN_MES_System.custom_Helper
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    @*<h4>RS_Partmaster</h4>*@
+    <hr />
+    <dl class="dl-horizontal">
+        
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Plant_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Shop_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName(ResourceDisplayName.Part_Group_desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model=>model.Part_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_No)
+        </dd>
+             <dt>
+            @Html.DisplayNameFor(model => model.Part_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genealogy)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Genealogy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Error_Proofing)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Error_Proofing)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kitting)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Kitting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sequence)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Sequence)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Traceability)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Traceability)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SOB)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.SOB)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="@ResourceGlobal.Delete" class="btn btn-primary" />
+             @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+            @*@Html.ActionLink("Back to List", "Index")*@
+        </div>
+    }
+</div>

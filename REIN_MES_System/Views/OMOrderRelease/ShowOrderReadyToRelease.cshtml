@@ -1,0 +1,104 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Creation>
+@using REIN_MES_System.Models
+
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    var day = DateTime.Today.Day;
+    var currentItem = Convert.ToInt16(ViewBag.TotalReleasedItem);
+    currentItem = currentItem + 1;
+    var config = ViewBag.omConfiguration;
+    DateTime time = DateTime.Now.Date;
+    REIN_MES_System.Models.RS_OM_OrderRelease Order_Release=new REIN_MES_System.Models.RS_OM_OrderRelease();
+    DateTime date = DateTime.Today.Date;
+    string oredr_cummulative="";
+    int cnt=0;
+    int cnt_orderno=0;
+    int cummulative;
+    var plant_id = ViewBag.plant;
+    var Shopid = ViewBag.Shop_Id;
+    int totalOrder = 0;
+    }
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+       
+        <div class="panel-heading">Order List</div>
+        <div class="table-responsive">
+            <table class=" table table-bordered table-striped datatable_completes">
+                <thead>
+                    <tr>
+                        <th>Order Cummulative</th>
+                        <th>Order No</th>
+                        <th>Model Code</th>
+                        @*<th>Series</th>*@
+                        @*<th>Color Id</th>*@
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        for (int i = 0; i < Convert.ToInt16(ViewBag.Quantity); i++)
+                        {
+                            if (oredr_cummulative != "")
+                            {
+                                cnt = cnt + 1;
+                            }
+
+                            <tr>
+                                <td>
+                                    @{
+                                 oredr_cummulative = Order_Release.generateORNNumber(1, date)+"";
+                                 cummulative = Convert.ToInt16(oredr_cummulative) + cnt; ;
+                                 @cummulative
+                                    }
+
+                                </td>
+                                <td>
+                                    @{
+                            int Shop_id = Convert.ToInt16(Shopid);
+                            RS_OM_OrderRelease omOrderRelease = new RS_OM_OrderRelease();
+                            string order_number = omOrderRelease.Order_No;
+                            int Line_ID =Convert.ToInt16 (omOrderRelease.Line_ID);
+                            var max_orderno = db.RS_OM_OrderRelease.Max(r => r.ORN);
+                            string orderno;
+                            totalOrder = omOrderRelease.getTotalOrderReleasedByDate(Shop_id,Line_ID);
+                            if (max_orderno == null)
+                            {
+                                omOrderRelease.Order_No = omOrderRelease.generateOrderNumber(cnt + 1, "Tractor");
+                                orderno = omOrderRelease.Order_No;
+                            }
+                            else
+                            {
+                                cnt_orderno = cnt_orderno + 1;
+                                int number = Convert.ToInt16(max_orderno + cnt_orderno);
+                                omOrderRelease.Order_No = omOrderRelease.generateOrderNumber(number, "Tractor");
+                                orderno = omOrderRelease.Order_No;
+                            }
+                            @orderno
+                                    }
+                                             </td>
+                                <td>@ViewBag.ModelCode</td>
+                                @*<td>@ViewBag.ColorCode</td>*@
+                                <td>@*@ViewBag.Series_Code*@</td>
+                            </tr>
+
+                            currentItem = currentItem + 1;
+                        }
+                    }
+                </tbody>
+            </table>
+       </div>
+        </div>
+    </div>
+
+</div>
+
+            <center> <input type="button" id="release_order" class="btn btn-primary" value="Release Order" /><br /><br /></center>
+  
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

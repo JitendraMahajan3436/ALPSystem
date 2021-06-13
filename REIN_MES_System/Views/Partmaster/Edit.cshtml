@@ -1,0 +1,708 @@
+﻿@model REIN_MES_System.Models.RS_Partmaster
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    @*<div class="col-md-3 plant-line">*@
+    <div class="form-horizontal">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.PartMaster_ID)
+            <input type="hidden" id="hfSeries_Discription" name="hSeries_Discription" />
+
+            <div class="row">
+                <div class="col-md-3" style="display:none;">
+
+                    @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, null, new { onchange = "", @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Consumption_Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Consuption_Shop, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Consumption_Line_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.Select_Consuption_Line, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Station_ID, ResourceDisplayName.Consumption_Station_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Station_ID, null, ResourceDisplayName.Select_Consumption_Station, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+            <br />
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Partgroup_ID, ResourceDisplayName.PartGroup_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Partgroup_ID, null, ResourceDisplayName.Select_PartGroup, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Partgroup_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-3" style="display:none">
+
+                    @Html.LabelFor(model => model.Stage, htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Stage, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Stage)
+
+                </div>
+
+
+                @*<div class="col-md-3" style="display:none">
+
+                        @Html.LabelFor(model => model.Series_Code, htmlAttributes: new { @class = "" })
+
+                        @Html.DropDownList("Series_Code", (SelectList)ViewBag.Series, ResourceDisplayName.Select_Series, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Series_Code, null, new { @class = "validation_error" })
+
+                    </div>
+                        <div class="col-md-3">
+
+                        @Html.LabelFor(model => model.Part_No, ResourceDisplayName.Part_No + " *", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Part_No, new { onchange = "", @class = "form-control text-uppercase", @maxlength = "30" })
+                        @Html.ValidationMessageFor(model => model.Part_No, null, new { @class = "validation_error" })
+                        <label id="errorMsg1" style="color:red"></label>
+                    </div>
+
+                    <div class="col-md-3">
+
+                        @Html.LabelFor(model => model.Series_Code, htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Series_Discription, new { onchange = "", @class = "form-control text-uppercase", @maxlength = "15" })
+                        @Html.ValidationMessageFor(model => model.Series_Code, null, new { @class = "validation_error" })
+
+                    </div>*@
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Part_No, ResourceDisplayName.Part_No, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.TextBoxFor(model => model.Part_No, new { onchange = "", @class = "form-control text-uppercase", @maxlength = "30" })
+                    @Html.ValidationMessageFor(model => model.Part_No, null, new { @class = "validation_error" })
+                    <label id="errorMsg1" style="color:red"></label>
+                </div>
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Part_Description, ResourceDisplayName.Part_Description, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.TextAreaFor(model => model.Part_Description, new { onchange = "", @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.Part_Description, null, new { @class = "validation_error" })
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+                @*<div class="col-md-3">
+
+                        @Html.LabelFor(model => model.Part_No, ResourceDisplayName.Part_No + " *", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Part_No, new { onchange = "", @class = "form-control text-uppercase", @maxlength = "30" })
+                        @Html.ValidationMessageFor(model => model.Part_No, null, new { @class = "validation_error" })
+                        <label id="errorMsg1" style="color:red"></label>
+                    </div>*@
+
+
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.RadioButtonFor(model => model.is_Non_RS_Barcode, false, new { @checked = "checked" })
+                    &nbsp;
+                    @Html.Label("Standard Barcode", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.is_Non_RS_Barcode, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.RadioButtonFor(model => model.is_Non_RS_Barcode, true)
+                    &nbsp;
+                    @Html.Label("Vendor Specific Barcode", htmlAttributes: new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.is_Non_RS_Barcode, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4" id="stdChar" style="display:none">
+                    @Html.LabelFor(model => model.Std_Char, ResourceDisplayName.Std_Char, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Std_Char, new { onchange = "", @class = "form-control", @MaxLength = "2" })
+                    @Html.ValidationMessageFor(model => model.Std_Char, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4" id="StartPos" style="display:none">
+                    @Html.LabelFor(model => model.Start_Position, ResourceDisplayName.Start_Position, htmlAttributes: new { @class = "", @Value = "0" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Start_Position, new { onchange = "", @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "2" })
+                    @Html.ValidationMessageFor(model => model.Start_Position, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4" id="mStartPos" style="display:none">
+                    @Html.LabelFor(model => model.Month_Start_Position, ResourceDisplayName.Month_Start_Position, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Month_Start_Position, new { onchange = "", @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "2" })
+                    @Html.ValidationMessageFor(model => model.Month_Start_Position, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4" id="yStartPos" style="display:none">
+                    @Html.LabelFor(model => model.Year_Start_Position, ResourceDisplayName.Year_Start_Position, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Year_Start_Position, new { onchange = "", @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "2" })
+                    @Html.ValidationMessageFor(model => model.Year_Start_Position, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4" id="mIdentifier" style="display:none">
+                    @Html.LabelFor(model => model.Month_Identifier, ResourceDisplayName.Month_Identifier, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Month_Identifier, new { onchange = "", @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "1" })
+                    @Html.ValidationMessageFor(model => model.Month_Identifier, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4" id="yIdentifier" style="display:none">
+                    @Html.LabelFor(model => model.Year_Identifier, ResourceDisplayName.Year_Identifier, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Year_Identifier, new { onchange = "", @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "1" })
+                    @Html.ValidationMessageFor(model => model.Year_Identifier, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-2" style="display:none;">
+
+                    @Html.LabelFor(model => model.Kitting, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Kitting)
+                    @Html.ValidationMessageFor(model => model.Kitting)
+
+                </div>
+
+                <div class="col-md-2" style="display:none;">
+
+                    @Html.LabelFor(model => model.Sequence, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Sequence)
+                    @Html.ValidationMessageFor(model => model.Sequence)
+                </div>
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Genealogy, htmlAttributes: new { @class = "" })
+                    &nbsp;
+                    @Html.EditorFor(model => model.Genealogy)
+                    @Html.ValidationMessageFor(model => model.Genealogy)
+
+                </div>
+
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Error_Proofing, htmlAttributes: new { @class = "" })
+                    &nbsp;
+                    @Html.EditorFor(model => model.Error_Proofing, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Error_Proofing)
+
+                </div>
+                <div class="col-md-4">
+
+                    @Html.LabelFor(model => model.Traceability, htmlAttributes: new { @class = "" })
+                    &nbsp;
+                    @Html.EditorFor(model => model.Traceability, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Traceability)
+
+                </div>
+                <div class="col-md-2" style="display:none;">
+
+                    @Html.LabelFor(model => model.isFinished, htmlAttributes: new { @class = "" })
+                    &nbsp;
+                    @Html.EditorFor(model => model.isFinished, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.isFinished)
+
+                </div>
+                <div class="col-md-4" id="stdChar" style="display:none">
+
+                    @Html.LabelFor(model => model.Is_Part_Create_Order, htmlAttributes: new { @class = "" })
+                    &nbsp;
+                    @Html.EditorFor(model => model.Is_Part_Create_Order, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.isFinished)
+
+                </div>
+            </div>
+
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-4" id="divPartID" style="display:none">
+                    @Html.LabelFor(model => model.PartID, "PartID", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.PartID, null, "Select PartID", new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PartID, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br />
+            <div class="row col-md-3">
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" id="btnSave" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        }
+    </div>
+    @*</div>*@
+</div>
+
+<div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/master_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+    }
+
+    @*@Html.ActionLink("Back to List", "Index")*@
+</div>
+
+<script>
+    $(document).ready(function () {
+        //for loading contain of vender specific barcode
+        $(':radio[name=is_Non_RS_Barcode][value="False"], :radio[name=is_Non_RS_Barcode][value="True"]').change();
+        //
+
+        $("#Partgroup_ID").select2({
+            allowClear: true
+        });
+
+        $("#Line_ID").select2({
+            allowClear: true
+        });
+
+        $("#Series_Code").select2({
+            allowClear: true
+        });
+
+        $("#Shop_ID").select2({
+            allowClear: true
+        });
+
+        $("#Station_ID").select2({
+            allowClear: true
+        });
+
+
+      
+            var checkedTraceValue = document.getElementById("Traceability").checked;
+            if (checkedTraceValue == true) {
+                document.getElementById("divPartID").style.display = "block"
+            }
+            else {
+                document.getElementById("divPartID").style.display = "none"
+                $('span[data-valmsg-for="PartID"]').text("");
+                $("#PartID").val("");
+            }
+        
+    });
+
+</script>
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+    //    $("#btnSave").click(function () {
+    //        if (("#Std_Char").val() == "") {
+    //            $("span[data-valmsg-for=" + $(this) + "]").addClass("field-validation-valid validation_error");
+    //        }
+    //        if (("#Start_Position").val() == "") { }
+    //        if (("#Month_Start_Position").val() == "") { }
+    //        if (("#Year_Start_Position").val() == "") { }
+    //        if (("#Month_Identifier").val() == "") { }
+    //        if (("#Year_Identifier").val() == "") { }
+
+    //    });
+
+    //    var checkedValue = document.getElementById("is_Non_RS_Barcode").checked;
+    //    if (checkedValue == false) {
+    //        document.getElementById("StartPos").style.display = "block"
+    //        document.getElementById("stdChar").style.display = "block"
+    //        document.getElementById("mStartPos").style.display = "block"
+    //        document.getElementById("yStartPos").style.display = "block"
+    //        document.getElementById("yIdentifier").style.display = "block"
+    //        document.getElementById("mIdentifier").style.display = "block"
+    //    }
+    //    else {
+    //        document.getElementById("StartPos").style.display = "none"
+    //        document.getElementById("stdChar").style.display = "none"
+    //        document.getElementById("mStartPos").style.display = "none"
+    //        document.getElementById("yStartPos").style.display = "none"
+    //        document.getElementById("yIdentifier").style.display = "none"
+    //        document.getElementById("mIdentifier").style.display = "none"
+
+    //    }
+
+    //});
+    //PartGroup JavaScript
+    $("#Shop_ID").on("change", function () {
+
+        var Plant = $("#Plant_ID").val();
+        var Shop = $("#Shop_ID").val();
+
+        $('Partgroup_ID').html("");
+        if (Plant.length > 0 && Shop.length > 0) {
+            $('#Line_ID option').remove();
+            $('#Line_ID').append('<option value="">Select Consumption Line Name </option>');
+            $('#Partgroup_ID option').remove();
+            $('#Partgroup_ID').append('<option value="">Select Partgroup </option>');
+            $('#Station_ID option').remove();
+            $('#Station_ID').append('<option value="">Select Station </option>');
+            // Populate categories when the page is loaded.
+            $.getJSON('/Partmaster/GetPartGroup', { Plant_Id: Plant, Shop_Id: Shop }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Partgroup_ID option').remove();
+                    $('#Partgroup_ID').append('<option value="">Select Partgroup </option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Partgroup_ID').append('<option value="' +
+                            data[i].Partgroup_ID + '">' + data[i].Partgrup_Desc + '</option>');
+                    }
+                } else {
+                    $('#Partgroup_ID option').remove();
+                    alert("No Partgroup Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting Partgroup Selection !');
+            });
+
+
+            //Line
+            // Populate categories when the page is loaded.
+            $('Line_ID').html("");
+            $.getJSON('/Partmaster/GetLineID', { Shopid: Shop }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Line_ID option').remove();
+                    $('#Line_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Line_ID').append('<option value="' +
+                            data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                    }
+                } else {
+                    $('#Line_ID option').remove();
+                    alert("No Line Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting Line Selection !');
+            });
+
+
+            // Populate categories when the page is loaded.
+            $('Series_Code').html("");
+            $.getJSON('/Partmaster/GetSeriesCode', { Plant_Id: Plant, Shop_id: Shop }, function (data) {
+
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Series_Code option').remove();
+                    $('#Series_Code').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Series_Code').append('<option value="' +
+                            data[i].Series_Code + '">' + data[i].Series_Description + '</option>');
+                    }
+                } else {
+                    $('#Series_Code option').remove();
+                    alert("No Series Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting PartGroups !');
+            });
+
+        }
+        else {
+            $('#Line_ID option').remove();
+            $('#Line_ID').append('<option value="">Select Consumption Line Name </option>');
+            $('#Partgroup_ID option').remove();
+            $('#Partgroup_ID').append('<option value="">Select Partgroup </option>');
+            $('#Station_ID option').remove();
+            $('#Station_ID').append('<option value="">Select Station </option>');
+        }
+    }); // Shop Select Change Event End
+    $(':radio[name=is_Non_RS_Barcode][value="False"], :radio[name=is_Non_RS_Barcode][value="True"]').on("change", function () {
+        debugger;
+        var checkedValue = document.getElementById("is_Non_RS_Barcode").checked;
+        if (checkedValue == false) {
+            document.getElementById("StartPos").style.display = "block"
+            document.getElementById("stdChar").style.display = "block"
+            document.getElementById("mStartPos").style.display = "block"
+            document.getElementById("yStartPos").style.display = "block"
+            document.getElementById("yIdentifier").style.display = "block"
+            document.getElementById("mIdentifier").style.display = "block"
+        }
+        else {
+            debugger;
+            $("#Std_Char").val("");
+            $("#Start_Position").val("");
+            $("#Month_Start_Position").val("");
+            $("#Year_Start_Position").val("");
+            $("#Month_Identifier").val("");
+            $("#Year_Identifier").val("");
+            document.getElementById("StartPos").style.display = "none"
+            document.getElementById("stdChar").style.display = "none"
+            document.getElementById("mStartPos").style.display = "none"
+            document.getElementById("yStartPos").style.display = "none"
+            document.getElementById("yIdentifier").style.display = "none"
+            document.getElementById("mIdentifier").style.display = "none"
+            $('span[data-valmsg-for="Std_Char"]').text("");
+            $('span[data-valmsg-for="Start_Position"]').text("");
+            $('span[data-valmsg-for="Month_Start_Position"]').text("");
+            $('span[data-valmsg-for="Year_Start_Position"]').text("");
+            $('span[data-valmsg-for="Month_Identifier"]').text("");
+            $('span[data-valmsg-for="Year_Identifier"]').text("");
+        }
+    });
+
+    $("#Traceability").on("change", function () {
+        var checkedTraceValue = document.getElementById("Traceability").checked;
+        if (checkedTraceValue == true) {
+            document.getElementById("divPartID").style.display = "block"
+        }
+        else {
+            debugger;
+            document.getElementById("divPartID").style.display = "none"
+            $('span[data-valmsg-for="PartID"]').text("");
+            $("#PartID").val("");
+        }
+    });
+
+    $("#PartID").on("change", function () {
+        var PartID = $("#PartID").val();
+        if(PartID != "")
+        {
+            $('span[data-valmsg-for="PartID"]').text("");
+        }
+    });
+
+    $('#btnSave').click(function () {
+        debugger;
+        var res = true;
+        var barcode = $("input[id='is_Non_RS_Barcode']:checked").val();
+        var Shop_ID = $("#Shop_ID").val();
+        var Line_ID = $("#Line_ID").val();
+        var Station_ID = $("#Station_ID").val();
+        var Partgroup_ID = $("#Partgroup_ID").val();
+        var Part_No = $("#Part_No").val();
+        var Part_Description = $("#Part_Description").val();
+        var Traceability = $("input[id='Traceability']:checked").val();
+
+        if (Shop_ID == undefined || Shop_ID == null || Shop_ID == "") {
+            $('span[data-valmsg-for="Shop_ID"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Shop_ID"]').text("");
+        }
+
+        if (Line_ID == undefined || Line_ID == null || Line_ID == "") {
+            $('span[data-valmsg-for="Line_ID"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Line_ID"]').text("");
+        }
+        if (Station_ID == undefined || Station_ID == null || Station_ID == "") {
+            $('span[data-valmsg-for="Station_ID"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Station_ID"]').text("");
+        }
+
+
+        if (Partgroup_ID == undefined || Partgroup_ID == null || Partgroup_ID == "") {
+            $('span[data-valmsg-for="Partgroup_ID"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Partgroup_ID"]').text("");
+        }
+        if (Part_No == undefined || Part_No == null || Part_No == "") {
+            $('span[data-valmsg-for="Part_No"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Part_No"]').text("");
+        }
+        if (Part_Description == undefined || Part_Description == null || Part_Description == "") {
+            $('span[data-valmsg-for="Part_Description"]').text("This Field Is Required");
+            res = false
+        }
+        else {
+            $('span[data-valmsg-for="Part_Description"]').text("");
+        }
+        debugger;
+        if (barcode == "False" && res == true) {
+            debugger;
+            $("#Std_Char").val("0");
+            $("#Start_Position").val("11");
+            $("#Month_Start_Position").val("11");
+            $("#Year_Start_Position").val("11");
+            $("#Month_Identifier").val("0");
+            $("#Year_Identifier").val("0");
+
+
+        }
+        else if (barcode == "False" && res == false) {
+            debugger;
+            $("#Std_Char").val("");
+            $("#Start_Position").val("");
+            $("#Month_Start_Position").val("");
+            $("#Year_Start_Position").val("");
+            $("#Month_Identifier").val("");
+            $("#Year_Identifier").val("");
+        }
+        else if (barcode == "True") {
+            var StdChar = $("#Std_Char").val();
+            var StartPosition = $("#Start_Position").val();
+            var MonthStartPosition = $("#Month_Start_Position").val();
+            var YearStartPosition = $("#Year_Start_Position").val();
+            var MonthIdentifier = $("#Month_Identifier").val();
+            var YearIdentifier = $("#Year_Identifier").val();
+
+            if (StdChar == undefined || StdChar == null || StdChar == "") {
+                $('span[data-valmsg-for="Std_Char"]').text("This Field Is Required");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Std_Char"]').text("");
+            }
+
+            if (StartPosition == undefined || StartPosition == null || StartPosition == "") {
+                $('span[data-valmsg-for="Start_Position"]').text("This Field Is Required");
+                res = false
+            }
+            else if (StartPosition.length != 2) {
+                $('span[data-valmsg-for="Start_Position"]').text("Please Enter 2 digit numbers");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Start_Position"]').text("");
+            }
+            if (MonthStartPosition == undefined || MonthStartPosition == null || MonthStartPosition == "") {
+                $('span[data-valmsg-for="Month_Start_Position"]').text("This Field Is Required");
+                res = false
+            }
+            else if (MonthStartPosition.length != 2) {
+                $('span[data-valmsg-for="Month_Start_Position"]').text("Please Enter 2 digit numbers");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Month_Start_Position"]').text("");
+            }
+            if (YearStartPosition == undefined || YearStartPosition == null || YearStartPosition == "") {
+                $('span[data-valmsg-for="Year_Start_Position"]').text("This Field Is Required");
+                res = false
+            }
+            else if (YearStartPosition.length != 2) {
+                $('span[data-valmsg-for="Year_Start_Position"]').text("Please Enter 2 digit numbers");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Year_Start_Position"]').text("");
+
+            }
+
+            if (MonthIdentifier == undefined || MonthIdentifier == null || MonthIdentifier == "") {
+                $('span[data-valmsg-for="Month_Identifier"]').text("This Field Is Required");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Month_Identifier"]').text("");
+            }
+            if (YearIdentifier == undefined || YearIdentifier == null || YearIdentifier == "") {
+                $('span[data-valmsg-for="Year_Identifier"]').text("This Field Is Required");
+                res = false
+            }
+            else {
+                $('span[data-valmsg-for="Year_Identifier"]').text("");
+            }
+        }
+        else {
+            alert("Please select Barcode Type");
+            res = false;
+        }
+        if (Traceability == "True" || Traceability == "true") {
+            var PartID = $("#PartID").val();
+            if (PartID == null || PartID == undefined || PartID == "") {
+                $('span[data-valmsg-for="PartID"]').text("This Field Is Required");
+                res = false
+            }
+        }
+        return res;
+    });
+    $("#Line_ID").on("change", function () {
+
+        var Plant = $("#Plant_ID").val();
+        var Shop = $("#Shop_ID").val();
+        var LineId = $("#Line_ID").val();
+
+        $('#Station_ID').html("");
+
+        if (Plant.length > 0) {
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/Partmaster/GetStationID', { plantid: Plant, shopid: Shop, LineId: LineId }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Station_ID option').remove();
+                    $('#Station_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Station_ID').append('<option value="' +
+                            data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                    }
+                } else {
+                    $('#Station_ID option').remove();
+                    alert("No Station Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting PartGroups !');
+            });
+
+        }
+
+    }); // Shop Select Change Event End
+
+
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}
+
+

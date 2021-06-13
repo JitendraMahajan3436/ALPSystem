@@ -1,0 +1,55 @@
+﻿@model IEnumerable<REIN_MES_System.Models.CycleStoppageData>
+<div class="modal-body no-padding table-responsive" id="MinorStoppagesModal">
+    <div class="header" style="background-color:cadetblue">
+        @*<marquee direction="right">*@
+            <p style="text-align:center;color: white; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" ">Minor Stoppage data from @ViewBag.fromDate To @ViewBag.toDate</p>
+        @*</marquee>*@
+    </div>
+    <div class="table-responsive">
+     
+          
+            <table class="table table-condensed table-bordered">
+                <thead>
+                <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                    Sr.No
+                </th>
+                <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                    Machine Name
+                </th>
+                <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                    Cycle Step Name
+                </th>
+                <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                    Quantity 
+                </th>
+                </thead>
+                <tbody>
+                 
+                    @{int i = 0;}
+                    @foreach (var CycleObj in Model)
+                    {
+                       
+                     
+                    <tr>
+                        <td style="text-align:center">
+                           @(i+=1)
+                        </td>
+                        <td>
+                            @ViewBag.MachineName
+                        </td>
+                        <td>
+                            @CycleObj.CyclestepName
+                        </td>
+                        <td data-target="#CycleHistory" data-toggle="modal" data-id="@ViewBag.CycleID" onclick="MyFunction4(@CycleObj.CycleID, @CycleObj.MachineID)" style="cursor:pointer;text-align:center">
+                            @CycleObj.CycleCount
+                         
+                        </td>
+                    
+                    </tr>
+                    }
+                    
+                </tbody>
+            </table>
+     
+    </div>
+</div>

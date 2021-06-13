@@ -1,0 +1,60 @@
+﻿
+@model IEnumerable<REIN_MES_System.Models.RS_AM_Operator_Change_Request>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Employee Name")
+            </th>
+
+            <th>
+                @Html.DisplayName("Employee Number")
+            </th>
+            <th>
+                @Html.DisplayName("Allocation Date")
+            </th>
+            @*<th>
+                @Html.DisplayName("Allocation Day")
+            </th>*@
+            <th>
+                @Html.DisplayName("Current Shift")
+            </th>
+            <th>
+                @Html.DisplayName("Change Shift")
+            </th>
+            <th>@Html.DisplayName("Action")</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee.Employee_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Allocation_Date)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Week_Day)
+                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shift.Shift_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shift1.Shift_Name)
+                </td>
+
+                <td>
+                    <a class="accept label label-success" id="@item.ID" data-request-rowid="@item.ID">Accept</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

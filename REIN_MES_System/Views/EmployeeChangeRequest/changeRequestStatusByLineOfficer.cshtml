@@ -1,0 +1,90 @@
+﻿@model REIN_MES_System.Models.RS_AM_Operator_Change_Request
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Change Request Line Officer";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal route_configuration">
+        <div class="box">
+            <div class="box-body">
+                <div id="testy"></div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        @Html.HiddenFor(m => m.ID, new { @id = "Row_ID" })
+                        @Html.HiddenFor(m => m.New_Shift_ID, new { @id = "Shift_ID" })
+                        @Html.HiddenFor(m => m.Employe_ID, new { @id = "Employee_ID" })
+                        @Html.HiddenFor(m => m.Allocation_Date, new { @id = "Allocation_Date" })
+                        @Html.LabelFor(model => model.Shop_ID, ResourceShop.Shop_Label_Shop_Select, new { @class = "" })
+                        @Html.DropDownList("Shop_ID", null, "Shop", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID)
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error oShopID" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.Line_ID, ResourceLine.Line_Label_Line_Select, new { @class = "" })
+                        @Html.DropDownList("Line_ID", null, ResourceLine.Line_Label_Name, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.Line_ID, "Select Station", new { @class = "" })
+                        @Html.DropDownList("Station_ID", null, "Select Station", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        @Html.Label("Select Shift", new { @class = "" })
+                        @Html.DropDownList("Shift", null, ResourceDisplayName.Shift, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.Label("Select Status", new { @class = "" })
+                        @Html.DropDownListFor(model => model.Status, new SelectList(new List<object> { new { value = "1", text = "Accept" }, new { value = "2", text = "Reject" } }, "value", "text"), new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4" style="margin-top:1%;">
+                        <input type="button" value="Change Status" class="btn btn-primary" id="btnChange" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnChange').click(function () {
+            var url = "/EmployeeChangeRequest/UpdateChangeRequestStatus";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + $('#Row_ID').val() + "&Status=" + $('#Status').val(), UpdateChangeRequestStatus, "json");
+        });
+    })
+
+    function UpdateChangeRequestStatus() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                if (jsonRes) {
+                    $("#srlmessage-block").removeClass("bg-error");
+                    $("#srlmessage-block").addClass("bg-success");
+                    $("#srlmessage-block").html("Change request accepted successfully.");
+                    setTimeout(function () {
+                        window.location.href = "/EmployeeChangeRequest/ChangeRequestNotification";
+                    }, 2000);
+                }
+                else {
+                    $("#srlmessage-block").html("Some issue occured while changing the status.");
+                    $("#srlmessage-block").addClass("bg-error");
+                   
+                }
+            }
+        }
+    }
+</script>

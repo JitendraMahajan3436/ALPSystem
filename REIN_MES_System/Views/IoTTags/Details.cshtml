@@ -1,0 +1,44 @@
+﻿@model REIN_MES_System.Models.RS_IoT_Tags
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Station Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Tag Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tag_Name)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Tag_ID }, new { @class = "btn btn-primary" }) @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Tag_ID }) |
+        @Html.ActionLink("Back to List", "Index@*")*@
+</p>

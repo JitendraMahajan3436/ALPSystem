@@ -1,0 +1,164 @@
+﻿@model REIN_MES_System.Models.RS_Manual_Data_Collection
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="col-md-12">
+
+        @Html.ValidationSummary(true)
+        <div class="row">
+
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Shop_ID, (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID)
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Line_ID, "Line Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(), "--Select Line--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID)
+
+            </div>
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Station_ID, "Station Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Station_ID, Enumerable.Empty<SelectListItem>(), "--Select Station--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Station_ID)
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Shift_ID, "Shift Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Shift_ID, (IEnumerable<SelectListItem>)ViewBag.Shift_ID, "--Select Shift--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shift_ID)
+            </div>
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Parameter_ID, "Parameter Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Parameter_ID, (IEnumerable<SelectListItem>)ViewBag.Parameter_ID, "--Select Parameter--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Parameter_ID)
+            </div>
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Minimum_Value, "Minimum Value", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Minimum_Value, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Minimum_Value)
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Maximum_Value, "Maximum Value", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Maximum_Value, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Maximum_Value)
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Frequency, "Frequency", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Frequency, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Frequency)
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/shared/Shop")*@
+    <script>
+
+        $(document).ready(function () {
+
+
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //  alert(Shop_ID);
+                    $.getJSON('/ManualDataCollection/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value="">Select Line</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Line is not present in current Shop")
+                        }
+                    });
+                    setTimeout(function () {
+                        //alert(Shop_ID);
+                        $.getJSON('/ManualDataCollection/getShiftbyShop', { ShopID: Shop_ID }, function (data) {
+                            //  alert(data);
+                            if (data.length > 0) {
+                                $('#Shift_ID option').remove();
+                                $('#Shift_ID').append('<option value="">Select Shift</option>');
+                                for (var i = 0; i < data.length; i++) {
+                                    $('#Shift_ID').append('<option value="' +
+                                               data[i].ID + '">' + data[i].Value + '</option>');
+                                }
+                            }
+                            else {
+                                $('#Shift_ID option').remove();
+                                $('#Shift_ID').append('<option value="">No Shift Found against shop/line/station !</option>');
+                            }
+
+
+                        });
+                    }, 500);
+                }
+            });
+
+            $("#Line_ID").on("change", function () {
+                $("#Station_ID").html("");
+                var Station_ID = $('#Line_ID').val();
+                if (Station_ID.length > 0) {
+                    //  alert(Shop_ID);
+                    $.getJSON('/ManualDataCollection/GetStationByLineID', { lineid: Station_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Station_ID option').remove();
+                            $('#Station_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Station_ID').append('<option value="' +
+                                           data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Station is not present in current Shop")
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+
+    </script>
+}

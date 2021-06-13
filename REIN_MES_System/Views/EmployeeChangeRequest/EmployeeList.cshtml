@@ -1,0 +1,89 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_AM_Operator_Station_Allocation_History>
+
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Employee Name")
+            </th>
+
+            <th>
+                @Html.DisplayName("Employee Number")
+            </th>
+            <th>
+                @Html.DisplayName("Allocation Date")
+            </th>
+            <th>
+                @Html.DisplayName("Allocation Day")
+            </th>
+            <th>
+                @Html.DisplayName("Current Shift")
+            </th>
+            <th>
+                @Html.DisplayName("Requested Shift")
+            </th>
+
+            <th>
+                @Html.DisplayName("Status")
+            </th>
+            <th>@Html.DisplayName("Action")</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Allocation_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Week_Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Shift_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NewShift)
+                </td>
+
+                <td>
+                    @if (item.Request_Status == "Accept")
+                    {
+
+                        <span class="label label-success">  @Html.DisplayFor(modelItem => item.Request_Status)</span>
+
+                    }
+                    else if (item.Request_Status == "Reject")
+                    {
+
+                        <span class="label label-danger">  @Html.DisplayFor(modelItem => item.Request_Status)</span>
+
+                    }
+                    else if (item.Request_Status == "Send")
+                    {
+                        <span class="label label-info">
+                            @Html.DisplayFor(modelItem => item.Request_Status)
+                        </span>
+                    }
+
+                </td>
+
+                <td>
+                    @if (item.Request_Status != "Accept")
+                    {
+                        <a href="@Url.Action("ChangeRequest", "EmployeeChangeRequest", new { id = item.Employee_ID, allocation_date = item.Allocation_Date.ToShortDateString() })"><i class="fa fa-edit"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

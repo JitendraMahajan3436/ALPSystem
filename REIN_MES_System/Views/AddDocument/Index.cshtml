@@ -1,0 +1,80 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_Documents>
+@{
+
+
+    ViewBag.Title = "Show Documents";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+
+    <a href="@Url.Action("Create", "AddDocument")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i>Create New</a>
+    @* @ResourceGlobal*@
+</p>
+
+<div class="table-responsive">
+
+
+    <table class="table  table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    Document Name
+
+                </th>
+                @*<th>
+                    Document Description
+                </th>*@
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doc_Name)
+
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Doc_Description)
+                    </td>*@
+
+                    <td>
+                        @*<a href="@Url.Action("Edit", "AddDocument", new { id = item.Doc_ID })"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;&nbsp;*@
+                        <a href="@Url.Action("getview", "AddDocument", new { id = item.Doc_ID })"><i class="fa fa-fw fa-laptop" title="View Document" id="btnShowpdf"></i></a> &nbsp;&nbsp;
+                        <a href="@Url.Action("Delete", "AddDocument", new { id = item.Doc_ID })"><i class="fa fa-trash" title="Delete"></i></a>&nbsp;&nbsp;
+                        <a href="@Url.Action("Download", "AddDocument", new { Doc_Id = item.Doc_ID })"><i class="glyphicon glyphicon-download-alt" title="Download" id="btnDownloaddoc"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="logon">
+
+</div>
+
+
+<script type="text/javascript">
+    $("#btnDownloaddoc").click(function () {
+        debugger
+        var fileName = $("#Doc_Name").val();
+        var Doc_ID = $("#Shop_ID").val();
+        var path = " /AddUsers/OJTDataUpload?ShopId=" + ShopId;
+        window.open(path);
+    })
+
+
+</script>
+
+
+
+@section scripts{
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

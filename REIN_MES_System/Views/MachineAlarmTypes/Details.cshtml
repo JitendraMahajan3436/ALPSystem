@@ -1,0 +1,113 @@
+﻿@model REIN_MES_System.Models.RS_Ctrl_Machine_Alarm_Types
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Alarm_Type_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Alarm_Type_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fault_Background_Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fault_Background_Color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fault_Forground_Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fault_Forground_Color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Healthy_Background_Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Healthy_Background_Color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Healthy_Forground_Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Healthy_Forground_Color)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Inserted_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee1.Employee_Name)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Alarm_Type_ID }, new {@class="btn btn-primary"}) @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+</p>

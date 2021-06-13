@@ -1,0 +1,292 @@
+﻿@model IEnumerable<REIN_MES_System.Models.UtilityMainFeederMapping>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+
+@*<div class="box">
+    <div class="box-header">
+        <p class="position_absolute">
+           
+
+            <a href="@Url.Action("Create", "MainFeederMappings")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> Create New</a>
+        </p>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered table-striped datatable_completes">
+            <thead>
+                <tr>
+                  
+                    <th>
+                        Shop Name
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.FeederName)
+                    </th>
+                    <th>
+                       
+                        <label>Parameter Name</label>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TagIndex)
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Feeders.FeederName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_Parameter.Prameter_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TagIndex)
+                    </td>
+
+                    <td>
+                        <a style="color:dodgerblue" href="@Url.Action("Edit", "MainFeederMappings", new { id = item.RowId})"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;|
+                       @Html.ActionLink("Details", "Details", new { id = item.RowId }) |
+                        <a style="color:dodgerblue" data-target="#@item.RowId" data-toggle="modal" data-id="@item.RowId" onclick="deleteStart(this)"><i class="fa fa-trash-o" title="Delete"></i></a>
+                        @using (Html.BeginForm("DeleteConfirmed", "MainFeederMappings", new { id = item.RowId }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="modal fade" id="@item.RowId" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title">Delete Confirmation</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this item?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                                            <input type="submit" value="Delete" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+
+
+        </table>
+
+    </div>
+</div>*@
+
+
+
+<div class="row">
+
+    <div class="col-md-12" style="margin-top:0.2%;margin-left:1%">
+        <a href="@Url.Action("Create", "MainFeederMappings")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create New</a>
+        @*<a href="@Url.Action("ExcelUpload", "QualityCheckpoint")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>*@
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3" style="margin-left:1%">
+        @Html.Label("Shop_ID", ResourceDisplayName.Shop_Name, new { @class = "" }) *
+        @Html.DropDownList("Shop_ID", null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessage("Shop_ID")<label id="lblShopID" class="error"></label>
+
+    </div>
+
+    @*<div class="col-md-3">
+        @Html.Label("Line_ID", ResourceDisplayName.Line_Name, new { @class = "" }) *
+        @Html.DropDownList("Line_ID", null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessage("Line_ID")<label id="lblLineID" class="error"></label>
+    </div>
+
+    <div class="col-md-3">
+        @Html.Label("Station_ID", ResourceDisplayName.Station_Name, new { @class = "" }) *
+        @Html.DropDownList("Station_ID", null, ResourceDisplayName.Select_Station, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessage("Station_ID")<label id="lblStationID" class="error"></label>
+    </div>*@
+    <div class="col-md-3" style="margin-top:2.5%;">
+
+        <a class="btn btn-primary" id="btnShowAll">Show All</a>
+
+    </div>
+
+
+</div>
+
+<div class="row" style="margin-left:1%;margin-right:1%">
+   
+    <div class="tbl">
+
+    </div>
+</div>
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+<style type="text/css">
+    .error {
+        -webkit-text-fill-color: red;
+        /*font-size: 20px;*/
+    }
+</style>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        
+
+
+        $("#btnShowAll").click(function (e) {
+            //alert("hsdfg");
+            debugger;
+            var shop_ID = $("#Shop_ID").val();
+            //var Line_ID = $("#Line_ID").val();
+            //var Station_ID = $("#Station_ID").val();
+            shopName = $("#Shop_ID option:selected").text();
+            //linepName = $("#Line_ID option:selected").text();
+            //stationName = $("#Station_ID option:selected").text();
+            var istrue = true;
+            //alert(shopName);
+            //alert(linepName);
+            //alert(stationName);
+            if (shopName == "Select Shop") {
+                $("#lblShopID").html("Select Shop.");
+                istrue = false;
+            }
+            //if (linepName == "Select Line") {
+            //    $("#lblLineID").html("Select Line.");
+            //    istrue = false;
+            //}
+            //if (stationName == "Select Station") {
+            //    $("#lblStationID").html("Select Station.");
+            //    istrue = false;
+            //}
+            if (istrue == true) {
+                showfeederDetails(shop_ID)
+                //$('#frm_Quality_Shead').submit();
+            }
+            else {
+                return false;
+            }
+
+        });
+
+
+       
+
+        function showfeederDetails(shopId) {
+            debugger;
+
+           
+            debugger;
+            var options = {};
+            options.url = "/MainFeederMappings/displayfeederDetails";
+            options.type = "POST";
+            options.data = JSON.stringify({ shop_ID: shopId });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (result) {
+                var res = "";
+                res += '<table class="table table-bordered table-striped datatable_completes ">';
+                res += '<thead>';
+                res += '  <tr>';
+
+                res += ' <th>';
+                res += 'Shop Name';
+                res += '  </th>';
+                res += ' <th>';
+                res += '   @Html.DisplayName("Feeder Name")';
+                res += ' </th>';
+                res += '  <th>';
+                res += '    @Html.DisplayName("Parameter Name")';
+                res += '  </th>';
+                res += ' <th>';
+
+                res += '  @Html.DisplayName("TagIndex")';
+              
+                res += '  </th>';
+                 res += ' <th>';
+
+             
+                res += '  @Html.DisplayName("Tag Name")';
+                res += '  </th>';
+
+                res += ' <th>@ResourceGlobal.Action</th>';
+                res += ' </tr>';
+                res += ' </thead>';
+                for (var i = 0; i < result.length; i++) {
+                    res += '<tr>';
+                    res += '<td>' + result[i].shopName + ' </td>';
+                    res += '<td>' + result[i].feederName + ' </td>';
+                    res += '<td>' + result[i].ParmeterName + ' </td>';
+                    res += '<td>' + result[i].tagindex + ' </td>';
+                    res += '<td>' + result[i].tagName + ' </td>';
+
+
+                    res += ' <td><a href="/MainFeederMappings/Edit/' + result[i].MeterId + '"><i class="fa fa-edit" title="Edit"></i></a><a href="/MainFeederMappings/Delete/' + result[i].MeterId + '"><i class="fa fa-trash" title="Delete"></i></a> </td > ';
+
+
+                    res += '</tr>';
+
+                }
+                res += ' </table>';
+                //res += '</ul>';
+                $('.tbl').html(res);
+                $('.datatable_completes').dataTable({
+                    "bPaginate": true,
+                    "bLengthChange": false,
+                    "bFilter": true,
+                    "bSort": true,
+                    "bInfo": true,
+                    "bAutoWidth": false
+                });
+
+            }
+            options.error = function () {
+                alert("Invalid shop ");
+            };
+            $.ajax(options);
+      
+            }
+     
+
+
+        function SelectOptionHTML(jsonRes, targetId) {
+            //var jsonRes = $.parseJSON(myajax.responseText);
+            var res = "";
+            for (var i = 0; i < jsonRes.length; i++) {
+                res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+            }
+
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+            $("#" + targetId).html(res);
+        }
+
+
+    });
+</script>
+
+
+

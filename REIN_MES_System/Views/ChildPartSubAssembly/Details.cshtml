@@ -1,0 +1,25 @@
+﻿@model REIN_MES_System.Models.RS_Major_Sub_Assembly
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName(ResourceDisplayName.Sub_Assembly_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sub_Assembly_Name)
+        </dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Sub_Assembly_ID }, new { @class = "btn btn-success" })
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>

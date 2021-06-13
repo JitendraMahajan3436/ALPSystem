@@ -1,0 +1,51 @@
+﻿<div class="row">
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-8">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="nav-tabs-custom">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs pull-right">
+                    @if (ViewBag.sopModel != null)
+                    {
+                        int i = 0;
+                        foreach (var sop in ViewBag.sopModel)
+                        {
+                            i++;
+                            if (i == 1)
+                            {
+                                <li class="active"><a href="#@sop.SOP_ID" data-toggle="tab">@sop.SOP_Name</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="#@sop.SOP_ID" data-toggle="tab">@sop.SOP_Name</a></li>
+                            }
+                        }
+                    }
+                    <li class="pull-left header"><i class="fa fa-inbox"></i>SOP</li>
+                </ul>
+                <div class="tab-content no-padding">
+                    @if (ViewBag.sopModel != null)
+                    {
+                        int i = 0;
+                        foreach (var sop in ViewBag.sopModel)
+                        {
+                            i++;
+                            if (i == 1)
+                            {
+                                <div class="tab-pane active" id="@sop.SOP_ID" style="position: relative;">
+                                    <img class="zoom_img" src="/Content/images/@sop.Image_Name" data-zoom-image="/Content/images/@sop.Image_Name" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="tab-pane" id="@sop.SOP_ID" style="position: relative;">
+                                    <img class="zoom_img" src="/Content/images/@sop.Image_Name" data-zoom-image="/Content/images/@sop.Image_Name" />
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div><!-- /.nav-tabs-custom -->
+        </div>
+    </div>
+</div>

@@ -1,0 +1,211 @@
+﻿@model REIN_MES_System.Models.RS_Model_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RS_Model_Master</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OMconfig_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OMconfig_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_Size_Front)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_Size_Front)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_Size_Rear)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_Size_Rear)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Domestic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Domestic)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters.Attribute_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters1.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters1.Attribute_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters2.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters2.Attribute_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Colour.Colour_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Colour.Colour_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Platform.Platform_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Platform.Platform_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Serial_Number_Configuration.Display_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Serial_Number_Configuration.Display_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Series.Series_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Series.Series_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Series1.Series_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Series1.Series_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Model_Code }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

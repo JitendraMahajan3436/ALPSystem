@@ -1,0 +1,191 @@
+﻿@model REIN_MES_System.Models.RS_Stations
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div class="col-md-12">
+    <div class="plant-stations">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Station_ID)
+
+                <div class="row breakClass">
+                    <div class="form-group" style="display:none;">
+                        @Html.LabelFor(model => model.Plant_ID, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Shop_ID, new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Line_ID, new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Station_Name, new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.TextBoxFor(model => model.Station_Name, htmlAttributes: new { @class = "form-control", @maxlength = "50", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Station_Name, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Station_Description, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Station_Description, htmlAttributes: new { @class = "form-control", @maxlength = "200", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Station_Description)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Station_IP_Address, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Station_IP_Address, htmlAttributes: new { @class = "form-control", @maxlength = "30", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Station_IP_Address, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.LabelFor(model => model.Station_Host_Name, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Station_Host_Name, htmlAttributes: new { @class = "form-control", @maxlength = "50", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.Station_Host_Name, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        <div class="">
+                            @Html.Label("Station Type", new { @class = "" })
+                            @Html.DropDownList("Station_Type_ID", null, "Select Station Type", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Station_Type_ID, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="">
+                            <div class="">
+                                @Html.Label("Buffer Station", new { @class = "" })
+                                @Html.DropDownListFor(model => model.Is_Buffer, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2) @*new { @class = "list-box tri-state valid" }*@, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Is_Buffer, null, new { @class = "validation_error" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("Sort Order", new { @class = "" })
+                        @Html.TextBoxFor(model => model.Sort_Order, htmlAttributes: new { @class = "form-control", @maxlength = "3", @placeholder = "Enter Station Position", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.Sort_Order, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        @Html.CheckBox("Is_Error_Proofing", new { @id = "Is_Error_Proofing", @class = "" })
+                        @Html.Label("Error Proofing Station", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.Is_Error_Proofing)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.CheckBox("Tprint", new { @id = "Tprint", @class = "" })
+                        @Html.Label("Traceability Print", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.Tprint)
+                    </div>
+                </div>
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        @Html.CheckBox("Linemode", new { @id = "Linemode", @class = "ModeGroup" })
+                        @Html.Label("Linemode", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.Linemode)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.CheckBox("Reworkmode", new { @id = "Reworkmode", @class = "ModeGroup" })
+                        @Html.Label("Reworkmode", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.Reworkmode)
+                    </div>
+                </div>
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        @Html.CheckBox("IsVin", new { @id = "IsVin",  @class = "VINBINGroup" })
+                        @*<input type="radio" id="IsVin" class="VINBINGroup" />*@
+                        @Html.Label("VIN", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.IsVin)
+                    </div>
+                    <div class="col-md-4">
+                        @Html.CheckBox("IsEngine", new { @id = "IsEngine", @class = "VINBINGroup" })
+                        @*<input type="radio" id="IsBin" class="VINBINGroup" checked="checked" />*@
+                        @Html.Label("BIN", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.IsEngine)
+                    </div>
+                </div>
+
+                <div class="row breakClass">
+                    <div class="col-md-4">
+                        <div class="">
+
+                            <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                            @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*<div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>*@
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/master_file")
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+        $(".VINBINGroup").click(function () {
+            $(".VINBINGroup").removeAttr("checked");
+            $(this).removeClass("VINBINGroup");
+            $(this).prop('checked', true);
+            var value = this;
+            $(this).addClass("VINBINGroup");
+        });
+
+        $(".ModeGroup").click(function () {
+            $(".ModeGroup").removeAttr("checked");
+            $(this).removeClass("ModeGroup");
+            $(this).prop('checked', true);
+            var value = this;
+            $(this).addClass("ModeGroup");
+        });
+    });
+</script>

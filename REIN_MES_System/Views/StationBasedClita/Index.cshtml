@@ -1,0 +1,109 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_Station_Based_Clita>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "StationBasedClita")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    <a href="@Url.Action("Upload", "StationBasedClita")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>
+</p>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Upload File", "Upload", null, new { @class = "btn btn-primary" })
+</p>*@
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            <th>
+                @Html.DisplayName("Station Name")
+            </th>
+
+            <th>
+                @Html.DisplayName("CLITA Item")
+            </th>
+            <th>
+                @Html.DisplayName("Classification")
+            </th>
+            <th>
+                @Html.DisplayName("Standards")
+            </th>
+
+            <th>
+                @Html.DisplayName("Method")
+            </th>
+            <th>
+                @Html.DisplayName("Frequency")
+            </th>
+            <th>
+                @Html.DisplayName("Expected Duration (HH:MM:SS)")
+            </th>
+
+            @*<th>
+                @Html.DisplayName("Start Date")
+            </th>*@
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clita_Item)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Classification.Classification)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Standard.Standard)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Method.Method)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cycle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Maintenance_Time_TACT)
+                </td>
+
+                @*<td>
+                    @item.Start_Date
+                </td>*@
+
+                <td>
+                    <a href="@Url.Action("Edit", "StationBasedClita", new { id = item.Station_Clita_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "StationBasedClita", new { id = item.Station_Clita_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "StationBasedClita", new { id = item.Station_Clita_ID })"><i class="fa fa-trash"></i></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

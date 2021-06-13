@@ -1,0 +1,60 @@
+﻿@model REIN_MES_System.Models.RS_Colour
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Colour_ID);
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Plant_ID, "Plant *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Plant_ID, null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Plant_ID)
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Colour_Desc, "Colour Description", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Colour_Desc, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Colour_Desc)
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Colour_Batch, "Colour Batch *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Colour_Batch, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Colour_Batch)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Export_Colour, "Export Colour *", htmlAttributes: new { @class = "" })
+            @Html.EditorFor(model => model.Export_Colour, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Export_Colour)
+        </div>
+       
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Active, "Active ", htmlAttributes: new { @class = "" })
+            @Html.EditorFor(model => model.Active, null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Active)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <br />
+            <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink("Show All", "Index",null,new { @class="btn btn-primary"})
+        </div>
+    </div>
+
+}
+
+<div>
+   
+</div>

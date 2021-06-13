@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "FirstStationManifestScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+<div class="row shopForm-wrapper">
+    @using (Ajax.BeginForm("InsertSerialNo", "Manifest", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "imageDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "OnSuccess", OnFailure = "OnFailure" }, new { id = "serialnoForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                @Html.Label("SerialNo", "Scan Serial No.", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.TextBox("SerialNo", null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-12" id="imageDiv">
+            @if (ViewBag.PartsImage != null)
+            {
+                foreach (var item in ViewBag.PartsImage)
+                {
+                    <div class="col-md-6">
+                        <img src="~/Content/images/@item.Image_Name" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $("#serialnoSubmit").keypress(function (e) {
+                if (e.which == 13) {
+                    $("#serialnoForm").submit();
+                }
+            });
+        });
+    </script>
+}

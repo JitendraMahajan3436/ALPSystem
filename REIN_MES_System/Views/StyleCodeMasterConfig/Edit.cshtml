@@ -1,0 +1,192 @@
+﻿@model REIN_MES_System.Models.VMStyleCodeMasterConfig
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12 plant-line plant-stations">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Row_ID)
+        @Html.HiddenFor(model => model.Shop_ID)
+        <div class="row">
+            <div style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Row_ID, new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.Row_ID, null, "Select Model", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Row_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Style_Code, new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownList("Style_Code", null, "Select Style Code", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Style_Code, null, new { @class = "validation_error" })
+
+            </div>
+
+
+        </div>
+        <br />
+
+
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    </div>
+    }
+
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+    @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/Select2scripts")*@
+    @*@Styles.Render("~/Content/Select2styles")*@
+    }
+</div>
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+
+
+     
+        $("#Shop_ID").on("change", function () {
+            var Shop = $("#Shop_ID").val();
+            $('#Model_ID').html("");
+            refreshFields();
+            if (Shop.length > 0) {
+
+                // Populate categories when the page is loaded.
+                $.getJSON('/StyleCodeMasterConfig/GetModelCodeByShopID', { shopId: Shop }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Model_ID option').remove();
+                        $('#Model_ID').append('<option value="">Select Model Code</option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Model_ID').append('<option value="' + data[i].Model_ID + '">' + data[i].Model_Code + '</option>');
+                        }
+                    } else {
+                        $('#Model_ID option').remove();
+                        $('#Model_ID').append('<option value="">Select Model Code</option>');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Model Code Selection !');
+                });
+            }
+            else {
+                $('#Model_ID option').remove();
+                $('#Model_ID').append('<option value="">Select Model Code</option>');
+            }
+        });
+        function refreshFields() {
+
+            $('#Model_ID option').remove();
+            $('#Model_ID').append('<option value="">Select Model Code</option>')
+            $('#Model_ID').removeClass('input-validation-error');
+            $('#Model_ID').next().text('');
+
+            //$('#Style_Code option').remove();
+            //$('#Style_Code').append('<option value="">Select Style Code</option>');
+            //$('#Style_Code').removeClass('input-validation-error');
+            //$('#Style_Code').next().text('');
+
+        }
+
+    });
+</script>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#Row_ID").select2({ allowClear: true });
+    
+        //$("#Row_ID").select2({
+            
+        //}
+        //);
+        //$("#Style_Code").select2({
+            
+        //}
+        // );
+        $("#Shop_ID").on("change", function () {
+            var Shop = $("#Shop_ID").val();
+            $('#Row_ID').html("");
+            refreshFields();
+            if (Shop.length > 0) {
+
+                // Populate categories when the page is loaded.
+                $.getJSON('/StyleCodeMasterConfig/GetBiwPartNoByShopID', { shopId: Shop }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Row_ID option').remove();
+                        $('#Row_ID').append('<option value="">Select BIW Part No</option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Row_ID').append('<option value="' + data[i].Row_ID + '">' + data[i].Variant_Code + '</option>');
+                        }
+                    } else {
+                        $('#Row_ID option').remove();
+                        $('#Row_ID').append('<option value="">Select BIW Part No</option>');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting BIW Part No Selection !');
+                });
+            }
+            else {
+                $('#Row_ID option').remove();
+                $('#Row_ID').append('<option value="">Select BIW Part No</option>');
+            }
+        });
+        function refreshFields() {
+
+            $('#Row_ID option').remove();
+            $('#Row_ID').append('<option value="">Select BIW Part No</option>')
+            $('#Row_ID').removeClass('input-validation-error');
+            $('#Row_ID').next().text('');
+            //$("#Row_ID").select2({ allowClear: true });
+            //$('#Style_Code option').remove();
+            //$('#Style_Code').append('<option value="">Select Style Code</option>');
+            //$('#Style_Code').removeClass('input-validation-error');
+            //$('#Style_Code').next().text('');
+
+        }
+
+    });
+</script>

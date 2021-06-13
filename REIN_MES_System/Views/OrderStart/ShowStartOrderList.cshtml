@@ -1,0 +1,200 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Order_List>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper
+
+<style type="text/css">
+    .generalAltRow {
+        background-color: green;
+        /*font-size: 1.1em;*/
+        /*font-size: larger;*/
+        /*font: bold;*/
+        color: white;
+    }
+</style>
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+
+    int plantId = ((FDSession)this.Session["FDSession"]).plantId;
+    int shopId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).shopId);
+    int lineId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).lineId);
+    int stationId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).stationId);
+    var serial = "";
+    try
+    {
+        Int64 psn = Convert.ToInt64(db.RS_OM_Order_List.Where(m => m.Shop_ID == shopId && m.Line_ID == lineId && m.Station_ID == stationId).Max(item => item.PSN).ToString());
+
+        serial = db.RS_OM_Order_List.Where(item => item.PSN == psn && item.Shop_ID == shopId && item.Line_ID == lineId && item.Station_ID == stationId).Select(item => item.Serial_No).FirstOrDefault();
+    }
+    catch (Exception)
+    {
+        serial = " ";
+
+    }
+
+
+    //string style = daysLeft <= 30 ? "background-color:Red" : null;
+    int i = 0;
+    //order-start-tbl
+}
+
+<table class="table table-bordered order-start-tbl">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Order Number")
+            </th>
+            <th>
+                @Html.DisplayName("Part Number")
+            </th>
+            @*<th>
+                    @Html.DisplayName("Part Number")
+                </th>*@
+            <th>
+                @Html.DisplayName("Color")
+            </th>
+            <th>
+                @Html.DisplayName("Order Type")
+            </th>
+            <th>
+                @Html.DisplayName("Auto Remark")
+            </th>
+            <th>
+                @Html.DisplayName("Serial Number")
+            </th>
+            <th>
+                @Html.DisplayName("VIN Number")
+            </th>
+            <th>
+                @Html.DisplayName("Start Date")
+            </th>
+            <th>
+                @Html.DisplayName("Start Time")
+            </th>
+            <th>
+                @Html.DisplayName("Status")
+            </th>
+            @*<th>
+                    @Html.DisplayName("Hold Order")
+                </th>*@
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                i = i + 1;
+                string rowColor = "";
+
+                if (item.Serial_No == serial)
+                {
+                    rowColor = "generalAltRow";
+                }
+
+                <tr class="@rowColor">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Order_No)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.partno)
+                        </td>*@
+
+                    @{
+                        var biwPartNo = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.Model_Code).FirstOrDefault();
+                        if (biwPartNo != null)
+                        {
+
+                            <td>
+                                @biwPartNo
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+                        </td>*@
+                    @{
+                        //var colorCode = item.Model_Color;
+                        var colorCode = db.RS_OM_OrderRelease.Where(m => m.Model_Code == item.Model_Code && m.Order_No == item.Order_No).Select(m => m.Model_Color).FirstOrDefault();
+                        if (colorCode != null)
+                        {
+                            var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                            <td>
+                                @colorName
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    }
+                    @{
+                        var orderType = db.RS_OM_OrderRelease.Where(m => m.Model_Code == item.Model_Code && m.Order_No == item.Order_No).Select(m => m.Order_Type).FirstOrDefault();
+                        if (orderType != null)
+                        {
+                            //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                            <td>
+                                @orderType
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    @{
+                        var autoRemark = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.Auto_Remarks).FirstOrDefault();
+                        if (autoRemark != null)
+                        {
+                            //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                            <td>
+                                @autoRemark
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serial_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VIN_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Entry_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Entry_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayName("Completed")
+                    </td>
+                    @* <td>
+                        @*<a class="create_order" id="@item.Order_No" href="javascript:void(0);">Hold Order</a>*@
+
+                    @*</td>
+                        <td>*@
+                    @*<a class="create_order" id="@item.Order_No" href="javascript:void(0);">Hold Order</a>*@
+                    @* </td>*@
+
+
+                </tr>
+                            }
+                        }
+    </tbody>
+</table>
+@*@section scripts {
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+    }*@

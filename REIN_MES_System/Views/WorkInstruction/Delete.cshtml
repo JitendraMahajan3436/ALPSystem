@@ -1,0 +1,129 @@
+﻿@model REIN_MES_System.Models.RS_WorkInstruction_Master
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>RS_WorkInstruction_Master</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model_Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sequence_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sequence_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WI_Type_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WI_Type_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WI_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WI_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Active)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MM_Stations.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_Stations.Station_Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

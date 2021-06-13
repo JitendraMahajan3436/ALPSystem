@@ -1,0 +1,59 @@
+﻿@model REIN_MES_System.Models.RS_Menus
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+
+<div class="col-md-6">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Menu_ID)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LinkName, new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.LinkName, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LinkName, null, new { @class = "validation_error" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ActionName, new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.ActionName, null, htmlAttributes: new { @class = "form-control",@readOnly="True" })
+                @Html.ValidationMessageFor(model => model.ActionName, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.ControllerName, new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.ControllerName, null, htmlAttributes: new { @class = "form-control", @readOnly = "True" })
+                @Html.ValidationMessageFor(model => model.ControllerName, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Sort_Order, "Sort Order", new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Sort_Order, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sort_Order, null, new { @class = "validation_error" })
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

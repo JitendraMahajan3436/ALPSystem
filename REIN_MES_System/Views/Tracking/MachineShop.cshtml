@@ -1,0 +1,1423 @@
+﻿
+
+@{
+    ViewBag.Title = "Machine Shop";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<div style="padding:0.5%">
+    <a target="_self" href="@Url.Action("MDURA1", "Tracking")" class="btn btn-primary"> Go To Engine Shop</a>
+</div>
+<div class="row table-responsive tracking-container">
+
+    <div class="alarmColorLabel messages clearfix" style="bottom: 99px;">
+        <div class="row legend-block clearfix">
+            <div class="legend-title">Line Stop Reasons</div>
+            <div id="lineStopReasonErrorMessage">
+            </div>
+            <div id="lineStopErrorMessage">
+            </div>
+        </div>
+    </div>
+
+    <div class="alarmColorLabel tractorShopLabel clearfix">
+        <div class="row legend-block clearfix">
+            <div class="">
+                <div class="legend-symbol lineStopTrigger"></div><div class="legend-title">Line Stop Station</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol backgroundMaterialCall"></div><div class="legend-title">Material Call</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol backgroundProductionCall"></div><div class="legend-title">Supervisor Call</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol backgroundQualityCall"></div><div class="legend-title">Maintenance Call</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol TakeInOut TakeIn"></div><div class="legend-title">Take In</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol TakeInOut TakeOut"></div><div class="legend-title">Take Out</div>
+            </div>
+            <div class="">
+                <div class="legend-symbol track-mc-status mc-bad"></div><div class="legend-title">Idle M/C</div>
+            </div>
+
+
+            <div class="">
+                <div class="legend-symbol tracking_legend_symbol">
+                    <div class="station_border legend_blue">STN</div>
+                </div>
+                <div class="legend-title"></div>
+            </div>
+
+            <div class="">
+                <div class="legend-symbol tracking_legend_symbol">
+                    <div class="station_border legend_green">QDMS</div>
+                </div>
+                <div class="legend-title"></div>
+            </div>
+
+            <div class="">
+                <div class="legend-symbol tracking_legend_symbol">
+                    <div class="station_border legend_pink">TB</div>
+                </div>
+                <div class="legend-title"></div>
+            </div>
+
+            <div class="">
+                <div class="legend-symbol tracking_legend_symbol">
+                    <div class="station_border legend_lemon_green">RFD</div>
+                </div>
+                <div class="legend-title"></div>
+            </div>
+
+            <div class="">
+                <div class="legend-symbol tracking_legend_symbol">
+                    <div class="station_border legend_orange">SA</div>
+                </div>
+                <div class="legend-title"></div>
+            </div>
+        </div>
+        <div class="row row legend-block clearfix">
+            <div style="height:10px;display:inline-flex;float:left">
+
+
+                <div class="station-box" style="display: -webkit-box;"><div style="background-color:green;height:20px;width:20px"></div>Running</div>
+                <div class="station-box" style="display: -webkit-box;"><div style="background-color:blue;height:20px;width:20px"></div>OFF</div>
+                <div class="station-box" style="display: -webkit-box;"><div style="background-color:yellow;height:20px;width:20px"></div>Idle</div>
+                <div class="station-box" style="display: -webkit-box;"><div style="background-color:red;height:20px;width:20px"></div>Fault</div>
+
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div>
+                <button class="btn btn-xs btn-info btn-flat btn-showcallsummary" data-toggle="modal" data-target="#myModal3">Show Summary</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12" style="margin: 3%;">
+        <table class="tracking-table">
+            <tbody>
+
+                <tr>
+                    <td colspan="10"></td>
+
+                    <td colspan="2"></td>
+
+
+                </tr>
+                <tr>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="floating-div b1-line-seperator" data-line-id="59">
+                            <div class="horizontal-title-box title-box-bottom">CH Machine Line</div>
+                            <div class="direction-box"><marquee direction="right"><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i></marquee></div>
+                        </div>
+                        <p class="station-info station-info-top">CH ORDER START</p>
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="20">
+                            <div class="station-title">CH10</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="21">
+                            <div class="station-title">IWM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="22">
+                            <div class="station-title">VSVGP</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="23">
+                            <div class="station-title">CH20</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="24">
+                            <div class="station-title">VSVGL</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="25">
+                            <div class="station-title">CH30</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="34">
+                            <div class="station-title">NPM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="26">
+                            <div class="station-title">CH40</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="27">
+                            <div class="station-title">CHFWM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="28">
+                            <div class="station-title">WJLTM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="35">
+                            <div class="station-title">CHBOf</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+
+
+                    <td class="line-item line-horizontal line-type-2"></td>
+
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="join-td">
+                        <div class="floating-div d-line-seperator-Conv-B" data-line-id="114" style="top: -36%;/* right:7%; */left: -2em;width :61px;height: 265px;">
+
+
+                        </div>
+                        <div style="/* content: &quot;&quot;; */top: 4em;position: absolute;left:18%;height: 245%;content: ''" class="line-arrow-box line-down line1">
+                            <marquee direction="down" style="top :116%;/* left: 40%; */right :119%;width :14px;height :90px;"><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i><i class="fa fa-arrow-down"></i></marquee>
+
+                        </div>
+                        <div class="join-bottom-left">
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+
+                </tr>
+
+                <tr>
+                    <td class="">
+                        <br><br>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="floating-div b1-line-seperator" data-line-id="59">
+                            <div class="horizontal-title-box title-box-bottom">CC Machine Line</div>
+                            <div class="direction-box"><marquee direction="right"><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i></marquee></div>
+                        </div>
+                        <p class="station-info station-info-top">CC ORDER START</p>
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="36">
+                            <div class="station-title">CCTM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="37">
+                            <div class="station-title">
+                                NPM
+
+                            </div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="29">
+                            <div class="station-title">CC10</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="30">
+                            <div class="station-title">BPM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="31">
+                            <div class="station-title">
+                                CC20A
+
+                            </div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="32">
+                            <div class="station-title">CC20B</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="33">
+                            <div class="station-title">CCFWM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="38">
+                            <div class="station-title">CCBOf</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+
+
+
+
+
+
+
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="join-td">
+                        <div class="join-bottom-left">
+                        </div>
+                    </td>
+
+
+                    <td colspan="8"></td>
+
+
+                    <td class="line-item line-type-2 " colspan="1"></td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </tr>
+
+                <tr>
+                    <td class="">
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+
+
+
+
+
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="floating-div b1-line-seperator" data-line-id="59" style="width: 1236%;">
+                            <div class="horizontal-title-box title-box-bottom">CH S/A(D/C) &amp; Gasoline</div>
+                            <div class="direction-box"><marquee direction="left"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></marquee></div>
+                        </div>
+
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="51">
+                            <div class="station-title">B-Off</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="50">
+                            <div class="station-title">
+                                VLA
+
+                            </div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="49">
+                            <div class="station-title">VLT</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    @*<td class="line-item  line-horizontal line-type-2">
+                            <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="1035">
+                                <div class="station-title">BPM</div>
+                                <div class="station-body"></div>
+                            </div>
+                        </td>*@
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="48">
+                            <div class="station-title">
+                                VPC
+
+                            </div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="47">
+                            <div class="station-title">R&amp;SSP</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    @*<td class="line-item line-horizontal line-type-2">
+                            <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="828">
+                                <div class="station-title">CCFWM</div>
+                                <div class="station-body"></div>
+                            </div>
+                        </td>*@
+                    <td class="line-item  line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="46">
+                            <div class="station-title">MOG T</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+
+
+
+
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item line-horizontal line-type-2"></td>
+
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="line-item  line-horizontal line-type-2"></td>
+                    <td class="join-td">
+                        <div class="join-up-left">
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </tr>
+
+                <tr>
+                    <td class="">
+                        <br><br><br>
+                        <div style="top: -27px;position: absolute;left: 0px;height: 609%;" class="line-arrow-box line-down">
+
+                        </div>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td colspan="7"></td>
+                    <td>
+                        <div class="line-arrow-box line-down" style="height: 72px;left: 133%;top: 54px;position: absolute;">
+
+                        </div>
+                    </td>
+                    <td class="join-td">
+
+                        <div class="join-bottom-right">
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+
+
+                    <td class="line-item line-horizontal line-type-3">
+                        <div class="floating-div b1-line-seperator" data-line-id="59" style="left: -121px;width: 402%;height:86px;">
+
+
+
+                            <div class="horizontal-title-box title-box-bottom" style="left: 37px;">Piston &amp; jumbo S/A</div>
+                            <div class="direction-box"><marquee direction="left"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></marquee></div>
+                        </div>
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="52">
+                            <div class="station-title">PCRSJS/A</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-3">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="43">
+                            <div class="station-title">PU S/A</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="top: -161px;position: absolute;left: 35px;height: 461%;" class="line-arrow-box line-down">
+
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+                </tr>
+
+
+
+                <tr>
+                    <td colspan="8"></td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </tr>
+                <tr>
+                    <td class="">
+                        <br><br>
+                    </td>
+                </tr>
+
+
+
+
+
+
+
+
+                <tr>
+                    <td colspan="1"></td>
+                    <td class="line-item line-horizontal line-type-1">
+                        <div class="floating-div b1-line-seperator" data-line-id="59" style="width: 1307%;">
+                            <div class="horizontal-title-box title-box-bottom">CC Sub Assembly</div>
+                            <div class="direction-box"><marquee direction="left"><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i><i class="fa fa-arrow-left"></i></marquee></div>
+                        </div>
+
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="59">
+                            <div class="station-title">TTT/BO</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="58">
+                            <div class="station-title">TT</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="57">
+                            <div class="station-title">CHST</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-1">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="56">
+                            <div class="station-title">ODAF</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="55">
+                            <div class="station-title">CC TM</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="54">
+                            <div class="station-title">Manip</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="53">
+                            <div class="station-title">SD</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-3">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="42">
+                            <div class="station-title">JumboS/A D</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="41">
+                            <div class="station-title">MBBP</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="40">
+                            <div class="station-title">PCJT</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td class="line-item line-horizontal line-type-2">
+                        <div class="station-box" data-toggle="modal" data-target="#myModal" data-serialno="" data-station-id="39">
+                            <div class="station-title">ENP</div>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+
+                    <td class="line-item line-horizontal line-type-2"></td>
+
+
+                    <td class="join-td">
+                        <div class="join-up-left">
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+                </tr>
+
+
+
+                <tr>
+                    <td colspan="1"></td>
+
+
+                    <td class="join-td">
+                        <div class="join-up-right">
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right-d15-b12-caption">
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right-d15-b12">
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right-d15-b12">
+                        </div>
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right-d15-b12">
+                        </div>
+                    </td>
+
+
+
+
+                    <td class="">
+                        <div class="line-arrow-box line-right-d15-b12">
+                        </div>
+                    </td>
+
+
+
+
+
+
+
+
+                    <td class="join-td">
+                        <div class="join-bottom-left-d15-b12">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        <br><br><br>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="1"></td>
+
+                    <td class="line-item line-type-2 line-horizontal" colspan="1">
+                        <div class="station-box" data-station-id="726" style="background-color:bisque">
+                            <span id="station1title" class="station1title">KITTING</span>
+                            <div class="station-body"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="line-arrow-box line-right">
+                        </div>
+
+
+
+                    </td>
+                    <td>
+                        <div class="line-arrow-box line-right">
+                        </div>
+
+
+
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right">
+                        </div>
+
+                    </td>
+                    <td class="">
+                        <div class="line-arrow-box line-right">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="box-body" style="border:2px solid black;
+                                        width: 200%;
+    height: 60px;">
+                            <div class="span3" style="background-color:#8f86e9;color:#050505;font-weight:bold; ">
+                                RROOM
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+                    </td>
+
+
+
+
+
+
+                </tr>
+
+                <tr>
+                    <td colspan="16"></td>
+                    <td>
+                        <a target="_self" href="/Tracking/MDURA1"><b> To Engine Shop</b> </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="">
+                        <br><br><br>
+                    </td>
+                </tr>
+
+            </tbody>
+
+
+
+
+
+
+
+
+
+
+
+        </table>
+    </div>
+    @*nil*@
+    <div class="alarmColorLabel1 tractorShopLabel1 clearfix1 ">
+        <div class="row1 legend-block1 clearfix1">
+            <div class="">
+                <div class="legend-title pull-left" style="font:300px; display:none;" id="LunchBreakMessage">Lunch Break Time: 11:30 AM to 12:00 PM</div>
+                <div class="legend-title pull-left" style="font:300px; display:none;" id="TeaBreakMessage">Tea Break Time: 3:00 PM to 3:07 PM</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width:59%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body no-padding">
+                <div class="row universal-tracking-box">
+                    <div class="col-md-6">
+                        <table class="table table-bordered station-detail-table">
+                            <tbody>
+                                @*<tr><td class="bg-dark text-right">DSN</td><td id="station-ItemDSN">10</td></tr>*@
+                                <tr><td class="bg-dark text-right">Serial No.</td><td id="station-Item"></td></tr>
+                                @*<tr><td class="bg-dark text-right">Model</td><td id="station-ItemModel"></td></tr>*@
+                                <tr><td class="bg-dark text-right">Model Series</td><td id="station-ItemModelSeries"></td></tr>
+                            </tbody>
+                        </table>
+                        <div>
+                            @*<a id="AvixSOS" class="btn btn-primary  col-md-12">Avix SOS</a>*@
+                            @Html.ActionLink("Avix SOS", "DownloadAvixFile", "Tracking", new { documentPath = "" }, htmlAttributes: new { @class = "btn btn-info btn-sm col-md-12 btn-flat", id = "AvxSOS" })
+                        </div>
+
+
+                        <div class="col-md-12" id="associatelist-tracking">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="machinelist-tracking">
+                        </div>
+                        <div class="col-md-12 text-bold" id="stationSignalsBlock">
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered table-condensed tracking-popup" id="defectlist-tracking"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel1">RELEASED ORDERS</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive tracking-orders-wrapper" id="released-orders-box">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content" id="buffermodal">
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel1">CALLS SUMMARY</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive" id="callsummary">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function Loadingajax() {
+            $("#loader").show();
+            $('#myModal2').modal();
+            $("#buffermodal").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+        function showCreateModal() {
+            $("#loader").hide();
+            $('#myModal2').modal();
+        }
+        function resetStationData() {
+            $("#myModalLabel").text("");
+            //$("#station-ItemDSN").text("");
+            $("#station-Item").text("");
+            $("#station-ItemModel").text("");
+            $("#station-ItemModelSeries").text("");
+        }
+        function resetDefectsData() {
+            $("#defectlist-tracking").html("");
+        }
+        function resetAllStation() {
+            //$(".station-box").removeData("data-station-id");
+            //$(".station-box").removeData("data-station-DSN");
+            //$(".station-box").removeData("data-station-Serial");
+            //$(".station-box").removeData("data-station-Model");
+            //$(".station-box").removeData("data-station-ModelSeries");
+
+            //$(".station-box .station-title").text("");
+            $(".station-box .station-body").text("");
+        }
+        function resetAllLines() {
+            $(".floating-div").removeClass("LineStoped backgroundRed");
+            //$(".station-box").removeClass("triggeredStation lineStopTrigger");
+            $('.direction-box').show();
+        }
+        function resetAllMaterialCalls() {
+            $(".station-box .station-body").removeClass("backgroundMaterialCall");
+            $(".station-box .station-body").removeClass("backgroundProductionCall");
+            $(".station-box .station-body").removeClass("backgroundQualityCall");
+            $(".station-box").removeClass("triggeredStation lineStopTrigger");
+        }
+        function resetAllTakeInOutCalls() {
+            $(".station-box").removeClass("TakeInOut TakeInBlock");
+            $(".station-box").removeClass("TakeInOut TakeOutBlock");
+        }
+        function resetAllMachineStatus() {
+            $(".station-box .station-title").removeClass("track-mc-status mc-bad");
+        }
+        function resetAllMESLineStop() {
+            $(".station-box").removeClass("mestriggeredStation mes-linestop");
+        }
+  function resetAllWorkDelay() {
+            $(".station-box").removeClass("WorkDelayCall");
+        }
+        //new added
+       function LineStopReason() {
+
+            $(".alarmColorLabel.messages").show();
+            $("#lineStopReasonErrorMessage").html("");
+            var str = "<ul style='color:red'>";
+            $(".triggeredStation").each(function () {
+                if ($(this).hasClass("WorkDelayCall"))
+                {
+                    str = str;
+                }
+                else {
+                    str += "<li>" + $(this).children(".station-title").html() + ": Reason :Line Stop" + "</li>";
+                }
+
+            });//WorkDelayCall
+            $(".WorkDelayCall").each(function () {
+                str += "<li>" + $(this).children(".station-title").html() + ": Reason :Work Delay" + "</li>";
+            });
+            str += "</ul>";
+            $("#lineStopReasonErrorMessage").html(str);
+        }
+
+        function checkTracking() {
+            $.getJSON('/Tracking/checkIfLineStop', { shopid: 3 }, function (data) {
+                resetAllLines();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, lineStop) {
+
+                        var lineid = lineStop.Line_ID;
+                        var stationid = lineStop.LineStopStation_ID;
+                        $('*[data-line-id="' + lineid + '"]').addClass("LineStoped backgroundRed");
+                        $('*[data-line-id="' + lineid + '"]').find('.direction-box').hide();
+                        //$('*[data-station-id="' + stationid + '"]').addClass("triggeredStation lineStopTrigger");
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Line Stop Data !');
+            });
+
+            $.getJSON('/Tracking/getStationCalls', { shopid: 3 }, function (data) {
+                resetAllMaterialCalls();
+resetAllWorkDelay();
+                if (data.length > 0) {
+                    $.each(data, function (idx, stationCalls) {
+
+                        var stationid = stationCalls.Station_ID;
+                        var divObj = $('*[data-station-id="' + stationid + '"]').children(".station-body");
+                        if (stationCalls.Material_Call) {
+                            divObj.addClass("backgroundMaterialCall");
+                        }
+                        if (stationCalls.Supervisor_Call) {
+                            divObj.addClass("backgroundProductionCall");
+                        }
+                        if (stationCalls.Maintenance_Call) {
+                            divObj.addClass("backgroundQualityCall");
+                        }
+                        if (stationCalls.Line_Stop || stationCalls.Emergency_Call) {
+                            $('*[data-station-id="' + stationid + '"]').addClass("triggeredStation lineStopTrigger");
+                        }
+                        if (stationCalls.Work_Delay) {
+                            // divObj.addClass("WorkDelayCall");
+                            $('*[data-station-id="' + stationid + '"]').addClass("triggeredStation lineStopTrigger WorkDelayCall");
+                        }
+
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Station Calls !');
+            });
+
+            $.getJSON('/Tracking/trackOrder', { shopid: 3 }, function (data) {
+                resetAllStation();
+                LineStopReason();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, tracking) {
+
+                        var stationid = tracking.Station_ID;
+                        var serialno = (tracking.SerialNo);
+                        var seriescode = "";
+                        if (tracking.Series_Description != null && tracking.Series_Description != '') {
+                            seriescode = tracking.Series_Description;
+                        }
+
+                        if ((serialno != null && serialno != '')) {
+                            if (serialno == 'EMPTYPITCH') {
+                                seriescode = serialno.substr(0, 5);
+                            }
+                        } else {
+                            serialno = '';
+                        }
+
+                        $('*[data-station-id="' + stationid + '"]').children(".station-body").text(seriescode);
+                        $('*[data-station-id="' + stationid + '"]').attr("data-serialno", serialno);
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Tracking Data !');
+            });
+            $.getJSON('/Tracking/getTakeInOutData', { shopid: 3 }, function (data) {
+                resetAllTakeInOutCalls();
+                if (data.length > 0) {
+                    $.each(data, function (idx, resultDataObj) {
+
+                        var serialNo = resultDataObj.Serial_No;
+                        var divObj = $('*[data-serialno="' + serialNo + '"]');
+
+                        if (resultDataObj.Rework_Status == "Not Good") {
+                            divObj.addClass("TakeInOut TakeOutBlock");
+                        }
+                        else if (resultDataObj.Rework_Status == "Good") {
+                            divObj.addClass("TakeInOut TakeInBlock");
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Station Calls !');
+            });
+            $.getJSON('/Tracking/getMESLineStopStation', { shopid: 3 }, function (data) {
+                TestBedCycleData();
+
+                resetAllMESLineStop();
+                $("#lineStopErrorMessage").html("");
+                // $(".alarmColorLabel.messages").hide();
+                if (data.length > 0) {
+                    $(".alarmColorLabel.messages").show();
+                    var res = "<ul>";
+                    $.each(data, function (idx, resultDataObj) {
+
+                        var stationid = resultDataObj.Station_ID;
+                        var divObj = $('*[data-station-id="' + stationid + '"]');
+
+                        divObj.addClass("mestriggeredStation mes-linestop");
+                        var stationName = divObj.find(".station-title").html();
+                        var stopReason = resultDataObj.Stop_Reason;
+                        var isMes = resultDataObj.isLineStop;
+                        if (isMes == 1) {
+                            if (stopReason == "Serial Not Scanned") {
+                                stopReason = "Serial number not scanned"
+                            }
+                            else
+                                if (stopReason == "Error Proofing") {
+                                    stopReason = "Wrong error proofing"
+                                }
+                                else
+                                    if (stopReason == "Pending ErrorProofing or Geneaology Scan") {
+                                        stopReason = "Error proofing scanning pending"
+                                    }
+                            res = res + "<li>" + stationName + " : " + stopReason + "</li>";
+                            //$("#lineStopErrorMessage").html(stationName + " : " + stopReason);
+                        }
+
+                    });
+                    res = res + "</ul>";
+                    $("#lineStopErrorMessage").html(res);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Machine Status !');
+            });
+        }// Check Tracking function END
+
+
+        //TestBedCycleData
+        function TestBedCycleData() {
+            url = "/EngineAndon/TestBedCycleData";
+            var machineId = "31,32,33,34,35";
+            ajaxpack.getAjaxRequest(url, "machineId="+machineId, RefreshTestBedCycle, "json");
+        }
+
+        function RefreshTestBedCycle() {
+
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                var jsonRes = $.parseJSON(myajax.responseText);
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+                    var res = "";
+                    var length = jsonRes.length;
+
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        if (jsonRes[i].Heart_Bit == null || jsonRes[i].Heart_Bit == false) {
+                            if (jsonRes[i].isFaulty == true) {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Red")
+                            }
+                            else if (jsonRes[i].isHealthy == true) {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Green")
+                            }
+                            else if (jsonRes[i].isIdle == true) {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Yellow")
+                            }
+                            else {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Yellow")
+                            }
+                        }
+
+                        else {
+                            if (jsonRes[i].Heart_Bit == true) {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Blue")
+                            }
+                            else {
+                                $("#Machine_" + jsonRes[i].Machine_ID).children(".station-body").css("background-color", "Red")
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        $("#AvixSOS").click(function (e) {
+            var invokerstation = $(e.relatedTarget);
+            var StationName1 = $("#myModalLabel").html() + ".avx4";
+            var url = '@Url.Action("DownloadAvixFile", "Tracking")';
+            window.location.href = url + "?documentPath=" + StationName1;
+
+        });
+
+        $(document).ready(function () {
+
+            timmer();
+            setInterval(function () {
+                timmer();
+            }, 60000);
+            function timmer() {
+                url = "/Tracking/GetBerakLunchTime";
+
+                ajaxpack.getAjaxRequest(url, "ShopID=" + 3, LoadShiftLunchTime, "json");
+            }
+            function LoadShiftLunchTime() {
+
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+                        var res = "";
+                        var length = jsonRes.length;
+                        $("#LunchBreakMessage").css('display', 'block');
+                        $("#LunchBreakMessage").empty();
+                        $("#LunchBreakMessage").html(jsonRes);
+                        $("#LunchBreakMessage").css({ "font-size": "20px", "margin-bottom": "163px" });
+
+
+                    }
+                }
+            }
+
+
+            checkTracking();
+            window.setInterval(checkTracking, 5000);
+
+            setInterval(function () {
+                $('.LineStoped').toggleClass("backgroundRed");
+                $('.triggeredStation').toggleClass("lineStopTrigger");
+                //$('.mestriggeredStation').toggleClass("mes-linestop");
+            }, 300);
+
+            $('#myModal3').on('shown.bs.modal', function (e) {
+                $("#callsummary").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                $.post('/Tracking/getSignalsSummary', { shopid: 3 }, function (data) {
+                    if (data.length) {
+                        $("#callsummary").html(data);
+
+                    } else {
+                        $("#callsummary").html("");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert(textStatus);
+                });
+            });
+
+            $('#myModal1').on('shown.bs.modal', function (e) {
+                $("#released-orders-box").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                $.post('/Tracking/getReleasedOrders', { shopid: 3, lineID: 14 }, function (data) {
+                    if (data.length) {
+                        $("#released-orders-box").html(data);
+
+                    } else {
+                        $("#released-orders-box").html("");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert(textStatus);
+                });
+            });
+
+            $('#myModal').on('shown.bs.modal', function (e) {
+                var invokerstation = $(e.relatedTarget);
+                $("#associatelist-tracking").html("");
+                $("#machinelist-tracking").html("");
+                resetDefectsData();
+                var station = invokerstation.data("station-id");
+
+                //$.getJSON('/Tracking/Getfiles', { documentPath: station }, function (data) {
+                //    if (data != null) {
+                //        alert(data.Message);
+                //        if (data.length > 0) {
+                //            if (data.Status == true) {
+                //                $("#AvxSOS").attr("href", data.Message)
+                //            }
+                //        } else {
+                //            //  $("#AvxSOS").hide();
+                //        }
+                //    } else {
+                //        $("#associatelist-tracking").html("<p class='text-center bg-danger'>No Avxi4 assigned !</p>");
+                //    }
+                //}).fail(function (jqXHR, textStatus, errorThrown) {
+                //    // Ajax fail callback function.
+                //    // alert('Error getting Associate List !');
+                //});
+
+
+
+                var stationSerialNo = invokerstation.data("serialno");
+                $.getJSON('/Tracking/getStationData', { shopid: 3, stationid: station }, function (data) {
+
+                    if (data != null) {
+                        $("#myModalLabel").text(data.Station_Name);
+
+                        $("#myModalLabel").text(data.Station_Name);
+
+                        $("#station-Item").text(data.SerialNo);
+                        $("#station-ItemModel").text(data.partno);
+                        $("#station-ItemModelSeries").text(data.Series_Description);
+
+                    } else {
+                        resetStationData();
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Station Data !');
+                });
+
+                //$.getJSON('/Tracking/getStationDefects', { shopid: 3, stationid: station, serialno: stationSerialNo }, function (data) {
+
+                //    if (data != null) {
+                //        if (data.length > 0) {
+                //            $("#defectlist-tracking").append("<thead>" +
+                //                           "<tr><td colspan='6' class='bg-dark text-center'>DEFECT LIST</td></tr>" +
+                //                           "<tr>" +
+                //                           "<th>Checklist Name</th><th>Checkpoint Name</th><th>Value</th><th>Defect</th><th>Corrective Action</th><th>Status</th></tr>" +
+                //                           "</thead><tbody>");
+                //            $.each(data, function (idx, resultDataObj) {
+                //                $("#defectlist-tracking").append("<tr><td>" + resultDataObj.Checklist_Name + "</td><td>" + resultDataObj.Checkpoint_Name + "</td>" +
+                //                 "<td>" + resultDataObj.User_Checkpoint_Value + "</td><td>" + resultDataObj.Defect_Name + "</td>" +
+                //                 "<td>" + resultDataObj.Corrective_Action_Name + "</td>" +
+                //                 "<td>" + resultDataObj.Is_Clear + "</td></tr>");
+
+                //            });
+                //            $("#defectlist-tracking").append("</tbody>");
+                //        } else {
+                //            $("#defectlist-tracking").append("<thead>" +
+                //                               "<tr><td class='text-center bg-success'>No Defects !</td></tr>" +
+                //                               "</thead>");
+                //        }
+                //    } else {
+                //        $("#defectlist-tracking").append("<thead>" +
+                //                               "<tr><td class='text-center bg-success'>No Defects !</td></tr>" +
+                //                               "</thead>");
+                //    }
+                //}).fail(function (jqXHR, textStatus, errorThrown) {
+                //    // Ajax fail callback function.
+                //    // alert('Error getting Defects List !');
+                //});
+
+                $.getJSON('/Tracking/getStationAssociates', { shopid: 3, stationid: station }, function (data) {
+                    if (data != null) {
+                        if (data.PresentObj.length > 0) {
+                            $.each(data.PresentObj, function (idx, resultDataObj) {
+                                $("#associatelist-tracking").append("<div class='details-block associate-detail-block clearfix'>" +
+                                "<div class='col-md-9'><h5>" + resultDataObj.Employee_No + "</h5>" +
+                                "<p>" + resultDataObj.Employee_Name + "</p></div>" +
+                                "<div class='col-md-3'><img src='/Content/images/Skills/" + resultDataObj.Skill_ID + ".png'/></div>" +
+                                "</div>");
+                            });
+                        } else {
+                            $("#associatelist-tracking").html("<p class='text-center bg-danger'>" + data.IsAssocaitesPrsent + "</p>");
+                        }
+                    } else {
+                        $("#associatelist-tracking").html("<p class='text-center bg-danger'>No Associates assigned !</p>");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                });
+
+                $.getJSON('/Tracking/getStationMachines', { shopid: 3, stationid: station }, function (data) {
+                    if (data != null) {
+                        if (data.length > 0) {
+                            $.each(data, function (idx, resultDataObj) {
+                                $("#machinelist-tracking").append("<div class='details-block machine-detail-block' data-machine-id='" + resultDataObj.Machine_ID + "'>" +
+                                  "<h5>" + resultDataObj.Machine_Name + "</h5>" +
+                                  "<div class='machine-details-cloud'>" +
+                                  "<div class='row text-center'>" +
+                                  "<div class='col-md-6'><a target='_blank' href='/CBMDashboard/ShowMachineCBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CBM</a></div>" +
+                                  "<div class='col-md-6'><a target='_blank' href='/MinorStoppages/ShowMachineMinorStoppage/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>Minor Stoppage</a></div>" +
+                                  "<div class='col-md-6'><a target='_blank' href='/TBMDashboard/ShowMachineTBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>TBM</a></div>" +
+                                  "<div class='col-md-6'><a target='_blank' href='/CLITADailyCheck/ShowMachineDailyCLITA/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CLITA</a></div>" +
+                                  "</div></div>" +
+                                  //"<h5 data-toggle='modal' data-target='#myModal4' >" + resultDataObj.Machine_Name + "</h5>" +
+                                  "</div>");
+                            });
+                        } else {
+                            $("#machinelist-tracking").html("<p class='text-center'>No Machines assigned !</p>");
+                        }
+                    } else {
+                        $("#machinelist-tracking").html("<p class='text-center'>No Machines assigned !</p>");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    //alert('Error getting Machine List !');
+                });
+                $.getJSON('/Tracking/getStationSignals', { shopid: 3, stationid: station }, function (data) {
+                    if (data != null) {
+                        var stationSignals = "";
+                        if (data.Emergency_Call) {
+                            stationSignals += "<span>Emergency Call Active</span>"
+                        }
+                        if (data.Line_Stop) {
+                            stationSignals += "<span>Line Pause Active</span>"
+                        }
+                        if (data.Work_Delay) {
+                            stationSignals += "<span>Work Delay Call Active</span>"
+                        }
+                        if (data.Material_Call) {
+                            stationSignals += "<span>Material Call Active</span>"
+                        }
+                        if (data.Supervisor_Call) {
+                            stationSignals += "<span>Supervisor Call Active</span>"
+                        }
+                        if (data.Maintenance_Call) {
+                            stationSignals += "<span>Maintenance Call Active</span>"
+                        }
+
+                        $("#stationSignalsBlock").html(stationSignals);
+                    } else {
+                        $("#stationSignalsBlock").html("");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    // alert('Error Station Signals.Please try again !');
+                });
+            });
+        });
+
+    </script>
+    <style type="text/css">
+        .tracking-table .join-up-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 53%;
+            height: 39px;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .tracking-table .join-bottom-right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+            height: 21px;
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            z-index: 100;
+        }
+
+        .tracking-table .join-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 54%;
+            height: 21px;
+            border-top: 2px solid #000;
+            border-right: 2px solid #000;
+            z-index: 100;
+        }
+    </style>
+}

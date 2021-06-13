@@ -1,0 +1,168 @@
+﻿@model REIN_MES_System.Models.RS_MT_Clita_Station_Machines
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<h2>Create</h2>*@
+@*<h3>Clita Station Machines</h3>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="form-horizontal">*@
+    <div class="col-md-12">
+        @*<hr />*@
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Plant_ID, (IEnumerable<SelectListItem>)ViewBag.Plant_ID, "--Select Plant--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Shop_ID, Enumerable.Empty<SelectListItem>(),"--Select Shop--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Line_ID, "Line Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(),"--Select Line--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Station_ID, "Station Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Station_ID, Enumerable.Empty<SelectListItem>(),"--Select Station--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+            </div>
+       
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Machine_ID, "Machine Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Machine_ID, Enumerable.Empty<SelectListItem>(),"--Select Machine--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+}
+
+@*<div>
+
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+
+            $("#Plant_ID").on("change", function () {
+                $("#Shop_ID").html("");
+                $("#Line_ID").html("");
+                var Plant_ID = $('#Plant_ID').val();
+                if (Plant_ID.length > 0) {
+                    //  alert(Plant_ID);
+                    $.getJSON('/ClitaStationMachines/GetShopByPlantID', { plantid: Plant_ID }, function (data) {
+                        // alert(data);
+                        if (data.length > 0) {
+                            $('#Shop_ID option').remove();
+                            $('#Shop_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Shop_ID').append('<option value="' +
+                                           data[i].Shop_ID + '">' + data[i].Shop_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Shops are not present in current plant")
+                        }
+                    });
+                }
+            });
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/ClitaStationMachines/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Line are not present in current Shop")
+                        }
+                    });
+                }
+            });
+
+            $("#Line_ID").on("change", function () {
+                $("#Station_ID").html("");
+                var Shop_ID = $('#Line_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/ClitaStationMachines/GetStationsByLineID', { lineid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Station_ID option').remove();
+                            $('#Station_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Station_ID').append('<option value="' +
+                                           data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Stations are not present in current Line")
+                        }
+                    });
+                }
+            });
+
+            $("#Station_ID").on("change", function () {
+                $("#Machine_ID").html("");
+                var Shop_ID = $('#Plant_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/ClitaStationMachines/GetMachines', { plantid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Machine_ID option').remove();
+                            $('#Machine_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Machine_ID').append('<option value="' +
+                                           data[i].Value + '">' + data[i].Text + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Machines are not present in current Station")
+                        }
+                    });
+                }
+            });
+
+
+
+
+        });
+    </script>
+}

@@ -1,0 +1,145 @@
+﻿@model REIN_MES_System.Models.RS_Ctrl_Machine_Alarms_Master
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Alarm_ID)
+            <div class="form-group" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, "Plant_ID", new { @class = "" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Plant_ID", String.Empty)
+                    @Html.ValidationMessageFor(model => model.Plant_ID)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.Label("Shop_ID", "Shop Name", htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Shop_ID, null, "Select Shop", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID)
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("Machine_ID", "Machine Name", htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Machine_ID, null, "Select Machine", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Machine_ID)
+                </div>
+                @*<div class="col-md-4">
+                    @Html.LabelFor(model => model.Machine_ID, "Machine Name *", htmlAttributes: new { @class = "" })
+                    @Html.DropDownListFor(model => model.Machine_ID, null, String.Empty, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+                </div>*@
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Alarm_Name, ResourceMachineAlarmMaster.Machine_Alarm_Master_Label_Alarm_Name, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Alarm_Name, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Alarm_Name)
+                </div>
+                
+            </div><br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Alarm_Message, ResourceMachineAlarmMaster.Machine_Alarm_Master_Label_Alarm_Message, new { @class = "" })
+                    @Html.TextBoxFor(model => model.Alarm_Message, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Alarm_Message)
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Alarm_Type_ID, ResourceMachineAlarmType.Machine_Alarm_Type_Label_Type, new { @class = "control-label" })
+                    @Html.DropDownList("Alarm_Type_ID", null, String.Empty, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Alarm_Type_ID)
+                </div>
+                <div class="col-md-4" style="display:none">
+                    @Html.LabelFor(model => model.Is_MTTR, ResourceMachineAlarmMaster.Machine_Alarm_Master_Label_Is_MTTR, new { @class = "control-label" })
+                    <br />
+                    @Html.DropDownListFor(model => model.Is_MTTR, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid" })
+                    @Html.ValidationMessageFor(model => model.Is_MTTR)
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-8 io-combo">
+                    @Html.LabelFor(model => model.AlarmIOList, new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.AlarmIOList, null, new { @class = "form-control", multiple = "true" }) eg. %ip
+                    @Html.ValidationMessageFor(model => model.AlarmIOList)
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#AlarmIOList").select2({
+                placeholder: 'Select IOs',
+                allowClear: true,
+            });
+
+            $('#Shop_ID').change(function () {
+                var shopId = $("#Shop_ID").val();
+                if (shopId) {
+                    var url = "/MachineAlarmMaster/getMachineList";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showMachineShopID, "json");
+
+                }
+                else {
+                    // clear the line type and shop
+                    clearSelectBox("Machine_ID");
+                }
+            });
+
+            function showMachineShopID() {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) {
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Machine_ID");
+                    }
+                }
+            }
+
+            function SelectOptionHTML(jsonRes, targetId) {
+                var res = "";
+                for (var i = 0; i < jsonRes.length; i++) {
+                    res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+                }
+
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+                $("#" + targetId).html(res);
+            }
+
+            function clearSelectBox(targetId) {
+                var res = "";
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+                $("#" + targetId).html(res);
+            }
+        });
+    </script>
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+    <style>
+        .io-combo .select2 {
+            font-size: 1.2em;
+        }
+
+        .io-combo .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            display: block;
+            float: none;
+            width: auto;
+        }
+    </style>
+}

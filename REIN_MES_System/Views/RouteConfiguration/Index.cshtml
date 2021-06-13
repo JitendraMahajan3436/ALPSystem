@@ -1,0 +1,186 @@
+﻿@model REIN_MES_System.Models.RS_Route_Configurations
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<marquee><h1><b>The UI is Under Developement</b></h1></marquee>*@
+
+@using (Html.BeginForm("SaveRouteConfig", "RouteConfiguration", FormMethod.Post, null))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal route_configuration">
+
+        <div class="row">
+            <div class="col-sm-3" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, new { @class = "" })
+                @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, htmlAttributes: new { @class = "form-control" })              
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-sm-3">
+                @Html.LabelFor(model => model.Shop_ID, new { @class = "" })
+                @Html.DropDownList("Shop_ID", null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                <div id="configuration_shop" class="validation_error"></div>
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+            </div>
+            
+            <div class="col-sm-3">
+                @Html.LabelFor(model => model.Line_ID, new { @class = "" })
+                @Html.DropDownList("Line_ID", null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                <div id="configuration_line" class="validation_error"></div>
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-sm-3">
+                <label></label><br />
+              
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary validate_route_configuration" />
+                <input type="hidden" value="0" name="hdnIsStartStaionAdded" id="hdnIsStartStaionAdded" />
+                <input type="hidden" value="0" name="hdnIsEndStaionAdded" id="hdnIsEndStaionAdded" />
+                <input type="hidden" value="0" name="hdnStartStaionID" id="hdnStartStaionID" />
+                <input type="hidden" value="0" name="hdnEndStaionID" id="hdnEndStaionID" />
+                <input type="hidden" value="" name="hdnRouteConfiguration" id="hdnRouteConfiguration" />
+
+                <input type="hidden" value="" name="hdnRouteConfigurationDisplay" id="hdnRouteConfigurationDisplay" />
+                
+            </div>
+
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-md-2">
+                <div class="box box-primary">
+                    @Html.LabelFor(model => model.Station_ID, new { @class = "" })
+                    <div class="color-palette-set station_lists" style="min-height: 381px;">
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-2">
+                <div class="box box-primary" style="text-align: center;">
+                    <label> Select Icons</label>
+                    <div class="color-palette-set icon_lists" style="margin-left: 41px;">
+                        <div id="icons_1" class="bg-aqua color-palette station_icon_items line_arrow_left"><span class="line_arrow_left"><i class="fa fa-fw fa-arrow-left"></i><i class="fa fa-fw fa-arrow-left"></i></span></div><br />
+                        <div id="icons_2" class="bg-aqua color-palette station_icon_items line_arrow_right"><span class="line_arrow_right"><i class="fa fa-fw fa-arrow-right"></i><i class="fa fa-fw fa-arrow-right"></i></span></div><br />
+                        <div id="icons_3" class="bg-aqua color-palette station_icon_items line_arrow_down"><span class="line_arrow_down"><i class="fa fa-fw fa-arrow-down"></i><i class="fa fa-fw fa-arrow-down"></i></span></div><br />
+                        <div id="icons_4" class="bg-aqua color-palette station_icon_items line_arrow_up"><span class="line_arrow_up"><i class="fa fa-fw fa-arrow-up"></i><i class="fa fa-fw fa-arrow-up"></i></span></div><br />
+
+                        <div id="icons_5" class="bg-aqua color-palette station_icon_items line_start"><span class="line_start">Line Start</span></div><br />
+                        <div id="icons_6" class="bg-aqua color-palette station_icon_items line_end"><span class="line_end">Line End</span></div><br />
+
+
+                    </div>
+
+                    <div class="site_trash_box">
+                        <i class="fa fa-fw fa-trash"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="box box-primary">
+                    <label>Line Configuration</label>
+                    <div id="configuration_errors" class="validation_error"></div>
+                    <div class="" style="width: 100%; overflow-x: scroll;">
+                        <table id="line_configurations"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+       
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery_ui")
+    @Scripts.Render("~/bundles/route_configuration")
+}
+
+
+
+<style type="text/css">
+    .skin-yellow .main-header .logo {
+        background-color: white;
+    }
+
+    .main-footer {
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        padding: 22px 0;
+        width: 79px;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        height: 72px;
+        min-height: 72px;
+        min-width: 72px;
+        padding: 0;
+    }
+
+
+
+
+
+    .station_items {
+        height: 72px;
+        padding: 0;
+        width: 72px;
+        z-index: 9999999;
+    }
+
+
+    .station_icon_items {
+        /* width: 36px; */
+        text-align: center;
+        width: 72px;
+        z-index: 99;
+    }
+
+    td .station_items {
+        font-size: 12px;
+    }
+
+    .station_icon_items.line_arrow_down, .station_icon_items.line_arrow_up {
+        height: 72px;
+        margin: 0 22px;
+        width: 25px;
+    }
+
+    /* td .station_icon_items.line_arrow_down, td .station_icon_items.line_arrow_up {
+            height: 99px;
+            margin: 0 23px;
+            width: 25px;
+        } */
+
+    .site_trash_box {
+        border: 1px solid #cccccc;
+        font-size: 34px;
+        padding: 25px 0;
+        text-align: center;
+    }
+
+    #line_configurations td.table_error {
+        border-color: red;
+    }
+
+    .route_configuration span {
+        color: black;
+        word-wrap: break-word;
+    }
+
+    
+</style>

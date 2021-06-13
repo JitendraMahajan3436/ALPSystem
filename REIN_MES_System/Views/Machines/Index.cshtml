@@ -1,0 +1,117 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Machines")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    @*<a href="@Url.Action("Upload", "Machines")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>*@
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model=>model.Machine_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Machine_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Machine_Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Shop_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Line_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Station_ID)
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var MName = item.Machine_Name + "(" + item.Machine_Number + ")";
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.Machine_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => MName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Machine_Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                    </td>
+                    <td>
+                        <a href="@Url.Action(ResourceGlobal.Edit, "Machines", new { id = item.Machine_ID })"><i class="fa fa-edit" style="color:blue"></i></a> 
+                        <a href="@Url.Action(ResourceGlobal.Details, "Machines", new { id = item.Machine_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Delete, "Machines", new { id = item.Machine_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+                        @*@if (item.FMEA_Document != null && item.FMEA_Document != "")
+                        {
+                            <a href="@Url.Action("Download", "Machines", new { id = item.Machine_ID })"><i class="fa fa-download"></i></a>
+                        }*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.datatable_completes tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.datatable_completes').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

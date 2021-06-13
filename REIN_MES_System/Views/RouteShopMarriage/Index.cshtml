@@ -1,0 +1,106 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Route_Marriage_Shop>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_Host)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_Host)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Lines1.Line_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Shops1.Shop_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RS_Stations1.Station_Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inserted_Host)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Inserted_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Updated_Host)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Updated_Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Lines1.Line_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Shops1.Shop_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Stations1.Station_Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Route_Marriage_Shop_Station }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Route_Marriage_Shop_Station }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Route_Marriage_Shop_Station })
+        </td>
+    </tr>
+}
+
+</table>

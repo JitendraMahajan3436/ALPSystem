@@ -1,0 +1,579 @@
+﻿@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="box">
+    <div class="box-header with-border">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 col-sm-3">
+                @*@Html.CheckBox("WIP", new { @class = "modelist" })*@
+                <input type="radio" id="WIP" class="modelist" name="tracemode" />
+                @Html.Label("WIP")
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3">
+                @*@Html.CheckBox("CompletedRecord", new { @class = "modelist" })*@
+                <input type="radio" id="CompletedRecord" class="modelist" name="tracemode" />
+                @Html.Label("Completed", new { @class = "" })
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label style="width: 9rem;">WIP : </label>
+                <label id="lblTotalCount"></label>
+
+            </div>
+
+            <div class="col-md-4 col-lg-4 col-sm-4">
+                <label>Last @globalData.pageTitle Serial No : </label>
+                <label id="lblLastBin"></label>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 50%;">
+            <div class="col-md-4 col-lg-4 col-sm-2">
+                <label>Completed : </label>
+                <label id="lblCompletedCount"></label>
+
+            </div>
+        </div>
+        <div class="row" id="WIPContent" style="margin-top:3%">
+            @*<h4 style="    padding: 15px;">
+                    <b>Body Serial Number</b>
+                </h4>*@
+
+            <div class="col-md-3 ">
+                @Html.Label("Body Serial Number")
+                @Html.TextBox("Serial_Number", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                <span id="spanSerialNo" style="color:red"></span>
+            </div>
+
+            @*<div class="col-md-2 ">
+                    @Html.Label("Skid No")
+                    @Html.DropDownList("Skid_No", null, "Select Skid No", htmlAttributes: new { onchange = "", @class = "form-control", @style = "width:70%" })
+                    <span id="spanSkidNumber" style="color:red"></span>
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("Hanger No")
+                    @Html.DropDownList("Hanger_No", null, "Select Hanger No", htmlAttributes: new { onchange = "", @class = "form-control" })
+                    <span id="spanHangerNumber" style="color:red"></span>
+                </div>*@
+            @*<div class="col-md-2">
+                    @Html.Label("Barcode")
+                    @Html.TextBox("Barcode", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                    <span id="spanBarcode" style="color:red"></span>
+                </div>*@
+            @*<div class="col-md-3 ">
+                    @Html.Label(ResourceDisplayName.PaintShop_Selection)
+
+
+                    @Html.DropDownList("Shop_ID", new SelectList(ViewBag.Shop_ID, "Value", "Text"), ResourceDisplayName.PaintShop_Selection, new { onchange = "", @class = "form-control" })
+
+                    <span id="spanShopId" style="color:red"></span>
+                    @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+                </div>*@
+
+            <div class="col-md-1">
+                <br />
+                <button type="button" id="genData" class="btn btn-primary order_Supervisor_cred" data-toggle="modal" data-target="#myModal_MarkingData">OK</button>
+
+            </div>
+            <div class="col-md-1">
+                <br />
+                <button class="btn btn-primary" type="button" id="btnReprint">Reprint</button>
+            </div>
+            <div class="plant-line">
+
+                <div class="modal fade" id="myModal_MarkingData" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Paint Out </h4>
+                            </div>
+                            <p id="error_msgParts" style="color:red;font-size:15px;"></p>
+                            <div class="modal-body">
+
+                                <div class="form-horizontal">
+
+                                    <div class="col-md-12" id="vinpopup">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <input type="button" value="Yes" id="IsYes" class="btn btn-primary" />
+                                <input type="button" value="No" id="IsNo" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6" id="divData" style="margin-top: 2rem;width:70vw">
+                <table class="table-responsive" style="text-align:center;overflow-y:auto; width: 85vw;" id="wip_completed">
+                    <thead>
+                        <tr style="font-size:18px;font-weight:bold;background-color:#80808066;border:1px solid black">
+                            <th>Serial No</th>
+                            <th>Model Code</th>
+                            <th>Model Description</th>
+                            <th style="width:10%">Skid No</th>
+                            <th style="width:10%">Hanger No</th>
+                            <th style="width:10%">Barcode</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-6" id="divCompletedData" style="display:block"></div>
+        </div>
+    </div>
+</div>
+<div id="testy" style="margin-top:7%"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @*@Scripts.Render("~/Content/theme/plugins/datatables/js")*@
+    @Scripts.Render("~/fdtheme/notification_js")
+
+
+    @*@Scripts.Render("~/Content/theme/plugins/datatables/css")*@
+    @*<script src="~/Scripts/buttons.flash.min.js"></script>
+        <script src="~/Scripts/buttons.html5.min.js"></script>
+        <script src="~/Scripts/dataTables.buttons.min.js"></script>*@
+    <script src="~/Content/theme/plugins/datatables/jquery.dataTables.min.js"></script>
+    @*<script src="~/Content/PaintShop/PaintShop.js"></script>*@
+}
+@section Styles {
+    @Styles.Render("~/fdtheme/notification_css");
+    @Styles.Render("~/Content/Select2styles")
+    <link href="~/Content/theme/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/PaintShop/PaintShop.css" rel="stylesheet" />
+
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#Shop_ID").select2({
+            allowClear: true,
+            tags: true,
+        });
+        //SetJQDataTable();
+        GetData();
+        // LastMarkingNumber();
+        UpdatePopupMessage("Are you sure, want to send body to Paint Out ?");
+        //setInterval(LastMarkingNumber, 5000);
+        // GetSkipData();
+        $('.modelist').on('change', function () {
+
+
+            var Entrymode = document.getElementById("WIP").checked;
+            var Deletemode = document.getElementById("CompletedRecord").checked;
+            // LastMarkingNumber();
+
+            $("#spanSerialNo").html("");
+            $("#spanSHNumber").html("");
+            $("#spanBarcode").html("");
+            $("#spanSkidNumber").html("");
+            $("#spanHangerNumber").html("");
+            if (Entrymode == true) {
+                //$("#Serial_Number").prop('disabled', false);
+                //$("#genData").prop('disabled', false);
+                $("#Serial_Number").val("");
+                $("#Serial_Number").focus();
+                UpdatePopupMessage("Are you sure, want to send Body to Paint Out ?");
+                $("#CompletedRecord").prop("checked", false);
+                $("#WIP").prop("checked", true);
+                //$("#divCompletedData").html("");
+                //$("#divCompletedData").css("display", "none");
+                $("#wip_completed > tbody").html("");
+                $("#divData").css("display", "block");
+                $('#WIPContent').show();
+                GetData();
+
+            }
+            else {
+                //$("#Serial_Number").prop('disabled', true);
+                //$("#genData").prop('disabled', true);
+                UpdatePopupMessage("Are you sure, want to recall data ?");
+                $("#CompletedRecord").prop("checked", true);
+                $("#WIP").prop("checked", false);
+                //$("#divData").html("");
+                $("#wip_completed > tbody").html("");
+                $("#divData").css("display", "block");
+                //$("#divCompletedData").css("display", "block");
+                $('#WIPContent').hide();
+                GetCompletedData();
+            }
+        });
+        $("#Serial_Number").on('keyup', function (e) {
+            debugger;
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                //var wipChecked = $("#WIP").is(":checked");
+                //var completedChecked = $("#CompletedRecord").is(":checked");
+                if ($("#Serial_Number").val() != '' && $("#Serial_Number").val() != undefined) {
+                    var wipcompleted = $("#WIP").is(":checked") ? "WIP" : "Completed";
+                    if (wipcompleted == "WIP") {
+                        GetData($('#Serial_Number').val());
+                    }
+                    else {
+                        GetCompletedData($('#Serial_Number').val());
+                    }
+                }
+            }
+        });
+        window.onload = function () {
+            $("#WIP").prop("checked", true);
+            $("#CompletedRecord").prop("checked", false);
+            GetData();
+
+            //$.ajax({
+            //    url: '/PTEDOUT/OnLoad',
+            //    type: 'GET',
+            //    data: "",
+            //    contentType: 'application/json;charset-utf-8',
+            //    success: function (data) {
+            //        //alert(data.userhost);
+
+            //        if (data.stationcnt == true) {
+
+            //            $('#Serial_Number').prop('disabled', false);
+                       
+            //        }
+            //        else {
+
+            //            $('#testy').toastee({
+            //                type: 'error',
+            //                width: '500px',
+            //                height: '100px',
+            //                message: 'No Data Available for Station :' + data.userhost,
+            //            });
+
+            //            $('#Serial_Number').prop('disabled', true);
+            //        }
+            //    }
+            //});
+        }
+
+
+        $("#Serial_Number").focus();
+
+        $("#genData").on("click", function (e) {
+            debugger;
+            var returnOk = true;
+            $("#spanSerialNo").html('');
+            $("#spanSkidNumber").html('');
+            if ($('#Serial_Number').val() == '') {
+                $("#spanSerialNo").html("Please Select Body Serial No");
+                returnOk = false;
+            }
+            if ($("#Hanger_No").is(":visible")) {
+                if ($('#Hanger_No').val() == '' || $('#Hanger_No').val() == undefined) {
+                    $("#spanHangerNumber").html("Please Enter Hanger Number.");
+                    returnOk = false;
+                }
+            }
+            if ($("#Barcode").is(":visible")) {
+                if ($('#Barcode').val() == '' || $('#Barcode').val() == undefined) {
+                    $("#spanBarcode").html("Please Enter Barcode.");
+                    returnOk = false;
+                }
+            }
+            if ($("#Skid_No").is(":visible")) {
+                if ($('#Skid_No').val() == '' || $('#Skid_No').val() == undefined) {
+                    $("#spanSkidNumber").html("Please Enter Skid Number.");
+                    returnOk = false;
+                }
+            }
+            return returnOk;
+        });
+        $("#IsYes").on("click", function (e) {
+            $("#spanSerialNo").html("");
+            $("#spanSerialNo").html("");
+            var SerialNo = $("#Serial_Number").val();
+            var WIPRecord = document.getElementById("WIP").checked;
+            var Delete = document.getElementById("CompletedRecord").checked;
+            var skidNo = "";
+            var hangerNo = "";
+            var shopID = 0;
+            var barcd = "";
+            if ($("#Shop_ID").is(":visible")) {
+                shopID = $('#Shop_ID').val();
+            }
+            if ($("#Barcode").is(":visible")) {
+                barcd = $('#Barcode').val();
+            }
+            if ($("#Skid_No").is(":visible")) {
+                skidNo = $('#Skid_No').val();
+            }
+            if ($("#Hanger_No").is(":visible")) {
+                hangerNo = $('#Hanger_No').val();
+            }
+            if (SerialNo != "") {
+                $.getJSON("/PTEDOUT/ValidateSerialNo", { SerialNo: SerialNo }, function (data) {
+                    if (data.Result == false) {
+                        $('#testy').toastee({
+                            type: 'error',
+                            width: '500px',
+                            height: '100px',
+                            message: data.Msg,
+                        });
+                        $("#myModal_MarkingData").modal("hide");
+                        $("#Serial_Number").val("");
+                        $("#Serial_Number").focus();
+                    }
+                    else {
+                        var url = "/PTEDOUT/SaveData";
+                        $.getJSON(url, { SerialNo: SerialNo, WIP: WIPRecord, CompletedRecord: Delete, Skid_No: skidNo, Hanger_No: hangerNo, Barcode: barcd, Shop_Id: shopID }, function (data) {
+                            $("#myModal_MarkingData").modal("hide");
+                            $("#Serial_Number").val("");
+                            $("#Serial_Number").focus();
+
+                            if (WIPRecord)
+                                GetData();
+                            if (Delete)
+                                GetCompletedData();
+                            //LastMarkingNumber();
+                            if (data.Result == true) {
+                                $('#testy').toastee({
+                                    type: 'success',
+                                    width: '500px',
+                                    height: '100px',
+                                    message: data.Msg,
+                                });
+                            }
+                            else {
+                                $('#testy').toastee({
+                                    type: 'error',
+                                    width: '500px',
+                                    height: '100px',
+                                    message: data.Msg,
+                                });
+                            }
+
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            location.reload();
+                        });
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                   // location.reload();
+                });
+
+
+                
+            }
+            else {
+                $("#spanSerialNo").html("Please Select Body Serial No");
+            }
+        });
+
+        $("#IsNo").on("click", function (e) {
+            $("#myModal_MarkingData").modal("hide");
+            $("#Serial_Number").val("");
+            $("#Serial_Number").focus();
+        });
+
+        $("#btnReprint").on("click", function () {
+            var SerialNo = $("#Serial_Number").val();
+            $("#spanSerialNo").html("");
+            if (SerialNo != "") {
+                $.getJSON("/PTEDOUT/IsReprint", { SerialNo: SerialNo }, function (data) {
+                    if (data.Result == false) {
+                        $('#testy').toastee({
+                            type: 'error',
+                            width: '500px',
+                            height: '100px',
+                            message: data.Msg,
+                        });
+
+                        $("#Serial_Number").val("");
+                        $("#Serial_Number").focus();
+                    }
+                    else {
+
+                        if (data.Result == true) {
+                            $('#testy').toastee({
+                                type: 'success',
+                                width: '500px',
+                                height: '100px',
+                                message: data.Msg,
+                            });
+                        }
+                        $("#Serial_Number").val("");
+                        $("#Serial_Number").focus();
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // location.reload();
+                });
+            }
+            else {
+                $("#spanSerialNo").html("Please Select Body Serial No");
+            }
+        });
+
+        function GetData(serialNo) {
+            var url = "/PTEDOUT/GetWIPData";
+            $.getJSON(url, { Serial_No: serialNo }, function (data) {
+                var res = "";
+
+                for (var i = 0; i < data.Result.length; i++) {
+
+                    res += '';
+                    res += '  <tr  style="color:black" style="font-size:16px;border:1px solid black">';
+
+                    res += '      <td ondblclick="SetSerialNo(' + "'" + data.Result[i].BodySrno + "'" + ')"  style  = "font-size:15px; border:1px solid black;padding:3px ">';
+                    res += '           ' + data.Result[i].BodySrno;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px ">';
+                    res += '           ' + data.Result[i].Model_Code;
+                    res += '       </td>';
+                    //res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px ">';
+                    //res += '           ' + data.Result[i].Model_Code;
+                    //res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap;width: 50px;overflow: hidden;text - overflow: ellipsis;">';
+                    res += '           ' + data.Result[i].Model_Description;
+                    res += '       </td>';
+                    res += '       <td style="display:none"></td>';
+                    res += '       <td style="display:none"></td>';
+                    res += '       <td style="display:none"></td>';
+                    res += '    </tr>';
+
+
+
+                }
+                $(' th:nth-child(4)').hide();
+                $(' th:nth-child(5)').hide();
+                $(' th:nth-child(6)').hide();
+
+                // res += ' </table>';
+                $("#wip_completed > tbody").html("");
+                ClearDataTable();
+                //$('#wip_completed').append(res);
+                $("#wip_completed > tbody").append(res);
+                //$("#divData").html(res);
+                $("#lblTotalCount").html(data.Result.length);
+                $("#lblLastBin").html(data.Result1);
+                $("#lblCompletedCount").html(data.CompletedCount);
+
+                SetJQDataTable();
+                ClearTextBox();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR);
+                //location.reload();
+            });
+        }
+
+        function ClearTextBox() {
+            $('#SH_Number').val('');
+            $('#Barcode').val('');
+        }
+        function GetCompletedData() {
+
+            var url = "/PTEDOUT/GetCompletedData";
+            $.getJSON(url, {}, function (data) {
+                var res = "";
+
+                for (var i = 0; i < data.Result.length; i++) {
+                    debugger;
+                    res += '';
+                    res += '  <tr  style="color:black" style="font-size:16px;border:1px solid black">';
+
+                    res += '      <td ondblclick="SetSerialNo(' + "'" + data.Result[i].BodySrno + "'" + ')"  style  = "font-size:15px; border:1px solid black;padding:3px ">';
+                    res += '           ' + data.Result[i].BodySrno;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px ">';
+                    res += '           ' + data.Result[i].Model_Code;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    res += '           ' + data.Result[i].Model_Description;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    res += '           ' + data.Result[i].Skid_No;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    res += '           ' + data.Result[i].Hanger_No;
+                    res += '       </td>';
+                    res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    res += '           ' + data.Result[i].Barcode;
+                    res += '       </td>';
+                    //res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    //res += '           ' + data.Result[i].Barcode;
+                    //res += '       </td>';
+                    //res += '      <td  style  = "font-size:15px; border:1px solid black;padding:3px;white-space: nowrap; ;overflow: hidden;text - overflow: ellipsis;">';
+                    //res += '           ' + data.Result[i].Paint_Shop;
+                    //res += '       </td>';
+
+                    res += '    </tr>';
+
+
+                }
+                $("#lblCompletedCount").html(data.Result.length);
+                $("#lblTotalCount").html(data.WIPCount);
+
+                $("#lblLastBin").html(data.Result1);
+                $(' th:nth-child(4)').show();
+                $(' th:nth-child(5)').show();
+                $(' th:nth-child(6)').show();
+
+                $("#wip_completed > tbody").html("");
+                ClearDataTable();
+                $("#wip_completed > tbody").append(res);
+                SetJQDataTable();
+                ClearTextBox();
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                //location.reload();
+            });
+        }
+
+        function SetJQDataTable() {
+            var table = $("#wip_completed").DataTable({
+                responsive: true,
+                select: true,
+                stateSave: true,
+                destroy: true,
+                processing: true,
+                searchHighlight: true,
+                //fixedHeader: true,
+                bLengthChange: false, //used to hide the property
+                dom: '<"toolbar">lfrtip',
+                //dom: 'Bfrtip',
+                //buttons: [
+                //    {
+                //        text: 'My button',
+                //        action: function (e, dt, node, config) {
+                //            alert('Button activated');
+                //        }
+                //    }
+                //],
+
+            });
+        }
+        function ClearDataTable() {
+            $("#wip_completed tbody").html('');
+            $("#wip_completed").DataTable().clear();
+            $('#wip_completed').DataTable().destroy();
+        }
+
+
+        function UpdatePopupMessage(Msg) {
+            $("#vinpopup").html(Msg);
+        }
+
+
+    });
+    function SetSerialNo(SerialNo) {
+
+        $("#Serial_Number").val(SerialNo);
+    }
+</script>
+
+
+

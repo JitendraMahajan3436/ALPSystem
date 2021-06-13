@@ -1,0 +1,343 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<style>
+    .shopchartbtn:hover {
+        background-color: darkgreen;
+        color: white;
+    }
+
+    .shopchartbtn {
+        background-color: initial;
+        border-color: black;
+        color: white;
+    }
+</style>
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+
+
+
+
+<div class="row">
+
+    <div class="col-md-offset-4 col-md-4">
+        @Html.Label("Plant Name", htmlAttributes: new { @class = "" })  *
+
+        @Html.DropDownList("Plant_ID", null, "Select Plant", new { @class = "form-control select2", @onchange = "getshopgroup()" })
+
+    </div>
+
+    <div id="show-shopgroup">
+
+    </div>
+
+    <div id="chart">
+
+    </div>
+    @*@foreach (var items in ViewBag.Plants)
+        {
+            <div class="col-md-3">
+                <div class="panel">
+
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <a  href="#" onclick="getshopgroup(@items.Plant_ID)" style="color:white;font-size:15px">@items.Plant_Name </a>
+                    </div>
+                </div>
+            </div>
+        }*@
+
+</div>
+
+@*<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-3">
+            <div class="panel" style="border:solid;color:lightseagreen">
+                 small box
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+                    <p style="color:white"><b>PRESS SHOP</b></p
+                    <button type="button" class="btn shopchartbtn" value='PRESS SHOPS'><b></b> </button>
+
+                </div>
+
+                <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                    @ViewBag.Pressshop <label>kWh</label>
+
+                </p>
+
+            </div>
+        </div>
+        </div>
+    </div>*@
+
+@*<div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:lightseagreen">
+
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+                        <p style="color:white"><b>PRESS SHOP</b></p>
+                        <button type="button" class="btn shopchartbtn" value='PRESS SHOPS'><b>PRESS SHOPS</b> </button>
+
+                    </div>
+
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Pressshop <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:lightseagreen">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+
+                        <p style="color:white"><b>OTHER SHOP</b></p>
+                        <button type="button" class="btn shopchartbtn" value='OTHER SHOPS'><b>OTHER SHOPS</b> </button>
+
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Othershop <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3 ">
+                <div class="panel" style="border:solid;color:lightseagreen">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+
+                        <p style="color:white"><b>PAINT SHOPS</b></p>
+                        <button type="button" class="btn shopchartbtn" value='PAINT SHOPS'><b>PAINT SHOPS</b> </button>
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Paintshop <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:lightseagreen">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>CE SHOP</b></p>
+                        <button type="button" class="btn shopchartbtn" value='CE SHOPS'><b>CE SHOPS</b> </button>
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.CE<label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@*<div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:chocolate">
+
+                    <div class="panel-heading" style="background-color:chocolate; text-align:center">
+
+
+                        <p style="color:white"><b>ENGINE SHOPS</b></p>
+                        <button type="button" class="btn shopchartbtn" value='ENGINE SHOPS'><b>ENGINE SHOPS</b> </button>
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Engineshop <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:chocolate">
+                    <div class="panel-heading" style="background-color:chocolate; text-align:center">
+
+                        <p style="color:white"><b>BODY SHOPS</b></p>
+                        <button type="button" class="btn shopchartbtn" value='BODY SHOPS'><b>BODY SHOPS</b> </button>
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Bodyshop <label>kWh</label>
+
+                    </p>
+
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:chocolate">
+                    <div class="panel-heading" style="background-color:chocolate; text-align:center">
+
+
+                        <p style="color:white"><b>ASSEMBLY SHOP</b></p>
+                        <button type="button" name="J1 BLOCK" class="btn shopchartbtn" value='ASSEMBLY SHOPS'>ASSEMBLY SHOPS</button>
+
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Assemblyshop <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel" style="border:solid;color:chocolate">
+                    <div class="panel-heading" style="background-color:chocolate; text-align:center">
+
+
+                        <p style="color:white"><b>H BLOCK</b></p>
+
+                    </div>
+                    <img class="center-image-wrapper" style="padding-left:30px;width:50%;height:100px" src="~/Content/images/SOPImages/meter1.png" />
+
+
+                    <p style="font-size:large; text-align:center;font-family:'Times New Roman';color:black">
+                        @ViewBag.Hblock <label>kWh</label>
+
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".select2").select2();
+                    window.onload = function () {
+                       
+                        $("#bodyid").addClass('sidebar-collapse');
+                        $("#userDeatail").addClass('user-name-collapse');
+                    }
+                    $(".btn").click(function () {
+
+                        var SHOPWISE = $(this).button(".btn").val();
+                        if (SHOPWISE == null || SHOPWISE == '') {
+
+                        }
+                        else {
+                            var path = "/EnergyHome/ShopwiseChart?SHOPWISE=" + SHOPWISE;
+                            window.location.href = path;
+                        }
+
+
+
+                    });
+                });
+                getshopgroup();
+                function getshopgroup() {
+                    var plantid = $("#Plant_ID").val();
+
+                    $.ajax({
+                        url: '/EnergyHome/getshopgroup?plantid=' + plantid,
+                            type: 'GET',
+                        data: "",
+                        contentType: 'application/json;charset-utf-8',
+                        success: function (data) {
+
+                            if (data != "") {
+                                                $("#show-shopgroup").html(data);
+                            }
+                        }
+                    });
+                }
+
+                function getShops(shopgroupid) {
+
+               
+                    $("#show-shopgroup").html('');
+                   // $("#chart").load("/ShopwiseChart?shopgroupid=" + shopgroupid);
+                  window.location.href = "/EnergyHome/ShopwiseChart?shopgroupid=" + shopgroupid;
+                   @*$.ajax({
+                    //    url: '/EnergyHome/ShopwiseChart?shopgroupid=' + shopgroupid,
+                    //    type: 'GET',
+                    //    data: "",
+                    //    contentType: 'application/json;charset-utf-8',
+                    //    success: function (data) {
+                    //        alert(data);
+                    //        if (data != "") {
+                    //            $("#show-shopgroup").html('');
+                    //            $("#chart").html(data);
+
+                    //        }
+                    //    }
+                    //});*@
+                }
+</script>
+
+
+@*<script>
+
+        window.onload = function () {
+            debugger
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title: {
+            text: "Shop Consumption"
+        },
+        axisY: {
+            title: "KWh per Vehicle"
+        },
+
+    axisX: {
+        title: " Shop Name"
+        },
+        data: [{
+            type: "column",
+            dataPoints: @Html.Raw(ViewBag.DataPoints)
+        }]
+    });
+    chart.render();
+
+    }
+
+    </script>*@
+
+@*<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>*@
+<script src="~/Content/Barchart/barchart.min.js"></script>

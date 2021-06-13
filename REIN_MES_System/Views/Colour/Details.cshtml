@@ -1,0 +1,57 @@
+﻿@model REIN_MES_System.Models.RS_Colour
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Plant")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model=>model.Plant_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Colour Description")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Colour Batch")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Batch)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Export Colour")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Export_Colour)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Active")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Colour_ID }, new { @Class = "btn btn-primary" }) |
+    @Html.ActionLink("Show All", "Index", null, new { @Class = "btn btn-primary" })
+</p>

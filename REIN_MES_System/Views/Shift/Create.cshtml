@@ -1,0 +1,309 @@
+﻿@model REIN_MES_System.Models.RS_Shift
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+<style>
+    table {
+        border: 1px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+
+
+        table .tr > td {
+            text-wrap: initial;
+            text-align: center;
+        }
+
+        table tr.progress-signal {
+            background-color: yellow;
+            text-align: center;
+            color: black;
+            font-weight: bold;
+        }
+
+    .table-scroll {
+        height: 240px !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Plant_ID, null, ResourceDisplayName.Select_Plant, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="">
+                        @Html.LabelFor(model => model.Shift_Name, ResourceDisplayName.Shift_Name, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Shift_Name, htmlAttributes: new { @placeholder = "Enter Shift Name", @class = "form-control", @maxlength = "30" })
+                        @Html.ValidationMessageFor(model => model.Shift_Name, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Shift_Start_Time, ResourceDisplayName.Shift_Start_Time, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Shift_Start_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shift_Start_Time)
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Shift_End_Time, ResourceDisplayName.Shift_End_Time, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Shift_End_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shift_End_Time, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Break1_Time, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Break1_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Break1_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Break1_End_Time, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Break1_End_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Break1_End_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Break2_Time, new { @class = "" })
+                            @Html.TextBoxFor(model => model.Break2_Time, new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Break2_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Break2_End_Time, new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Break2_End_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Break2_End_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Lunch_Time, new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Lunch_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lunch_Time, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="">
+                        @Html.LabelFor(model => model.Lunch_End_Time, new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Lunch_End_Time, htmlAttributes: new { @placeholder = "Eg. 11:00:00", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lunch_End_Time, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+            </div>
+
+
+            <br />
+            <div class="">
+                <input type="submit" value="@ResourceGlobal.Create" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    }
+    @section scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Shift_Start_Time").keydown(false);
+        $("#Shift_End_Time").keydown(false);
+        $("#Break1_Time").keydown(false);
+        $("#Break1_End_Time").keydown(false);
+        $("#Break2_Time").keydown(false);
+        $("#Break2_End_Time").keydown(false);
+
+        $("#Lunch_Time").keydown(false);
+        $("#Lunch_End_Time").keydown(false);
+    });
+
+    $("#Shift_Start_Time").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+    $("#Shift_End_Time").datetimepicker(
+           {
+               format: "HH:mm:ss",
+               allowInputToggle: true,
+               //maxDate: '0',
+               collapse: true,
+           });
+
+    $("#Break1_Time").datetimepicker(
+          {
+              format: "HH:mm:ss",
+              allowInputToggle: true,
+              //maxDate: '0',
+              collapse: true,
+          });
+
+    $("#Break1_End_Time").datetimepicker(
+          {
+              format: "HH:mm:ss",
+              allowInputToggle: true,
+              //maxDate: '0',
+              collapse: true,
+          });
+
+    $("#Break2_Time").datetimepicker(
+          {
+              format: "HH:mm:ss",
+              allowInputToggle: true,
+              //maxDate: '0',
+              collapse: true,
+          });
+
+    $("#Break2_End_Time").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+    $("#Lunch_Time").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+    $("#Lunch_End_Time").datetimepicker(
+            {
+                format: "HH:mm:ss",
+                allowInputToggle: true,
+                //maxDate: '0',
+                collapse: true,
+            });
+
+
+
+
+
+    $("#Plant_ID").on("change", function () {
+
+        var Plant = $("#Plant_ID").val();
+        if (Plant.length > 0) {
+            // Populate categories when the page is loaded.
+            $.getJSON('/Shift/GetShopByPlantID', { plantId: Plant }, function (data) {
+
+                if (data.length > 0) {
+
+                    $('#Shop_ID option').remove();
+                    $('#Shop_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Shop_ID').append('<option value="' +
+                                     data[i].Id + '">' + data[i].Value + '</option>');
+                    }
+                } else {
+                    $('#Shop_ID option').remove();
+                    alert("No Shop Available for this Plant!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting PartGroups !');
+            });
+
+
+        }
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+</script>
+
+

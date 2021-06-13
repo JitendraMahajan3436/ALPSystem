@@ -1,0 +1,98 @@
+﻿@model REIN_MES_System.Models.RS_Route_Marriage_Station
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "RouteMarriageStation";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal route_marriage_configuration">
+
+        @Html.ValidationSummary(true)
+
+        <div class="row">
+            <div class="col-sm-3" style="display:none;">
+                <div class="">
+                    @Html.LabelFor(model => model.Plant_ID, new { @class = "" })
+
+                    @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="">
+                    @Html.LabelFor(model => model.Shop_ID, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Shop_ID", null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="">
+                    @Html.LabelFor(model => model.Sub_Line_ID, new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Sub_Line_ID", null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Sub_Line_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="">
+                    @Html.LabelFor(model => model.Sub_Line_Station_ID, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Sub_Line_Station_ID", null, ResourceDisplayName.Select_Station, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Sub_Line_Station_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="">
+                    @Html.LabelFor(model => model.Marriage_Line_ID, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Marriage_Line_ID", null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Marriage_Line_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="">
+                    @Html.LabelFor(model => model.Marriage_Station_ID, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Marriage_Station_ID", null, ResourceDisplayName.Select_Station, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Marriage_Station_ID, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+        </div>
+
+        
+
+        <br />
+        <div class="">
+            <div class="">
+                <input type="submit" value="@ResourceGlobal.Create" class="btn btn-primary" />
+                 @Html.ActionLink(ResourceGlobal.Show_All, "RouteMarriageStationList", "RouteConfiguration", new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/route_marriage_configuration")
+}

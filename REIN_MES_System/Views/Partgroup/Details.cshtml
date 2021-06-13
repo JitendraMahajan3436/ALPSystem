@@ -1,0 +1,72 @@
+﻿@model REIN_MES_System.Models.RS_Partgroup
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+        
+
+              <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Partgrup_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Partgrup_Desc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Consumption_Line_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines1.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Consumption_Station_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Partgroup_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Partgroup_Code)
+        </dd>
+       
+        <dt>
+            @Html.DisplayNameFor(model => model.Qty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Qty)
+        </dd>
+    </dl>
+</div>
+<p>
+   
+     @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+   
+</p>

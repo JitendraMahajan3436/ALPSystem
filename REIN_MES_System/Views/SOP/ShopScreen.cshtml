@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "ShopScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<h2>ShopScreen</h2>
+
+<div class="row">
+    <div class="col-md-12 sop-wrapper">
+        <h4 class="bg-dark text-center">@ViewBag.ShopName</h4>
+        @if (ViewBag.ImageName != null)
+        {
+            <img src="~/Content/images/@ViewBag.ImageName" />
+        }
+    </div>
+</div>
+

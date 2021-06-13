@@ -1,0 +1,65 @@
+﻿@model IEnumerable<REIN_MES_System.Models.Sp_MetetConsumByShop_Result>
+@{
+    ViewBag.Title = "getmeterByShopID";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+    var plant_id = ViewBag.plant_id;
+    var shopgroup_id = ViewBag.shopgroup_id;
+}
+<input type="hidden" id="plant" value="@plant_id" />
+<input type="hidden" id="shop" value="@shopgroup_id" />
+<div class="row" id="showlists">
+    <div class="col-md-12">
+        <div class="col-md-4 col-md-offset-4" id="strip">
+
+            <div class="panel">
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                    <h style="color:white;font-size:15px"><b>Yesterday's Data For @ViewBag.ShopGroupName</b> </h>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-md-offset-2" style=" margin-top: 1%;" id="showbuttons">
+            @*  <button class="btn btn-primary" id="backtoShopGroup" click="backtohome()">Back To ShopGroup</button>*@
+            @*<a class="btn shopchartbtn" href="/EnergyConsumptions/getshopgroupByPlantID?plantid=@shopid"><b style="color:  black;">Back To ShopGroup </b></a>*@
+            <a class="btn shopchartbtn" href="/EnergyConsumptions/getshopgroupByPlantID?plantid=@plant_id"  style="background-color: #007bb6;"><b style="color:  white;">Back To ShopGroup </b></a>
+            <a class="btn shopchartbtn" href="/EnergyConsumptions/Index"  style="background-color: #007bb6;margin-top: 1%;"><b style="color:  white;">Back To Plant </b></a>
+            <a class="btn shopchartbtn" href="/EnergyConsumptions/GetShopByShopGroup?shopid=@shopgroup_id" style="background-color: #007bb6;margin-top: 1%;margin-bottom: 1%;"><b style="color:  white;">Back To Shops </b></a>
+            @* <button class="btn btn-primary" id="backtoplant" click="backtoplant()">Back To Plant</button>*@
+        </div>
+    </div>
+</div>
+<div class="row" id="show-shops">
+    @foreach (var items in Model)
+    {
+
+        <div class="col-md-3">
+            <div class="panel" style="border:solid;color:lightseagreen">
+                <!-- small box -->
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+                    @*<p style="color:white"><b>PRESS SHOP</b></p>*@
+                    <button type="button" class="btn shopchartbtn" onclick="getShopGroupFromPlantId(@items.FeederName)"><b style="color:  black;">@items.FeederName </b> </button>
+                </div>
+                <div id="image_show" style="text-align:center">
+                    <img class="center-image-wrapper text-center" style="width:37%" src="~/Content/images/SOPImages/meter1.png" />
+                </div>
+                <div style="/* MARGIN-TOP: 0%; */font-size:large;text-align:center;font-family:'Times New Roman';color:white;FONT-WEIGHT: BOLD;BORDER: 1PX SOLID black;BACKGROUND-COLOR:  #20b2aa;">
+                    @items.totalconsumption <label>kWh</label>
+
+                </div>
+
+            </div>
+        </div>
+    }
+    @*<div class="col-md-offset-3 col-md-6">
+            <div id="chartContainer"></div>
+        </div>*@
+    @*<div id="chartContainer">
+
+            </div>
+        </div>*@
+
+</div>
+
+
+

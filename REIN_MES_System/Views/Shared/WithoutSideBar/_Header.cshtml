@@ -1,0 +1,125 @@
+﻿@using REIN_MES_System.App_LocalResources
+@using REIN_MES_System;
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+    var currentDate = DateTime.Now.ToShortDateString();
+}
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!-- <a href="../../index2.html" class="navbar-brand"><b>Admin</b>LTE</a> -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <!-- Logo -->
+                        <a href="../../index2.html" class="logo">
+                            <img width="200" src="~/Content/images/ReinSolutionsLogo.jpeg">
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+
+                    @if (userSession.menuObj != null)
+                    {
+                        foreach (var menu in userSession.menuObj)
+                        {
+                            <li><a href="@Url.Action(menu.ActionName, menu.ControllerName)"> @menu.LinkName </a></li>
+                        }
+                    }
+
+                    @if (ViewBag.IsQualityStation == true)
+                    {
+                        <li><a href="@Url.Action("Create", "QualityCaptures")">Quality Capture</a></li>
+                        @*<li><a href="@Url.Action("Index", "EKanban")">E-Kanban</a></li>*@
+                    }
+
+                    @*<li class="active"><a href="@Url.Action("ShopScreen", "SOP")">SOP</a></li>
+                        <li><a href="@Url.Action("ShopScreen", "Manifest")">Manifest</a></li>
+                        <li><a href="@Url.Action("Confirm", "Clita")">CLITA</a></li>
+                        <li><a href="@Url.Action("Collect","ManualDataCollection")">MANUAL DATA COLLECTIONS</a></li>
+                        <li><a href="@Url.Action("TrackingScreen","Tracking")">TRACKING</a></li>*@
+                </ul>
+            </div><!-- /.navbar-collapse -->
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    @*<li><a href="" class="btnback">BACK</a></li>*@
+
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="~/Content/theme/dist/img/user3-160x160_blank.jpg" class="user-image" alt="User Image" />
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+
+                            <span class="hidden-xs">@userSession.userName.ToUpperInvariant()</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                                <img src="~/Content/theme/dist/img/user3-160x160_blank.jpg" class="img-circle" alt="User Image" />
+                                <p>
+                                    @userSession.userName
+
+                                    @*<small>Member since July. 2015</small>*@
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                @*<div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>*@
+                                <div class="pull-right">
+                                    <a href="@Url.Action("Logout", "User")" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-custom-menu -->
+        </div><!-- /.container-fluid -->
+        @*<div class="container-fluid shop-details-bar">
+                <div class="row container">
+                    <div class="col-xs-4"><i class="fa fa-desktop"></i><p>STATION - @ViewBag.StationName</p></div>
+                    <div class="col-xs-8 text-center shop-title">
+                        @ViewBag.ShopScreenTitle
+                    </div>
+                </div>
+            </div>*@
+        <div class="container-fluid shop-details-bar">
+            <div class="row container top-bar top-bar1">
+                <div class="col-xs-4" id="stationName"> @userSession.stationName</div>
+                <div class="col-xs-4 text-center shop-title" id="shopTitle">
+                    @ViewBag.ShopScreenTitle
+                </div>
+                <div class="col-xs-2 pull-right text-right">Shift - <span id="shop-shift">General</span></div>
+                <div class="col-xs-2 pull-right text-right">Date - <span id="shop-date">@currentDate</span></div>
+
+            </div>
+
+            <div class="row container top-bar top-bar2" id="SR_NO">
+                <div class="shopDataBlock col-xs-7">
+                    <p id="serial_no">SERIAL No. </p>
+                    <div class=""><input type="text" name="srlno" class="srlno-input scanpart" value="" maxlength="20" autofocus="autofocus" /></div>
+                    <div id="srlmessage-block" class="shop-notify"></div>
+                </div>
+                <div class="shopDataBlock"><p>SERIES  </p><p id="shop-series">N/A</p></div>
+                <div class="shopDataBlock"><p>Attribute  </p><p id="shop-family">N/A</p></div>
+                <div class="shopDataBlock"><p>Count  </p><p id="shop-Quality">N/A</p></div>
+                @*<div class="shopDataBlock"><p id="takein-takeout"></p></div>*@
+            </div>
+        </div>
+    </nav>
+</header>
+

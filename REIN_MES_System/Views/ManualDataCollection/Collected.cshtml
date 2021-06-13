@@ -1,0 +1,35 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Shop_Manual_Data_Collection>
+
+@{
+    ViewBag.Title = "Collected";
+    Layout = "~/Views/Shared/withoutSideBar/_Layout.cshtml";
+}
+
+<div class="row">
+    <table class="table table-bordered table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>@Html.DisplayName("Shop Name")</th>
+                <th>@Html.DisplayName("Line Name")</th>
+                <th>@Html.DisplayName("Station Name")</th>
+                <th>@Html.DisplayName("Min Val")</th>
+                <th>@Html.DisplayName("Max Val")</th>
+                <th>Current Value</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem=>item.RS_Shops.Shop_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Minimum_Value)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Maximum_Value)</td>
+                    <td>@Html.DisplayFor(modelItem=>item.Current_Value)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,186 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Plant_OrderNo)
+                </th>*@
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Order No")
+            </th>
+            <th>
+                @Html.DisplayName("Model Code")
+            </th>
+            <th>
+                @Html.DisplayName("Part No")
+            </th>
+            <th>
+                @Html.DisplayName("Series Code")
+            </th>
+            <th>
+                @Html.DisplayName("Model Color")
+            </th>
+            <th>
+                @Html.DisplayName("Order Type")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Country_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Priority)
+                </th>*@
+            <th>
+                @Html.DisplayName("Order Status")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.RSN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Remarks)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Transfered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Purgeable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Active)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Deleted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Manage_Remarks)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ORN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CUMN)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                </th>*@
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Plant_OrderNo)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.partno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem =>item.Series_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model_Color)
+                </td>
+                <td>
+                    @if (item.Order_Type.ToLower() == "p")
+                    {
+                        @Html.Label("Parent");
+                    }
+                    else if (item.Order_Type.ToLower() == "s")
+                    {
+                        @Html.Label("Spare");
+                    }
+
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Country_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Priority)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order_Status)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RSN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remarks)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Transfered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_User_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_User_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Active)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Deleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Manage_Remarks)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ORN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CUMN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>*@
+
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { id=item.Row_ID }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.Row_ID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.Row_ID })*@
+                </td>
+            </tr>
+
+        }
+    <tbody>
+</table>

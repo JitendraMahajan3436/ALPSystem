@@ -1,0 +1,75 @@
+﻿@model REIN_MES_System.Models.RS_OM_Order_Type
+@using REIN_MES_System.custom_Helper;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order_Type_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order_Type_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Order_Type_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order_Type_Code)
+        </dd>
+        <dt>
+            @*@Html.YesNo(Convert.ToBoolean(@Html.DisplayNameFor(model => model.Is_Serial_No_Generation)))
+            @Html.DisplayFor(model => model.Is_Serial_No_Generation)*@
+            @Html.DisplayNameFor(model => model.Is_Serial_No_Generation)
+        </dt>
+
+        <dd>
+            @Model.Is_Serial_No_Generation
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Build_Sheet_Print)
+        </dt>
+
+        <dd>
+           @Model.Is_Build_Sheet_Print
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Production_Booking)
+        </dt>
+
+        <dd>
+            @Model.Is_Production_Booking
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Spare)
+        </dt>
+
+        <dd>
+            @Model.Is_Spare
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Quality_Check)
+        </dt>
+
+        <dd>
+            @Model.Is_Quality_Check
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

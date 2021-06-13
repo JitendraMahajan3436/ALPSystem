@@ -1,0 +1,697 @@
+﻿@model REIN_MES_System.Models.RS_BIW_Part_Master
+@using REIN_MES_System.Models
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+
+
+@using (Html.BeginForm("Edit", "BIWPartNoMaster", FormMethod.Post, new { id = "edit_Part", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model=>model.Row_ID)
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="alert  alert-info alert-dismissable" style="display:none;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa  fa-check"></i></h4>
+
+        </div>
+        <div class="col-md-3" style="display:none;">
+            @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+            @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, null, new { @class = "form-control", @readonly = "true" })
+            @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+            @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, null, new { @class = "form-control", @readonly = "true" })
+            @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Platform_ID, "Platform", new { @class = "" })<i style="color:red">*</i>
+            @Html.DropDownListFor(model => model.Platform_ID, null, ResourceDisplayName.Select_Platform, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Platform_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Sub_Assembly_ID, ResourceDisplayName.Sub_Assembly_ID, new { @class = "" })<i style="color:red">*</i>
+            @Html.DropDownListFor(model => model.Sub_Assembly_ID, null, ResourceDisplayName.Select_Sub_Assembly, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Sub_Assembly_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Variant_Code, ResourceDisplayName.Variant_Code, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @*@Html.TextBoxFor(model => model.Variant_Code, new { @class = "form-control", @maxlength = "20" })*@
+            @Html.TextBoxFor(model => model.Variant_Code, new { @class = "form-control", @maxlength = "50", @readonly = "true" })
+            @Html.ValidationMessageFor(model => model.Variant_Code, null, new { @class = "validation_error" })
+
+        </div>
+
+
+    </div>
+    <br />
+    <div class="row">
+        @*<div class="col-md-3">
+                @Html.LabelFor(model => model.VARIANT_TYPE, ResourceDisplayName.VARIANT_TYPE + " *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.VARIANT_TYPE, new { @class = "form-control", @maxlength = "7" })
+                @Html.ValidationMessageFor(model => model.VARIANT_TYPE, null, new { @class = "validation_error" })
+
+            </div>*@          @*<div class="col-md-3">
+                @Html.LabelFor(model => model.VARIANT_TYPE, ResourceDisplayName.VARIANT_TYPE + " *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.VARIANT_TYPE, new { @class = "form-control", @maxlength = "7" })
+                @Html.ValidationMessageFor(model => model.VARIANT_TYPE, null, new { @class = "validation_error" })
+
+            </div>*@
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.OM_Config_ID, ResourceDisplayName.Order_Config, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.OM_Config_ID, null, ResourceDisplayName.Select_Config, new { @class = "form-control mandatoryfields" })
+                @Html.ValidationMessageFor(model => model.OM_Config_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Config_ID, ResourceDisplayName.Config_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Config_ID, null, "Select SerialNo Config", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Config_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.VARIANT_DESC, ResourceDisplayName.VARIANT_DESC, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.VARIANT_DESC, new { @class = "form-control", @maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.VARIANT_DESC, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.LONG_DESC, ResourceDisplayName.Variant_Long_Desc, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.TextAreaFor(model => model.LONG_DESC, new { onchange = "", @class = "form-control upperCase", @maxlength = "100" })
+                @Html.ValidationMessageFor(model => model.LONG_DESC, null, new { @class = "validation_error" })
+
+            </div>
+
+            @*
+                @if (Model.Image_Content == null)
+                {
+
+                }
+                else
+                {
+
+                    var base64imag = Convert.ToBase64String(Model.Image_Content);
+                    var imgsrcing = "";
+                    if (Model.Content_Type == "image/jpeg" || Model.Content_Type == "image/png" || Model.Content_Type == "image/gif" || Model.Content_Type == "image/jpg")
+                    {
+                        imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+
+                    }
+                    else
+                    {
+                        imgsrcing = string.Format("data:application/pdf;base64,{0}", base64imag);
+
+                    }
+                    <img id="fred" style="border:1px solid #000000;width:100px;height:128px" title="Image" src="@imgsrcing" frameborder="1"/>
+
+                }
+
+            *@
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Model_Attribute_ID, "Attribute", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Model_Attribute_ID, null, "Select Attribute", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Model_Attribute_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Image_Name, "Image", htmlAttributes: new { @class = "" })
+                <br />
+                <input type="file" id="Avatar" name="upload" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3" style="">
+
+                @Html.LabelFor(model => model.In_Use, ResourceDisplayName.In_Use, new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.In_Use, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+
+                @Html.ValidationMessageFor(model => model.In_Use, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3" style="">
+
+                @Html.LabelFor(model => model.Is_Spare, "Is Spare", new { @class = "" })
+                @Html.DropDownListFor(model => model.Is_Spare, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+
+                @Html.ValidationMessageFor(model => model.Is_Spare, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-3" style="">
+
+                @Html.LabelFor(model => model.Is_Colour_Applicable, "Colour Applicable", new { @class = "" })
+                @Html.DropDownListFor(model => model.Is_Colour_Applicable, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+
+                @Html.ValidationMessageFor(model => model.Is_Colour_Applicable, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-3" id="IsColourCheck" style="display:none">
+
+                @Html.LabelFor(model => model.Color_Code, ResourceDisplayName.Color_Check, new { @class = "" })
+                @Html.DropDownListFor(model => model.Color_Code, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+
+                @Html.ValidationMessageFor(model => model.Color_Code, null, new { @class = "validation_error" })
+
+
+            </div>
+        </div>
+        <br />
+        <div id="TextBoxContainer" class="">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @*@if (@ViewBag.Image_Name != null)
+            {
+            <label>Child Part Image</label>
+            <img src="@ViewBag.Image_Name" class="form-control" style="height: 100%;width: 100%;" />
+            }*@
+            @{ 
+                var ImageContent = db.RS_Aggregate_Part_Image.Where(m => m.Part_ID == Model.Row_ID).Select(m => m.Image_Content).FirstOrDefault();
+                var ContentType = db.RS_Aggregate_Part_Image.Where(m => m.Part_ID == Model.Row_ID).Select(m => m.Content_Type).FirstOrDefault();
+            }
+            @if (ImageContent != null)
+            {
+                <label>Aggregate Part Image</label>
+                var base64imag = Convert.ToBase64String(ImageContent);
+                var imgsrcing = "";
+                if (ContentType == "image/jpeg" || ContentType == "image/png" || ContentType == "image/jpg")
+                {
+                    imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+                    <img src="@imgsrcing" class="form-control" style="height: 100%;width: 100%;" />
+                }
+            }
+           
+            
+        </div>
+    </div>
+    <div id="ImageContainer" class="">
+
+    </div>
+
+                <br /><br />
+    <div class="row">
+        <div class="col-md-5">
+            @*<input type="submit" value="Save" class="btn btn-primary" />*@ 
+            <input type="button" value="Save" id="SaveChildPartMaster" class="btn btn-primary" />
+             @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @*@Scripts.Render("~/bundles/Commonjs")*@
+}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        debugger;
+        var isApplicable = $("#Is_Colour_Applicable").val();
+        if (isApplicable == "True") {
+            $("#IsColourCheck").css("display", "block");
+        }
+        else {
+            $("#IsColourCheck").css("display", "none");
+        }
+        $("#Is_Colour_Applicable").change(function () {
+            if (isApplicable == "True") {
+                $("#IsColourCheck").css("display", "block");
+            }
+            else {
+                $("#IsColourCheck").css("display", "none");
+            }
+        });
+
+        var Sub_Assembly_ID = $("#Sub_Assembly_ID").val();
+        //var plantID = $('#plantID').val();
+        var url = "/BIWPartNoMaster/GetData";
+        ajaxpack.getAjaxRequest(url, "Sub_Assembly_ID=" + Sub_Assembly_ID + "", showPrescentfields, "json");
+        if (true) {
+            var Part_No = $("#Variant_Code").val();
+            if (Part_No.length > 0) {
+                debugger;
+                ShowModelSaveData(Part_No);
+
+            }
+        }
+
+        $("#Platform_ID").change(function () {
+            var platformId = $("#Platform_ID").val();
+            $.ajax({
+                type: "POST",
+                url: '/BIWPartNoMaster/GetSeriesData',
+                data: JSON.stringify({ Platform_ID: platformId }),
+                contentType: 'application/json',
+                success: function (data) {
+                    debugger;
+                    $("#Config_ID").empty();
+
+                    $.each(data, function (i, data) {
+                        $("#Config_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                    });
+                }
+            });
+        });
+
+        $("#Shop_ID").change(function () {
+            debugger;
+            var shopId = $("#Shop_ID").val();
+            $.ajax({
+                type: "POST",
+                url: '/BIWPartNoMaster/GetChildPartMasterData',
+                data: JSON.stringify({ Shop_ID: shopId }),
+                contentType: 'application/json',
+                success: function (data) {
+                    debugger;
+                    $("#Sub_Assembly_ID").empty();
+
+                    $.each(data, function (i, data) {
+                        $("#Sub_Assembly_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                        if (data.id > 0) {
+                            debugger;
+                            var url = "/BIWPartNoMaster/GetAttributionParameters";
+                            ajaxpack.getAjaxRequest(url, "ID=" + data.id + "", showPrescentfields, "json");
+                        }
+
+                    });
+
+                }
+
+
+
+            });
+            
+        })
+
+        $("#SaveChildPartMaster").click(function () {
+            debugger;
+            var isValid = true
+            $('.mandatoryfields').each(function () {
+                debugger;
+                var value = $('#' + $(this).attr('id')).val();
+                if (value.length == 0) {
+
+                    $('#' + $(this).attr('id')).addClass('form-control input-validation-error');
+                    $('#' + $(this).attr('id')).next().text(ErrMsg);
+                    isValid = false;
+                }
+                else {
+                    $('#' + $(this).attr('id')).removeClass('input-validation-error');
+                    $('#' + $(this).attr('id')).next().text('');
+                }
+            });
+            if (isValid) {
+                var dataModal = [];
+                $('.getdropdownVal').each(function () {
+                    dataModal.push({
+                        label: $(this).parent().attr('id'),
+                        Value: $(this).val(),
+                        type: "dropdownList",
+                    });
+                });
+                $('.getTextboxVal').each(function () {
+                    dataModal.push({
+                        label: $(this).parent().attr('id'),
+                        Value: $(this).val(),
+                        type: "textBox",
+
+                    });
+                });
+                $('.getRadioButtonVal').each(function () {
+                    dataModal.push({
+                        label: $(this).parent().attr('id'),
+                        Value: document.getElementById($(this).attr('id')).checked,
+                        type: "RadioButton",
+
+                    });
+                });
+                $('.getCheckboxVal').each(function () {
+                    dataModal.push({
+                        label: $(this).parent().attr('id'),
+                        Value: document.getElementById($(this).attr('id')).checked,
+                        type: "CheckBox",
+
+                    });
+                });
+                var modeldata = [];
+                modeldata.push({
+                    Shop_ID: $('#Shop_ID').val(),
+                    Platform_ID: $('#Platform_ID').val(),
+                    Sub_Assembly_ID: $('#Sub_Assembly_ID').val(),
+                    Variant_Code: $('#Variant_Code').val(),
+                    VARIANT_DESC: $('#VARIANT_DESC').val(),
+                    LONG_DESC: $('#LONG_DESC').val(),
+                    Config_ID: $('#Config_ID').val(),
+                    OMConfig_ID: $('#OM_Config_ID').val(),
+                    Is_Colour_Applicable: $('#Is_Colour_Applicable').val(),
+                    Is_Spare: $('#Is_Spare').val(),
+                    In_Use: $('#In_Use').val(),
+                    Color_Code: $('#Color_Code').val(),
+                    Model_Attribute_ID: $('#Model_Attribute_ID').val()
+                })
+                var Image_Name = $('#Avatar')[0].files[0];
+                var formData = new FormData();
+                formData.append("Image_Name", Image_Name);
+                $.ajax({
+                    type: "POST",
+                    url: '/BIWPartNoMaster/SaveChildPartMasterDataEdit',
+                    data: JSON.stringify({ dataModal: JSON.stringify(dataModal), modeldata: JSON.stringify(modeldata), formData: JSON.stringify(formData) }),
+                    contentType: 'application/json',
+                    processData: false,
+                    success: function (response) {
+                        debugger;
+                        if (response.status == true) {
+
+                            uploadChildImage(response.Id, response.ModelID);
+                            //alert(response.message);
+                            window.location.href = "/BIWPartNoMaster/Index";
+                            setTimeout(function () {
+                                successMessage(response.message);
+                            }, 1000);
+                            
+                        }
+                        else {
+                            if (response.type == "duplicate") {
+                                errorMessage(response.message);
+                            }
+                            else {
+                                errorMessage(response.message);
+                            }
+                        }
+                        //refreshRackDisplay(rackID);
+
+                    },
+                    error: function (error) {
+
+                        alert("Errror connecting Server");
+                    }
+                });
+
+            }
+        })
+     
+        
+    });
+    function Datafill(Attributetype, split_Attribution_Type) {
+        //alert(Attributetype);
+        debugger;
+        $.getJSON('/BIWPartNoMaster/GetDropDownLoad', { Attributetype: Attributetype }, function (data) {
+
+            $("#ddl_" + split_Attribution_Type + "").html("");
+            //$("#ddl_" + split_Attribution_Type + "").append('<option>' + '-- ' + 'Select ' + Attributetype + ' --' + '</option>');
+            $("#ddl_" + split_Attribution_Type + "").append('<option value="">Select ' + Attributetype + '</option>');
+            if (data.length > 0) {
+
+                for (j = 0; j < data.length; j++) {
+                    $("#ddl_" + split_Attribution_Type + "").append('<option value="' + data[j].Attribute_ID + '">' + data[j].Attribute_Desc + '</option>');
+
+                }
+            }
+        });
+    };
+    function showPrescentfields() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+
+        var cnt_test = 0;
+        if (myajax.readyState == 4) {
+            // alert("Start Hiiii");
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                var res = '<div class="row">';    // </div></div>
+
+                for (var i = 0; i < jsonRes.length; i++) {
+                    cnt_test = cnt_test + 1;
+
+                    var type = jsonRes[i].ToolBox;
+                    var ToolBoxPost = jsonRes[i].ToolBoxPost;
+                    var Attribution_Type = jsonRes[i].Attribution_Type;
+                    var split_Attribution_Type = Attribution_Type.split(' ').join('_');
+
+                    if (cnt_test == 4) {
+                        cnt_test = 1;
+                        res += '</div>';
+                        res += '<div class="row">';
+                    }
+
+                    var class_data = "";
+                    if (cnt_test <= 3) {
+                        class_data = "col-md-3";
+                    }
+
+
+                    res += '<div id="' + Attribution_Type + '" class=' + class_data + '>';  //</div>
+                    if (type == "DropDownList") {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label>'
+                        res += '<select name="select" type="' + type + '" id=ddl_' + split_Attribution_Type + ' value="' + i + '" class="getdropdownVal form-control"/> </br>'
+                    }
+                    else if (type == "checkbox") {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label> </br>'
+                        res += '<input  type="' + type + '" id=chk_' + split_Attribution_Type + ' value="' + type + '" class= "getCheckboxVal"  /></br>'
+                    }
+                    else if (type == "Radio") {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label> </br>'
+                        res += '<input  type="' + type + '" id=rbt_' + split_Attribution_Type + ' class ="getRadioButtonVal" /></br>'
+                    }
+                    else {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label>'
+                        res += '<input  type="' + type + '" id=txt_' + split_Attribution_Type + ' value="' + type + '"  class=" getTextboxVal form-control"/></br>'
+                    }
+                    res += '</div>';
+
+                }
+            }
+
+            res += '</div></div>';
+            $("#TextBoxContainer").append(res);
+
+            //-----------------------------Drop down list fill data-----------------------------------------//
+
+            //setTimeout(function () {
+            //    sendData2Master();
+            //},1000);
+
+            var jsonRes1 = $.parseJSON(myajax.responseText);
+
+            for (var i = 0; i < jsonRes1.length; i++) {
+                var Attributetype = jsonRes1[i].Attribution_Type;
+                //alert(Attributetype);
+                var split_Attribution_Type = Attributetype.split(' ').join('_');
+                var toolbox_post = jsonRes1[i].ToolBoxPost;
+
+                var type = jsonRes1[i].ToolBox;
+                if (type == "DropDownList") {
+                    Datafill(Attributetype, split_Attribution_Type);
+                }
+            }
+        }
+
+    }
+    function ShowModelSaveData(Part_No) {
+        debugger;
+        var dataModel = [];
+        if (Part_No.length > 0) {
+            $.getJSON('/BIWPartNoMaster/ShowChildPartMasterData', { Part_No: Part_No }, function (data) {
+                if (data != null) {
+                    debugger;
+                    if (data.length > 0) {
+                        dataModel = JSON.parse(data[0].Attribution_Parameters);
+                        if (dataModel != null) {
+                            if (dataModel.length > 0) {
+                                for (var i = 0; i < dataModel.length; i++) {
+                                    if (dataModel[i].type == "dropdownList") {
+                                        if (dataModel[i].Value.length > 0) {
+                                            var name = dataModel[i].label;
+                                            var dropdownName = name.split(' ').join('_');
+                                            if ($("#ddl_" + dropdownName).length > 0) {
+
+                                                //$("#Sub_Line_Station_ID option[value=" + data[0].Id + "]").prop('selected', 'selected');
+                                                $("#ddl_" + dropdownName + " option[value=" + dataModel[i].Value + "]").prop('selected', 'selected');
+                                            }
+                                        }
+                                    }
+                                    if (dataModel[i].type == "CheckBox") {
+                                        var name = dataModel[i].label;
+                                        var checkboxname = name.split(' ').join('_');
+                                        if ($("#chk_" + checkboxname).length > 0) {
+                                            if (dataModel[i].Value == true) {
+                                                document.getElementById($("#chk_" + checkboxname).attr('id')).checked = true;
+                                            }
+                                            else {
+                                                document.getElementById($("#chk_" + checkboxname).attr('id')).checked = false;
+                                            }
+                                        }
+
+
+                                    }
+
+                                    if (dataModel[i].type == "RadioButton") {
+                                        debugger;
+                                        var name = dataModel[i].label;
+                                        var checkboxname = name.split(' ').join('_');
+                                        if ($("#rbt_" + checkboxname).length > 0) {
+                                            if (dataModel[i].Value == true) {
+                                                document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = true;
+                                            }
+                                            else {
+                                                document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = false;
+                                            }
+                                        }
+
+
+                                    }
+                                }
+                                //-------show static field value---------------------------//
+
+                            }
+                        }
+
+                        $('#Variant_Code').val(data[0].Variant_Code);
+                        $('#VARIANT_DESC').val(data[0].VARIANT_DESC);
+                        $('#LONG_DESC').val(data[0].LONG_DESC);
+                       
+                        
+                        $("#Config_ID option[value=" + data[0].Config_ID + "]").prop('selected', 'selected');
+                        $("#OM_Config_ID option[value=" + data[0].OM_Config_ID + "]").prop('selected', 'selected');
+                        $("#Sub_Assembly_ID option[value=" + data[0].Sub_Assembly_ID + "]").prop('selected', 'selected');
+                        $("#Platform_ID option[value=" + data[0].Platform_ID + "]").prop('selected', 'selected');
+                        $("#Shop_ID option[value=" + data[0].Shop_ID + "]").prop('selected', 'selected');
+                        $("#Model_Attribute_ID option[value=" + data[0].Model_Attribute_ID + "]").prop('selected', 'selected');
+                                            }
+                    else {
+
+                        $('#Variant_Code').val('');
+                        $('#VARIANT_DESC').val('');
+                        $('#LONG_DESC').val('');
+                        $("#Sub_Assembly_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Platform_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Config_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#OM_Config_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Shop_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Model_Attribute_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                    }
+                }
+            });
+        }
+    }
+    function uploadChildImage(Id, ModelID) {
+        debugger;
+        if (validateImageFilter()) {
+            var Image_Name = $('#Avatar')[0].files[0];
+            var formData = new FormData();
+            var Variant_Code = $('#Variant_Code').val();
+            formData.append("Image_Name", Image_Name);
+            formData.append("Variant_Code", Variant_Code);
+            formData.append("ID", Id);
+            formData.append("ModelID", ModelID);
+            $.ajax({
+                type: "POST",
+                url: '/BIWPartNoMaster/saveImage',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success == false) {
+
+                        className = "alert-warning";
+                        message = "Error occured.Image Not Uploaded.";
+                        iconClass = "fa-exclamation";
+                    }
+                    else {
+
+                        className = "alert-info";
+                        message = "Image Uploaded Sucessfully!";
+                        iconClass = "fa-check";
+
+                    }
+                    var alertHtml = '<div class="box-body myalert">' +
+                        '<div class="alert ' + className + ' alert-dismissable">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa ' + iconClass + '"></i> Child Part Master </h4>' +
+                        '' + message
+                    '</div></div>';
+                    $('.content-wrapper .content').before(alertHtml);
+
+                    $('html, body').animate({ scrollTop: 0 }, 900);
+                },
+                error: function (error) {
+                    alert(error);
+                    var alertHtml = '<div class="box-body myalert">' +
+                        '<div class="alert alert-warning alert-dismissable">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa fa-eclamation"></i> Child Part Master </h4>' +
+                        '' + error.message
+                    '</div></div>';
+                    $('.content-wrapper .content').before(alertHtml);
+
+                    $('html, body').animate({ scrollTop: 0 }, 900);
+                }
+            });
+        }
+    }
+
+    function validateImageFilter() {
+        var uploadpath = $('#Avatar').val();
+        var fileExtension = uploadpath.substring(uploadpath.lastIndexOf(".") + 1, uploadpath.length);
+
+        if (fileExtension == "jpg" || fileExtension == "png" || fileExtension == "jpeg") {
+            return true;
+        }
+        else {
+            //error code - select only excel files
+            $('#Avatar').val('');
+            $('*[data-valmsg-for="Image_Name"]').html("Please select an image File !<br> Allowed Formats - (.jpg|.png|.jpeg) ");
+            return false;
+        }
+    }
+
+    function successMessage(msg) {
+        var headermsg = "Success";
+        $('.content-wrapper div.myalert').remove();
+
+        alertHtml = '<div class="box-body myalert">' +
+            '<div class="alert alert-success alert-dismissable">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-check"></i>'+ headermsg+'</h4>' +
+            msg+
+            '</div></div>';
+        $('.content-wrapper .content').before(alertHtml);
+    }
+
+    function errorMessage(msg) {
+        var headermsg = "Error";
+        $('.content-wrapper div.myalert').remove();
+        alertHtml = '<div class="box-body myalert">' +
+            '<div class="alert  alert-danger alert-dismissable">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-ban"></i>'+ headermsg +'</h4>' +
+            '<p>' + msg+ '</p>' +
+            '</div></div>';
+        $('.content-wrapper .content').before(alertHtml);
+    }
+</script>

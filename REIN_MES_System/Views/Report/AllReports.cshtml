@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "AllReports";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12">
+    @using (Ajax.BeginForm("Generate", "Report", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "create-grid-body" }, new { }))
+    {
+        <div class="row col-md-12">
+            <div class="col-md-4">
+                @Html.Label("Search By :")
+                @Html.DropDownList("SearchBy", (IEnumerable<SelectListItem>)ViewBag.SearchBy, "-- Search By --", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-4" id="shop">
+                @Html.Label("Shop Name")
+                @Html.DropDownList("Shop_ID", (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-4" id="os">
+                @Html.Label("Order Status")
+                @Html.DropDownList("Order_Status", (IEnumerable<SelectListItem>)ViewBag.Order_Status, "--Select Order Status--", htmlAttributes: new { @class = "form-control" })
+            </div>
+
+            @*<div class="col-md-4" id="fm">
+                    @Html.Label("Family Name")
+                    @Html.DropDownList("Family", (IEnumerable<SelectListItem>)ViewBag.Family, "--Select Family--", htmlAttributes: new { @class = "form-control" })
+                </div>*@
+
+            <div class="col-md-4" id="Series">
+                @Html.Label("Part Series")
+                @Html.DropDownList("Part_Series", Enumerable.Empty<SelectListItem>(), "--Select Series--", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row" id="date">
+            <div class="col-md-4">
+                @Html.Label("Date From")
+                @Html.TextBox("DateFrom", "", htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Date To")
+                @Html.TextBox("DateTo", "", htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            </div>
+
+        </div>
+        <br />
+    <br />
+        <div class="row">
+            @*<div class="form-group">*@
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="View Report" class="btn btn-primary" />
+            </div>
+            @*</div>*@
+        </div>
+    }
+</div>
+<br />
+<br />
+
+<div class="col-md-12">
+    <div class="box-body" id="create-grid-body"></div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            document.body.style.overflow = 'hidden';
+            $("#Shop_ID").prop("disabled", true);
+            $("#Order_Status").prop("disabled", true);
+            //$("#Family").prop("disabled", true);
+            $("#Part_Series").prop("disabled", true);
+            $("#DateTo").prop("disabled", true);
+            $("#DateFrom").prop("disabled", true);
+
+            $("#DateFrom").datepicker(
+          {
+              format: 'yyyy-mm-dd',
+              endDate: '+0d',
+              autoclose: true
+          });
+            $("#DateTo").datepicker(
+                {
+                    format: 'yyyy-mm-dd',
+                    endDate: '+0d',
+                    autoclose: true
+                }
+           );
+          //  $("#DateFrom").datepicker({ format: "yyyy/MM/dd" });
+            $("#fm").hide()
+          //  $("#DateTo").datepicker({ format: "yyyy/MM/dd" });
+
+            $("#Shop_ID").on("change", function () {
+                $("#Part_Series").html("");
+                // $("#Line_ID").html("");
+                var Plant_ID = $('#Shop_ID').val();
+                if (Plant_ID.length > 0) {
+                    //alert(Plant_ID);
+                    $.getJSON('/Report/GetPartSeriesFromShopID', { shopid: Plant_ID }, function (data) {
+                        //alert(data);
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Part_Series').append('<option value="' +
+                                             data[i].Series_Code + '">' + data[i].Series_Description + '</option>');
+                            }
+
+                        }
+                        else {
+                            alert("Series is not present")
+                        }
+                    });
+                }
+            });
+
+            //$("#Shop_ID").on("change", function () {
+            //    var value = $("#Shop_ID").val();
+            //    if (value == "4") {
+            //        $("#fm").show()
+            //    }
+            //    else {
+            //        $("#fm").hide()
+            //    }
+            //    // $("#Part_Series").html("");
+
+
+            //});
+            $("#SearchBy").on("change", function () {
+                $("#Shop_ID").prop("disabled", false);
+                $("#Order_Status").prop("disabled", false);
+                //$("#Family").prop("disabled", false);
+                $("#Part_Series").prop("disabled", false);
+                $("#DateTo").prop("disabled", false);
+                $("#DateFrom").prop("disabled", false);
+
+                var value = $("#SearchBy").val();
+                if (value == "0") {
+                    $("#date").show()
+                }
+                else {
+                    $("#date").hide()
+                }
+                // $("#Part_Series").html("");
+                if (value == "1") {
+                    $("#Series").show()
+                }
+                else {
+                    $("#Series").hide()
+                }
+
+            });
+
+
+        });
+
+
+
+    </script>
+}

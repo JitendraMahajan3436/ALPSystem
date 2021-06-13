@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "VehicleStatusReport";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+            <div class="row" style="margin-bottom: 6px;">
+
+                <div class="col-md-3">
+                   
+                        <label>Serial No:</label>
+                        <input type="text" id="SerialNo" class="form-control" placeholder="Serial No" />
+                
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input type="button" id="ProductionReportGenerate" value="Generate Report" class="btn btn-primary" /> 
+                </div>
+            </div>
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        @*<br />*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-md-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame" id="ContentFrame" width="100%" height="900px"></iframe>
+                </div>
+            </div>
+        </div>
+    }
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/DateTime")*@
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+    
+    <style>
+        iframe {
+            border: 2px #2036a7 solid;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+           
+        });
+       
+        function hideshow(which) {
+            if (!document.getElementById)
+                return
+            if (which.style.display == "block") {
+                which.style.display = "none"
+                var iFrameID = document.getElementById('ContentFrame');
+                var CFdivID = document.getElementById('div1');
+                iFrameID.style.minHeight = 470 + "px";
+            }
+            else {
+                which.style.display = "block"
+                var iFrameID = document.getElementById('ContentFrame');
+                var CFdivID = document.getElementById('div1');
+            }
+        }
+        $('#ProductionReportGenerate').click(function () {
+            debugger;
+            var SerialNo = $("#SerialNo").val();
+            if (SerialNo == "") {
+                alert('Please Enter Body Serial No');
+                return false;
+            }
+
+           
+            $('#ContentFrame').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fDrona%2fVehicle_Status&rs:Command=Render&rc:Zoom=Page%20Width&VINBIN=' + SerialNo);
+
+        });
+    </script>
+
+
+
+
+

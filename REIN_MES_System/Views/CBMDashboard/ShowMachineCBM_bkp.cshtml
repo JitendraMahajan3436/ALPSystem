@@ -1,0 +1,1235 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_Conditional_Based_Maintenance>
+@using REIN_MES_System.Models;
+@{
+    ViewBag.Title = "ShowMachineCBM";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    MTTUWEntities db = new MTTUWEntities();
+}
+
+@*<script src="~/Content/theme/plugins/JQueryGraph/jquery-ui.min.js"></script>
+    <script src="~/Content/theme/plugins/JQueryGraph/jquery.min.js"></script>
+
+    <link href="~/Content/theme/plugins/JQueryGraph/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/JQueryGraph/Jquery-dynameter.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/JQueryGraph/jquery.dynameter.js"></script>
+    <script src="~/Content/theme/plugins/JQueryGraph/jquery.tempgauge.js"></script>*@
+
+<style>
+    .modal-dialog {
+        width: 80%;
+        height: 100%;
+    }
+
+    .modal-header {
+        margin-top: 0%;
+        background-color: brown;
+    }
+
+    .modal-open .modal {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+</style>
+<div class="row" id="ClitaDailyCheckContainer">
+    <div class="col-md-12 col-sm-12 col-lg-12  cbm-parent-container">
+        @{ if (globalData != null)
+            {
+                if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+                {
+                    <div class="box-body">
+                        @{
+                            if (globalData != null)
+                            {
+                                <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>                                                               } else { <text> style="display:none;" </text>                                                              } }>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4>
+                                        <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+    }
+                        }
+                    </div>
+        }
+    }
+        }
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" class="machine-tab graph-initialised" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" class="machine-tab" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="tab-content">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative;">
+                            <div class="row cbm-container">
+                                @{ int j = 0; }
+                                @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                {
+                                    j++;
+                                    <div class="col-md-4 col-sm-4 col-lg-4">
+                                        <div class="box box-primary box-solid cbm-box" id="cbm_@(item.CBM_ID)_box">
+                                            <div class=" box-header with-border">
+                                                <h3 class="box-title">@item.Machine_Parameter (Unit - @item.UOM)</h3>
+                                                <div class="box-tools pull-right">
+                                                    @*<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>*@
+                                                </div>
+                                            </div><!-- /.box-header -->
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-12 col-lg-12">
+                                                        <div class="chart-responsive" style="text-align:center">
+                                                            @if (item.Parameter_Category == "Level" || item.Parameter_Category == "LEVEL")
+                                                            {
+                                                                <a data-target="#CBM_ID" data-toggle="modal" data-id="@item.CBM_ID" onclick="MyFunction2(@item.CBM_ID)">
+                                                                    <svg id="cbm_@item.CBM_ID" width="97%" height="225"></svg>
+
+                                                                </a>
+                                                            }
+                                                            @*else if (item.Parameter_Category == "Pressure")
+                                                                {
+                                                                    <div style="text-align:center">
+                                                                        <div id="cbm_@item.CBM_ID" width="230" height="180" ></div>
+                                                                    </div>
+                                                                }*@
+                                                            @*else if (item.Parameter_Category == "Temperature")
+                                                                {
+                                                                    <div class="tempGauge-demo" id="cbm_@item.CBM_ID" width="230" height="180" ></div>
+                                                                }*@
+                                                            else
+                                                            {
+                                                                if (item.Parameter_Category == "Temperature")
+                                                                {
+                                                                    <a data-target="#CBM_ID" data-toggle="modal" data-id="@item.CBM_ID" onclick="MyFunction2(@item.CBM_ID)">
+                                                                        <canvas id="cbm_@item.CBM_ID" width="230" height="225" style="top:-12px; " class="center">
+                                                                            [No canvas support]
+                                                                        </canvas>
+
+                                                                    </a>
+                                                                }
+                                                                else if (item.Parameter_Category == "Voltage")
+                                                                {
+                                                                    <a data-target="#CBM_ID" data-toggle="modal" data-id="@item.CBM_ID" onclick="MyFunction2(@item.CBM_ID)">
+                                                                        <canvas id="cbm_@item.CBM_ID" width="230" height="225" style="top:-12px; " class="center">
+                                                                            [No canvas support]
+                                                                        </canvas>
+
+                                                                    </a>
+                                                                }
+                                                                else if (item.Parameter_Category == "Current")
+                                                                {
+
+                                                                    <a data-target="#CBM_ID" data-toggle="modal" data-id="@item.CBM_ID" onclick="MyFunction2(@item.CBM_ID)">
+                                                                        <canvas id="cbm_@item.CBM_ID" width="230" height="225" style="top:-12px; " class="center">
+                                                                            [No canvas support]
+                                                                        </canvas>
+
+                                                                    </a>
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <a data-target="#CBM_ID" data-toggle="modal" data-id="@item.CBM_ID" onclick="MyFunction2(@item.CBM_ID)">
+                                                                        <canvas id="cbm_@item.CBM_ID" width="230" height="225" style="top:-12px; " class="center">
+                                                                            [No canvas support]
+                                                                        </canvas>
+
+                                                                    </a>
+                                                                }
+                                                            }
+                                                        </div><!-- ./chart-responsive -->
+                                                    </div><!-- /.col -->
+
+
+
+
+                                                </div><!-- /.row -->
+                                            </div><!-- /.box-body -->
+                                            <div class="box-footer">
+                                                <div class="col-md-12  col-sm-12 col-lg-12" style="text-align:center">
+                                                    <table class="table table-bordered table-condensed table-responsive table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="text-align:center">
+                                                                    Cur Val
+                                                                </th>
+                                                                <th style="text-align:center">
+                                                                    Min Val
+                                                                </th>
+                                                                <th style="text-align:center">Max Val</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="bg-green-gradient cbm-current-val text-bold" id="cbm-current-val" style="font-family:initial">
+                                                                    @( String.Format("{0:0.00}", (Convert.ToDecimal(item.Current_Value) / item.Scale_Denominator)))
+                                                                </td>
+                                                                <td class="bg-teal-gradient cbm-min-val text-bold" style="font-family:initial;font-size:larger">
+                                                                    @( String.Format("{0:0.00}", item.Green_Min_Val))
+                                                                </td>
+                                                                <td class="bg-teal-gradient cbm-max-val text-bold" style="font-family:initial">
+                                                                    @( String.Format("{0:0.00}", item.Green_Max_Val))
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                </div>
+
+
+                                            </div><!-- /.footer -->
+
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+
+                        </div>
+                                        }
+                                    }
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="modal fade" id="CBM_ID" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" style="font-family:Calibri;font-size:21px;font-weight:bold">CBM Data</h4>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row">
+                                    <input type="hidden" id="hdnCBMId" value="" />
+                                    <div class="col-md-3" id="divFromDate">
+                                        @Html.Label("From Date")
+                                        <input type="text" id="FromDate" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        @Html.Label("History Data")
+                                        <select id="Hdata" class="form-control">
+                                            <option id="Hdata" value="AllData">All Data</option>
+                                            <option id="Hdata" value="ExceptionalData">Exceptions</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        @Html.Label("To Date", new { @style = "display:none" })
+                                        <input type="button" id="BtnGenerate" class="btn btn-primary" value="Generate Report" style="margin-top:25px;font-family:calibri;font-weight:bold;font-size:18px" />
+                                        <input type="button" id="BtnGenerateExcel" class="btn btn-primary" value="ExportReport" style="margin-top:25px;font-family:calibri;font-weight:bold;font-size:18px" />
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+                                <div id="CBMDashboardDetails" value="">
+
+                                </div>
+
+                                <div id="ccCharat" value="">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button data-dismiss="modal" type="button" class="btn btn-primary" style="font-family:Calibri;font-weight:bold;font-size:18px">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fuel-gauge"></div>
+
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+</div>
+<style>
+    .bg-faulty {
+        background: #ff2d27;
+    }
+</style>
+
+
+@*@Scripts.Render("~/bundles/jqueryval")*@
+@Scripts.Render("~/fdtheme/MMTUCharts_js")
+@*@Scripts.Render("~/bundles/highcharts")*@
+@Scripts.Render("~/bundles/datepicker")
+@Scripts.Render("~/bundles/PDFHighchart")
+}
+
+@Styles.Render("~/Content/datepickercss")
+<script type="text/javascript">
+        var repeater;
+        var cbmParams = {};
+        var flowNumArr = {};
+
+
+        $("#FromDate").datepicker(
+            {
+                format: 'dd-mm-yyyy'
+            });
+
+
+        $("#BtnGenerate").click(function () {
+            $('#ccCharat').html();
+            $('#ccCharat').empty();
+            var fromDate = $('#FromDate').val();
+            var CBMId = $('#hdnCBMId').val();
+            var HData = $("#Hdata").val();
+            //$('#ccCharat').remove();
+            var xAxisLabel = 'Time';
+            $("#CBMDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+            $.ajax({
+                url: "/CBMDashboard/CustomCBMData",
+                data: "{ 'cbmid': '" + CBMId + "', 'fromDate': '" + fromDate + "', 'HData': '" + HData + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if(data != "")
+                    $("#CBMDashboardDetails").html(data);
+                    ddl = new Array();
+                    cbmData = new Array();
+
+
+                    var unit = data.unit;
+                    var name = data.paramName;
+                    var diff = data.datediff;
+                    for (var i = 0; i < data.allTimes.length; i++) {
+                        ddl.push(data.allTimes[i]);
+                        cbmData.push(data.CBMdata[i]);
+                    }
+                    ShowName(ddl, cbmData, xAxisLabel, unit, name, diff)
+
+                }
+            });
+        });
+
+        $("#BtnGenerateExcel").click(function () {
+            $('#ccCharat').html();
+            $('#ccCharat').empty();
+            var fromDate = $('#FromDate').val();
+            var CBMId = $('#hdnCBMId').val();
+            var HData = $("#Hdata").val();
+            //$('#ccCharat').remove();
+            var xAxisLabel = 'Time';
+            var path = "/CBMDashboard/ExportData?cbmid=" + CBMId + "&fromDate=" + fromDate + "&HData=" + HData;
+
+            //window.open(path, '_blank');
+            window.open(path,'_blank');
+
+
+        });
+
+        function initializeCBMData() {
+
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //console.log(machineID);
+            cbmParams.length = 0;
+            flowNumArr.length = 0;
+            $.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+                $('.nav-tabs li.active a.machine-tab').addClass('graph-initialised');
+                //resetAllLines();
+                if (data.length > 0) {
+
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, cbmObj) {
+
+                        var cbmID = cbmObj.CBM_ID;
+                        var cbmUOM = cbmObj.UOM;
+                        var minVal = cbmObj.Min_Val;
+                        var maxVal = cbmObj.Max_Val;
+                        var greenMin = cbmObj.Green_Min_Val;
+                        var greenMax = cbmObj.Green_Max_Val;
+                        var warningMin = cbmObj.Warning_Min_Val;
+                        var warningMax = cbmObj.Warning_Max_Val;
+                        var currentState = cbmObj.Current_State;
+                        var paramCategory = cbmObj.Parameter_Category;
+                        var currentValue = (cbmObj.Current_Value / cbmObj.Scale_Denominator).toFixed(2);
+                        if (cbmObj.Current_Value > 30000) {
+                            currentValue = 0;
+                        }
+                        var cbmDomObj = $('*[data-cbmID="cbm_' + cbmID + '"]');
+                        var cbmAccesssor = 'cbm_' + cbmID;
+
+                        var cbmChartObj = $("#" + cbmAccesssor);
+                        var cbmBox = $("#" + cbmAccesssor + "_box");
+                        cbmBox.find('#cbm-current-val').text(currentValue);
+                        if (currentValue <= greenMax && currentValue >= greenMin) {
+                            cbmBox.find('.cbm-current-val').addClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                        } else if (currentValue > greenMax) {
+                            if (currentValue > warningMax) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                            } else {
+                                cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                            }
+                        } else if (currentValue < greenMin) {
+                            if (currentValue < warningMin) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                            } else {
+                                cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                            }
+                        }
+                        switch (cbmObj.Parameter_Category) {
+
+
+                            case "Pressure":
+                            case "PRESSURE":
+                            case "Speed":
+
+                 // Start code 2
+                                //var scaleDecimalVal = null;
+                                //if ((maxVal / 10) < 1) {
+                                //    scaleDecimalVal = 1;
+                                //}
+                                //cbmChartObj.attr("width", "230");
+                                //var currentObj = new RGraph.Gauge({
+                                //    id: cbmAccesssor,
+                                //    min: minVal,
+                                //    max: maxVal,
+                                //    value: currentValue,
+                                //    options: {
+                                //        scaleDecimals: scaleDecimalVal,
+                                //        tickmarksBig: 10,
+                                //        tickmarksSmall: 20,
+                                //        colorsRanges: [[minVal, maxVal, '#dd4b39'], [warningMin, warningMax, '#ff2'], [greenMin, greenMax, '#bada55']],
+                                //        labelsCount: 10
+                                //    }
+                                //}).draw();
+                                //cbmParams[cbmAccesssor] = currentObj;
+               // End code 2
+                                break;
+                            case "Current":
+                            case "CURRENT":
+                                var scaleDecimalVal = null;
+                                if ((maxVal / 10) < 1) {
+                                    scaleDecimalVal = 1;
+                                }
+                                cbmChartObj.attr("width", "230");
+                                var currentObj = new RGraph.Gauge({
+                                    id: cbmAccesssor,
+                                    min: minVal,
+                                    max: maxVal,
+                                    value: currentValue,
+                                    options: {
+                                        scaleDecimals: scaleDecimalVal,
+                                        tickmarksBig: 10,
+                                        tickmarksSmall: 20,
+                                        colorsRanges: [[minVal, maxVal, '#dd4b39'], [warningMin, warningMax, '#ff2'], [greenMin, greenMax, '#bada55']],
+                                        labelsCount: 10
+                                    }
+                                }).draw();
+                                cbmParams[cbmAccesssor] = currentObj;
+
+
+                                break;
+
+                            case "Voltage":
+                            case "VOLTAGE":
+                                var scaleDecimalVal = null;
+                                if ((maxVal / 10) < 1) {
+                                    scaleDecimalVal = 1;
+                                }
+                                cbmChartObj.attr("width", "230");
+                                var voltageObj = new RGraph.Gauge({
+                                    id: cbmAccesssor,
+                                    min: minVal,
+                                    max: maxVal,
+                                    value: currentValue,
+                                    options: {
+                                        scaleDecimals: scaleDecimalVal,
+                                        tickmarksBig: 10,
+                                        tickmarksSmall: 20,
+                                        colorsRanges: [[minVal, maxVal, '#dd4b39'], [warningMin, warningMax, '#ff2'], [greenMin, greenMax, '#bada55']],
+                                        labelsCount: 10
+                                    }
+                                }).draw();
+                                cbmParams[cbmAccesssor] = voltageObj;
+
+                 //Start Code Number 2
+                                //var temperatureObj = new RadialGauge({
+                                //    renderTo: cbmAccesssor,
+                                //    width: 230,
+                                //    height: 225,
+                                //    units: cbmUOM,
+                                //    title: "Voltage",
+                                //    minValue: minVal,
+                                //    maxValue: maxVal,
+                                //    //minValue: -50,
+                                //    //maxValue:50,
+                                //    value: currentValue,
+                                //    //majorTicks: [
+                                //    //    -50,
+                                //    //    -40,
+                                //    //    -30,
+                                //    //    -20,
+                                //    //    -10,
+                                //    //    0,
+                                //    //    10,
+                                //    //    20,
+                                //    //    30,
+                                //    //    40,
+                                //    //    50
+                                //    //],
+                                //    //minorTicks: 2,
+                                //    //strokeTicks: true,
+                                //    highlights: [
+                                //        {
+                                //            "from": greenMin,
+                                //            "to": greenMax,
+                                //            "color": "#00ca6d"
+                                //        },
+                                //        {
+                                //            "from": greenMax,
+                                //            "to": maxVal,
+                                //            "color": "rgba(255, 0, 0, .3)"
+                                //        }
+                                //    ],
+
+                                //    //ticksAngle: 225,
+                                //    //startAngle: 67.5,
+                                //    //colorMajorTicks: "#ddd",
+                                //    //colorMinorTicks: "#ddd",
+                                //    colorTitle: "#eee",
+                                //    colorUnits: "#ccc",
+                                //    colorNumbers: "#eee",
+                                //    colorPlate: "#222",
+                                //    borderShadowWidth: 0,
+                                //    borders: true,
+                                //    //needleType: "arrow",
+                                //    //needleWidth: 2,
+                                //    // needleCircleSize: 7,
+                                //    animation: false,
+                                //    //needleCircleOuter: true,
+                                //    //needleCircleInner: false,
+                                //    //animationDuration: 1500,
+                                //    animationRule: "linear",
+                                //    colorBorderOuter: "#333",
+                                //    colorBorderOuterEnd: "#111",
+                                //    colorBorderMiddle: "#222",
+                                //    colorBorderMiddleEnd: "#111",
+                                //    colorBorderInner: "#111",
+                                //    colorBorderInnerEnd: "#333",
+                                //    //colorNeedleShadowDown: "#333",
+                                //    // colorNeedleCircleOuter: "#333",
+                                //    // colorNeedleCircleOuterEnd: "#111",
+                                //    // colorNeedleCircleInner: "#111",
+                                //    // colorNeedleCircleInnerEnd: "#222",
+                                //    valueBoxBorderRadius: 0,
+                                //    colorValueBoxRect: "#222",
+                                //    colorValueBoxRectEnd: "#333"
+                                //}).draw();
+                                //cbmParams[cbmAccesssor] = temperatureObj;
+              //End Code Number 2
+                                break;
+                            case "Temperature":
+                                cbmChartObj.attr("width", "80");
+                                var tempColor = ['#00ca6d'];
+                                if (currentValue <= greenMax && currentValue >= greenMin) {
+                                    tempColor = ['#00ca6d'];
+                                } else if (currentValue > greenMax) {
+                                    if (currentValue > warningMax) {
+                                        tempColor = ['#f00'];
+                                    } else {
+                                        tempColor = ['#ff5'];
+                                    }
+                                } else if (currentValue < greenMin) {
+                                    if (currentValue < warningMin) {
+                                        tempColor = ['#f00'];
+                                    } else {
+                                        tempColor = ['#ff5'];
+                                    }
+                                }
+                                var temperatureObj = new RGraph.Thermometer({
+                                    id: cbmAccesssor,
+                                    min: minVal,
+                                    max: maxVal,
+                                    value: currentValue,
+                                    options: {
+                                        scaleVisible: true,
+                                        gutterLeft: 25,
+                                        valueLabel: false,
+                                        colors: tempColor
+                                        //textAccessible: true
+                                    }
+                                }).grow();
+                                cbmParams[cbmAccesssor] = temperatureObj;
+
+                                break;
+                            case "Vibration":
+                            case "Flow":
+                                cbmChartObj.attr("width", "250");
+
+                                var vibrationObj = new RGraph.Line({
+                                    id: cbmAccesssor,
+                                    data: new Array(5),
+                                    options: {
+                                        gutterLeft: 35,
+                                        ymax: maxVal,
+                                        ymin: minVal,
+                                        tickmarks: 'filledcircle',
+                                        scaleDecimals: 1,
+                                        linewidth: 1,
+                                        backgroundHbars: [
+                                            [minVal, warningMin - minVal, 'rgba(255, 49, 80, 0.73)'],
+                                            [warningMin, greenMin - warningMin, 'rgba(255, 255, 119, 0.5)'],
+                                            [greenMin, greenMax - greenMin, 'rgba(6, 255, 0, 0.39)'],
+                                            [greenMax, warningMax - greenMax, 'rgba(255, 255, 119, 0.5)'],
+                                            [warningMax, maxVal - warningMax, 'rgba(255, 49, 80, 0.73)'],
+                                        ],
+                                        shadow: null,
+                                        backgroundGridVlines: false,
+                                        backgroundGridBorder: false,
+                                        backgroundGridColor: '#eee',
+                                        colors: ['#058DC7'],
+                                        numxticks: 5,
+                                        unitsPost: cbmUOM,
+                                        yaxispos: 'right',
+                                        axisColor: '#666',
+                                        textColor: '#666',
+                                        textSize: 14,
+                                        linewidth: 2,
+                                        labels: ['25s', '20s', '15s', '10s', '5s', '0s'],
+                                        noxaxis: true,
+                                        textAccessible: true
+                                    }
+                                }).draw();
+                                cbmParams[cbmAccesssor] = vibrationObj;
+                                flowNumArr[cbmAccesssor] = ((((maxVal) - (minVal)) / 2) + (minVal));
+                                break;
+                            case "Level":
+                            case "LEVEL":
+                                cbmChartObj.attr("width", "230");
+                                if (currentValue < 0) {
+                                    currentValue = minVal;
+                                }
+                                else if (currentValue < minVal) {
+                                    currentValue = minVal;
+                                }
+                                else if (currentValue > maxVal) {
+                                    currentValue = maxVal;
+                                }
+
+
+
+                                var config1 = liquidFillGaugeDefaultSettings();
+
+                                config1.minValue = minVal;
+                                config1.maxValue = maxVal;
+                                config1.displayPercent = false;
+                                config1.waveAnimateTime = 1000;
+                                cbmParams[cbmAccesssor] = loadLiquidFillGauge(cbmAccesssor, currentValue, config1);
+                                break;
+                            default:
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+
+        function showchart(currentValue, Id, minVal, maxVal, cbmUOM, paramCategory) {
+
+
+
+           $('#vchart' + Id).highcharts( {
+                chart: {
+                    type: 'gauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+
+
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: null,
+                    //font : '10px'
+                },
+
+                pane: {
+                    startAngle: -150,
+                    endAngle: 150,
+                    background: [{
+                        backgroundColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                            //stops: [
+                            //    [0, '#FFF'],
+                            //    [1, '#333']
+                            //]
+                        },
+                        borderWidth: 7,
+                        animation: false,
+                        outerRadius: '109%'
+                    },
+
+                    {
+                        // default background
+                    },
+                    {
+                        backgroundColor: null,
+                        borderWidth: 0,
+                        outerRadius: '0%',
+                        innerRadius: '0%'
+                    }]
+                },
+
+                // the value axis
+                yAxis: {
+                    min: minVal,
+                    max: maxVal,
+                    //minorTickInterval: 'auto',
+                    minorTickWidth: 0,
+                    minorTickLength: 10,
+                    minorTickPosition: 'inside',
+                    minorTickColor: 'green',
+
+                    tickPixelInterval: 40,
+                    tickWidth: 2,
+                    tickPosition: 'inside',
+                    tickLength: 10,
+                    tickColor: '#666',
+                    labels: {
+                        //step: 2,
+                        //rotation: 'auto'
+                       // rotation: -0,
+
+                    },
+                    //title: {
+                    //    text: 'km/h'
+                    //},
+                    plotBands: [{
+                        from: 0,
+                        to: 120,
+                        // color: '#55BF3B' // green
+                    }, {
+                        from: 120,
+                        to: 160,
+                        //  color: '#DDDF0D' // yellow
+                    }, {
+                        from: 160,
+                        to: 200,
+                        // color: '#DF5353' // red
+                    }]
+
+                },
+
+
+                series: [{
+                    name: paramCategory,
+                    data: currentValue,
+                    animation:false,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y}' + cbmUOM,
+                        //rotation: -0,
+                        margin: 10,
+                        color: 'green',
+                    },
+                    tooltip: {
+                        valueSuffix: cbmUOM
+                    }
+                }]
+
+            }
+
+          );
+        }
+
+        function showPressureChart(currentValue, Id, minVal, maxVal, cbmUOM, paramCategory) {
+
+
+            $('#chart' + Id).highcharts( {
+                chart: {
+                    type: 'solidgauge',
+                    plotBackgroundColor: null,
+                    plotBackgroundImage: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+
+
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: null,
+                    //font : '10px'
+                },
+
+                pane: {
+                    center: ['50%','85%'],
+                    size:'140%',
+                    startAngle: -90,
+                    endAngle: 90,
+                    background: {
+                        backgroundColor: null,
+                        shape:'arc',
+                        outerRadius: '60%',
+                        innerRadius: '100%'
+                    }
+                },
+
+                // the value axis
+                yAxis: {
+                    min: minVal,
+                    max: maxVal,
+                    //minorTickInterval: 'auto',
+
+                    labels: {
+                        //step: 2,
+                        //rotation: 'auto'
+                        // rotation: -0,
+
+                    },
+                    //title: {
+                    //    text: 'km/h'
+                    //},
+                    plotBands: [{
+                        from: 0,
+                        to: 120,
+                        // color: '#55BF3B' // green
+                    }, {
+                        from: 120,
+                        to: 160,
+                        //  color: '#DDDF0D' // yellow
+                    }, {
+                        from: 160,
+                        to: 200,
+                        // color: '#DF5353' // red
+                    }]
+
+                },
+
+
+                series: [{
+                    name: paramCategory,
+                    data: currentValue,
+                    animation:false,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{y:.1f}' + cbmUOM,
+                        //rotation: -0,
+                        margin: 10,
+                        color: 'green',
+                    },
+                    tooltip: {
+                        valueSuffix: cbmUOM
+                    }
+                }]
+
+            }
+
+           );
+        }
+
+        function updateCBMData() {
+
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //console.log(machineID);
+
+            $.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+                //resetAllLines();
+
+                if (data.length > 0) {
+
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, cbmObj) {
+
+                        var cbmID = cbmObj.CBM_ID;
+                        var cbmAccesssor = 'cbm_' + cbmID;
+                        var cbmCurrentValue = 0;
+                        var cbmUOM = cbmObj.UOM;
+                        var minVal = cbmObj.Min_Val;
+                        var maxVal = cbmObj.Max_Val;
+                        var greenMin = cbmObj.Green_Min_Val;
+                        var greenMax = cbmObj.Green_Max_Val;
+                        var warningMin = cbmObj.Warning_Min_Val;
+                        var warningMax = cbmObj.Warning_Max_Val;
+                        var currentState = cbmObj.Current_State;
+                        var paramCategory = cbmObj.Parameter_Category;
+                        var currentValue = cbmObj.Current_Value / cbmObj.Scale_Denominator;
+                        if (cbmObj.Current_Value > 30000) {
+                            currentValue = 0;
+                        }
+                        var cbmDomObj = $('*[data-cbmID="cbm_' + cbmID + '"]');
+                        var cbmChartObj = cbmParams[cbmAccesssor];
+                        var cbmBox = $("#" + cbmAccesssor + "_box");
+
+                        if (currentState == false) {
+                            cbmBox.find('.overlay').remove();
+                            var overlayBody = '<div class="overlay">' +
+                                              '<i class="fa fa-power-off"></i>' +
+                                              '<h4 class="bold bg-gray">CYCLE OFF</h4>' +
+                                              '</div>';
+                            cbmBox.append(overlayBody);
+                            //if (cbmObj.Parameter_Category == 'Flow' && cbmObj.Parameter_Category != 'Level') {
+                            if (cbmObj.Parameter_Category == 'Temperature') {
+                                cbmChartObj.value = 0;
+                                cbmChartObj.grow();
+                            }
+                            //if (cbmObj.Parameter_Category == 'Temperature') {
+                            //    cbmChartObj.value = 0;
+                            //    cbmChartObj.grow();
+                            //}
+
+                            cbmBox.find('.cbm-current-val').addClass('bg-gray').removeClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                            cbmBox.find('.cbm-current-val h3').text(0);
+                        } else {
+                            cbmBox.find('.overlay').remove();
+                            cbmBox.find('#cbm-current-val').text(currentValue.toFixed(2));
+
+                            if (currentValue <= greenMax && currentValue >= greenMin) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                            } else if (currentValue > greenMax) {
+                                if (currentValue > warningMax) {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                                } else {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                                }
+                            } else if (currentValue < greenMin) {
+                                if (currentValue < warningMin) {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                                } else {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                                }
+                            }
+
+                            switch (cbmObj.Parameter_Category) {
+                                case "Pressure":
+                                case "PRESSURE":
+                                case "Speed":
+                                    cbmChartObj.value = currentValue;
+                                    cbmChartObj.grow();
+                                    break;
+                                case "Current":
+                                case "CURRENT":
+                                    cbmChartObj.value = currentValue;
+                                    cbmChartObj.grow();
+                                    break;
+                                case "Voltage":
+                                case "VOLTAGE":
+                                    cbmChartObj.value = currentValue;
+                                    cbmChartObj.grow();
+                                    break;
+
+
+                                    //var voltageObj = new RadialGauge({
+                                    //    renderTo: cbmAccesssor,
+                                    //    width: 230,
+                                    //    height: 225,
+                                    //    units: cbmUOM,
+                                    //    title: "Voltage",
+                                    //    minValue: minVal,
+                                    //    maxValue: maxVal,
+                                    //    //minValue: -50,
+                                    //    //maxValue:50,
+                                    //    value: currentValue,
+                                    //    //majorTicks: [
+                                    //    //    -50,
+                                    //    //    -40,
+                                    //    //    -30,
+                                    //    //    -20,
+                                    //    //    -10,
+                                    //    //    0,
+                                    //    //    10,
+                                    //    //    20,
+                                    //    //    30,
+                                    //    //    40,
+                                    //    //    50
+                                    //    //],
+                                    //    //minorTicks: 2,
+                                    //    //strokeTicks: true,
+                                    //    highlights: [
+                                    //        {
+                                    //            "from": greenMin,
+                                    //            "to": greenMax,
+                                    //            "color": "#00ca6d"
+                                    //        },
+                                    //        {
+                                    //            "from": greenMax,
+                                    //            "to": maxVal,
+                                    //            "color": "rgba(255, 0, 0, .3)"
+                                    //        }
+                                    //    ],
+
+                                    //    //ticksAngle: 225,
+                                    //    //startAngle: 67.5,
+                                    //    //colorMajorTicks: "#ddd",
+                                    //    //colorMinorTicks: "#ddd",
+                                    //    colorTitle: "#eee",
+                                    //    colorUnits: "#ccc",
+                                    //    colorNumbers: "#eee",
+                                    //    colorPlate: "#222",
+                                    //    borderShadowWidth: 0,
+                                    //    borders: true,
+                                    //    //needleType: "arrow",
+                                    //    //needleWidth: 2,
+                                    //    // needleCircleSize: 7,
+                                    //    animation: false,
+                                    //    //needleCircleOuter: true,
+                                    //    //needleCircleInner: false,
+                                    //    //animationDuration: 1500,
+                                    //    animationRule: "linear",
+                                    //    colorBorderOuter: "#333",
+                                    //    colorBorderOuterEnd: "#111",
+                                    //    colorBorderMiddle: "#222",
+                                    //    colorBorderMiddleEnd: "#111",
+                                    //    colorBorderInner: "#111",
+                                    //    colorBorderInnerEnd: "#333",
+                                    //    //colorNeedleShadowDown: "#333",
+                                    //    // colorNeedleCircleOuter: "#333",
+                                    //    // colorNeedleCircleOuterEnd: "#111",
+                                    //    // colorNeedleCircleInner: "#111",
+                                    //    // colorNeedleCircleInnerEnd: "#222",
+                                    //    valueBoxBorderRadius: 0,
+                                    //    colorValueBoxRect: "#222",
+                                    //    colorValueBoxRectEnd: "#333"
+                                    //}).draw();
+                                    //cbmParams[cbmAccesssor] = voltageObj;
+                                    break;
+                                case "TEMPRATURE":
+                                case "Temperature":
+                                    RGraph.clear(cbmChartObj.canvas);
+                                    cbmChartObj.value = currentValue;
+                                    if (currentValue <= greenMax && currentValue >= greenMin) {
+                                        // cbmChartObj.options = { colors: ['Gradient(#0c0:green:#6f6:#cfc)'] };
+                                        cbmChartObj.set({
+                                            colors: ['#00ca6d'],
+                                        }).grow();
+                                    } else if (currentValue > greenMax) {
+                                        if (currentValue > warningMax) {
+                                            // cbmChartObj.options = { colors: ['Gradient(#c00:red:#f66:#fcc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#f00'],
+                                            }).grow();
+                                        } else {
+                                            // cbmChartObj.options = { colors: ['Gradient(#ff0:yellow:#ff6:#ffc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#ff5'],
+                                            }).grow();
+                                        }
+                                    } else if (currentValue < greenMin) {
+                                        if (currentValue < warningMin) {
+                                            // cbmChartObj.options = { colors: ['Gradient(#c00:red:#f66:#fcc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#f00'],
+                                            }).grow();
+                                        } else {
+                                            //cbmChartObj.options = { colors: ['Gradient(#ff0:yellow:#ff6:#ffc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#ff5'],
+                                            }).grow();
+                                        }
+                                    }
+
+                                    break;
+                                case "Vibration":
+
+                                case "Flow":
+                                    RGraph.clear(cbmChartObj.canvas);
+
+                                    // Generate a random number between -5 and 5 and add it to the num
+                                    // variable. Adding asmall change instead of generating a whole new
+                                    // number result in a gentler change.
+                                    flowNumArr[cbmAccesssor] = currentValue;
+
+                                    // Limit the num variable to min - max
+                                    flowNumArr[cbmAccesssor] = Math.max(minVal, flowNumArr[cbmAccesssor]);
+                                    flowNumArr[cbmAccesssor] = Math.min(maxVal, flowNumArr[cbmAccesssor]);
+
+                                    // Remove a number from the front of the data array
+                                    cbmChartObj.original_data[0].shift();
+
+                                    // Add the new number on to end of the data array
+                                    cbmChartObj.original_data[0].push(flowNumArr[cbmAccesssor]);
+
+                                    // Draw the chart
+                                    cbmChartObj.draw();
+
+                                    //// Call this function again after the delay (using requestAnimationFrame
+                                    //// NOT setTimeout) This function is a compatibility wrapper around
+                                    //// requestAnimationFrame
+                                    //RGraph.Effects.updateCanvas(draw);
+                                    break;
+                                case "Level":
+                                case "LEVEL":
+                                    if (currentValue < 0) {
+                                        currentValue = minVal;
+                                    }
+                                    else if (currentValue < minVal) {
+                                        currentValue = minVal;
+                                    }
+                                    else if (currentValue > maxVal) {
+                                        currentValue = maxVal;
+                                    }
+
+                                    //var currentPercent = ((currentValue / maxVal) * 100).toFixed(2);
+                                    cbmParams[cbmAccesssor].update(currentValue);
+                                    break;
+                                default:
+                            }
+                        }//current status ELSE END
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+        $(document).ready(function () {
+
+
+
+            initializeCBMData();
+            repeater = setInterval(updateCBMData, 9000);
+            //repeater = setInterval(initializeCBMData, 9000);
+
+            //$('.nav-tabs li a.machine-tab').on('click', function () {
+            //    //var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //    //alert(machineID);
+
+            //});
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                if ($(this).hasClass('graph-initialised') == false) {
+                    initializeCBMData();
+                }
+            });
+            //$.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+
+            //});
+        });
+
+        function MyFunction2(CBMID) {
+
+            $('#ccCharat').html();
+            $('#ccCharat').empty();
+            $('#FromDate').val("");
+            $('#hdnCBMId').val(CBMID);
+            $("#Hdata").val("AllData");
+            //$('#ccCharat').remove();
+            var xAxisLabel = 'Time';
+            $("#CBMDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+            $.ajax({
+                url: "/CBMDashboard/LiveCBMData",
+                data: "{ 'cbmid': '" + CBMID + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    if (data != "")
+                        $("#CBMDashboardDetails").html(data);
+                    ddl = new Array();
+                    cbmData = new Array();
+
+                    var diff = 3;
+                    var unit = data.unit;
+                    var name = data.paramName;
+                    for (var i = 0; i < data.allTimes.length; i++) {
+                        ddl.push(data.allTimes[i]);
+                        cbmData.push(data.CBMdata[i]);
+                    };
+
+
+
+                    ShowName(ddl, cbmData, xAxisLabel, unit, name, diff)
+                }
+            });
+
+        }
+
+        function ShowName(ddl, cbmData, xAxisLabel, unit, name, diff) {
+
+            var chart = $('#ccCharat').highcharts({
+                chart: {
+                    zoomType: 'x',
+                    exportChart: {
+                        type: 'application/pdf',
+                        filename: 'my-pdf'
+                    }
+                },
+                title: {
+                    text: name+' - Last ' + diff + ' Days Data',
+
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    title: {
+                        text: xAxisLabel,
+                        style: {
+                            fontWeight: 'bold'
+                        }
+                    },
+                    dataLabels: {
+                        //rotation: -45,
+                        rotation: -30,
+                        //allowOverlap:true,
+                        enabled: true,
+
+                    },
+                    categories: ddl,
+                    crosshair: true
+                },
+                yAxis: {
+                    title: {
+                        text: 'Values',
+                        style: {
+                            fontWeight: 'bold'
+                        }
+                    },
+                },
+                tooltip: {
+                    valueSuffix: unit
+                },
+                series: [{
+
+                    data: cbmData,
+                    name: name
+                }],
+                exporting: {
+                    enabled: true
+                }
+            });
+
+        }
+</script>
+
+

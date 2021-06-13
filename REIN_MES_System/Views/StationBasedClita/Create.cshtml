@@ -1,0 +1,252 @@
+﻿@model REIN_MES_System.Models.MM_Station_Based_Clita
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    @*@Html.HiddenFor(model => model.End_Date)*@
+    <div class="row">
+        @*<div class="form-group col-md-4" style="display:none" >
+                @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Plant_ID, (IEnumerable<SelectListItem>)ViewBag.Plant_ID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>*@
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Shop_ID, "Shop Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Shop_ID, (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Line_ID, "Line Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(), "--Select Line--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Station_ID, "Station Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Station_ID, Enumerable.Empty<SelectListItem>(), "--Select Station--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Clita_Item, "CLITA Item *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Clita_Item, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Clita_Item, null, new { @class = "validation_error" })
+
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Clita_Classification_ID, "Classification *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Clita_Classification_ID, (IEnumerable<SelectListItem>)ViewBag.Clita_Classification_ID, "--Select Classification--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Clita_Classification_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Clita_Standard_ID, "Standards *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Clita_Standard_ID, (IEnumerable<SelectListItem>)ViewBag.Clita_Standard_ID, "--Select Standard--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Clita_Standard_ID, null, new { @class = "validation_error" })
+
+        </div>
+    </div>
+    <div class="row">
+
+
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Clita_Tool_ID, "CLITA Tool *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Clita_Tool_ID, (IEnumerable<SelectListItem>)ViewBag.Clita_Tool_ID, "--Select CLITA Tool--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Clita_Tool_ID, null, new { @class = "validation_error" })
+
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Clita_Method_ID, "Method *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Clita_Method_ID, (IEnumerable<SelectListItem>)ViewBag.Clita_Method_ID, "--Select Method--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Clita_Method_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Cycle, "Frequency *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Cycle, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Cycle, null, new { @class = "validation_error" })
+
+        </div>
+    </div>
+
+    <div class="row">
+
+
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Start_Date, "Start Date *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Start_Date, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Start_Date, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Maintenance_Time_TACT, "Expected Duration (HH:MM:SS)", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Maintenance_Time_TACT, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Maintenance_Time_TACT, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.HiddenFor(model => model.End_Date, DateTime.Now)
+        </div>
+    </div>
+    <div class="row">
+
+
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.users, "Maintenance User", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.users, (IEnumerable<SelectListItem>)ViewBag.users, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.users, null, new { @class = "validation_error" })
+
+        </div>
+
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.mails, "Recipient Email", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.mails, (IEnumerable<SelectListItem>)ViewBag.mails, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.mails, null, new { @class = "validation_error" })
+
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Show All", "Index",null,new{@class="btn btn-primary"})
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+            $('#mails').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var t = $("#mails").select2('val');
+                    valid(t);
+                }
+            });
+
+            $("#mails").select2({
+                allowClear: true,
+                multiple: 'multiple',
+                tags: true,
+                placeholder: 'select an email',
+                tokenSeparators: [',', ';']
+
+            });
+
+            $("#users").select2({
+                allowClear: true,
+                placeholder: 'select a user',
+                multiple: 'multiple'
+            });
+
+            $("#Start_Date").datepicker({ format: 'yyyy/mm/dd' });
+
+            $("#End_Date").datepicker({ format: 'yyyy/mm/dd' });
+
+            $('#Maintenance_Time_TACT').val("00:00:00");
+
+            $("#Start_Date").on("change", function () {
+                $("#End_Date").val($("#Start_Date").val());
+            });
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Clita/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+                      
+                    });
+                }
+            });
+
+            $("#Line_ID").on("change", function () {
+                $("#Station_ID").html("");
+                var Shop_ID = $('#Line_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/StationBasedClita/GetStationsByLineID', { lineid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0 && data.length > 0) {
+                            $('#Station_ID option').remove();
+                            $('#Station_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Station_ID').append('<option value="' +
+                                           data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                            }
+
+
+                        }
+                       
+                    });
+                }
+            });
+
+            $("#Station_ID").on("change", function () {
+                $("#Machine_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Clita/GetMachineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Machine_ID option').remove();
+                            $('#Machine_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Machine_ID').append('<option value="' +
+                                           data[i].Value + '">' + data[i].Text + '</option>');
+                            }
+                        }
+                     
+                    });
+                }
+            });
+
+
+        });
+    </script>}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}

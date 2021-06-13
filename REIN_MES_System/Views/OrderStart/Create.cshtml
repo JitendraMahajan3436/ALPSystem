@@ -1,0 +1,1623 @@
+﻿@model REIN_MES_System.Models.RS_OM_OrderRelease
+@using REIN_MES_System.Models
+<style>
+    table {
+        /*table-layout: fixed;
+        width: 10%;*/
+    }
+</style>
+
+
+<style>
+    .myClass label {
+        font-size: 29px;
+        color: darkblue;
+        text-align: center
+    }
+</style>
+
+
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    var StationId = ViewBag.Station_ID_User;
+}
+@if (ViewBag.flag == 1)
+{
+
+    <div class="box-body">
+        <div class="form-group col-md-12">
+            @{ 
+               
+                
+                
+                        <div class="row">
+
+
+                            <div class="myClass">
+                                <div class="col-md-2">
+                                    @Html.Label("Total12", "Total : ", new { @class = "" })
+                                    <label id="lblTotal"></label>
+                                </div>
+                            </div>
+
+                            <div class="myClass">
+                                <div class="col-md-2">
+                                    @Html.Label("Completed", "Completed : ", new { @class = "" })
+                                    <label id="lblCompleted"></label>
+                                </div>
+                            </div>
+
+                            <div class="myClass">
+                                <div class="col-md-2">
+                                    @Html.Label("Balance", "Balance : ", new { @class = "" })
+                                    <label id="lblBalance"></label>
+                                </div>
+                            </div>
+
+                            <div class="myClass">
+                                <div class="col-md-6">
+                                    @Html.Label("Current Engine Model", "Current Serial No: ", new { @class = "" })
+                                    <label id="lblCurrentEngineNo"></label>
+                                    <label id="lblCurrentEngineModel"></label>
+                                </div>
+                            </div>
+                            @*<div class="myClass">
+                                <div class="col-md-2">
+                                    
+                                    <button id="redirectoShop" type="button" class="btn btn-info"></button>
+                                </div>
+                            </div>*@
+                        </div>
+                
+                } 
+        </div>
+    </div>
+
+
+
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="col-md-6">
+                <div id="order-message-block" class="shop-notify order-start-notify"></div>
+            </div>
+            @if (StationId == 39)
+            {
+            <div class="col-md-6">
+                <button type="button" id="btnCrankCase" class="btn btn-primary" data-toggle="modal" onclick="OpenCrackcasepopup()" data-target="#myPopup">Cranckcase Scan</button>
+                <button type="button" id="btnBarcodeScan " class="btn btn-primary" data-toggle="modal" onclick="BarcodeScanPopup()" data-target="#barcodeScanPopup">Barcode Scan</button>
+                <button type="button" id="btnOrderStart " class="btn btn-primary" data-toggle="modal" onclick="OrderStartPopup()" data-target="#orderStartPopup">Order Start Scan</button>
+            </div>
+            }
+            <div class="box-tools pull-right">
+                @*<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>*@
+
+            </div>
+
+        </div>
+        <div class="box-body">
+            <div>
+                <input type="hidden" id="hdnPlantId" value="@ViewBag.Plant_ID_User" />
+                <input type="hidden" id="hdnShopId" value="@ViewBag.Shop_ID_User" />
+                <input type="hidden" id="hdnLineId" value="@ViewBag.Line_ID_User" />
+                <input type="hidden" id="hdnStationId" value="@ViewBag.Station_ID_User" />
+                <input type="hidden" id="hdnPlantOrderNo" value="" />
+                <input type="hidden" id="hdnModelCode" value="" />
+                <input type="hidden" id="hdnOrderListRowId" value="" />
+                <input type="hidden" id="hdnTotalGeneologyParts" value="" />
+                <div class="col-md-12 Order_Start">
+                    <div style="clear: both">
+                        <h3 id="TotalCount" style="float: right"></h3><h3 id="MainCount" style="float: right"></h3>
+                        <h3 style="float: left"><b>Release Order List</b></h3>
+                    </div>
+
+                    <div class="col-md-12 plant-line">
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div class="row">
+                                <div class="">
+                                    @using (Ajax.BeginForm("ShowStartOrderList", "OrderStart", new AjaxOptions()
+                                    {
+                                        HttpMethod = "POST",
+                                        UpdateTargetId = "showStartedOrderDetail",
+                                        InsertionMode = InsertionMode.Replace,
+                                        OnBegin = "StartedOrdersLoadBegin",
+                                        OnComplete = "StartedOrdersLoadComplete",
+                                    }, new { @id = "showStartedOrderList" }))
+                                    {
+                                        <input type="hidden" id="startOrderListShopId" name="startOrderListShopId" value="@ViewBag.Shop_ID_User" />
+                                        <input type="hidden" id="startOrderListLineId" name="startOrderListLineId" value="@ViewBag.Line_ID_User" />
+                                    }
+
+                                    <div id="showStartedOrderDetail">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*<h5> <b>Ready To Release Order List</b> </h5>*@
+                            <div class="row">
+                                @{
+                                    if (ViewBag.Is_PPC_Kitting_Order != null)
+                                    {
+
+                                        if (ViewBag.Is_PPC_Kitting_Order)
+                                        {
+                                            @Html.Hidden("Is_PPC_Kitting_Order", (bool)ViewBag.Is_PPC_Kitting_Order)
+                                            @*@Html.Action("ShowKitingOrderListByShopAndLine", "OrderStart")*@
+                                            <div class="">
+                                                @using (Ajax.BeginForm("PPCKittingOrderList", "OrderStart", new AjaxOptions()
+                                                {
+                                                    HttpMethod = "POST",
+                                                    UpdateTargetId = "showReleasedOrderDetail",
+                                                    InsertionMode = InsertionMode.Replace,
+                                                    OnBegin = "ReleasedOrdersLoadBegin",
+                                                    OnComplete = "ReleasedOrdersLoadComplete",
+                                                }, new { @id = "showReleaseOrderList" }))
+                                                {
+                                                    <input type="hidden" id="orderListShopId" name="orderListShopId" value="@ViewBag.Shop_ID_User" />
+                                                    <input type="hidden" id="orderListLineId" name="orderListLineId" value="@ViewBag.Line_ID_User" />
+                                                }
+
+                                                <div id="showReleasedOrderDetail">
+
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+
+                                    <div class="">
+                                        @using (Ajax.BeginForm("ShowOrderListByShopAndLine", "OrderStart", new AjaxOptions()
+                                        {
+                                            HttpMethod = "POST",
+                                            UpdateTargetId = "showReleasedOrderDetail",
+                                            InsertionMode = InsertionMode.Replace,
+                                            OnBegin = "ReleasedOrdersLoadBegin",
+                                            OnComplete = "ReleasedOrdersLoadComplete",
+                                        }, new { @id = "showReleaseOrderList" }))
+                                        {
+                                            <input type="hidden" id="orderListShopId" name="orderListShopId" value="@ViewBag.Shop_ID_User" />
+                                            <input type="hidden" id="orderListLineId" name="orderListLineId" value="@ViewBag.Line_ID_User" />
+                                        }
+
+                                        <div id="showReleasedOrderDetail">
+
+                                        </div>
+                                    </div>
+                                }
+
+
+                            </div>
+
+                            <div class="row">
+                                <h4>
+                                    <b>Serial Number</b>
+                                </h4>
+                                <div class="col-md-3 no-padding">
+                                    @Html.TextBox("Serial_Number1", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                                    @Html.ValidationMessage("Serial_Number1", null, new { @class = "validation_error" })
+                                </div>
+                                <div class="plant-line">
+
+                                    <div class="col-md-4">
+                                        <input type="button" id="btnStart_reprint" value="REPRINT" class="btn btn-primary" />
+                                        @Ajax.ActionLink("SHOW RELEASE ORDER LIST", "loadAllReleasedOrders", "OrderStart", new AjaxOptions()
+                                       {
+                                           HttpMethod = "Get",
+                                           UpdateTargetId = "releasedOrdersBody",
+                                           InsertionMode = InsertionMode.Replace,
+                                           OnBegin = "Loadingajax",
+                                           OnComplete = "LoadingajaxComplete"
+                                       }, new { @class = "btn btn-primary order_popup", id = "show_release" })
+                                        @*<input type="button" id="show_release" value="SHOW RELEASE ORDER LIST" class="btn btn-primary order_popup" data-toggle="modal" data-target="#myModal" />*@
+                                        <input type="button" id="btn_refresh" value="REFRESH" class="btn btn-warning" />
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*Show Order Release data*@
+
+
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Release Order List</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-horizontal" id="releasedOrdersBody">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="supervisorLoginCred" style="display:none">
+
+
+                    </div>
+                    <button type="button" class="btn btn-primary order_Supervisor_cred" style="display:none;" data-toggle="modal" data-target="#myModal_SupervisorCred">Login</button>
+                    <div class="modal fade" id="myModal_SupervisorCred" role="dialog">
+                        <div class="modal-dialog" style="border: 4px solid dodgerblue;">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <div class="login-logo">
+                                        <!-- <a href="../../index2.html"><b>Admin</b>LTE</a> -->
+                                        <img src="/Content/images/ReinSolutionsLogo.jpeg" width="360" />
+                                    </div>
+
+                                    <div class="login-box-body">
+                                        @*<p class="login-box-msg">Sign in to start your session</p>*@
+                                        <div class="form-group has-feedback">
+                                            <input type="email" id="txtTokenNumber" class="form-control" placeholder="Token Number">
+                                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                                        </div>
+                                        @*<div class="form-group has-feedback">
+                                                <input type="password" class="form-control" placeholder="Password">
+                                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                            </div>*@
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <button type="button" id="validTokenNumber" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                                            </div><!-- /.col -->
+                                        </div>
+                                        <br />
+                                        <div>
+                                            <label id="lblInvalidTokenNumner" style="color:red"></label>
+                                        </div>
+
+                                        <!--<div class="social-auth-links text-center">
+                                          <p>- OR -</p>
+                                          <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using Facebook</a>
+                                          <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign in using Google+</a>
+                                        </div> -->
+                                        <!-- /.social-auth-links -->
+                                        @*<a href="#">I forgot my password</a><br>
+                                            <a href="register.html" class="text-center">Register a new membership</a>*@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*kitting popup*@
+                    <button type="button" class="btn btn-primary order_kit_popup" style="display:none;" data-toggle="modal" data-target="#myModal_kit">Add Order</button>
+                    <input type="hidden" id="row_id_kit" />
+                    <input type="hidden" id="row_id_orderNo" />
+                    <div class="modal fade" id="myModal_kit" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Kitting </h4>
+                                </div>
+                                <p id="error_msgParts" style="color:red;font-size:15px;"></p>
+                                <div class="modal-body">
+                                    @*changes*@
+
+                                    <div class="form-horizontal">
+                                        <div class="row">
+                                            <div id="kitting_part" class="shopForm-wrapper">
+
+                                                <div class="col-sm-5">
+                                                    KITTING BARCODE.
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" id="txt_Kitting" class="validate_kitt_serial_no form-control" />
+                                                    <p id="error_msg" style="color:red;font-size:15px;"></p>
+                                                </div>
+
+                                            </div>
+                                            @*added for Part Configuration --ketan*@
+                                            <div class="row">
+                                                <div class="modelCheckboxList col-xs-4" style="float: right;">
+                                                    @*   <label for="SelectAll" style="background-color: lightgoldenrodyellow;width:13rem">Part Number</label>*@
+                                                    <input type="checkbox" id="SelectAll" name="ModelCodes" value="Select All" />
+                                                    <label for="SelectAll" style="width:13rem">Select All</label>
+                                                </div>
+                                                @*<div class="modelCheckboxList col-xs-2">
+                                                        <label style="background-color: lightgoldenrodyellow;width:9.2rem">Quantity</label>
+                                                    </div>
+                                                    <div class="modelCheckboxList col-xs-4">
+                                                        <label style="background-color: lightgoldenrodyellow;">Kitting Zone Name</label>
+                                                    </div>*@
+                                            </div>
+                                            <div class="part_html">
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    <input type="submit" value="Save" id="SavePartNumbers" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary order_geneology_popup" style="display:none;" data-toggle="modal" data-target="#ErrorProofingModal">Add Order</button>
+                    <div class="modal fade" id="ErrorProofingModal" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Geneology Parts</h4>
+                                </div>
+
+                                <div class="modal-body">
+                                    @*changes*@
+
+                                    <div class="form-horizontal">
+
+                                        @Html.ValidationSummary(true)
+
+
+                                        <div class="row">
+
+                                            <div id="geneology_part" class="shopForm-wrapper">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="loading_global_spinner_image" style="display:none;">
+                        @*<img src="~/Content/images/loader2.GIF" />*@
+                        <img src="~/Content/images/gears.gif" />
+                    </div>
+
+                    @*sharad*@
+                    <div class="modal fade" id="myPopup" role="dialog">
+                        <div class="modal-dialog" style="width:60%;margin-top: 19%;">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color:brown">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title" style="text-align:center;font-size:37px;font-weight:bold">Scan CrankCase</h4>
+                                </div>
+                                <div class="modal-body">
+                                    @*<div class="form-horizontal" id="startedOrdersBlock">*@
+                                    <div class="row">
+                                        <lable style="font-size:27px;font-weight:bold">Please Scan Crankcase</lable>
+                                        <input type="text" id="scanSerialNumber" style="font-size:28px;font-weight:bold" maxlength="10" autofocus="autofocus" autocomplete="off" /><br />                                        
+                                    </div>
+                                    <lable style="font-size:30px" id="message"></lable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="barcodeScanPopup" role="dialog">
+                        <div class="modal-dialog" style="width:60%;margin-top: 19%;">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color:brown">
+                                    <button type="button" id="closeCrank" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title" style="text-align:center;font-size:37px;font-weight:bold">Scan Barcode Sticker</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <lable style="font-size:27px;font-weight:bold">Please Scan Barcode Sticker</lable>
+                                    <input type="text" id="scanBarcodeSticker" style="font-size:28px;font-weight:bold" maxlength="10" autofocus="autofocus" autocomplete="off" /><br />
+                                    <lable style="font-size:30px" id="message1"></lable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="modal fade" id="orderStartPopup" role="dialog">
+                        <div class="modal-dialog" style="width:60%;margin-top: 19%;">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color:brown">
+                                    <button type="button" id="closeOrderStart" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title" style="text-align:center;font-size:37px;font-weight:bold">Scan Order Start String</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <lable style="font-size:27px;font-weight:bold">Please Scan Order Start String</lable>
+                                    <input type="text" id="scanOrderStart" style="font-size:28px;font-weight:bold" maxlength="11" autofocus="autofocus" autocomplete="off" /><br />
+                                    <lable style="font-size:30px" id="msgOrderStart"></lable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            @section Scripts {
+
+
+                @Scripts.Render("~/bundles/jqueryval")
+                @Scripts.Render("~/Content/theme/plugins/datatables/js")
+                @Styles.Render("~/Content/theme/plugins/datatables/css")
+                @Scripts.Render("~/Scripts/user_datatable")
+                @Scripts.Render("~/bundles/PrinterScripts")
+                @Styles.Render("~/bundles/PrinterStyles")
+                @Styles.Render("~/fdtheme/spinner_css")
+                @Scripts.Render("~/fdtheme/spinner_js")
+
+
+                <script src="~/Scripts/jquery.validate.min.js"></script>
+                <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+                <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+                <script type="text/javascript">
+                            //to chceck is kitting available while submitting ---- ketan
+                            var IsKittingAvailable = '';
+                            var Model_Code = '';
+                        var OrderID = '';
+
+
+
+
+                            function clearMessage() {
+                                if ($("#order-message-block").html() != "")
+                                    $("#order-message-block").slideUp(700); $('#order-message-block').html("");
+                                $('#order-message-block').removeClass('bg-error').removeClass('bg-correct').removeClass('bg-alert'); $("#order-message-block").slideDown(700);
+                            }
+                            function StartedOrdersLoadBegin() {
+                                @*$("#showStartedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");*@
+                            }
+                            function StartedOrdersLoadComplete() {
+                            }
+                            function ReleasedOrdersLoadBegin() {
+                                $("#showReleasedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                            }
+                            function ReleasedOrdersLoadComplete() {
+                            }
+                            function SpareOrdersLoadBegin() {
+                                @*$("#showSpareOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");*@
+                            }
+                            function SpareOrdersLoadComplete() {
+                            }
+                            function Loadingajax() {
+                                $('#myModal').modal();
+                                $("#releasedOrdersBody").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                            }
+                            //setInterval(function () {
+                            //    $(".start_orders").click();
+                            //}, 5000);
+
+                        $(document).ready(function () {
+                            $('#lblTotal').html(@ViewBag.ToTal);
+                            $('#lblBalance').html(@ViewBag.Balance);
+                            $('#lblCompleted').html(@ViewBag.Completed);
+                            $('#lblCurrentEngineModel').html(@ViewBag.CurrentModel);
+                            //$('#scanSerialNumber').trigger('focus');
+
+                                $("#btn_refresh").click(function (e) {
+                                    loadShopOrderList();
+                                    loadShopStartedList();
+                                    //loadSpareOrderList();
+                                    getTopOrderDetail();
+                            });
+
+                            var stationId = $('hdnStationId').val();
+                            if (stationId == 39) {
+                                setInterval(IsEngineNumberMarked, 10000);
+                            }
+                            //$("#closeCrank").click(function (e) {
+                            //
+                            //    setTimeout(function () {
+                            //        $('#order-message-block').slideUp("slow");
+                            //    }, 5000);
+                            //});
+                                //sandip
+                                $("#showReleasedOrderDetail").on("click", ".start_orders", function (e) {
+
+                                  //  $('#order-message-block').html("Invalid Serial Number Please Check Serial Number.....!");
+
+                                    $("#hdnOrderListRowId").val($(this).attr("id"));
+                                    var rowOrdeType = $(this).data("orderType");
+                                    var rowId = $(this).data("order-rowid");
+                                    var srno = $(this).data("orderno");
+                                    $('#row_id_kit').val(rowId);
+                                    $('#row_id_orderNo').val(srno);
+                                    var orderType = rowOrdeType.trim();
+
+                                    if (rowOrdeType.trim().length > 0) {
+                                        $.getJSON("/OrderStart/IsAuthorizeBySupervisor", { orderType: orderType }, function (result) {
+                                            if (result != null) {
+                                                if (result.status == true) {
+                                                    $('#lblInvalidTokenNumner').text('');
+                                                    $(".order_Supervisor_cred").trigger("click");
+                                                }
+                                                else {
+                                                    //var rowId = $(this).data("order-rowid");
+                                                    $('#row_id_kit').val(rowId);
+
+                                                    var stationId = $("#hdnStationId").val();
+                                                    var url = "/OrderStart/isWorkstationCompleted";
+                                                    //ajaxpack.getAjaxRequest(url, "serial_number=" + serial_number + "&Shop_Id=" + shopId, isreprintOrderStart, "json");
+                                                    $.getJSON(url, { stationId: stationId }, function (data) {
+
+                                                        //if (data == true) {
+                                                        //    showGeneologyPopup();
+                                                        //}
+                                                        //else {
+                                                            //$('#scanSerialNumber').val("");
+                                                            //$('#scanSerialNumber').focus();
+
+                                                            //if (stationId == 39) {
+                                                            //    checkCrankCaseScan();
+                                                            //}
+                                                            //else
+                                                        if (data == true) {
+                                                            order_Start();
+                                                        }
+                                                        else {
+                                                            $('#order-message-block').html("All Workstations are not OK for previous order.....!");
+                                                            $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                                            $('#order-message-block').css("display", "block");
+                                                        }
+
+                                                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                                                        location.reload();
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+
+
+
+                                    //else if ($('#hdnIsKitting').val() == "1") {
+                                    //    var rowId = $(this).data("order-rowid");
+                                    //    $('#row_id_kit').val(rowId);
+                                    //    // alert($('#row_id_kit').val());
+                                    //    $(".order_kit_popup").trigger("click");
+                                    //    //row_id_kit
+
+                                    //    //to Show part configure in bom item and Kiiting zone ---Ketan
+                                    //    var tr = $(this).parent().parent().find('td');
+                                    //    var ModelCode = tr[1].innerText;
+                                    //    Model_Code = tr[1].innerText;
+                                    //    OrderID = tr[0].innerText;
+                                    //    if (ModelCode != null) {
+                                    //        $.getJSON("/OrderStart/GetPartConfiguredInBOMItemAndKittingZone", { ModelCode: ModelCode }, function (data) {
+                                    //            if (data != null) {
+                                    //                if (data.length > 0) {
+                                    //                    //$('#ModalPart').modal('show');
+                                    //                    $('#error_msgParts').html('');
+                                    //                    var res = "";
+                                    //                    res = '<div class="modelCheckboxList_q col-xs-8">';
+                                    //                    res = res + '<label for="Part_No" style="background-color: lightgoldenrodyellow">Part Number</label></div>'
+                                    //                    res = res + '<div class="modelCheckboxList_q col-xs-4"><label style="background-color: lightgoldenrodyellow;">Quantity</label></div>'
+                                    //                    //res = res + '<div class="modelCheckboxList col-xs-4"><label style="background-color: lightgoldenrodyellow;">Kitting Zone Name</label></div>'
+                                    //                    for (var i = 0; i < data.length; i++) {
+                                    //                        res = res + '<div class="modelCheckboxList col-xs-8 partNoDiv"><input type="checkbox" id="' + data[i].Part_No + '" name="ModelCodes" value="' + data[i].Part_No + '" title="' + data[i].Quantity + '"/><label for="' + data[i].Part_No + '">' + data[i].Part_No + '</label></div>';
+                                    //                        res = res + '<div class="modelCheckboxList_q col-xs-4"><label for="' + data[i].Quantity + '">' + data[i].Quantity + '</label></div>';
+                                    //                        //res = res + '<div class="modelCheckboxList col-xs-4"><label for="' + data[i].kittingZoneName + '">' + data[i].kittingZoneName + '</label></div>';
+
+                                    //                    }
+                                    //                    //res = res + '</div>'
+                                    //                    $(".part_html").html(res);
+                                    //                    $(".loading_global_spinner_image").hide();
+                                    //                    SelectAllPartNo();
+                                    //                    document.getElementById("SelectAll").checked = true;
+
+                                    //                }
+                                    //                else {
+                                    //                    $('#error_msgParts').html('No Parts Available in BOM Item or In Kitting Part Zone!...');
+                                    //                }
+                                    //            }
+                                    //            else {
+                                    //                $(".loading_global_spinner_image").hide();
+                                    //                $('#error_msgParts').html('No Parts Available in BOM Item or In Kitting Part Zone!...');
+                                    //                //$("#message-block").addClass('bg-error');
+                                    //                //alert("Line is Stop Order is Not Started !");
+                                    //            }
+
+                                    //        }).fail(function (jqXHR, textStatus, errorThrown) {
+                                    //            location.reload();
+                                    //        });
+                                    //    }
+                                    //}
+                                    //else {
+
+                                    //}
+                                });
+
+
+                                //Reprint Serial Number
+                                $("#btnStart_reprint").click(function (e) {
+
+                                    var serial_number = document.getElementById("Serial_Number1").value;
+                                    if (serial_number) {
+                                        var url = "/OrderStart/isReprint";
+                                        //ajaxpack.getAjaxRequest(url, "serial_number=" + serial_number + "&Shop_Id=" + shopId, isreprintOrderStart, "json");
+                                        $.getJSON(url, { serial_number: serial_number }, function (data) {
+
+                                            if (data.status == true) {
+                                                //printBuildSheet(data.orderNo);
+                                                document.getElementById("Serial_Number1").value = "";
+                                                document.getElementById("Serial_Number1").focus();
+                                            }
+                                            else {
+                                                $('#order-message-block').html("Invalid Serial Number Please Check Serial Number.....!");
+                                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+                                                document.getElementById("Serial_Number1").value = "";
+                                                document.getElementById("Serial_Number1").focus();
+                                            }
+                                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                                            location.reload();
+                                        });
+                                    }
+                                    else {
+                                        $('#order-message-block').html("Please Enter Serial Number.....!");
+                                        $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                                        $(".loading_global_spinner_image").hide();
+                                    }
+                                });
+
+                                $("#showReleasedOrderDetail").on("click", ".hold_orders", function (e) {
+                                    //alert($(this).attr("id"));
+                                    var rowid = $(this).data("order-rowid");
+                                    var url = "/ManageOrders/changeOrderStateLinewise";
+
+                                    $.getJSON(url, { status: "Hold", rowID: rowid }, function (data) {
+                                        if (data != null) {
+                                            if (data == true) {
+                                                loadShopOrderList();
+                                                $('#order-message-block').html("Order holded Successfully.....!");
+                                                $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                            }
+                                            else {
+                                                $('#order-message-block').html("Order hold Not allowed.....!");
+                                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                            }
+                                        }
+                                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                                        location.reload();
+                                    });
+                                });
+
+                                $('#order_start').dataTable();
+
+                            setTimeout(function (e) {
+                                    //getTopOrderDetail();
+                                    loadShopOrderList();
+                                    loadShopStartedList();
+                                    getTopOrderDetail();
+                                    //loadSpareOrderList();
+                            }, 500);
+
+                    });// DOCUMENT READY STATE END
+
+
+                     // Auto refresh page
+                    //$(document).ajaxStop(function()
+                    //{
+                    //        window.location.reload();
+                    //    });
+                    //setTimeout(function () {
+                    //    location.reload();
+                    //}, 10000);
+
+                    // Auto refresh page
+                            //setTimeout(function () {
+                                //cache_clear();
+                             //window.location=window.location;
+                            //    window.location.reload(true);
+                            //},10000);
+
+                    //$("#btnCrankCase").on('pageshow', '#myPopup', function () {
+
+                    //    $('#scanSerialNumber').trigger('focus');
+                    //});
+
+
+                                //setTimeout(function () {
+                                //    $('#order-message-block').slideUp('fast');
+                                //}, 300);
+                    //  $(document).on('click', '#btnCrankCase', function () {
+                   //$("#btnCrankCase").on('click',function (event) {
+                   //     s
+                   //     event.preventDefault();
+                   //     $('#myPopup').modal('show');
+                   //     $('#scanSerialNumber').val("");
+                   //     $('#scanSerialNumber').focus();
+                   //     return false;
+                  //  }).trigger('click');
+
+                            function showGeneologyPopup() {
+
+                                var rowId = $("#hdnOrderListRowId").val();
+                                if (rowId) {
+                                    //alert("inside geneology");
+                                    // get error proofing and geneology part
+                                    var stationId = $("#hdnStationId").val();
+                                    var modelCode = $("#hdnModelCode").val();
+                                    var url = "/OrderStart/getErrorProofingGeneologyPartsByModelCode";
+
+                                    ajaxpack.postAjaxRequest(url, "modelCode=" + modelCode + "&stationId=" + stationId, showGeneologyParts, "json");
+
+                                }
+                                else {
+                                    $('#order-message-block').html("No orders are available to start.....!");
+                                    $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                    $("html, body").animate({ scrollTop: 0 }, "slow");
+
+                                }
+                            }
+
+                            function showGeneologyParts() {
+                                var myajax = ajaxpack.ajaxobj
+                                var myfiletype = ajaxpack.filetype
+                                if (myajax.readyState == 4) {
+                                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                                        var jsonRes = $.parseJSON(myajax.responseText);
+                                        var res = "";
+                                        res = res + "<table class='table'>";
+                                        for (var i = 0; i < jsonRes.length; i++) {
+                                            res = res + "<tr>";
+                                            res = res + "<td id='geneology_part_" + i + "'>";
+                                            res = res + "" + jsonRes[i].Part_No;
+                                            res = res + "</td>";
+
+                                            res = res + "<td>";
+                                            res = res + "<input type='text' id='part_" + i + "' class='validate_serial_no form-control'>";
+
+                                            res = res += "<label id='part_error_" + i + "' class='part_error'></label>";
+                                            res = res + "</td>";
+                                            res = res + "<td>";
+                                            res = res + "<div class='part_validation_" + i + " part_validation'></div>";
+                                            res = res + "</td>";
+                                            res = res + "</tr>";
+                                        }
+                                        res = res + "<tr>";
+                                        res = res + "<td></td>";
+                                        res = res + "<td>";
+
+                                        res = res + "<input type='button' class='btn btn-primary' id='validate_geneology_parts' value='Validate' />";
+                                        res = res + "</td>";
+                                        res = res + "</tr>";
+
+                                        res = res + "</table>";
+                                        $("#geneology_part").html(res);
+                                        $(".order_geneology_popup").trigger("click");
+
+                                        // set total geneology parts
+                                        $("#hdnTotalGeneologyParts").val(jsonRes.length);
+
+                                    }
+                                }
+                            }
+
+                            $("#geneology_part").on("keydown", ".validate_serial_no", function (e) {
+
+                                //$.tabNext();
+                                if (event.keyCode === 13) {
+
+                                    // $(this).next().focus();
+                                    var id = $(this).attr("id");
+                                    id = id.split("_")[1];
+                                    console.log(id);
+                                    id = parseInt(id) + 1;
+                                    $("input#part_" + id).focus().select();
+
+
+                                    var totalGeneologyParts = $("#hdnTotalGeneologyParts").val();
+                                    if (totalGeneologyParts == (id)) {
+                                        // process to submit the form
+                                        $("#validate_geneology_parts").trigger("click");
+                                    }
+
+                                }
+                        });
+
+                            $("#geneology_part").on("click", "#validate_geneology_parts", function (e) {
+                                var count = $("#hdnTotalGeneologyParts").val();
+                                var partNo = new Array();
+                                var serialNo = new Array();
+                                var isValid = true;
+
+                                $(".part_error").html("");
+                                $(".part_validation").html("");
+                                for (var i = 0; i < count; i++) {
+                                    partNo[i] = $("#geneology_part_" + i).html();
+
+                                    if ($("#part_" + i).val() == "" || $("#part_" + i).val() == null) {
+                                        $("#part_error_" + i).html("Required");
+                                        isValid = false;
+                                    }
+                                    else {
+                                        serialNo[i] = $("#part_" + i).val();
+                                    }
+
+                                }
+
+                                if (isValid) {
+
+                                    // process to check the serial in quality ok order
+                                    var url = "/OrderStart/validateQualityOKOrder";
+                                    ajaxpack.getAjaxRequest(url, "partNo=" + partNo + "&serialNo=" + serialNo + "&modelCode=" + $("#hdnModelCode").val(), showGeneologyPartsValidation, "json");
+                                }
+                            });
+
+
+
+                            function showGeneologyPartsValidation() {
+                                var myajax = ajaxpack.ajaxobj
+                                var myfiletype = ajaxpack.filetype
+                                if (myajax.readyState == 4) {
+
+                                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                                        var jsonRes = $.parseJSON(myajax.responseText);
+
+                                        var isValid = true;
+                                        for (var i = 0; i < jsonRes.length; i++) {
+
+                                            if (jsonRes[i].isOK == false) {
+                                                // process to show error of invalid vehicles
+                                                $(".part_validation_" + i).html("Invalid Serial Number");
+                                                $(".part_validation_" + i).addClass("bg-info");
+
+                                                isValid = false;
+                                            }
+                                        }
+
+                                        if (isValid) {
+                                            // process to start the order
+                                            order_Start();
+                                            loadShopOrderList();
+                                            //getTopOrderDetail();
+                                            getTopOrderDetail();
+                                            loadShopStartedList();
+                                            closeErrorProofingPopup();
+                                        }
+                                    }
+                                }
+                            }
+
+                            function loadShopOrderList() {
+                                $("#showReleaseOrderList").submit();
+                            }
+
+                            function loadShopStartedList() {
+                                $("#showStartedOrderList").submit();
+                            }
+
+                            function loadSpareOrderList() {
+                                $("#showSpareOrderList").submit();
+                            }
+                            //-----------------------------------------------------------------//
+
+                    //sharad
+                    function OpenCrackcasepopup() {
+
+
+                        $('#myPopup').on('shown.bs.modal', function () {
+                            $(this).find('#scanSerialNumber').val("");
+                            $(this).find('#scanSerialNumber').trigger('focus');
+                            $('#message').html("");
+                            $('#message1').html("");
+                            $('#msgOrderStart').html("");
+                        });
+                        clearMessage();
+                    }
+
+                    function BarcodeScanPopup() {
+
+                        clearMessage();
+                        $('#barcodeScanPopup').on('shown.bs.modal', function () {
+                            $(this).find('#scanBarcodeSticker').val("");
+                            $(this).find('#scanBarcodeSticker').trigger('focus');
+                            $('#message1').html("");
+                            $('#message').html("");
+                            $('#msgOrderStart').html("");
+                        });
+                    }
+
+                    function OrderStartPopup() {
+
+                        clearMessage();
+                        $('#orderStartPopup').on('shown.bs.modal', function () {
+                            $(this).find('#scanOrderStart').val("");
+                            $(this).find('#scanOrderStart').trigger('focus');
+                            $('#msgOrderStart').html("");
+                            $('#message').html("");
+                            $('#message1').html("");
+                        });
+                    }
+
+
+                    function checkCrankCaseScan() {
+
+                        var url = "/OrderStart/checkCrankCaseScans";
+                        $.getJSON(url, function (data) {
+
+                            if (data.Status == true) {
+                                order_Start();
+                                //$('message').html(data.result);
+                            }
+                            else {
+                                $('#order-message-block').html("Previous Engine Serial Number "  + data.Message + " is not marked.....!");
+                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                             //   $('#order-message-block').css("");
+                                $('#order-message-block').slideDown(300).delay(4000).slideUp(300);
+                            }
+                        })
+                    }
+
+                    $('#scanSerialNumber').on("keypress", function (e) {
+
+                        var key = e.which;
+                        if (key == 13) {
+
+                            var CrankCaseNumber = $('#scanSerialNumber').val();
+
+                            var url = "/OrderStart/GetVariant";
+                            $.getJSON(url, { CrankCaseNumber: CrankCaseNumber }, function (data) {
+
+                                if (data.Status == true) {
+                                    $('#order-message-block').html("Crankcase block is OK.....!");
+                                    $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                    $('#myPopup').modal('hide');
+
+                                    $('#barcodeScanPopup').modal('show');
+                                    $('#barcodeScanPopup').on('shown.bs.modal', function () {
+                                        $(this).find('#scanBarcodeSticker').val("");
+                                        $(this).find('#scanBarcodeSticker').trigger('focus');
+                                        $('#msgOrderStart').html("");
+                                        $('#message').html("");
+                                        $('#message1').html("");
+                                    });
+
+                                    $('#order-message-block').slideDown(300).delay(5000).slideUp(300);
+                                }
+                                else {
+                                    if (data.Message != "") {
+                                        $('#message').html(data.Message);
+                                        $('#message').css("color", "Red");
+                                    }
+                                    else {
+                                        $('#message').html("Scanned crankcase <label id='lbl' style='font-size:40px;font-weight:700'>" + CrankCaseNumber + "</label>  number is wrong");
+                                        $('#message').css("color", "Red");
+                                    }
+
+                                  //  $('#message').slideDown(300).delay(4000).slideUp(300);
+                                    $('#scanSerialNumber').val("");
+                                    $('#scanSerialNumber').focus();
+                                }
+                            })
+                                }
+                    });
+
+                    $('#scanBarcodeSticker').on("keypress", function (e) {
+
+                        var key = e.which;
+                        if (key == 13) {
+
+
+                            var SerialNumber = $('#scanBarcodeSticker').val();
+                            var url = "/OrderStart/ScanBarcode";
+                            $.getJSON(url, { SerialNumber: SerialNumber }, function (data) {
+
+                                if (data.Status == true)
+                                {
+
+                                    $('#scanBarcodeSticker').val("");
+                                    $('#scanBarcodeSticker').focus();
+                                    $('#order-message-block').html("Barcode scanned .....!");
+                                    $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                    $('#barcodeScanPopup').modal('hide');
+
+                                    //$('#orderStartPopup').modal('show');
+                                    //$('#orderStartPopup').on('shown.bs.modal', function () {
+                                    //    $(this).find('#scanOrderStart').val("");
+
+                                    //    $(this).find('#scanOrderStart').trigger('focus');
+                                    //    $('#msgOrderStart').html("");
+                                    //    $('#message').html("");
+                                    //    $('#message1').html("");
+                                    //});
+
+                                    $('#order-message-block').slideDown(300).delay(10000).slideUp(300);
+
+                                }
+                                else
+                                {
+                                    if (data.Message != "") {
+                                       // var msg = data.Message
+                                        $('#message1').html("Engine S.NO <label id='lbl' style='font-size:40px;font-weight:700'>" + SerialNumber + "</label>  already scanned");
+                                        $('#message1').css("color", "Red");
+                                    }
+                                    else {
+                                        $('#scanBarcodeSticker').val("");
+                                        $('#scanBarcodeSticker').focus();
+                                        $('#message1').html("Engine S.NO <label id='lbl' style='font-size:40px;font-weight:700'>" + SerialNumber + "</label>  is wrong");
+                                        $('#message1').css("color", "Red");
+                                    }
+                                    $('#scanBarcodeSticker').val("");
+                                    $('#scanBarcodeSticker').focus();
+                                    $('#order-message-block').slideDown(300).delay(5000).slideUp(200);
+                                }
+
+                            })
+                        }
+                    });
+
+                    $('#scanOrderStart').on("keypress", function (e) {
+                        var key = e.which;
+                        if (key == 13) {
+                            var ScanString = $('#scanOrderStart').val();
+                            var url = "/OrderStart/GetMarkedSerialNo";
+                            $.getJSON(url, { ScanString: ScanString }, function (data) {
+
+                                if (data.Status == true) {
+                                    $('#orderStartPopup').modal('hide');
+                                $(".start_orders").trigger("click");
+                            }
+                                else {
+                                    $('#scanOrderStart').val("");
+                                    $('#scanOrderStart').focus();
+                                    $('#msgOrderStart').css("color", "Red");
+                                    if (data.Message == "Invalid") {
+                                        $('#msgOrderStart').html("Invalid String <label id='lbl' style='font-size:40px;font-weight:700'>" + ScanString + "</label>  is scanned");
+                                    }
+                                    else {
+                                        $('#msgOrderStart').html("Previous Engine S.NO <label id='lbl' style='font-size:40px;font-weight:700'>" + data.Message + "</label>  is not marked");
+                                    }
+
+                            }
+                        })
+                        }
+                    });
+
+                    function IsEngineNumberMarked() {
+                        var url = "/OrderStart/IsEngineNumberMark";
+                        $.getJSON(url, function (data) {
+
+                            if (data.Status == true) {
+                                $('#myPopup').modal('hide');
+                                $('#barcodeScanPopup').modal('hide');
+
+                                $('#orderStartPopup').modal('show');
+                                    $('#orderStartPopup').on('shown.bs.modal', function () {
+                                        $(this).find('#scanOrderStart').val("");
+                                        $(this).find('#scanOrderStart').trigger('focus');
+                                        $('#msgOrderStart').html("");
+                                        $('#message').html("");
+                                        $('#message1').html("");
+                                    });
+                            }
+                            else {
+
+                            }
+                        })
+                    }
+
+                            function order_Start() {
+
+                                var kitting_Barcode = $('#txt_Kitting').val();
+                                var rowId = $('#row_id_kit').val();
+                                var serialNo = $('#row_id_orderNo').val();
+                                clearMessage();
+                                if (rowId) {
+                                    var url = "/OrderStart/StartOrder";
+
+                                    $(".loading_global_spinner_image").show();
+                                    //ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "&plantId=" + plantId + "&shopId=" + shopId + "&lineId=" + lineId + "&stationId=" + stationId + "&orderno=" + orderNo + "&modelcode=" + modelCode + "&rsn=" + RSN, showOrderStartDetail, "json");
+                                    $.getJSON(url, { rowId: rowId, kitting_Barcode: kitting_Barcode }, function (data) {
+
+                                        if (data != null) {
+                                            if (data.status == true) {
+                                                //sharad
+
+                                                $('#scanSerialNumber').val("");
+                                                $('#scanSerialNumber').focus();
+                                                var stationId = $("#hdnStationId").val();
+                                                if (stationId == 39) {
+                                                    $('#myPopup').modal('show');
+                                                }
+                                                $('#scanSerialNumber').val("");
+                                                $('#scanSerialNumber').focus();
+                                                // added by ketan to save part order details    Date 12-jun-17
+                                                if (IsKittingAvailable == true) {
+                                                    SavePartsOrderDetails();
+                                                }
+                                                $('#lblTotal').html(data.Total);
+                                                $('#lblBalance').html(data.Balance);
+                                                $('#lblCompleted').html(data.Completed);
+                                                $('#lblCurrentEngineModel').html(data.CurrentModel);
+                                                $('#lblCurrentEngineNo').html(data.CurrentEngine);
+
+                                                $('#order-message-block').html("Order is Started.....!");
+                                                $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                                $(".loading_global_spinner_image").hide();
+
+
+                                                $('#order-message-block').slideDown(300).delay(4000).slideUp(300);
+                                                $('#error_msg').html('');
+                                                $('#txt_Kitting').val('');
+                                                closepopup();
+                                                debugger;
+                                                var serialNo=data.CurrentEngine;
+                                                var OrderNo=data.OrderNo;
+                                                var Modelcode = data.ModelCode;
+
+                                                //GenerateXML
+
+
+                                                //window.location.href = '/WorkInstruction/GetData?OrderNo=' + OrderNo + '&ModelCode=' + Modelcode + '&SerialNo=' + serialNo;
+                                                $.getJSON('/OrderStart/GenerateXML',
+                                                    { OrderNo: OrderNo, Modelcode: Modelcode, serialNo: serialNo, typename:"build"},
+                                                    function (data) {
+                                                        if (data.status == true) {
+                                                          
+                                                        }
+                                                        else if (data.status == false) {
+                                                           
+                                                        }
+                                                    });
+
+
+                                                //window.location.href = '/WorkInstruction/GetData?OrderNo=' + OrderNo + '&ModelCode=' + Modelcode + '&SerialNo=' + serialNo;
+                                                //$.getJSON('/WorkInstruction/saveinQueue',
+                                                //    { OrderNo: OrderNo, ModelCode: ModelCode, SerialNo: SerialNo},
+                                                //    function (data) {
+                                                //        if (data.status == true) {
+                                                //            $('#myPopup').on('shown.bs.modal', function () {
+                                                //                $(this).find('#scanSerialNumber').val("");
+                                                //                $(this).find('#scanSerialNumber').trigger('focus');
+                                                //                $('#message').html("");
+                                                //                $('#message1').html("");
+                                                //                $('#msgOrderStart').html("");
+                                                //            });
+                                                //        }
+                                                //        else if (data.status == false) {
+                                                //            $('#order-message-block').html("");
+                                                //            $('#order-message-block').html(data.message);
+                                                //            $('#order-message-block').removeClass('bg-error bg-correct');
+                                                //            $('#order-message-block').addClass('bg-error');
+                                                //        }
+                                                //    });
+                                              
+
+                                                //var a = document.createElement("a");
+                                                //a.href = '/WorkInstruction/GetData?OrderNo=' + data.OrderNo + '&ModelCode=' + data.ModelCode + '&SerialNo=' + data.CurrentEngine;
+                                                //window.open('/WorkInstruction/GetData?OrderNo=' + data.OrderNo + '&ModelCode=' + data.ModelCode + '&SerialNo=' + data.CurrentEngine,'', 'width=1000,height=950');
+                                                //a.click();
+
+                                              
+                                                //printBuildSheet(serialNo);
+                                            }
+                                            else {
+                                                if (data.message != null && data.message != "") {
+                                                    $('#order-message-block').html(data.message);
+                                                }
+                                                else {
+                                                    $('#order-message-block').html(data.kit_message);
+                                                }
+                                                $('#error_msg').html(data.kit_message);
+                                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                                $(".loading_global_spinner_image").hide();
+                                                //$("#message-block").addClass('bg-error');
+                                                //alert("Line is Stop Order is Not Started !");
+                                            }
+                                            //getTopOrderDetail();
+                                            loadShopOrderList();
+                                            loadShopStartedList();
+                                            //getTopOrderDetail();
+                                            //loadSpareOrderList();
+                                        } else {
+                                            $(".loading_global_spinner_image").hide();
+                                            //$("#message-block").addClass('bg-error');
+                                            //alert("Line is Stop Order is Not Started !");
+                                        }
+
+                                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                                        location.reload();
+                                    });
+                                }
+                                else {
+                                    $('#order-message-block').html("No orders are available to start.....!");
+                                    $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                                }
+                                //Checking supervisor login credential
+
+                            }
+                            function printBuildSheet(order_No) {
+
+                                if (order_No) {
+                                    var url = "/OrderStart/BuildSheetPrint";
+                                    //ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "&plantId=" + plantId + "&shopId=" + shopId + "&lineId=" + lineId + "&stationId=" + stationId + "&orderno=" + orderNo + "&modelcode=" + modelCode + "&rsn=" + RSN, showOrderStartDetail, "json");
+                                    $.getJSON(url, { order_No: order_No }, function (data) {
+                                        if (data != null) {
+
+                                            //var req = new XMLHttpRequest();
+                                            //req.open("GET", "App_Data/buildSheet.pdf", true);
+                                            //req.responseType = "blob";
+
+                                            //req.onload = function (event) {
+                                            //var blob = req.response;
+                                            //console.log(blob.size);
+                                            //var link = document.createElement('a');
+                                            //link.href = window.URL.createObjectURL(blob);
+
+                                            ////link.download = data.msg;
+                                            //link.download = data.msg;
+
+                                            //link.click();
+
+
+
+                                            //added by mukesh
+
+                                            //var blob = req.response;
+
+                                            //var downloadUrl = URL.createObjectURL(data.msg);
+
+                                            //alert(data.msg);
+                                            if (data.printStatus == true) {
+                                                var a = document.createElement("a");
+                                                //a.href = data.msg;
+
+                                                a.href = '/OrderStart/DownloadBuildSheet?fileName=' + data.msg;
+                                                a.download = data.fileName;
+
+                                                //'/OrderStart/BuildSheetPrint?fileName=' + data.msg
+                                                //printJS('docs/OrderStart/DownloadBuildSheet?fileName=' + data.msg);
+
+                                                window.open('/OrderStart/DownloadBuildSheet?fileName=' + data.msg, 'newwindow', 'width=1000,height=950');
+
+                                                //document.body.appendChild(a);
+                                                a.click();
+                                                ///
+                                            }
+
+                                            //};
+                                            //window.location.href = data.msg;
+                                            //req.send();
+
+                                        } else {
+                                            $(".loading_global_spinner_image").hide();
+                                            //$("#message-block").addClass('bg-error');
+                                            //alert("Line is Stop Order is Not Started !");
+                                        }
+
+                                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                                        location.reload();
+                                    });
+                                }
+                            }
+                            $("#txt_Kitting").keydown(function () {
+
+                                if (event.keyCode === 13) {
+                                    var kitting_Serialno = $("#txt_Kitting").val();
+                                    if (kitting_Serialno.length > 5) {
+                                        //IsKitAvailabele
+                                        var url = "/OrderStart/IsKitAvailabele";
+                                        $.getJSON(url, { kitting_Barcode: kitting_Serialno }, function (data) {
+                                            if (data != null) {
+
+                                                if (data.msg == true) {
+                                                    IsKittingAvailable = data.msg;  //--ketan
+                                                    $('#error_msg').html('');
+                                                    $('#SavePartNumbers').attr('disabled', false);
+                                                    //closepopup();
+                                                    //order_Start();--- comment by ketan due to add in parts order details..
+                                                }
+                                                else {
+                                                    IsKittingAvailable = data.msg; //--ketan
+                                                    $('#error_msg').html(data.msg);
+                                                    $('#SavePartNumbers').attr('disabled', true);
+                                                    return false;
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    else {
+                                        $('#SavePartNumbers').attr('disabled', true);
+                                        $('#error_msg').html('Invalid Kit BarCode');
+                                        return false;
+                                    }
+
+                                }
+                        });
+
+                    //$('#redirectoShop').on("click", function () {
+                    //    window.location.href = '/WorkInstruction/WorkInstructionSubmission';
+                    //});
+                    
+                            function closepopup() {
+                                $("#myModal_kit .close").trigger("click");
+                            }
+
+                            function closeErrorProofingPopup() {
+                                $("#ErrorProofingModal .close").trigger("click");
+                            }
+
+                            //-----------------------------Kitting parts Code No use in Nashik-----------------------------//
+                            $('#SelectAll').on("click", function () {
+                                var PartNoCheckbox = $('.part_html').children().find('input')
+                                var checked = document.getElementById("SelectAll").checked
+                                if (checked) {
+                                    if (PartNoCheckbox.length > 0) {
+                                        for (var i = 0; i < PartNoCheckbox.length; i++) {
+                                            PartNoCheckbox[i].checked = true;
+                                            $('#SavePartNumbers').removeClass('disabled');
+                                        }
+                                    }
+                                }
+                                else {
+                                    if (PartNoCheckbox.length > 0) {
+                                        for (var i = 0; i < PartNoCheckbox.length; i++) {
+                                            PartNoCheckbox[i].checked = false;
+                                            $('#SavePartNumbers').addClass('disabled', 'disabled');
+                                        }
+                                    }
+                                }
+                            });
+                            //if all part No are checked than select All also checked--------------//
+                            $(document).on('click', '.partNoDiv', function () {
+
+                                var PartNoCheckbox = $('.part_html').children().find('input')
+                                if (PartNoCheckbox.length > 0) {
+                                    for (var i = 0; i < PartNoCheckbox.length; i++) {
+                                        if (PartNoCheckbox[i].checked == true) {
+                                            document.getElementById("SelectAll").checked = true;
+                                            $('#SavePartNumbers').removeClass('disabled');
+                                        }
+                                        else {
+                                            document.getElementById("SelectAll").checked = false;
+                                            $('#SavePartNumbers').addClass('disabled', 'disabled');
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+
+                            $(document).on('click', '#SavePartNumbers', function () {
+
+                                if (IsKittingAvailable == true) {
+                                    $('#error_msg').html('');
+                                    order_Start();
+                                }
+                                else {
+                                    $('#txt_Kitting').focus();
+                                    $('#error_msg').html('Scan kitting Barcode');
+                                }
+                            });
+                            function SelectAllPartNo() {
+                                var PartNoCheckbox = $('.part_html').children().find('input')
+                                if (PartNoCheckbox.length > 0) {
+                                    for (var i = 0; i < PartNoCheckbox.length; i++) {
+                                        PartNoCheckbox[i].checked = true;
+                                    }
+                                }
+
+                            }
+                            //to save order part details                ---ketan Date12-jum-17
+                            function SavePartsOrderDetails() {
+                                if (IsKittingAvailable) {
+                                    var PartNoCheckbox = $('.part_html').children().find('input')
+                                    var dataModal = []
+                                    if (PartNoCheckbox.length > 0) {
+                                        var kitting_Barcode = $('#txt_Kitting').val();
+                                        for (var i = 0; i < PartNoCheckbox.length; i++) {
+                                            if (PartNoCheckbox[i].checked == true) {
+
+                                                dataModal.push({
+                                                    Part_No: PartNoCheckbox[i].value,
+                                                    Quantity: PartNoCheckbox[i].title
+                                                });
+                                            }
+                                        }
+                                        //JSON.stringify(dataModal);
+                                        $.getJSON("/OrderStart/SaveOrderPartsDetails", { dataModel: JSON.stringify(dataModal), barcodeString: kitting_Barcode, Model_Code: Model_Code, OrderID: OrderID }, function (data) {
+                                            if (data != null) {
+                                                if (data.length > 0) {
+                                                    //$('#ModalPart').modal('show');
+
+                                                    $(".loading_global_spinner_image").hide();
+                                                }
+                                            }
+                                            else {
+                                                $(".loading_global_spinner_image").hide();
+                                                //$("#message-block").addClass('bg-error');
+                                                //alert("Line is Stop Order is Not Started !");
+                                            }
+
+                                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                                            location.reload();
+                                        });
+                                    }
+                                }
+
+                            }
+                            //-------------------------------End-----------------------------------//
+
+                            //--------------------Added Code for Nashik Developement-----Ketan------------------------------//
+                            $("#txtTokenNumber").keydown(function () {
+
+                                if (event.keyCode === 13) {
+
+                                    IsValidTokenNumber();
+                                }
+                            });
+                            function IsValidTokenNumber() {
+
+                                var tokenNumber = $("#txtTokenNumber").val();
+                                if (tokenNumber.length > 0) {
+                                    //IsKitAvailabele
+                                    var url = "/OrderStart/IsValidTokenNumber";
+                                    $.getJSON(url, { TokenNumber: tokenNumber }, function (data) {
+                                        if (data != null) {
+
+                                            if (data.status == true) {
+                                                $('#lblInvalidTokenNumner').text(data.msg);
+                                                $("#myModal_SupervisorCred .close").trigger("click");
+                                                order_Start();
+                                            }
+                                            else {
+                                                $('#lblInvalidTokenNumner').text(data.msg);
+                                                return false;
+                                            }
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $('#lblInvalidTokenNumner').html('Please Enter Token Number');
+                                    return false;
+                                }
+                            }
+                            $("#showSpareOrderDetail").on("click", ".start_orders", function (e) {
+
+                                var rowOrdeType = $(this).data("orderType");
+                                var rowId = $(this).data("order-rowid");
+                                $('#row_id_kit').val(rowId);
+                                var orderType = "Spare";
+                                if (rowOrdeType.trim().toLowerCase() == orderType.toLowerCase()) {
+                                    if (rowId) {
+                                        var url = "/OrderStart/StartSpareOrder";
+                                        $(".loading_global_spinner_image").show();
+                                        //ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "&plantId=" + plantId + "&shopId=" + shopId + "&lineId=" + lineId + "&stationId=" + stationId + "&orderno=" + orderNo + "&modelcode=" + modelCode + "&rsn=" + RSN, showOrderStartDetail, "json");
+                                        $.getJSON(url, { rowId: rowId }, function (data) {
+
+                                            if (data != null) {
+                                                if (data.status == true) {
+                                                    $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                                    $('#order-message-block').html("Order is Started.....!");
+
+                                                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                                                    $(".loading_global_spinner_image").hide();
+                                                    $('#error_msg').html('');
+                                                }
+                                                else {
+                                                    if (data.message != null && data.message != "") {
+                                                        $('#order-message-block').html(data.message);
+                                                    }
+                                                    else {
+                                                        $('#order-message-block').html(data.kit_message);
+                                                    }
+                                                    $('#error_msg').html(data.kit_message);
+                                                    $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                                                    $(".loading_global_spinner_image").hide();
+                                                }
+                                                loadShopOrderList();
+                                                loadShopStartedList();
+                                                getTopOrderDetail();
+                                                //loadSpareOrderList();
+                                            } else {
+                                                $(".loading_global_spinner_image").hide();
+                                                //$("#message-block").addClass('bg-error');
+                                                //alert("Line is Stop Order is Not Started !");
+                                            }
+                                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                                            location.reload();
+                                        });
+                                    }
+                                    else {
+                                        $('#order-message-block').html("No orders are available to start.....!");
+                                        $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                                    }
+                                }
+
+                            });
+
+                            $("#validTokenNumber").click(function (e) {
+                                IsValidTokenNumber();
+                            });
+
+
+                            function getTopOrderDetail() {
+                                var shopId = $("#hdnShopId").val();
+                                var lineId = $("#hdnLineId").val();
+                                if (shopId) {
+                                    setTimeout(function (e) {
+
+                                        var url = "/OrderStart/GetTopOrderDetails";
+                                        ajaxpack.getAjaxRequest(url, "shopId=" + shopId + "&lineId=" + lineId, showTopOrderDetail, "json");
+                                    }, 1000);
+                                }
+                            }
+
+                            function showTopOrderDetail() {
+                                var myajax = ajaxpack.ajaxobj
+                                var myfiletype = ajaxpack.filetype
+                                if (myajax.readyState == 4) {
+                                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                                        var jsonRes = $.parseJSON(myajax.responseText);
+                                        if (jsonRes.length > 0) {
+                                            $("#hdnPlantOrderNo").val(jsonRes[0].Plant_OrderNo);
+                                            $("#hdnModelCode").val(jsonRes[0].Model_Code);
+
+                                            $("#hdnOrderNo").val(jsonRes[0].Order_No);
+                                            //alert(jsonRes[0].Row_ID);
+                                            //$("#hdnOrderListRowId").val(jsonRes[0].Row_ID);
+                                        }
+                                        else {
+
+                                        }
+                                    }
+                                }
+                            }
+                            //------------------------------------End----------------------------------------------------//
+                </script>
+            }
+        </div>
+    </div><!-- /.box-body -->
+    <br />
+    <br />
+    <!-- </div> /.box -->
+}
+else
+{
+    string mName = TempData["MachineName"].ToString();
+    string[] split = mName.Split(',');
+    for (int i = 0; i < split.Length - 1; i++)
+    {
+        <div class="row">
+
+            <div class="col-lg-12" style="padding-left:20px;padding-right:20px;">
+                <div class="alert alert-danger fade in">
+                    @*<a href="#" class="close" data-dismiss="alert">&times;</a>*@
+                    <strong>Error!</strong> @split[i].ToString() machine clita not done
+                </div>
+            </div>
+        </div>
+    }
+
+}
+
+
+
+ 

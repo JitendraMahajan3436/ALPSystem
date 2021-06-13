@@ -1,0 +1,331 @@
+﻿
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+<style type="text/css">
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        width: 80%;
+        height: 20px
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider,
+    input[type="checkbox"]:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:focus + input[type="hidden"] + .slider,
+    input[type="checkbox"]:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider:before,
+    input[type="checkbox"]:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Opertion*</label>
+
+                @Html.DropDownList("Formula_ID", null,  htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessage("Formula_ID", null, new { @class = "validation_error Formula_ID1" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="display:block" id="Incomer">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>ADD Feeder For Addition *</label>
+
+                @Html.DropDownList("TagIndexadd", null, htmlAttributes: new { @class = "form-control", onchange = "ContainsData()", multiple = "true" })
+                @*@Html.DropDownListFor(model => model.Menu_ID, (IEnumerable<SelectListItem>)ViewBag.Menu_Roles, htmlAttributes: new { @class = "form-control", multiple = "true" })*@
+                @Html.ValidationMessage("TagIndexadd", null, new { @class = "validation_error TagIndexadd1" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label> ADD Feeder For Subtraction</label>
+                @Html.DropDownList("TagIndexSub", null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+                @Html.ValidationMessage("TagIndexSub", null, new { @class = "validation_error TagIndexSub1" })
+                @Html.Hidden("Plant_ID")
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row" style="display:block" id="ShopWise">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Shop*</label>
+
+                @Html.DropDownList("Shop_ID", null, htmlAttributes: new { @class = "form-control", onchange = "ContainsData()" })
+                @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error Shop_ID1" })
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display:block" id="shopGroupwise">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Shop Group*</label>
+
+                @Html.DropDownList("ShopGroup_ID", null, htmlAttributes: new { @class = "form-control", onchange = "ContainsData()" })
+                @Html.ValidationMessage("ShopGroup_ID", null, new { @class = "validation_error ShopGroup_ID1" })
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="box-footer">
+        <div class="form-group">
+            <input type="submit" value="Save" id="btnsubmit" class="btn btn-primary" />
+            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+            <br />
+        </div>
+    </div>
+
+
+
+
+
+
+<div id="testy" style="margin-top:50px"></div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*<script src="~/Content/theme/plugins/select2/select2.full.js"></script>*@
+    @Scripts.Render("~/bundles/Select2scripts")
+    <link href="~/Content/theme/plugins/toastee/css/styles.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/toastee/js/jquery.toastee.0.1.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+            $("#Shop_ID").select2({
+                placeholder: 'Add Shop',
+                allowClear: true,
+                multiple:true
+            });
+            $("#ShopGroup_ID").select2({
+                placeholder: 'Add Shop Group',
+                allowClear: true,
+                multiple: true
+            });
+            $("#TagIndexadd").select2({
+                placeholder: 'Add feedder',
+                allowClear: true,
+            });
+            $("#TagIndexSub").select2({
+                placeholder: 'Assign Feeder',
+                allowClear: true,
+            });
+            $("#ShopWise").hide();
+            $("#shopGroupwise").hide();
+
+
+            $("#Formula_ID").change(function () {
+                var formula = $("#Formula_ID").val();
+                if (formula == 1) {
+                    $("#Incomer").show();
+                    $("#ShopWise").hide();
+                    $("#shopGroupwise").hide();
+                }
+               else if (formula == 2) {
+                    $("#ShopWise").show();
+                    $("#Incomer").hide();
+                    $("#shopGroupwise").hide();
+                }
+                if (formula == 3) {
+                    $("#shopGroupwise").show();
+                    $("#Incomer").hide();
+                    $("#ShopWise").hide();
+                }
+               
+            })
+           
+            $("#btnsubmit").click(function () {
+                debugger;
+                var addTagIndex = $.map($("#TagIndexadd"), function (e) {
+                    return $(e).val();
+                })
+                var subTagIndex = $.map($("#TagIndexSub"), function (e) {
+                    return $(e).val();
+                })
+                var Formula = $("#Formula_ID").val();
+                var Shop = $.map($("#Shop_ID"), function (e) {
+                    return $(e).val();
+                })
+                var ShopGroup = $.map($("#ShopGroup_ID"), function (e) {
+                    return $(e).val();
+                })
+                isValid = true;
+                if (Formula == 1) {
+                    if (addTagIndex == "") {
+                        $('.TagIndexadd1').html("Please select altest one feeder");
+                      /*  $('#TagIndexadd').focus()*/;
+                        isValid = false;
+                    }
+                }
+                else if (Formula == 2) {
+                    if (Shop == "") {
+                        $('.Shop_ID1').html("Please select altest one shop");
+                        $('#Shop_ID').focus();
+                        isValid = false;
+                    }
+                }
+                else if (Formula == 3) {
+                    if (ShopGroup == "") {
+                        $('.ShopGroup_ID1').html("Please select altest one shopgroup");
+                        $('#ShopGroup_ID').focus();
+                        isValid = false;
+                    }
+                }
+
+
+                if (isValid) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Plant_Consume/CheckOpertion",
+                        data: JSON.stringify({ formula: Formula }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            debugger;
+                            if (data.length > 0) {
+                                $('#testy').toastee({
+                                    type: 'error',
+                                    width: '300px',
+                                    height: '300px',
+                                    Top:'30px',
+                                    message: "Allready exist this Opertion",
+                                });
+                                //setTimeout(function () {
+                                //    location.reload();
+                                //}, 5000);
+                            }
+                            else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Plant_Consume/addconsume",
+                                    data: JSON.stringify({ add: addTagIndex, sub: subTagIndex, Shop: Shop, ShopGroup: ShopGroup, formula: Formula }),
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function (data) {
+                                        $('#testy').toastee({
+                                            type: 'success',
+                                            width: '300px',
+                                            height: '100px',
+                                            message: data.Message,
+                                        });
+                                        setTimeout(function () {
+                                            location.reload();
+                                        }, 5000);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                   
+                }
+            });
+            
+
+
+        })
+        function ContainsData() {
+            debugger;
+            var addTagIndex = $.map($("#TagIndexadd"), function (e) {
+                return $(e).val();
+            })
+            var subTagIndex = $.map($("#TagIndexSub"), function (e) {
+                return $(e).val();
+            })
+            var Formula = $("#Formula_ID").val();
+            var Shop = $.map($("#Shop_ID"), function (e) {
+                return $(e).val();
+            })
+            var ShopGroup = $.map($("#ShopGroup_ID"), function (e) {
+                return $(e).val();
+            })
+            isValid = true;
+            if (Formula == 1) {
+                if (addTagIndex != "") {
+                    $('.TagIndexadd1').html("");
+                    $('#TagIndexadd').focus();
+
+                }
+            }
+            else if (Formula == 2) {
+                if (Shop != "") {
+                    $('.Shop_ID1').html("");
+                    $('#Shop_ID').focus();
+
+                }
+            }
+            else if (Formula == 3) {
+                if (ShopGroup != "") {
+                    $('.ShopGroup_ID1').html("");
+                    $('#ShopGroup_ID').focus();
+
+                }
+            }
+        }
+    </script>
+
+
+}
+@section Styles {
+    <link href="~/Content/theme/RoleMgt.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}

@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewBag.Title = "Reading";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+
+
+
+
+
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal" style="height:30%; display:block; margin-left:1%" id="div1">
+
+            @Html.ValidationSummary(true)
+
+            <div class="form-group">
+                <div class="col-md-2 col-sm-2 col-lg-2">
+
+                  
+                        <label> Parameter</label>
+
+                        @*@Html.DropDownList("Parameter_ID",  Enumerable.Empty<SelectListItem>(), htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })*@
+
+                        @Html.DropDownList("Parameter_ID", null, "Select Parameter", new { @class = "form-control select2", @style = "max-width:100%" })
+
+                        <span class="error" id="StartDateId" style="color:red; display:none">Date field is required</span>
+                   
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+
+                   
+                        <label> From Date</label>
+                        @Html.TextBox("FromDateTrend", null, new { @class = "fromDate1 form-control fromdate1", @style = "max-width:100%", @autocomplete = "off" })
+                        <span class="error" id="FromDateTrend" style="color:red; display:none">Date field is required</span>
+                   
+                </div>
+                <div class="col-md-2 col-sm-2 col-lg-2">
+                    
+                        <label>To Date</label>
+                        @Html.TextBox("ToDateTrend", null, new { @class = "ToDate1 form-control todate1", @style = "max-width:100%", @autocomplete = "off" })
+                        <span class="error" id="EndDateId" style="color:red; display:none">Date field is required</span>
+                   
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Shop", " Shop", htmlAttributes: new { @class = "" })
+                    @*@Html.DropDownList("Shop_ID", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "true" })*@
+                    @Html.DropDownList("Shop_ID", null, "ALL", htmlAttributes: new { @class = "form-control select2", @autoComplete = "off", @readOnly = "true" })
+                    @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+                    @Html.Hidden("ShiftTime")
+                </div>
+
+                <div class="col-md-3" style="margin-top: 26px">
+                    <label></label>
+                    <input id="GenerateReport" type="button" value="Generate Log" class="btn btn-primary" />
+                    @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))"><i class="fa fa-fw fa-arrow-circle-up" id="btntoggle" style="font-size:30px"> </i></a></center>
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-sm-12">
+                    <iframe width="100%" height="350px" id="ContentFrame" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @*@Scripts.Render("~/bundles/QualityReportManagement_file")*@
+
+    }
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    @*@section Styles {
+
+            @Styles.Render("~/Content/Select2styles")
+
+        }*@
+</div>
+
+<script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.min.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.full.min.js"></script>
+<link href="~/Content/theme/plugins/DateTimePicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+<link href="~/Content/theme/plugins/timepicker1/timepickerCSS.css" rel="stylesheet" />
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+        $(".fromDate1").datetimepicker(
+            {
+                format: 'm/d/y H:i',
+                defaultDate: new Date(),
+                timepickerScrollbar: true,
+                hours12: false
+            });
+        $(".ToDate1").datetimepicker(
+            {
+                format: 'm/d/Y H:i',
+                defaultDate: new Date(),
+                timepickerScrollbar: true,
+                hours12: false
+            });
+
+        var date1 = new Date();
+        var toDate = new Date();
+        toDate = moment(toDate).format("MM/DD/YY HH:mm");
+
+
+        var time = moment().toDate();  // This will return a copy of the Date that the moment uses
+
+        time.setHours(06);
+        time.setMinutes(30);
+        time.setSeconds(0);
+        time.setMilliseconds(0);
+        date1 = moment(time).format("MM/DD/YY HH:mm");
+
+        $('#FromDateTrend').val(date1);
+        $('#ToDateTrend').val(toDate);
+        $("#siderbarmenu").click();
+
+
+        $("#GenerateReport").click(function (e) {
+            debugger;
+            var fromDate1 = $(".fromDate1").val();
+            var ToDate1 = $(".ToDate1").val();
+           
+            var shop = document.getElementById("Shop_ID").value;
+            var Parameter = document.getElementById("Parameter_ID").value;
+            if (fromDate1 == "") {
+                alert("Please select Start Date");
+                return;
+            }
+            if (ToDate1 == "") {
+                alert("Please select End Date");
+                return;
+            }
+            if (shop == "") {
+                shop = 0;
+            }
+            if (Parameter == "") {
+                alert("Please select Parameter");
+                return;
+            }
+            if (fromDate1 > ToDate1) {
+                alert("From Date Should Be Less Than To Date");
+                return;
+            }
+            if (fromDate1 != "" && ToDate1 != "" && Parameter != "") {
+
+                // MVML
+                ////$('#ContentFrame').attr('src', 'http://mvml-drnrs/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2fmeterreadingreportnew&rs:Command=Render=' + StartDate + '&EndDate=' + EndDate);
+
+
+             
+
+                $('#ContentFrame').attr('src', 'http://mvml-drnrs/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2fmeterreadingreportnew&parameter_ID=' + Parameter + '&From_Date=' + fromDate1 + '&End_Date=' + ToDate1 + '&Shop_Id=' + shop);
+
+
+                //Haridwar
+
+                // http://mmhrddrnrs/ReportServer?%2fEnergy+Management+System&rs:Command=ListChildren
+
+                // $('#ContentFrame').attr('src', 'http://mmhrddrnrs/ReportServer/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&FromDate=' + StartDate + '&Shop_ID=' + shop);
+
+
+                // KND
+                //http://mmknddronars/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&rs:Command=Render
+
+                //$('#ContentFrame').attr('src', 'http://mmknddronars/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&FromDate=' + StartDate + '&Shop_ID=' + shop);
+
+                // Nashik
+                //http://mmnsk1drsv/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&rs:Command=Render
+                // $('#ContentFrame').attr('src', 'http://mmnsk1drsv/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&FromDate=' + StartDate + '&Shop_ID=' + shop);
+
+
+                // IgatPuri
+                //http://mmigtdronarept/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&rs:Command=Render
+
+                //$('#ContentFrame').attr('src', 'http://mmigtdronarept/DronaRep/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&FromDate=' + StartDate + '&Shop_ID=' + shop);
+
+
+
+            }
+
+        });
+    });
+
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+            $("#btntoggle").removeClass("fa fa-fw fa-arrow-circle-up");
+            $("#btntoggle").addClass("fa fa-fw fa-arrow-circle-down");
+
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            $("#btntoggle").removeClass("fa fa-fw fa-arrow-circle-down");
+            $("#btntoggle").addClass("fa fa-fw fa-arrow-circle-up");
+        }
+    }
+</script>

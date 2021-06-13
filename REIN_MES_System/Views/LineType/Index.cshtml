@@ -1,0 +1,100 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Line_Types>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type_Name)
+            </th>
+            <th>
+                @Html.DisplayName("Description")
+            </th>
+            <th>
+                @Html.DisplayName(ResourcePlant.Plant_Label_Plant_Name)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Is_Transfered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Purgeable)
+                </th>*@
+            <th>
+                @Html.DisplayName(ResourceGlobal.Inserted_Date)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>*@
+
+            <th>
+                @Html.DisplayName(ResourceGlobal.Inserted_User_Id)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+                </th>*@
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type_Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Is_Transfered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inserted_Date)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Updated_Date)
+                    </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+                    </td>*@
+                <td>
+                    <a href="@Url.Action("Edit", "LineType", new { id = item.Line_Type_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+                    <a href="@Url.Action("Details", "LineType", new { id = item.Line_Type_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a> 
+                    <a href="@Url.Action("Delete", "LineType", new { id = item.Line_Type_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+
+                    @*@Html.ActionLink("Edit", "Edit", new { id=item.Line_Type_ID }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.Line_Type_ID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.Line_Type_ID })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

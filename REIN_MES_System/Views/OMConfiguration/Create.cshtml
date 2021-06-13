@@ -1,0 +1,205 @@
+﻿@model REIN_MES_System.Models.RS_OM_Configuration
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-md-3" style="display:none;">
+                    @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name + " *", htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, ResourceDisplayName.Select_Shop, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3" style="display:none;">
+                    @Html.LabelFor(model => model.Platform_Id, ResourceDisplayName.Platform_Name, htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownList("Platform_Id", (SelectList)ViewBag.Platform_Id, ResourceDisplayName.Select_Platform, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Platform_Id, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Config_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Config_Name, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Config_Name, null, new { @class = "validation_error" })
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3" style="display:none">
+                    @Html.LabelFor(model => model.OMconfig_ID, htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.OMconfig_ID, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OMconfig_ID, null, new { @class = "validation_error" })
+                </div>
+
+
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label(ResourceDisplayName.PartGroup_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.SelectedPartgroup_ID, null, String.Empty, new { multiple = "multiple", @class = "form-control", @style = "min-height: 200px" })
+                    @Html.ValidationMessageFor(model => model.SelectedPartgroup_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-5">
+                    @Html.LabelFor(model => model.OMconfig_Desc, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.TextBoxFor(model => model.OMconfig_Desc, new { onchange = "", @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.OMconfig_Desc, null, new { @class = "validation_error" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+
+
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+
+
+}
+
+<div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    $("#Plant_ID").on("change", function () {
+
+        var Plant = $("#Plant_ID").val();
+
+        $('#Shop_ID').html("");
+        $('#Platform_Id').html("");
+
+
+        if (Plant.length > 0) {
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/OMConfiguration/GetShopID', { Plant_Id: Plant }, function (data) {
+
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Shop_ID option').remove();
+                    $('#Shop_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Shop_ID').append('<option value="' +
+                                     data[i].Shop_ID + '">' + data[i].Shop_Name + '</option>');
+                    }
+                } else {
+                    alert("No Shop Available for this Plant!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting PartGroups !');
+            });
+
+            //Populate Platform
+            $.getJSON('/OMConfiguration/GetPlatformID', { Plant_Id: Plant }, function (data) {
+
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Platform_Id option').remove();
+                    //  $('#Platform_Id').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Platform_Id').append('<option value="' +
+                                     data[i].Platform_Id + '">' + data[i].Platform_Description + '</option>');
+                    }
+                } else {
+                    alert("No Platform Available for this Plant!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting Model Master !');
+            });
+
+        }
+
+    }); // Shop Select Change Event End
+
+    $("#Shop_ID").change(function (e) {
+        clearSelectBox("SelectedPartgroup_ID");
+        debugger;
+        var shopId = $(this).val();
+
+        if (shopId) {
+            var url = "/OMConfiguration/GetPartgroupByShopId";
+            ajaxpack.getAjaxRequest(url, "shopId=" + shopId + "", showPartgroupDetails, "json");
+        }
+    });
+
+    function showPartgroupDetails() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                var jsonRes = $.parseJSON(myajax.responseText);
+                SelectOptionHTML(jsonRes, "SelectedPartgroup_ID");
+            }
+        }
+    }
+
+    function SelectOptionHTML(jsonRes, targetId) {
+        //var jsonRes = $.parseJSON(myajax.responseText);
+        var res = "";
+        for (var i = 0; i < jsonRes.length; i++) {
+            res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+        }
+
+        res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+        $("#" + targetId).html(res);
+    }
+
+    function clearSelectBox(targetId) {
+        var res = "";
+        res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+        $("#" + targetId).html(res);
+    }
+    $("#SelectedPartgroup_ID").on("change", function () {
+        var texts = [];
+        $('#SelectedPartgroup_ID :selected').each(function () {
+            texts.push($(this).text());
+        });
+        var strText;
+        for (var i = 0; i < texts.length; i++) {
+            if (strText == null)
+                strText = texts[i]
+            else
+                strText = strText + " + " + texts[i];
+        }
+        $('#OMconfig_Desc').val(strText);
+
+    });
+
+</script>

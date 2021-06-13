@@ -1,0 +1,83 @@
+﻿@model REIN_MES_System.Models.RS_Partmaster
+@using REIN_MES_System.App_LocalResources
+@using REIN_MES_System.custom_Helper;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+  
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model=>model.Plant_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Partgroup_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_Description)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Series_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Series.Series_Description)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genealogy)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Genealogy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Error_Proofing)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Error_Proofing)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Partmaster", new { id = Model.Part_No }, htmlAttributes: new { @class = "btn btn-primary" })*@ 
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_BreakDown_Target>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<p>
+    <a href="@Url.Action("Create", "BreakDownTarget")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Month)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value_Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Module)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Target_Value)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+            </th>
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Month)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value_Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Module)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Target_Value)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "BreakDownTarget", new { id = item.Target_ID + "/" })"><i class="fa fa-edit"></i></a>
+                    <a href="@Url.Action("Details", "BreakDownTarget", new { id = item.Target_ID + "/" })"><i class="fa fa-fw fa-laptop"></i></a>
+                    <a href="@Url.Action("Delete", "BreakDownTarget", new { id = item.Target_ID + "/" })"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+
+        }
+
+    </table>
+</div>

@@ -1,0 +1,83 @@
+﻿@model REIN_MES_System.Models.RS_Shift
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Shift_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shift_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shift_Start_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shift_Start_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shift_End_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shift_End_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Break1_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Break1_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Break2_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Break2_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lunch_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lunch_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Shift_ID }, new { @class = "btn btn-primary" }) 
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>

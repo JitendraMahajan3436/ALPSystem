@@ -1,0 +1,146 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Employee>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+   
+}
+
+
+<br />
+<p class="position_absolute">
+   @* @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" }) @Html.ActionLink("Upload File", "Upload", null, htmlAttributes: new { @class = "btn btn-primary" })*@
+    
+    <a href="@Url.Action("Create", "AddUsers")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a> @*<a href="@Url.Action("AllConfigurationExcelUpload", "AddUsers")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i>All Configuration Upload</a> <a href="@Url.Action("OJTDataUpload", "AddUsers")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i>OJT Data Upload </a>*@
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Employee Name")
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Employee_Password)
+                    </th>*@
+                <th>
+                    @Html.DisplayName("Employee Number")
+                </th>
+                <th>
+                    @Html.DisplayName("Email Address")
+                </th>
+                <th>
+                    @Html.DisplayName("Date Of Birth")
+                </th>
+                <th>
+                    @Html.DisplayName("Contact Number")
+                </th>
+                <th>@Html.DisplayName("Action")</th>
+                @*<th>
+                                @Html.DisplayNameFor(model => model.Gender)
+                            </th>
+                          <th>
+                        @Html.DisplayNameFor(model => model.Is_Transfered)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Is_Purgeable)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Inserted_Host)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Inserted_User_ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Inserted_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updated_Host)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updated_User_ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updated_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Plants2.Plant_Name)
+                    </th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Name)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Employee_Password)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email_Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DOB)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Contact_No)
+                    </td>
+                    @* <td>
+                                        @Html.DisplayFor(modelItem => item.Gender)
+                                    </td>
+                                    <td>
+                            @Html.DisplayFor(modelItem => item.Is_Transfered)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inserted_Host)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inserted_User_ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inserted_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated_Host)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated_User_ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RS_Plants2.Plant_Name)
+                        </td>*@
+                    <td>
+
+                        <a href="@Url.Action("Edit", "AddUsers", new { id = item.Employee_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action("Details", "AddUsers", new { id = item.Employee_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action("Delete", "AddUsers", new { id = item.Employee_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Employee_ID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Employee_ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Employee_ID })*@
+                    </td>
+                </tr>
+        }
+        </tbody>
+
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

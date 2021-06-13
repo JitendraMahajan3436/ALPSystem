@@ -1,0 +1,64 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+
+
+
+<div class="row machine_alarm_status">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-2">
+            <!-- small box -->
+            <div id="@item.Machine_ID" class="small-box machine_box bg-green-gradient">
+                <div class="inner">
+                    <div class="downtime col-lg-5"><h4>02:40:01</h4></div>
+                    <div class="working_time col-lg-5"><h4 style="color: yellow;">04:05:36</h4></div>
+                    <div class="clearfix"></div>
+                    <p class="machine_name">@item.Machine_Name</p>
+                </div>
+                @*<div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>*@
+
+            </div>
+        </div>
+    }
+</div>
+
+<style type="text/css">
+    .machine_alarm_status .machine_name {
+        font-size: 14px;
+        margin-bottom: 0px;
+        clear: both;
+        min-height: 45px;
+    }
+
+    .mt-red {
+        background: #ff0000;
+        color: white;
+   
+        /* fallback */
+        /*background-color:  #ff0000;
+        background: url(images/linear_bg_2.png);
+        background-repeat: repeat-x;*/
+        /* Safari 4-5, Chrome 1-9 */
+        /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from( #ff0000), to(#2F2727));*/
+        /* Safari 5.1, Chrome 10+ */
+        /*background: -webkit-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* Firefox 3.6+ */
+        /*background: -moz-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* IE 10 */
+        /*background: -ms-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* Opera 11.10+ */
+        /*background: -o-linear-gradient(top, #2F2727,  #ff0000);*/
+    }
+
+    .machine_box .downtime, .machine_box .working_time {
+        border: 1px solid yellow;
+        margin-left: 0;
+        padding: 0 7px;
+    }
+
+    .machine_box .working_time {
+        margin-left: 25px;
+    }
+</style>

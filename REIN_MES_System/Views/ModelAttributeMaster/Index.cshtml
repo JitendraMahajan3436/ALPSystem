@@ -1,0 +1,63 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Model_Attribute_Master>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "ModelAttributeMaster")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Platform_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sub_Assembly_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attribution)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_OM_Platform.Platform_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Major_Sub_Assembly.Sub_Assembly_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Attribution)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "ModelAttributeMaster", new { id = item.Model_Attribute_ID })"><i class="fa fa-edit" style="color:blue" title="Edit"></i></a>
+                        <a href="@Url.Action("Details", "ModelAttributeMaster", new { id = item.Model_Attribute_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet" title="Details"></i></a>
+                        <a href="@Url.Action("Delete", "ModelAttributeMaster", new { id = item.Model_Attribute_ID })"><i class="fa fa-trash" style="color:red" title="Delete"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+    @section scripts {
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+    }

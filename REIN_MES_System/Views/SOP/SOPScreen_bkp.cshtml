@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "SOPScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<div class="row">
+    @*<h4 class="bg-dark text-center pull-left">ShopName : @ViewBag.ShopName </h4>
+        <h4 class="bg-dark text-center pull-right">StationName : @ViewBag.StationName</h4>*@
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-8">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="nav-tabs-custom">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs pull-right sop-tabs">
+                    @if (ViewBag.sopModel != null)
+                    {
+                        int i = 0;
+                        foreach (var sop in ViewBag.sopModel)
+                        {
+                            i++;
+                            if (i == 1)
+                            {
+                                <li class="active"><a href="#@sop.SOP_ID" data-toggle="tab">@sop.SOP_Name</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="#@sop.SOP_ID" data-toggle="tab">@sop.SOP_Name</a></li>
+                            }
+                        }
+                    }
+                    @*else
+                    {
+                        <li class="active"><a href="#SOP100" data-toggle="tab">SOP 01</a></li>
+                    }*@
+                    @*<li class="pull-left header"><i class="fa fa-inbox"></i>SOP</li>*@
+                </ul>
+                <div class="tab-content no-padding">
+                    @if (ViewBag.sopModel != null)
+                    {
+                        int i = 0;
+                        foreach (var sop in ViewBag.sopModel)
+                        {
+                            i++;
+                            if (i == 1)
+                            {
+                                <div class="tab-pane active" id="@sop.SOP_ID" style="position: relative;">
+                                    <img class="zoom_img" src="/Content/images/@sop.Image_Name" data-zoom-image="/Content/images/@sop.Image_Name" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="tab-pane" id="@sop.SOP_ID" style="position: relative;">
+                                    <img class="zoom_img" src="/Content/images/@sop.Image_Name" data-zoom-image="/Content/images/@sop.Image_Name" />
+                                </div>
+                            }
+                        }
+                    }
+                    @*else
+                    {
+
+                        <div class="tab-pane active" id="SOP100" style="position: relative;">
+                            <img class="zoom_img" src="/Content/images/SOPImages/sop tr.jpg" data-zoom-image="/Content/images/SOPImages/sop tr.jpg" />
+                        </div>
+                    }*@
+                </div>
+            </div><!-- /.nav-tabs-custom -->
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/Zooming")
+    <script type="text/javascript">
+        var serialChanged;
+        function refreshContent() {
+            $('#shop-floor-content').load('/SOP/refreshSOP', function (response, status, xhr) {
+                if (status == "success") {
+                    $("#shop-floor-content .zoom_img").elevateZoom({
+                        // zoomType : "lens",
+                        // lensShape : "round",
+                        // zoomType : "inner",
+                        // lensSize : 250,
+                        // easing : true,
+                        scrollZoom: true,
+                        easing: true,
+                        zoomWindowWidth: 470,
+                        zoomWindowHeight: 500
+                    });
+                }
+            });
+        }
+        $(document).ready(function () {
+            $('img.zoomed').removeData('elevateZoom');//remove zoom instance from image
+            $('.zoomWrapper img.zoomed').unwrap();
+            $('.zoomContainer').remove();
+            $("input[name='srlno']").prop('disabled',true);
+            $("#shop-floor-content .zoom_img").elevateZoom({
+                // zoomType : "lens",
+                // lensShape : "round",
+                // zoomType : "inner",
+                // lensSize : 250,
+                // easing : true,
+                scrollZoom: true,
+                easing: true,
+                zoomWindowWidth: 470,
+                zoomWindowHeight: 500
+            });
+            
+            $('.sop-wrapper ').on('click', '.sop-tabs li a', function () {
+                zoomImage = $("#shop-floor-content .zoom_img");
+                $('.zoomContainer').remove();
+                zoomImage.removeData('elevateZoom');
+                zoomImage.attr('src', $(this).data('image'));
+                zoomImage.data('zoom-image',$(this).data('zoom-image'));
+                zoomImage.elevateZoom({
+                    scrollZoom: true,
+                    easing: true,
+                    zoomWindowWidth: 470,
+                    zoomWindowHeight: 500
+                });
+            });
+        });
+    </script>
+}

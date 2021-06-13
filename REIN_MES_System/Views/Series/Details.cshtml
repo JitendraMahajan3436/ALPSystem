@@ -1,0 +1,32 @@
+﻿@model REIN_MES_System.Models.RS_Series
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+    
+    <dl class="dl-horizontal">
+      
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Series Description")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Series_Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Series_Code }, new { @class = "btn btn-primary" })
+     @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>

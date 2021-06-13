@@ -1,0 +1,48 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_Email_Time_Configuration>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "EmailTime")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Maintenance Type")
+            </th>
+            <th>
+                @Html.DisplayName("Day")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MM_MT_Maintenance_Type.Maintenance_Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day_Frequency)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "EmailTime", new { id = item.ET_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "EmailTime", new { id = item.ET_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "EmailTime", new { id = item.ET_ID })"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

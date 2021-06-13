@@ -1,0 +1,553 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_Conditional_Based_Maintenance>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="row" id="ClitaDailyCheckContainer">
+    <div class="col-md-12 cbm-parent-container">
+        @{ if (globalData != null)
+         {
+             if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+             {
+                <div class="box-body">
+                    @{
+                 if (globalData != null)
+                 {
+                    <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>                                                              } else { <text> style="display:none;" </text>                                                             } }>
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4>
+                            <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+                 }
+                    }
+                </div>
+             }
+         }
+        }
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" class="machine-tab graph-initialised" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" class="machine-tab" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="tab-content">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative;">
+                            <div class="row cbm-container">
+                                @{ int j = 0; }
+                                @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                {
+                                    j++;
+                                    <div class="col-md-3">
+                                        <div class="box box-primary box-solid cbm-box" id="cbm_@(item.CBM_ID)_box">
+                                            <div class=" box-header with-border">
+                                                <h3 class="box-title">@item.Machine_Parameter (Unit - @item.UOM)</h3>
+                                                <div class="box-tools pull-right">
+                                                    @*<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>*@
+                                                </div>
+                                            </div><!-- /.box-header -->
+                                            <div class="box-body no-padding">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="chart-responsive">
+                                                            @if (item.Parameter_Category == "Level")
+                                                            {
+                                                                <svg id="cbm_@item.CBM_ID" width="97%" height="230"></svg>
+                                                            }
+                                                            else
+                                                            {
+                                                                <canvas id="cbm_@item.CBM_ID" width="230" height="230">
+                                                                    [No canvas support]
+                                                                </canvas>
+                                                            }
+                                                        </div><!-- ./chart-responsive -->
+                                                    </div><!-- /.col -->
+                                                    <div class="col-md-4 no-padding">
+                                                        <div class="col-md-12">
+                                                            <ul class="chart-legend clearfix cbm-chart-legend my-border-left">
+                                                                <li>
+                                                                    <div class="bg-green-gradient cbm-current-val">
+                                                                        <h3 class="text-bold">@( String.Format("{0:0.00}", (Convert.ToDecimal(item.Current_Value) / item.Scale_Denominator)))</h3>
+                                                                        @*<span>@item.UOM</span>*@
+                                                                    </div>
+                                                                    <h4 class="bg-dark text-bold">Curr Value</h4>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="bg-teal-gradient cbm-min-val">
+                                                                        <h3 class="text-bold">@( String.Format("{0:0.00}", item.Green_Min_Val))</h3>
+                                                                        @*<span>@item.UOM</span>*@
+                                                                    </div>
+                                                                    <h4 class="bg-dark text-bold">Min Value</h4>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="bg-teal-gradient cbm-max-val">
+                                                                        <h3 class="text-bold">@( String.Format("{0:0.00}", item.Green_Max_Val))</h3>
+                                                                        @*<span>@item.UOM</span>*@
+                                                                    </div>
+                                                                    <h4 class="bg-dark text-bold">Max Value</h4>
+                                                                </li>
+                                                                @*<li><i class="fa fa-circle-o text-green"></i> IE</li>
+                                                                    <li><i class="fa fa-circle-o text-yellow"></i> FireFox</li>
+                                                                    <li><i class="fa fa-circle-o text-aqua"></i> Safari</li>
+                                                                    <li><i class="fa fa-circle-o text-light-blue"></i> Opera</li>
+                                                                    <li><i class="fa fa-circle-o text-gray"></i> Navigator</li>*@
+                                                            </ul>
+                                                        </div>
+                                                    </div><!-- /.col -->
+                                                </div><!-- /.row -->
+                                            </div><!-- /.box-body -->
+                                            <div class="box-footer no-padding">
+                                                @*<ul class="nav nav-pills nav-stacked">
+                                                        <li><a href="#">United States of America <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+                                                        <li><a href="#">India <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a></li>
+                                                        <li><a href="#">China <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
+                                                    </ul>*@
+                                            </div><!-- /.footer -->
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+</div>
+<style>
+    .bg-faulty {
+        background: #ff2d27;
+    }
+</style>
+@section Scripts {
+    @Scripts.Render("~/fdtheme/MMTUCharts_js")
+    <script type="text/javascript">
+        var repeater;
+        var cbmParams = {};
+        var flowNumArr = {};
+        //function updateEquipment() {
+        //    var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+        //    //console.log(machineID);
+        //    $.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+        //        //resetAllLines();
+        //        if (data.length > 0) {
+        //            //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+        //            $.each(data, function (idx, cbmObj) {
+
+        //                var cbmID = cbmObj.CBM_ID;
+        //                var cbmCurrentValue = 0;
+
+        //                var cbmDomObj = $('*[data-cbmID="cbm_' + cbmID + '"]');
+        //                if (cbmObj.Current_State == true) {
+        //                    cbmCurrentValue = (cbmObj.Current_Value / cbmObj.Scale_Denominator).toFixed(2);
+        //                    var cbmUOM = cbmObj.UOM;
+        //                    var minVal = cbmObj.Min_Val;
+        //                    var maxVal = cbmObj.Max_Val;
+        //                    var greenMin = cbmObj.Green_Min_Val;
+        //                    var greenMax = cbmObj.Green_Max_Val;
+        //                    var warningMin = cbmObj.Warning_Min_Val;
+        //                    var warningMax = cbmObj.Warning_Max_Val;
+
+        //                    cbmDomObj.find('.cbm-currentVal').text(cbmCurrentValue + " " + cbmUOM);
+        //                    if (cbmCurrentValue >= 0 && (cbmCurrentValue < minVal || cbmCurrentValue > maxVal)) {
+        //                        cbmDomObj.addClass('bg-faulty');
+        //                    } else {
+        //                        cbmDomObj.removeClass('bg-faulty');
+        //                    }
+
+        //                } else {
+        //                    cbmDomObj.find('.cbm-currentVal').text("");
+        //                    cbmDomObj.removeClass('bg-faulty');
+        //                }
+        //            });
+        //        }
+        //    }).fail(function (jqXHR, textStatus, errorThrown) {
+        //        // Ajax fail callback function.
+        //        console.log('Error getting cycle step Signal !');
+        //    });
+        //}
+
+        function initializeCBMData() {
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //console.log(machineID);
+            cbmParams.length = 0;
+            flowNumArr.length = 0;
+            $.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+                $('.nav-tabs li.active a.machine-tab').addClass('graph-initialised');
+                //resetAllLines();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, cbmObj) {
+                        var cbmID = cbmObj.CBM_ID;
+                        var cbmUOM = cbmObj.UOM;
+                        var minVal = cbmObj.Min_Val;
+                        var maxVal = cbmObj.Max_Val;
+                        var greenMin = cbmObj.Green_Min_Val;
+                        var greenMax = cbmObj.Green_Max_Val;
+                        var warningMin = cbmObj.Warning_Min_Val;
+                        var warningMax = cbmObj.Warning_Max_Val;
+                        var currentState = cbmObj.Current_State;
+                        var currentValue = (cbmObj.Current_Value / cbmObj.Scale_Denominator).toFixed(2);
+                        if (cbmObj.Current_Value > 30000) {
+                            currentValue = 0;
+                        }
+                        var cbmDomObj = $('*[data-cbmID="cbm_' + cbmID + '"]');
+                        var cbmAccesssor = 'cbm_' + cbmID;
+                        var cbmChartObj = $("#" + cbmAccesssor);
+                        var cbmBox = $("#" + cbmAccesssor + "_box");
+                        cbmBox.find('.cbm-current-val h3').text(currentValue);
+                        if (currentValue <= greenMax && currentValue >= greenMin) {
+                            cbmBox.find('.cbm-current-val').addClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                        } else if (currentValue > greenMax) {
+                            if (currentValue > warningMax) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                            } else {
+                                cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                            }
+                        } else if (currentValue < greenMin) {
+                            if (currentValue < warningMin) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                            } else {
+                                cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                            }
+                        }
+                        switch (cbmObj.Parameter_Category) {
+                            case "CURRENT":
+                            case "Current":
+                            case "Voltage":
+                            case "Pressure":
+                            case "PRESSURE":
+                            case "Speed":
+                                var scaleDecimalVal = null;
+                                if ((maxVal / 10) < 1) {
+                                    scaleDecimalVal = 1;
+                                }
+                                cbmChartObj.attr("width", "230");
+                                var pressureObj = new RGraph.Gauge({
+                                    id: cbmAccesssor,
+                                    min: minVal,
+                                    max: maxVal,
+                                    value: currentValue,
+                                    options: {
+                                        //valueText: true,
+                                        //valueTextDecimals: 2,
+                                        //valueTextBoundingStroke: '#aaa',
+                                        //valueTextYPos: 0.4,
+                                        //textAccessible: true,
+                                        scaleDecimals: scaleDecimalVal,
+                                        tickmarksBig: 10,
+                                        tickmarksSmall:20,
+                                        colorsRanges: [[minVal, maxVal, '#dd4b39'], [warningMin, warningMax, '#ff2'], [greenMin, greenMax, '#bada55']],
+                                        labelsCount: 10
+                                    }
+                                }).draw();
+                                cbmParams[cbmAccesssor] = pressureObj;
+
+                                break;
+                            case "TEMPRATURE":
+                                cbmChartObj.attr("width", "80");
+                                var tempColor = ['#00ca6d'];
+                                if (currentValue <= greenMax && currentValue >= greenMin) {
+                                    tempColor = ['#00ca6d'];
+                                } else if (currentValue > greenMax) {
+                                    if (currentValue > warningMax) {
+                                        tempColor = ['#f00'];
+                                    } else {
+                                        tempColor = ['#ff5'];
+                                    }
+                                } else if (currentValue < greenMin) {
+                                    if (currentValue < warningMin) {
+                                        tempColor = ['#f00'];
+                                    } else {
+                                        tempColor = ['#ff5'];
+                                    }
+                                }
+                                var temperatureObj = new RGraph.Thermometer({
+                                    id: cbmAccesssor,
+                                    min: minVal,
+                                    max: maxVal,
+                                    value: currentValue,
+                                    options: {
+                                        scaleVisible: true,
+                                        gutterLeft: 25,
+                                        valueLabel: false,
+                                        colors:tempColor
+                                        //textAccessible: true
+                                    }
+                                }).grow();
+                                cbmParams[cbmAccesssor] = temperatureObj;
+                                break;
+                            case "VIBRATION":
+                            case "Flow":
+                                cbmChartObj.attr("width", "250");
+
+                                var vibrationObj = new RGraph.Line({
+                                    id: cbmAccesssor,
+                                    data: new Array(5),
+                                    options: {
+                                        gutterLeft: 35,
+                                        ymax: maxVal,
+                                        ymin: minVal,
+                                        tickmarks: 'filledcircle',
+                                        scaleDecimals:1,
+                                        linewidth: 1,
+                                        backgroundHbars: [
+                                            [minVal, warningMin - minVal, 'rgba(255, 49, 80, 0.73)'],
+                                            [warningMin, greenMin - warningMin, 'rgba(255, 255, 119, 0.5)'],
+                                            [greenMin, greenMax - greenMin, 'rgba(6, 255, 0, 0.39)'],
+                                            [greenMax, warningMax - greenMax, 'rgba(255, 255, 119, 0.5)'],
+                                            [warningMax, maxVal - warningMax, 'rgba(255, 49, 80, 0.73)'],
+                                        ],
+                                        shadow: null,
+                                        backgroundGridVlines: false,
+                                        backgroundGridBorder: false,
+                                        backgroundGridColor: '#eee',
+                                        colors: ['#058DC7'],
+                                        numxticks: 5,
+                                        yaxispos: 'right',
+                                        axisColor: '#666',
+                                        textColor: '#666',
+                                        textSize: 14,
+                                        linewidth: 2,
+                                        labels: ['25s', '20s', '15s', '10s', '5s', '0s'],
+                                        noxaxis: true,
+                                        textAccessible: true
+                                    }
+                                }).draw();
+                                cbmParams[cbmAccesssor] = vibrationObj;
+                                flowNumArr[cbmAccesssor] = ((((maxVal) - (minVal)) / 2) + (minVal));
+                                break;
+                            case "LEVEL":
+                                cbmChartObj.attr("width", "230");
+                                if (currentValue < 0) {
+                                    currentValue = 0;
+                                } else if (currentValue > maxVal) {
+                                    currentValue = maxVal;
+                                }
+
+                                //var currentPercent = ((currentValue / maxVal) * 100).toFixed(2);
+
+                                var config1 = liquidFillGaugeDefaultSettings();
+                                //config1.circleColor = "#FF7777";
+                                //config1.textColor = "#FF4444";
+                                //config1.waveTextColor = "#FFAAAA";
+                                //config1.waveColor = "#FFDDDD";
+                                //config1.circleThickness = 0.2;
+                                //config1.textVertPosition = 0.2;
+                                config1.minValue = minVal;
+                                config1.maxValue = maxVal;
+                                config1.displayPercent = false;
+                                config1.waveAnimateTime = 1000;
+                                cbmParams[cbmAccesssor] = loadLiquidFillGauge(cbmAccesssor, currentValue, config1);
+                                break;
+                            default:
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+
+        function updateCBMData() {
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //console.log(machineID);
+
+            $.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+                //resetAllLines();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, cbmObj) {
+                        var cbmID = cbmObj.CBM_ID;
+                        var cbmAccesssor = 'cbm_' + cbmID;
+                        var cbmCurrentValue = 0;
+                        var cbmUOM = cbmObj.UOM;
+                        var minVal = cbmObj.Min_Val;
+                        var maxVal = cbmObj.Max_Val;
+                        var greenMin = cbmObj.Green_Min_Val;
+                        var greenMax = cbmObj.Green_Max_Val;
+                        var warningMin = cbmObj.Warning_Min_Val;
+                        var warningMax = cbmObj.Warning_Max_Val;
+                        var currentState = cbmObj.Current_State;
+                        var currentValue = cbmObj.Current_Value / cbmObj.Scale_Denominator;
+                        if (cbmObj.Current_Value > 30000) {
+                            currentValue = 0;
+                        }
+                        var cbmDomObj = $('*[data-cbmID="cbm_' + cbmID + '"]');
+                        var cbmChartObj = cbmParams[cbmAccesssor];
+                        var cbmBox = $("#" + cbmAccesssor + "_box");
+
+                        if (currentState == false) {
+                            cbmBox.find('.overlay').remove();
+                            var overlayBody = '<div class="overlay">' +
+                                              '<i class="fa fa-power-off"></i>' +
+                                              '<h4 class="bold bg-gray">CYCLE OFF</h4>' +
+                                              '</div>';
+                            cbmBox.append(overlayBody);
+                            if (cbmObj.Parameter_Category != 'Flow' && cbmObj.Parameter_Category != 'Level') {
+                                cbmChartObj.value = 0;
+                                cbmChartObj.grow();
+                            }
+                            cbmBox.find('.cbm-current-val').addClass('bg-gray').removeClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                            cbmBox.find('.cbm-current-val h3').text(0);
+                        } else {
+                            cbmBox.find('.overlay').remove();
+                            cbmBox.find('.cbm-current-val h3').text(currentValue.toFixed(2));
+
+                            if (currentValue <= greenMax && currentValue >= greenMin) {
+                                cbmBox.find('.cbm-current-val').addClass('bg-green-gradient').removeClass('bg-red-gradient').removeClass('bg-yellow-gradient');
+                            } else if (currentValue > greenMax) {
+                                if (currentValue > warningMax) {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                                } else {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                                }
+                            } else if (currentValue < greenMin) {
+                                if (currentValue < warningMin) {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-red-gradient').removeClass('bg-green-gradient').removeClass('bg-yellow-gradient');
+                                } else {
+                                    cbmBox.find('.cbm-current-val').addClass('bg-yellow-gradient').removeClass('bg-red-gradient').removeClass('bg-green-gradient');
+                                }
+                            }
+
+                            switch (cbmObj.Parameter_Category) {
+                                case "CURRENT":
+                                case "Current":
+                                case "Voltage":
+                                case "Pressure":
+                                case "PRESSURE":
+                                case "Speed":
+                                    cbmChartObj.value = currentValue;
+                                    cbmChartObj.grow();
+                                    break;
+                                case "Temperature":
+                                    RGraph.clear(cbmChartObj.canvas);
+                                    cbmChartObj.value = currentValue;
+                                    if (currentValue <= greenMax && currentValue >= greenMin) {
+                                        // cbmChartObj.options = { colors: ['Gradient(#0c0:green:#6f6:#cfc)'] };
+                                        cbmChartObj.set({
+                                            colors: ['#00ca6d'],
+                                        }).grow();
+                                    } else if (currentValue > greenMax) {
+                                        if (currentValue > warningMax) {
+                                            // cbmChartObj.options = { colors: ['Gradient(#c00:red:#f66:#fcc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#f00'],
+                                            }).grow();
+                                        } else {
+                                            // cbmChartObj.options = { colors: ['Gradient(#ff0:yellow:#ff6:#ffc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#ff5'],
+                                            }).grow();
+                                        }
+                                    } else if (currentValue < greenMin) {
+                                        if (currentValue < warningMin) {
+                                            // cbmChartObj.options = { colors: ['Gradient(#c00:red:#f66:#fcc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#f00'],
+                                            }).grow();
+                                        } else {
+                                            //cbmChartObj.options = { colors: ['Gradient(#ff0:yellow:#ff6:#ffc)'] };
+                                            cbmChartObj.set({
+                                                colors: ['#ff5'],
+                                            }).grow();
+                                        }
+                                    }
+                                    break;
+                                case "VIBRATION":
+                                case "Flow":                                
+                                    RGraph.clear(cbmChartObj.canvas);
+
+                                    // Generate a random number between -5 and 5 and add it to the num
+                                    // variable. Adding asmall change instead of generating a whole new
+                                    // number result in a gentler change.
+                                    flowNumArr[cbmAccesssor] = currentValue;
+
+                                    // Limit the num variable to min - max
+                                    flowNumArr[cbmAccesssor] = Math.max(minVal, flowNumArr[cbmAccesssor]);
+                                    flowNumArr[cbmAccesssor] = Math.min(maxVal, flowNumArr[cbmAccesssor]);
+
+                                    // Remove a number from the front of the data array
+                                    cbmChartObj.original_data[0].shift();
+
+                                    // Add the new number on to end of the data array
+                                    cbmChartObj.original_data[0].push(flowNumArr[cbmAccesssor]);
+
+                                    // Draw the chart
+                                    cbmChartObj.draw();
+
+                                    //// Call this function again after the delay (using requestAnimationFrame
+                                    //// NOT setTimeout) This function is a compatibility wrapper around
+                                    //// requestAnimationFrame
+                                    //RGraph.Effects.updateCanvas(draw);
+                                    break;
+                                case "Level":
+                                    if (currentValue < 0) {
+                                        currentValue = 0;
+                                    } else if (currentValue > maxVal) {
+                                        currentValue = maxVal;
+                                    }
+
+                                    //var currentPercent = ((currentValue / maxVal) * 100).toFixed(2);
+                                    cbmParams[cbmAccesssor].update(currentValue);
+                                    break;
+                                default:
+                            }
+                        }//current status ELSE END
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+        $(document).ready(function () {
+            initializeCBMData();
+            repeater = setInterval(updateCBMData, 5000);
+            //$('.nav-tabs li a.machine-tab').on('click', function () {
+            //    //var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //    //alert(machineID);
+
+            //});
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                if ($(this).hasClass('graph-initialised') == false) {
+                    initializeCBMData();
+                }
+            });
+            //$.getJSON('/CBMDashboard/getCBMDetails', { machineId: machineID }, function (data) {
+
+            //});
+        });
+    </script>
+}

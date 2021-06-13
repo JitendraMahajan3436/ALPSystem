@@ -1,0 +1,115 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            @Html.ValidationSummary(true)
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Machine_ID, "Machine Name *", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Machine_ID, (IEnumerable<SelectListItem>)ViewBag.Machine_Name, "--Select Machine--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+            </div>
+            @*<div class="form-group col-md-4">
+                    @Html.LabelFor(model => model.Machine_ID, "Machine Name", htmlAttributes: new { @class = "" })
+                    @Html.TextBox("Machine Name", null, string.Empty, htmlAttributes: new { @class = "form-control",@disabled="disabled" })
+                    @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+                </div>*@
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Equipment_Name, "Machine Part *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Equipment_Name, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Equipment_Name, null, new { @class = "validation_error" })
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-0 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div id="dialog" title="Error"></div>
+@*<div class="col-md-6">
+
+    </div>*@
+@*<div>
+        @Html.ActionLink("Show All", "Index",null,new { @class = "btn btn-primary" })
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#Machine_ID").on("change", function () {
+                $("#Machine_Name").html("");
+                // $("#Line_ID").html("");
+                var Plant_ID = $('#Machine_ID').val();
+                var obj = document.getElementById("RS_MT_Machines_Machine_Name")
+
+                if (Plant_ID.length > 0) {
+                    //alert(Plant_ID);
+                    $.getJSON('/Equipment/GetMachineNameByMachineID', { machineid: Plant_ID }, function (data) {
+                        //alert(data);
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Machine_Name').val(data[i].Machine_Name);
+                            }
+                            //$('#Machine_Name value').remove();
+                            //$('#Machine_Name').append('<option value=""></option>');
+                            //for (var i = 0; i < data.length; i++) {
+                            //    $('#Machine_Name').append('<option value="' +
+                            //               data[i].Shop_ID + '">' + data[i].Shop_Name + '</option>');
+                            //}
+                        }
+
+                    });
+                }
+            });
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //  alert(Shop_ID);
+                    $.getJSON('/Machines/FillLine', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+
+                    });
+                }
+            });
+
+
+
+        });
+
+
+
+    </script>
+}
+

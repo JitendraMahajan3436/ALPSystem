@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+  }
+
+<div class="box-body">
+
+    <div id="PartialCAPA">
+        @{Html.RenderAction("PartialCAPA", "ClitaCAPA");}
+    </div>
+</div>
+
+
+<script>
+
+    function EnterClitaData(ESHID) {
+        $("#txtRemark").val("");
+        $("#hdnESHID").val(ESHID);
+        $("#ConfirmDoneClita").modal('show');
+        cleardata();
+    }
+    function closeModel() {
+        cleardata();
+    }
+    function cleardata()
+    {
+        $("#errorRemark").html("");
+        $("#errorRemark").hide("");
+        $("#lblDoneBy").html("");
+        $("#lblDoneBy").hide();
+        $("#lblCorrectiveAction").html("");
+        $("#lblCorrectiveAction").hide();
+        $("#lblRemark").html("");
+        $("#lblRemark").hide();
+        $("#lblPreventiveAction").html("");
+        $("#lblPreventiveAction").hide();
+        $("#Done_By_User_ID").val("");
+        $("#CorrectiveAction").val("");
+        $("#PreventiveAction").val("");
+        $("#RemarkClita").val("");
+
+    }
+    function saveClitaInformation() {
+      
+        var flag = 0;
+        var userID = $("#Done_By_User_ID").val();
+        var CorrectiveAction = $("#CorrectiveAction").val();
+        var PreventiveAction = $("#PreventiveAction").val();
+        var RemarkClita = $("#RemarkClita").val();
+        var ESHID = $("#hdnESHID").val();
+        if (userID == "") {
+            $("#lblDoneBy").html("Please select the user");
+            $("#lblDoneBy").show();
+            flag = 1;
+        } else {
+            $("#lblDoneBy").html("");
+            $("#lblDoneBy").hide();
+        }
+        if (CorrectiveAction == "") {
+            $("#lblCorrectiveAction").html("Please enter corrective action");
+            $("#lblCorrectiveAction").show();
+            flag = 1;
+        } else {
+            $("#lblCorrectiveAction").html("");
+            $("#lblCorrectiveAction").hide();
+        }
+        if (PreventiveAction == "") {
+            $("#lblPreventiveAction").html("Please enter preventive action");
+            $("#lblPreventiveAction").show();
+            flag = 1;
+        } else {
+            $("#lblPreventiveAction").html("");
+            $("#lblPreventiveAction").hide();
+        }
+        if (RemarkClita == "") {
+            $("#lblRemark").html("Please enter remark");
+            $("#lblRemark").show();
+            flag = 1;
+        } else {
+            $("#lblRemark").html("");
+            $("#lblRemark").hide();
+        }
+        if (flag == 0) {
+            $.ajax(
+           {
+               url: '/ClitaCAPA/saveClitaInformation?userID=' + userID + '&CorrectiveAction=' + CorrectiveAction + '&PreventiveAction=' + PreventiveAction + '&RemarkClita=' + RemarkClita + '&ESHID=' + ESHID,
+               type: 'GET',
+               data: "",
+               contentType: 'application/json; charset=utf-8',
+               success: function (data) {
+                   if(data)
+                   {
+                       $("#ConfirmDoneClita").modal('hide');
+                       $("#PartialCAPA").html(data);
+                       alert("CAPA done successfully..!");
+                       //EnterClitaData();
+                       closeModel();
+                       saveClitaInformation();
+                       cleardata();
+                   } else {
+                       alert("Faild");
+                   }
+               }
+           });
+        }
+    }
+</script>

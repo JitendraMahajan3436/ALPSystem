@@ -1,0 +1,162 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Lines>
+@{
+    ViewBag.Title = "ConveyorStatus";
+    //Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+
+}
+<style>
+    .img1 {
+        height: 50px;
+        width: 50px;
+    }
+
+    
+</style>
+<div class="col-md-12">
+    <table align="center" class="table table-bordered tblRow" style="background-color:white">
+    @if (ViewBag.Shop != null)
+    {
+        foreach (var shop in ViewBag.Shop)
+        {
+            var colspan = Model.Where(m => m.Shop_ID == shop.Shop_ID).Count();
+        <tr class="@shop.Shop_Name"><td colspan="@colspan" class="bg-light-blue-active color-palette">@shop.Shop_Name</td></tr>
+        <tr class="bg-purple disabled color-palette @shop.Shop_Name">
+            @foreach (var line in Model.Where(m => m.Shop_ID == shop.Shop_ID).ToList())
+            {
+            <td>@line.Line_Name</td>
+            }
+        </tr>
+        <tr class="bg-gray-active color-palette @shop.Shop_Name">
+            @foreach (var line in Model.Where(m => m.Shop_ID == shop.Shop_ID).ToList())
+            {
+                var id = "span" + @line.Line_ID;
+                <td><a href="@shop.Link"><img id="@line.Line_ID" class="img1" src="~/Content/images/green.png" /></a>&nbsp;&nbsp;<span id="@id"></span></td>
+            }
+        </tr>
+        <tr style="height:20px"><td colspan="@colspan"></td></tr>
+        }
+    }
+
+    @*<tr class="transmissionShop"><td colspan="3" class="bg-light-blue-active">Transmission Assembly</td><td colspan="2" class="bg-light-blue-active">Hydraulic Assembly</td></tr>
+    <tr class="bg-purple disabled color-palette transmissionShop"><td>Conveyor A</td><td>Conveyor B </td><td>Clutch Housing</td><td>VTU Assembly</td><td>MSTAR CV Assembly</td></tr>
+    <tr class="bg-gray-active color-palette transmissionShop"><td><img id="191" class="img1" src="~/Content/images/green.png" /></td><td><img id="59" class="img1" src="~/Content/images/green.png" /></td><td><img id="114" class="img1" src="~/Content/images/green.png" /></td><td><img id="119" class="img1" src="~/Content/images/green.png" /></td><td><img id="224" class="img1" src="~/Content/images/green.png" /></td></tr>
+    <tr style="height:50px"><td colspan="5"></td></tr>
+    
+    <tr><td colspan="4" class="bg-light-blue-active color-palette EngineShop">Engine Assembly</td><td colspan="4" class="bg-light-blue-active color-palette EngineShop">J Bar</td></tr>
+    <tr><td class="bg-maroon color-palette EngineShop">Engine Main Line-1</td><td class="bg-maroon color-palette EngineShop">Engine Main Line-2</td><td class="bg-maroon color-palette EngineShop">Camshaft sub assembly</td><td class="bg-maroon color-palette EngineShop">Piston Sub Assembly</td><td class="bg-maroon color-palette EngineShop">J Bar</td></tr>
+    <tr class="bg-gray-active color-palette"><td class="#5698dc EngineShop"><img id="19" class="img1" src="~/Content/images/green.png" /></td><td class="#5698dc EngineShop"><img id="190" class="img1" src="~/Content/images/green.png" /></td><td class="#5698dc EngineShop"><img id="9" class="img1" src="~/Content/images/green.png" /></td><td class="VTUShop"><img id="21" class="img1" src="~/Content/images/green.png" /> </td><td class="VTUShop"><img id="116" class="img1" src="~/Content/images/green.png" /> </td></tr>
+    <tr style="height:50px"><td colspan="5"></td></tr>
+
+     <tr><td colspan="5" class="bg-light-blue-active color-palette tractorShop">Tractor Assembly</td></tr>
+    <tr class="bg-teal-active color-palette tractorShop"><td>Main Line</td><td>Pre dispatch inspection</td><td>Post painting SL1</td><td>Post painting SL2</td><td> Robo panting</td></tr>
+    <tr class="bg-gray-active color-palette tractorShop"><td><img id="220" class="img1" src="~/Content/images/green.png" /></td><td><img id="123" class="img1" src="~/Content/images/green.png" /></td><td><img id="122" class="img1" src="~/Content/images/green.png" /></td><td><img id="6" class="img1" src="~/Content/images/green.png" /></td><td><img id="221" class="img1" src="~/Content/images/green.png" /></td></tr>
+    <tr style="height:50px"><td colspan="5"></td></tr>
+
+    <tr><td colspan="3" class="bg-light-blue-active color-palette tractorShop">Paint Shop </td></tr>
+    <tr class="bg-teal-active color-palette tractorShop"><td>Topcoat Line</td><td>CED Line</td><td>Transfer Conveyor Line</td></tr>
+    <tr class="bg-gray-active color-palette tractorShop"><td><img id="28" class="img1" src="~/Content/images/green.png" /></td><td><img id="79" class="img1" src="~/Content/images/green.png" /></td><td><img id="80" class="img1" src="~/Content/images/green.png" /></td></tr>*@
+    
+    
+    </table>
+
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+
+<script>
+    $(document).ready(function () {
+        // Result();
+       
+        setInterval("ConveyorStatus()", 1000);
+
+    });
+
+
+
+    function ConveyorStatus() {
+        url = "/EngineAndon/ConveyorStatusData";
+        ajaxpack.getAjaxRequest(url, "", RefreshDiv, "json");
+    }
+
+    function RefreshDiv() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            var jsonRes = $.parseJSON(myajax.responseText);
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+                var res = "";
+                var length = jsonRes.length;
+                for (var i = 0; i < jsonRes.length; i++) {
+                    if (jsonRes[i].isLineStop == true) {
+                        
+                        var CurrentTime = new Date();
+                        var time = jsonRes[i].LineStop_Time.toString();
+                        var time1 = time.replace("/Date(", "");
+                        var time2 = time1.replace(")/", "");
+                        var date = new Date(parseInt(time2))
+                        
+                       
+                        var millisec = Math.abs(CurrentTime.getTime() - date.getTime());
+                        
+                            var seconds = (millisec / 1000).toFixed(0);
+                            var minutes = Math.floor(seconds / 60);
+                            var hours = "";
+                            if (minutes > 59) {
+                                hours = Math.floor(minutes / 60);
+                                hours = (hours >= 10) ? hours : "0" + hours;
+                                minutes = minutes - (hours * 60);
+                                minutes = (minutes >= 10) ? minutes : "0" + minutes;
+                            }
+
+                            seconds = Math.floor(seconds % 60);
+                            seconds = (seconds >= 10) ? seconds : "0" + seconds;
+                            var LineStop = "";
+                            if (hours != "") {
+                                LineStop = hours + ":" + minutes + ":" + seconds;
+                            }
+                            else {
+                                LineStop = minutes + ":" + seconds;
+                            }
+                            
+                        //}
+
+                        
+                        
+                            $("#" + jsonRes[i].Line_ID).attr('src', '/Content/images/red.png');
+                            $("#" + jsonRes[i].Line_ID).attr('float', 'left');
+                        $("#span" + jsonRes[i].Line_ID).html(LineStop);
+                        $("#span" + jsonRes[i].Line_ID).attr('class', 'timeBox');
+                    }
+                    else {
+                        $("#" + jsonRes[i].Line_ID).attr('src', '/Content/images/green.png');
+                        
+                    }
+
+                }
+
+            }
+        }
+    }
+    //$(".tractorShop").click(function () {
+    //    window.location.href = 'http://10.151.34.31:81/Tracking/TractorShop';
+    //});
+    //$(".VTUShop").click(function () {
+    //    window.location.href = 'http://10.151.34.31:81/Tracking/VTUShop';
+    //});
+    //$(".EngineShop").click(function () {
+    //    window.location.href = 'http://10.151.34.31:81/Tracking/EngineShop';
+    //});
+    //$(".transmissionShop").click(function () {
+    //    window.location.href = 'http://10.151.34.31:81/Tracking/TransmissionShop';
+    //});
+
+
+</script>

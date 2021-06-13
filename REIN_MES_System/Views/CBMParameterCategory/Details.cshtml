@@ -1,0 +1,21 @@
+﻿@model REIN_MES_System.Models.MM_CBM_Parameter_Category
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Parameter Category")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Category_Name)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Category_ID }, htmlAttributes: new { @class = "btn btn-success" }) |
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

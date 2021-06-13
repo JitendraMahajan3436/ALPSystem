@@ -1,0 +1,544 @@
+﻿
+@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+@using System.Globalization
+@using REIN_MES_System
+@using System.Threading;
+@{
+    ViewBag.Title = "Status";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+
+
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="machine-status-box-header">
+                @*<span style="font-size:small; font-weight: bold; float:right;">Legend</span>*@
+                <span class="machine-status-box-number">
+                    <button class="btn mt-green font-div-text">Healthy</button>
+                    <button class="btn mt-orange font-div-text">Idle</button>
+                    <button class="btn mt-red font-div-text">Faulty</button>
+                    @*<button class="btn mt-blue font-div-text">Connection Failure</button>*@
+                    <button class="btn mt-blue font-div-text"> Connection failure/ M/c Off</button>
+                </span>
+            </div>
+            <div style="display:none">
+                @Html.TextBox("Plant_ID")
+            </div>
+        </div>
+    </div>
+
+    <section>
+        <div class="main-sidebar" style="background-image: url('../../Content/images/plain-red-blurred-background_1035-3332.jpg');">
+            @if (ViewBag.Shops != null)
+            {
+                int i = 0;
+                foreach (var shop in ViewBag.Shops)
+                {
+                    <li class="treeview" id="treeview_@shop.Shop_ID" onclick="UpdateShop('@shop.Shop_ID')">
+                        <a href="#" style="color:white" id="Anchor_@shop.Shop_ID" class="anchorclass">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                            <span><b>@shop.Shop_Name</b></span>
+                        </a>
+                    </li>
+                }
+
+            }
+        </div>
+        <input type="hidden" id="hdnShop_ID" />
+    </section>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="machine-info-box-header"><span class="machine-info-box-number" id="shopnamebind"></span></div>
+            <div style="display:none">
+                <input id="Plant_ID" name="Plant_ID" type="text" value="">
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-12" style="margin-left: 202px;">*@
+    <div class="route_machine_list" id="route_machine_list"></div>
+    @*</div>
+        </div>*@
+
+    @*<div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="box-body machinshop">
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body no-padding">
+                    <div class="row universal-tracking-box" style="height: 130px;">
+
+                        @*<div class="col-md-6">
+                                <table class="table table-bordered station-detail-table">
+                                    <tbody>
+                                        <tr><td class="bg-dark text-right">Serial No.</td><td id="station-Item"></td></tr>
+                                        <tr><td class="bg-dark text-right">Model Series</td><td id="station-ItemModelSeries"></td></tr>
+                                    </tbody>
+                                </table>
+                                @Html.ActionLink("Avix SOS", "DownloadAvixFile", "Tracking", new { documentPath = "" }, htmlAttributes: new { @class = "btn btn-info btn-sm col-md-12 btn-flat" })
+                                <div class="col-md-12" id="associatelist-tracking">
+
+                                </div>
+                            </div>*@
+                        <div class="col-md-12">
+                            <div id="machinelist-tracking">
+                            </div>
+
+                            <div class="col-md-12 text-bold" id="stationSignalsBlock">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="container" id="machineimage">
+
+
+                        <table class="table table-bordered table-condensed tracking-popup" id="defectlist-tracking"></table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*<link href="~/Content/theme/base/jquery-ui.css" rel="stylesheet" />
+        <script src="~/Content/theme/base/jquery-ui.js"></script>
+        <script src="~/Content/theme/base/jquery-ui.min.js"></script>*@
+    <script src="~/Scripts/carousel.js"></script>
+    <script type="text/javascript">
+
+        //$(function () {
+        //    $("#tabs").tabs();
+        //});
+
+
+        $(document).ready(function () {
+            checkStatus();
+
+            $('[data-toggle="tooltip"]').tooltip();
+            window.setInterval(checkStatus, 10000);
+
+            $('.carousel').carousel({
+                pause: "false"
+            });
+
+        });
+
+
+
+        function blink(selector) {
+            $(selector).fadeOut('slow', function () {
+                $(this).fadeIn('slow', function () {
+                    blink(this);
+                });
+            });
+        }
+
+        blink('.blink');
+        function checkStatus() {
+            $.getJSON('/MachineStatus/getStatus', function (data) {
+                // alert(data);
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+
+                    $.each(data, function (i, item) {
+
+                        var machineid = data[i].Machine_ID;
+                        var isHealthy = data[i].isHealthy;
+                        var isFaulty = data[i].isFaulty;
+                        var isIdle = data[i].isIdle;
+                        var isHeartBit = data[i].Heart_Bit;
+                        // serialno = serialno.substr(serialno.length - 5);
+
+                        if (isHealthy) {
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            //.css("background", "green");
+                        }
+                        else if (isFaulty) {
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('blinker');
+                            //  $('*[data-id="' + machineid + '"]').children("div").css("background", "red");
+                            // blink($('.machine-info-box .blinker'));
+
+                        }
+                        else if (isIdle) {
+
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            // $('*[data-id="' + machineid + '"]').children("div").css("background", "orange");
+                        }
+                        else if (isHeartBit) {
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            // $('*[data-id="' + machineid + '"]').children("div").css("background", "blue");
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Machine Status !');
+            });
+
+        }
+    </script>
+}
+
+
+<script type="text/javascript">
+
+        function UpdateShop(shopid){
+            debugger
+            if(shopid!=0)
+            {
+               
+                //$('.anchorclass').removeAttr("style");
+                $('.anchorclass').attr("style","color:white")
+                //$("#Anchor_" + shopid).removeAttr("style");
+
+                $("#Anchor_" + shopid).attr("style", "color:skyblue");
+
+                var url = "/MachineStatus/getshopname";
+                ajaxpack.getAjaxRequest(url, "shopid=" + shopid + "", showLineDetail, "json");
+            }
+            setTimeout(function () {
+               
+                var url ="/MachineStatus/getmachine"; // we are calling json method
+                ajaxpack.getAjaxRequest(url, "shopid=" + shopid + "", Showmachineslist, "json");
+
+
+                }
+            , 1000);
+        }
+        function showLineDetail() {
+           
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        $("#shopnamebind").html(jsonRes[0].Value);
+                    }
+                }
+
+
+
+
+
+        }
+        function Showmachineslist() {
+           
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                    $(".route_station_list").html("");
+                    var jsonRes = $.parseJSON(myajax.responseText);
+
+                    var res = "";
+                    var count = 0;
+                    
+                    res += '<div class="machinetst">';
+                    res += '<div class="row">';
+                    //$("#lblStages").html(jsonRes.count);
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        //var res = "";
+                        count++;
+                        //res += ' <div class="row">';
+                        //res += '<div class="col-md-12">';
+                        res +='<div class="col-md-4">';
+                        res += '<div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="' + jsonRes[i].machine_Id + '">';
+                        res +='<div class="info-box-content">';
+                        res += '<span class="info-box-text">' + jsonRes[i].machine_no + '</span>';
+                        res += '<span class="info-box-number">' + jsonRes[i].machine_name + '</span>';
+
+                         res +='</div>'   ;
+                         res +='</div>';
+                         res +='</div>';
+
+                        //res += '</div>';
+                        //res += '</div>';
+
+                        if (count % 3 == 0 && i>0) {
+                            res += '</div>';
+                            res += '<div class="row">';
+                        }
+
+                    }
+                    res += '</div>';
+                    res += '</div>';
+                    $(".route_machine_list").html(res);
+                }
+            }
+        }
+        $('#myModal').on('shown.bs.modal', function (e) {
+            
+            var invokerstation = $(e.relatedTarget);
+            $("#associatelist-tracking").html("");
+            $("#machinelist-tracking").html("");
+
+            $("#ItemPreview").attr("src", "");
+
+            var machine = invokerstation.data("id");
+
+
+
+            $.getJSON('/Tracking/getMachines', { machineid: machine }, function (data) {
+               
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (idx, resultDataObj) {
+
+                            $("#machinelist-tracking").append("<div class='details-block machine-detail-block' data-machine-id='" + resultDataObj.Machine_ID + "'>" +
+                              "<h5>" + resultDataObj.Machine_Name + "</h5>" +
+                             "<div class='machine-details-cloud'>" +
+                             "<div class='row text-center'>" +
+                              "<div class='col-md-6'><a target='_blank' href='/CBMDashboard/ShowMachineCBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CBM</a></div>" +
+                              "<div class='col-md-6'><a target='_blank' href='/MinorStoppages/ShowMachineMinorStoppage/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary tbmclass'>Minor Stoppage</a></div>" +
+                              "<div class='col-md-6'><a target='_blank' href='/TBMDashboard/ShowMachineTBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>TBM</a></div>" +
+                              "<div class='col-md-6'><a target='_blank' href='/CLITADailyCheck/ShowMachineDailyCLITA/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CLITA</a></div>" +
+                              //"<div class='col-md-6'><a  href='/CBMDashboard/ShowMachineCBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CBM</a></div>" +
+                              //"<div class='col-md-6'><a  href='/MinorStoppages/ShowMachineMinorStoppage/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>Minor Stoppage</a></div>" +
+                              //"<div class='col-md-6'><a  href='/TBMDashboard/ShowMachineTBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>TBM</a></div>" +
+                              //"<div class='col-md-6'><a  href='/CLITADailyCheck/ShowMachineDailyCLITA/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CLITA</a></div>" +
+                              "</div></div>" +
+                //"<h5 data-toggle='modal' data-target='#myModal4' >" + resultDataObj.Machine_Name + "</h5>" +
+                              "</div>");
+
+                            //$("#ItemPreview").attr('src', url);
+                        });
+                    } else {
+                        $("#machinelist-").html("<p class='text-center'>No Machines assigned !</p>");
+                    }
+                } else {
+                    $("#machinelist-tracking").html("<p class='text-center'>No Machines assigned !</p>");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Error getting Machine List !');
+            });
+            setTimeout(function () {
+               
+                //var buffer = jsonRes[i].Image_Content;
+                $.ajax({
+                    type: 'POST',
+                    url: "/Tracking/getmachineimage", // we are calling json method
+                    dataType: 'json',
+                    data: { machineid: machine },
+                    success: function (data) {
+                        
+                       // var imagename1 = "/Content/theme/dist/img/boxed-bg.png";
+                       
+                       // $("#ItemPreview").attr("src", "data:image/png;base64", +arrayBufferToBase64(data.Imagedata));
+                        //$('#ItemPreview').attr("src", "data:image/png;base64" ,+arrayBufferToBase64(data.Imagedata));
+                        var res = '<div class="">';
+                        if (data.length > 0) {
+                            //$("hideimage").html("");
+
+                            //var byteArray = data[0].Imagedata;
+                            var buffer = data[0].Imagedata;
+                            //var base64 = arrayBufferToBase64(byteArray);
+                            res += '<img id="ItemPreview" alt="machine image" style="width:33em;height:274px;margin-left: 2%" src="data:image/png;base64,' + arrayBufferToBase64(buffer) + '">';
+
+                        }
+                        else
+                        {
+                            res += '<img alt="machine image" style="width:33em;height:274px;margin-left: 2%" src="/Content/theme/dist/img/boxed-bg.png">';
+                        }
+                        res += '</div>';
+                        //$("#ItemPreview").attr('src', 'data:image/jpeg;base64,' + base64);
+                        $("#machineimage").html(res);
+                        }
+                        //else {
+                        //    //$("#hideimage").html("There is no image against machine");
+                        //    $("#ItemPreview").attr('src', imagename1);
+
+                        //}
+
+
+                })
+            }
+
+           , 750);
+
+
+
+
+            //$('.tbmclass').click(function () {
+
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "/TBMDashboard/gettbmimage", // we are calling json method
+            //        dataType: 'json',
+            //        data: { machineid: machine },
+            //        success: function (data) {
+            //            debugger
+            //            // $("#ItemPreview").attr("src", "data:image/png;base64", +arrayBufferToBase64(data.Imagedata));
+            //            //$('#ItemPreview').attr("src", "data:image/png;base64" ,+arrayBufferToBase64(data.Imagedata));
+
+            //            var byteArray = data[0].Imagedata;
+
+            //            var base64 = arrayBufferToBase64(byteArray);
+
+            //            $("#ItemPreview").attr('src', 'data:image/jpeg;base64,' + base64);
+            //        }
+            //    })
+
+            //})
+
+
+        });
+        function arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+            // Ajax fail callback function.
+            //alert('Error getting Machine List !');
+
+
+</script>
+<style type="text/css">
+    .machine-info-box {
+        display: block;
+        min-height:1%; 
+        background: #fff!important;
+        width: 83%;
+        box-shadow: 6px 5px 10px rgba(15, 15, 15, 0.35)!important;
+        border-radius: 2px;
+        margin-bottom: 15px;
+    }
+
+    .machinetst {
+        margin-left: 16%;
+    }
+
+    .machine-info-box-header {
+        display: block;
+        height: 30px;
+        background: #6fece1;
+        width: 85% !important;
+        box-shadow: 05px 12px rgb(166, 127, 127) !important;
+        margin-left: 14%;
+        margin-top: 1.5% !important;
+        border-radius: 2px;
+    }
+</style>
+<style type="text/css">
+    .mt-green {
+        background: #26a831;
+    }
+
+    .mt-red {
+        background-color: tomato;
+    }
+
+    .mt-blue {
+        /*background: rgba(96, 59, 190, 0.33);*/
+        background: rgba(189, 184, 34, 1);
+    }
+
+    .mt-orange {
+        background: rgba(255, 106, 0, 0.54);
+    }
+
+    .skin-yellow .wrapper, .skin-yellow .main-sidebar, .skin-yellow .left-side {
+        background-color: white;
+    }
+
+    .main-sidebar, .left-side {
+        position: absolute;
+        top: 12%;
+        left: 0;
+        padding-top: 50px;
+        min-height: 100%;
+        width: 185px;
+        z-index: 810;
+        -webkit-transition: -webkit-transform .3s ease-in-out,width .3s ease-in-out;
+        -moz-transition: -moz-transform .3s ease-in-out,width .3s ease-in-out;
+        -o-transition: -o-transform .3s ease-in-out,width .3s ease-in-out;
+        transition: transform .3s ease-in-out,width .3s ease-in-out;
+    }
+
+    .ShopName {
+        margin-bottom: -0.7%;
+        box-shadow: 0 1px 0px rgba(0,0,0,0.12), 3px 4px 1px rgba(66,59,59,0.24);
+        border: dashed;
+        border: medium;
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        margin-top: 2%;
+        background-color: #222d32;
+        /* margin-top: 4.55%; */
+        color: #f6f6f6;
+        width: 81%;
+        margin-left: 19%;
+        position: fixed;
+        z-index: 999;
+        /* margin-top: 50px; */
+        height: 30px;
+    }
+
+    .machine-info-box-header {
+        display: block;
+        /* min-height: 57px; */
+        height: 30px;
+        background: #6fece1;
+        /* border: 1px solid; */
+        width: 85% !important;
+        box-shadow: 0 5px 12px rgb(166, 127, 127) !important;
+        border-radius: 2px;
+        margin-bottom: 15px;
+        margin-left: 14%;
+        margin-top: 1.5% !important;
+    }
+
+    .machinshop {
+        width: 239px;
+        height: 7px;
+        border: 2px solid black;
+        margin-left: 37%;
+        border-radius: 4px;
+    }
+</style>

@@ -1,0 +1,74 @@
+﻿@model REIN_MES_System.Models.RS_Style_Code
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model=>model.StyleCode_ID)
+        <div class="row">
+            <div class="alert  alert-info alert-dismissable" style="display:none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa  fa-check"></i></h4>
+
+            </div>
+            <div class="col-md-6" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name + " *", htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, null, new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Style_Code, ResourceDisplayName.Style_Code, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Style_Code, new { @class = "form-control", @maxlength = "20" })
+                @Html.ValidationMessageFor(model => model.Style_Code, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Style_Code_Number, ResourceDisplayName.Style_Code_Number, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Style_Code_Number, new { @class = "form-control", @maxlength = "3", @onkeypress = "return isNumberKey(event)" })
+                @Html.ValidationMessageFor(model => model.Style_Code_Number, null, new { @class = "validation_error" })
+
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+
+                @Html.LabelFor(model => model.Style_Code_Description, ResourceDisplayName.Style_Code_Description, htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Style_Code_Description, new { onchange = "", @class = "form-control" , @maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.Style_Code_Description, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-5">
+            <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/Commonjs")
+}
+
+<script type="text/javascript">
+    function isNumberKey(evt) {
+        // alert(evt.which);
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    }
+</script>

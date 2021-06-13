@@ -1,0 +1,81 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_BIW_Part_Master>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "BIWPartNoMaster")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+       
+            <thead>
+                <tr>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                        </th>*@
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Sub_Assembly_ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Variant_Code)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VARIANT_DESC)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.VARIANT_TYPE)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.LONG_DESC)
+                    </th>
+                    <th>@ResourceGlobal.Action</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Major_Sub_Assembly.Sub_Assembly_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Variant_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VARIANT_DESC)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.VARIANT_TYPE)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LONG_DESC)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "BIWPartNoMaster", new { id = item.Row_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+                        <a href="@Url.Action("Details", "BIWPartNoMaster", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action("Delete", "BIWPartNoMaster", new { id = item.Row_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+        @section scripts {
+            @Scripts.Render("~/Content/theme/plugins/datatables/js")
+            @Styles.Render("~/Content/theme/plugins/datatables/css")
+            @Scripts.Render("~/Scripts/user_datatable")
+        }

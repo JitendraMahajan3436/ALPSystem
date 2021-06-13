@@ -1,0 +1,228 @@
+﻿@model REIN_MES_System.Models.RS_Lines
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    bool isConveyorSelected = Convert.ToBoolean(ViewBag.Is_Conveyor_Selected);
+    bool IsOrderstartonTAKT = Convert.ToBoolean(ViewBag.Is_StartOrder_BasedOn_TAKT);
+}
+<script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+<style>
+    table {
+        border: 1px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        table .tr > td {
+            text-wrap: initial;
+            text-align: center;
+        }
+
+        table tr.progress-signal {
+            background-color: yellow;
+            text-align: center;
+            color: black;
+            font-weight: bold;
+        }
+
+    .table-scroll {
+        height: 240px !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden;
+        padding-right: 0px;
+    }
+</style>
+
+<div class="col-md-12 plant-line plant-stations">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Line_ID)
+            <div class="row">
+                <div style="display:none;">
+                    @Html.LabelFor(model => model.Plant_ID, new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Shop_ID, new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Shop_ID", null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Line_Code, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Line_Code, htmlAttributes: new { @class = "form-control text-uppercase", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.Line_Code, null, new { @class = "validation_error" })
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Line_Name, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Line_Name, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.Line_Name, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Line_Description, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Line_Description, htmlAttributes: new { @class = "form-control", @maxlength = "100" })
+                    @Html.ValidationMessageFor(model => model.Line_Description, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Is_Shop_Line_Start, new { @class = "" })
+                    @Html.DropDownListFor(model => model.Is_Shop_Line_Start, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid form-control" })
+                    @Html.ValidationMessageFor(model => model.Is_Shop_Line_Start, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Is_Shop_Line_End, new { @class = "" })
+                    @Html.DropDownListFor(model => model.Is_Shop_Line_End, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid form-control" })
+                    @Html.ValidationMessageFor(model => model.Is_Shop_Line_End, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Is_Conveyor, new { @class = "" })
+                    @Html.DropDownListFor(model => model.Is_Conveyor, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid form-control" })
+                    @Html.ValidationMessageFor(model => model.Is_Conveyor, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-5">
+                        @Html.Label("Start Order Based on TAKT(80%)", new { @class = "" })
+                        @Html.DropDownListFor(model => model.Is_StartOrder_BasedOn_TAKT, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid" })
+                        @Html.ValidationMessageFor(model => model.Is_StartOrder_BasedOn_TAKT, null, new { @class = "validation_error" })
+                    </div>*@
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-3 line_tact_time"
+                     @{ if (isConveyorSelected) { } else { <text> style="display:none;" </text>                 } }>
+                    @Html.LabelFor(model => model.isPLC, new { @class = "" })
+                    @Html.DropDownListFor(model => model.isPLC, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid form-control" })
+                    @Html.ValidationMessageFor(model => model.isPLC, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-2 line_tact_time"
+                     @{ if (isConveyorSelected) { } else { <text> style="display:none;" </text>             } }>
+                    @Html.LabelFor(model => model.TACT_Time, new { @class = "" })
+                    @Html.TextBoxFor(model => model.TACT_Time, htmlAttributes: new { @class = "form-control", @placeholder = "Eg. 11:00" })
+                    @Html.ValidationMessageFor(model => model.TACT_Time, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-2 line_tact_sec"
+                         @{ if (IsOrderstartonTAKT) { } else { <text> style="display:none;" </text>              } }>
+                        @Html.Label("Takt Time Second", new { @class = "" })
+                        @Html.TextBoxFor(model => model.Tact_Time_Sec, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Tact_Time_Sec, null, new { @class = "validation_error" })
+                    </div>*@
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    @*<input type="checkbox" id="Is_Buildsheet" name="CheckboxGroup" class="CheckboxGroup" />*@
+                    @Html.CheckBox("Is_Buildsheet",new { @id= "Is_Buildsheet",@class= "CheckboxGroup" })
+                    @Html.Label("Buildsheet", new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.Is_Buildsheet)
+                </div>
+                <div class="col-md-3">
+                    @*<input type="checkbox" id="Is_PRN" name="CheckboxGroup" class="CheckboxGroup" />*@
+                    @Html.CheckBox("Is_PRN",new { @id= "Is_PRN",@class= "CheckboxGroup" })
+                    @Html.Label("PRN", new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.Is_PRN)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/master_file")
+    }
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+        $(".CheckboxGroup").click(function () {
+
+            $(".CheckboxGroup").removeAttr("checked");
+            $(this).removeClass("CheckboxGroup");
+            $(this).prop('checked', true);
+            var value = this;
+            $(this).addClass("CheckboxGroup");
+        });
+
+        $("#TACT_Time").keydown(false);
+
+        $("#Is_Conveyor").change(function (e) {
+            if ($(this).val() == "true") {
+                // display line tact time with reset
+                $(".line_tact_time").show("slow");
+                $("#TACT_Time").val("00:00:00");
+                //$("#isPLC").val("");
+            }
+            else {
+                // hide tact time and reset
+                $(".line_tact_time").hide("slow");
+                $("#TACT_Time").val("00:00:00");
+                //$("#isPLC").val("");
+            }
+        });
+
+        $('#TACT_Time').change(function(){
+            val = $('#TACT_Time').val();
+            if (val > "23:59:59") {
+                $('#TACT_Time').addClass('input-validation-error');
+                $('#TACT_Time').next().text("Please Enter Valid Tact time.");
+            }
+            else {
+                $('#TACT_Time').removeClass('input-validation-error');
+                $('#TACT_Time').next().text("");
+            }
+        });
+    });
+
+    $("#TACT_Time").datetimepicker(
+           {
+               format: "HH:mm:ss",
+               allowInputToggle: true,
+               //maxDate: '0',
+               collapse: true,
+           });
+    //$("#Is_StartOrder_BasedOn_TAKT").change(function (e) {
+    //    if ($(this).val() == "true") {
+    //        // display line tact time with reset
+    //        $(".line_tact_sec").show("slow");
+    //        $("#TACT_Time").val("00:00:00");
+    //        //$("#isPLC").val("");
+    //    }
+    //    else {
+    //        // hide tact time and reset
+    //        $(".line_tact_sec").hide("slow");
+    //        $("#TACT_Time").val("00:00:00");
+    //        //$("#isPLC").val("");
+    //    }
+    //});
+</script>

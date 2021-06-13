@@ -1,0 +1,113 @@
+﻿@model REIN_MES_System.Models.MM_Documents
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "AddDocument", FormMethod.Post, new { id = "add_Doc", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Doc_Name, "Document Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Doc_Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Doc_Name, null, new { @class = "validation_error" })
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Doc_Description, "Document Description", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Doc_Description, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Doc_Description, null, new { @class = "validation_error" })
+        </div>
+    </div>*@
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Doc_Content, "Select Document", htmlAttributes: new { @class = "" })
+                <input type="file" class="form-control input-lg" name="file" id="uloadfile" />
+                @*<div class="input-group">
+                        <span class="input-group-btn">
+                            <label class="btn btn-primary btn-file" for="multiple_input_group">
+                                <div class="input required"><input id="multiple_input_group" name="file" type="file"></div> Browse
+                            </label>
+                        </span>
+                        <span class="file-input-label"></span>
+                    </div>*@
+
+                @Html.ValidationMessageFor(model => model.Doc_Content, null, new { @class = "validation_error" })
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+
+                <input type="submit" value="Save" class="btn btn-success" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+}
+<div id="dialog" title="Error"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+
+
+
+}
+
+
+<script type="text/javascript">
+        $(document).ready(function (e) {
+            //add_User
+            debugger
+            //$("#add_Doc").validate({
+
+            //    ignore: [],
+            //    rules: {
+            //        Doc_Name: "required",
+            //        multiple_input_group: "required"
+            //    }
+
+            //});
+        })
+</script>
+<style type="text/css">
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            background: red;
+            cursor: inherit;
+            display: block;
+        }
+
+    .file-input-label {
+        padding: 0px 10px;
+        display: table-cell;
+        vertical-align: middle;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    input[readonly] {
+        background-color: white !important;
+        cursor: text !important;
+    }
+</style>
+

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Traceability>
+
+<div class="table-responsive">
+
+
+    <table class="table table-responsive table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+
+                    Part_Id
+                </th>
+                <th>
+                    Part ID Desc.
+                </th>
+                <th>
+                    BOM Part No
+                </th>
+                <th>
+
+                    Scan Value
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    VCode
+                </th>
+                <th>
+                    MFGDATE
+                </th>
+                <th>MFGSHIFT</th>
+                <th>MFGSRNO</th>
+                <th>StnCode</th>
+                <th>PartNo</th>
+                <th>Zpart</th>
+                <th>Eroor Prof.</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item)
+                        @item.
+                    </td>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        @item.Part_NO_BOM
+                    </td>
+                    <td>
+                        @item.Scan_Value
+                    </td>
+                    <td>
+                        @item.Status
+                    </td>
+                    <td>
+                        @item.VCode
+                    </td>
+                    <td>
+                        @item.MFGDATE
+                    </td>
+                    <td>
+                        @item.MFGSHIFT
+                    </td>
+                    <td>
+                        @item.MFGSRNO
+                    </td>
+                    <td>
+                        @item.StnCode
+                    </td>
+                    <td>
+                        @item.PartNo
+
+                    </td>
+                    <td>
+                        @item.Zpart
+                    </td>
+                    <td>
+                        @item.Error
+                    </td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>

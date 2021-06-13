@@ -1,0 +1,36 @@
+﻿@model REIN_MES_System.Models.RS_PartID
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-6">
+    <div>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.PartID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PartID)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.PartIDDescription)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PartIDDescription)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.RowID }, new { @class = "btn btn-primary" })
+        @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+    </p>
+
+</div>

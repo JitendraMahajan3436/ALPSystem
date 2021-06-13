@@ -1,0 +1,86 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Lines>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+<div id="LineOfficerTactTime">
+    @Html.Partial("IndexPartial", Model)
+</div>
+
+<script>
+    $(".IntegerValidation").on("keypress", function (e) {
+        if ((e.keyCode < 48 || e.keyCode > 57)) {
+            e.preventDefault();
+        }
+    });
+    function UpdateTactTime(Line_ID) {
+        var Tact_Time = $("#txtTactTime_" + Line_ID).val();
+        var LineStoppagePercent = $("#Line_Stop_Percentage_" + Line_ID).val();
+        var LineStopPercentage = parseInt(LineStoppagePercent);
+        var flag = 0;
+        var Tflag = 0;
+        if (LineStopPercentage == "" || isNaN(LineStopPercentage)) {
+            $("#ErrorLinePercentage_" + Line_ID).html("Please enter line stop value")
+            flag = 1;
+        } else if (LineStopPercentage >= 100) {
+            $("#ErrorLinePercentage_" + Line_ID).html("Line stop value should not greter than 100% or Equal to 100 %")
+            flag = 1;
+        } else {
+            flag = 0;
+        }
+        if (Tact_Time == "") {
+            Tflag = 1;
+            $("#ErrorTACT_Time_" + Line_ID).html("Please enter tact time");
+        } else {
+            Tflag = 0;
+        }
+        if (flag == 0 && Tflag==0) {
+            $.ajax(
+          {
+              url: '/LineSuperVisor/Edit?Line_ID=' + Line_ID + '&TACT_Time=' + Tact_Time + "&Line_Stop_Percentage=" + LineStopPercentage,
+              type: 'POST',
+              data: "",
+              contentType: 'application/json; charset=utf-8',
+              success: function (data) {
+                  if (data) {
+                      $("#LineOfficerTactTime").html(data);
+                      alert("Tact time updated successfully..!")
+                  } else {
+                      alert("error");
+                  }
+              },
+              error: function () {
+                  alert("error");
+              }
+          });
+        }
+    }
+
+</script>
+<script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $(".tactTime").keydown(false);
+
+        $('.tactTime').change(function () {
+            val = $('#.tactTime').val();
+            if (val > "23:59:59") {
+                $('.tactTime').addClass('input-validation-error');
+                $('#.tactTime').next().text("Please Enter Valid Tact time.");
+            }
+            else {
+                $('.tactTime').removeClass('input-validation-error');
+                $('.tactTime').next().text("");
+            }
+        });
+    });
+    $(".tactTime").datetimepicker(
+       {
+           format: "HH:mm:ss",
+           allowInputToggle: true,
+           collapse: true,
+       });
+</script>

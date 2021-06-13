@@ -1,0 +1,366 @@
+﻿@model REIN_MES_System.Models.UtilityMainFeederMapping
+@using REIN_MES_System.App_LocalResources;
+@{
+                /**/
+
+                ViewBag.Title = "Edit";
+                Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+<style>
+    input.metercheckbox {
+        width: 30px;
+        height: 30px;
+        margin-top: 30px
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.RowId)
+
+
+    <div class="row">
+        @*<div class="col-md-3">
+
+            </div>*@
+        <div class="col-md-12">
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+
+
+                        <div class="form-group">
+                            <label>Shop Name *</label>
+                            @Html.DropDownList("Shop_ID", null, "Select Shop ", new { @class = "form-control", @style = "max-width:100%" })
+
+                            @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category Name </label>
+                            @*@Html.DropDownList("Category_ID", null, "Select Category ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                            @Html.DropDownListFor(model => model.Category_ID, null, ResourceDisplayName.Select_Category, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Category_ID, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Feeder Name *</label>
+                            @*@Html.EditorFor(model => model.FeederName, new { htmlAttributes = new { @class = "form-control ", @style = "max-width:100%" } })*@
+                            @Html.DropDownListFor(model => model.Feeder_ID, null, new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(model => model.Feeder_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Feeder Desc </label>
+                            @*@Html.DropDownList("Category_ID", null, "Select Category ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                            @Html.TextBox("FeederDesc", null, htmlAttributes: new { @class = "form-control", ReadOnly = "true", disabled = "false" })
+
+                        </div>
+
+                    </div>
+
+                   
+
+                    
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Area Name *</label>
+                            @*@Html.DropDownList("Parameter_ID", null, "Select Parameter ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                            @Html.DropDownListFor(model => model.Area_ID, null, "select Area Name", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Area_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Meter Type *</label>
+                            @Html.DropDownList("Meter_ID", null, "Select Meter ", new { @class = "form-control ", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Meter_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                
+
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Parameter Name *</label>
+                            @*@Html.DropDownList("Parameter_ID", null, "Select Parameter ", new { @class = "form-control select2", @style = "max-width:100%" })*@
+                            @Html.DropDownListFor(model => model.Parameter_ID, null, ResourceDisplayName.Select_Parameter, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Parameter_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label> Unit *</label>
+                            @Html.DropDownListFor(model => model.Unit_ID, null, "select Unit", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Unit_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                 
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>TagIndex *</label>
+                            @Html.EditorFor(model => model.TagIndex, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tag Name *</label>
+                            @Html.EditorFor(model => model.TagName, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.TagName, "", new { @class = "text-danger" })
+                        </div>
+
+
+                    </div>
+                   
+
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Load Type *</label>
+                            @Html.DropDownList("Load_ID", null, "Select Load ", new { @class = "form-control ", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Load_ID, "", new { @class = "text-danger Meter" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Rated Load </label>
+                            @Html.TextBox("Ratedload", null, new { @class = "form-control ", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Ratedload, "", new { @class = "text-danger Meter" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Ideal consumption </label>
+                            @Html.TextBox("Ideal", null, new { @class = "form-control ", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Ideal, "", new { @class = "text-danger Meter" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Consider *</label>
+                            @*@Html.EditorFor(model => model.Consider, new { htmlAttributes = new { @class = "form-control select2", @style = "max-width:100%" } })*@
+                            @Html.DropDownListFor(model => model.Consider, new SelectList(new List<object> { new { value = "", text = "Select" }, new { value = "True", text = "Active" }, new { value = "False", text = "InActive" } }, "value", "text", 2), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Consider, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.CheckBox("Active")
+                        <label>Shared Feeder</label>
+                        @Html.CheckBox("ManualMeter")
+                        <label>Manual Meter</label>
+                        @*@Html.CheckBox("ConsumptionType")
+            <label>/1000</label>
+            @Html.CheckBox("Is_Incomer")
+            <label>IS_Incomer</label>*@
+                        @Html.Hidden("Plant_ID")
+                    </div>
+
+
+
+
+
+
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-linkedin" />
+                        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+
+
+                
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".select2").select2();
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Plant_ID").change(function () {
+
+                var Plant_ID = $("#Plant_ID").val();
+
+                var options = {};
+                options.url = "/CommanMethod/PlantwiseShopconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Plant_ID: Plant_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $("#Shop_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Shop_ID").append(
+
+
+                            $('<option></option>').val(test.Shop_ID).html(test.Shop_Name).prop('selected', true));
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid Shop ");
+                };
+                $.ajax(options);
+
+
+            })
+            $("#Feeder_ID").change(function () {
+
+                var Feeder_ID = $("#Feeder_ID").val();
+                debugger;
+                var options = {};
+                options.url = "/CommanMethod/Feederwisedesc";
+                options.type = "POST";
+                options.data = JSON.stringify({ Feeder_ID: Feeder_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    //  $('#Feeder option').remove();
+                    $("#FeederDesc").html(""); // clear before appending new list
+                    $("#FeederDesc").val(id);
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+
+
+            })
+            $("#Shop_ID").change(function () {
+
+                var Shop_Id = $("#Shop_ID").val();
+                $("#Feeder_ID").html("")
+                debugger;
+                var options = {};
+                options.url = "/CommanMethod/ShopwiseFeeder";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: Shop_Id });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+                    debugger;
+                    //  $('#Feeder option').remove();
+                    $("#Feeder_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Feeder_ID").append(
+
+
+                            $('<option></option>').val(test.Feeder_ID).html(test.FeederName).prop('selected', true));
+                    });
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+                Area(Shop_Id)
+
+            })
+            function Area(shop) {
+                $("#Area_ID").html("");
+                var options = {};
+                options.url = "/CommanMethod/ShopwiseArea";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: shop });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    //  $('#Feeder option').remove();
+                    $("#Area_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Area_ID").append(
+
+
+                            $('<option></option>').val(test.Area_Id).html(test.Area_Name).prop('selected', true));
+                    });
+
+
+                };
+
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+            }
+        })
+    </script>
+    @*<script>
+        $("#Active").click(function () {
+            if ($(this).is(":checked")) {
+                $("input[name='Active']").prop("checked", this.checked, 
+                    );
+            }
+            else {
+                $("input[name='Active']").prop("checked", false);
+            }
+            //$("#submit").show();
+        });
+    </script>*@
+
+}
+
+

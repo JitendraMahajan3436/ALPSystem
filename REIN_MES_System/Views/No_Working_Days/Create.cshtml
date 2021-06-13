@@ -1,0 +1,105 @@
+﻿@model REIN_MES_System.Models.RS_No_Working_Day
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Day_Date, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                            @*@Html.Editor("Day_Date", new { htmlAttributes = new { @class = "form-control" } })*@
+
+                            @Html.Editor("Day_Date", new { htmlAttributes = new { @class = "form-control datepicker", autocomplete = "off" } })
+
+                            @Html.ValidationMessageFor(model => model.Day_Date, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Reason_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.DropDownListFor(model => model.Reason_ID, null, null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Reason_ID, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+
+
+
+
+
+
+
+
+                    @Html.Hidden("Plant_ID")
+
+
+
+                    <div class="form-group">
+
+                        <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".select2").select2();
+        });
+    </script>
+
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var start = $("#Day_Date").val();
+        $('.datepicker').datepicker({
+
+            //format: "yyyy/mm/dd",
+            format: 'dd/MM/yyyy',
+            //startDate: '+0d',
+            autocomplete: true
+        })
+
+
+    })
+</script>

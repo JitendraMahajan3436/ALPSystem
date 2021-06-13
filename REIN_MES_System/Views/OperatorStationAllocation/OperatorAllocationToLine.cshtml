@@ -1,0 +1,530 @@
+﻿@{
+    ViewBag.Title = "OperatorAllocationToLine";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-5">
+            @Html.Label("Shop Name")
+            @Html.DropDownList("Shop_ID", (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-5">
+            @Html.Label("Line Name")
+            @Html.DropDownList("Line_ID", Enumerable.Empty<SelectListItem>(), "--Select Line--", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-2"><span style="font:bold;"> Shift Name:</span> <label id="currentShift_Id" value="currentShift"> </label><br /></div>
+
+    </div>
+</div>
+
+<div class="row">
+    <input type="hidden" value="0" name="hdnSelectedStation" id="hdnSelectedStation" />
+    <input type="hidden" value="" name="hdnSelectedOperator" id="hdnSelectedOperator" />
+
+    <div id="line_configurations" style="height:400px;width:99%;overflow:scroll;" class="form-control">
+
+    </div>
+</div>
+
+
+
+<div class=" row">
+    <div class="col-md-4">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Present Buffer Employee's</h3>
+                <div class="box-tools pull-right">
+                    <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+
+            <div id="operator_Bpresent_list" class="box-body">
+                <ul class="users-list clearfix">
+                    @foreach (var emp in ViewBag.PBEmp)
+                    {
+                        <li id="@emp.Employee_No">
+                            <img alt="User Image" src="~/Content/images/tractor.png">
+                            <a href="#" class="users-list-name">@emp.Employee_Name</a>
+                            <span class="users-list-date">@emp.Employee_No</span>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Present Employee's</h3>
+                <div class="box-tools pull-right">
+                    <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+
+            <div id="operator_present_list" class="box-body">
+                <ul id="ulprsentemp" class="users-list clearfix">
+                    @if (ViewBag.PEmp != null)
+                    {
+                        foreach (var emp in ViewBag.PEmp)
+                        {
+                            <li id="@emp.Employee_No">
+                                <img alt="User Image" src="~/Content/images/tractor.png">
+                                <a href="#" class="users-list-name">@emp.Employee_Name</a>
+                                <span class="users-list-date">@emp.Employee_No</span>
+                            </li>
+                        }
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Abscent Employee's</h3>
+                <div class="box-tools pull-right">
+                    <button data-widget="collapse" class="btn btn-box-tool"><i class="fa fa-minus"></i></button>
+                    <button data-widget="remove" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div id="configuration_errors" class="box-body">
+                <ul class="users-list clearfix">
+                    @foreach (var abscentEmp in (System.Collections.Generic.IEnumerable<REIN_MES_System.Models.EmployeeAllocationData>)ViewBag.AEmp)
+                    {
+                        <li>
+                            <img alt="User Image" src="~/Content/images/tractor.png">
+                            <a href="#" class="users-list-name">@abscentEmp.Employee_Name</a>
+                            <span class="users-list-date">@abscentEmp.Employee_No</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery_ui")
+    <script src="~/Scripts/DailyReport.js"></script>
+    @*@Scripts.Render("~/bundles/route_configuration")*@
+    <link href="~/Content/EmployeeSkillSet.css" rel="stylesheet" />
+    @*<link href="~/Scripts/MyStyle.css" rel="stylesheet" />*@
+    <script src="~/Scripts/route_configuration.js"></script>
+
+    <script type="text/javascript">
+        var rowTotal = 25, columnTotal = 25;
+        $(function () {
+            loadHTMLTable();
+            presentOperatorDraggable();
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    url = "GetCurrentShift/";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showShiftName, "json");
+                    //alert(Shop_ID);
+                    $.getJSON('/OperatorStationAllocation/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+                        else {
+                            alert("Line are not present in current Shop")
+                        }
+                    });
+
+                }
+            });
+
+            $("#Line_ID").change(function (event) {
+                //$(".loading_spinner_image").show();
+
+                var url = "/OperatorStationAllocation/CreateOperatorAllocationToLineTable";
+                ajaxpack.getAjaxRequest(url, "lineId=" + $("#Line_ID").val() + "", showConfigurationHTML, "json");
+            });
+
+            function loadHTMLTable() {
+                var res = "";
+                var count = 1;
+                for (var i = 1; i <= rowTotal; i++) {
+                    res += "<tr>";
+                    for (var j = 1; j <= columnTotal; j++) {
+                        res = res + "<td id='" + count + "'></td>";
+                        count = count + 1;
+                    }
+                    res += "</tr>";
+                }
+
+                $("#line_configurations").html(res);
+            }
+
+            function showConfigurationHTML() {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        $("#line_configurations td").html("");
+                        var data = $.parseJSON(myajax.responseText);
+                        jsonRes = data.route;
+                        employee = data.employee;
+                        var line_arrow_left = '<div id="icons_1" class="bg-aqua color-palette station_icon_items line_arrow_left"><span class="line_arrow_left"><i class="fa fa-fw fa-arrow-left"></i><i class="fa fa-fw fa-arrow-left"></i></span></div>';
+                        var line_arrow_right = '<div id="icons_2" class="bg-aqua color-palette station_icon_items line_arrow_right"><span class="line_arrow_right"><i class="fa fa-fw fa-arrow-right"></i><i class="fa fa-fw fa-arrow-right"></i></span></div>';
+                        var line_arrow_down = '<div id="icons_3" class="bg-aqua color-palette station_icon_items line_arrow_down"><span class="line_arrow_down"><i class="fa fa-fw fa-arrow-down"></i><i class="fa fa-fw fa-arrow-down"></i></span></div>';
+                        var line_arrow_up = '<div id="icons_4" class="bg-aqua color-palette station_icon_items line_arrow_up"><span class="line_arrow_up"><i class="fa fa-fw fa-arrow-up"></i><i class="fa fa-fw fa-arrow-up"></i></span></div>';
+
+                        var line_start = '<div id="icons_5" class="bg-aqua color-palette station_icon_items line_start"><span class="line_start">Line Start</span></div>';
+                        var line_end = '<div id="icons_6" class="bg-aqua color-palette station_icon_items line_end"><span class="line_end">Line End</span></div>';
+
+                        for (var i = 0; i < jsonRes.length; i++) {
+                            var rowItem = ((jsonRes[i].Row_ID - 1) * columnTotal) + jsonRes[i].Col_ID;
+                            if (jsonRes[i].Station_ID) {
+                                //var res = "<div id='station_" + jsonRes[i].Station_ID + "' class='bg-aqua ui-droppable color-palette station_items'><div class='panel panel-heading ui-droppable station_items' >" + jsonRes[i].Station_Name + "</div><div id='user_" + jsonRes[i].Station_ID + "' class='panel-body ui-droppable station_items'></div>";
+                                var res = "<div id='station_" + jsonRes[i].Station_ID + "' class='bg-aqua ui-droppable color-palette station_items' onclick='GetEmployeeDetails(" + jsonRes[i].Station_ID + ")'><span class='" + jsonRes[i].Station_ID + "' >" + jsonRes[i].Station_Name + "</span><div>";
+                                for (var j = 0; j < employee.length; j++) {
+                                    if (jsonRes[i].Station_ID == employee[j].Station_ID) {
+                                        var emp = "";
+                                        emp = '<li id="assigned_operator_' + employee[j].Station_ID + '_' + employee[j].Employee_No + '">';
+                                        emp += '<img alt="User Image" src="content/theme/dist/img/user1-128x128.jpg">';
+                                        emp += '<a href="#" class="users-list-name">' + employee[j].Employee_Name + '</a>';
+                                        emp += '<span class="users-list-date">' + employee[j].Employee_No + '</span>';
+                                        emp += '</li></div>';
+                                        res += emp + "</div>";
+                                        //res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+                                        //$("#station_" + jsonRes[i].Station_ID).html(emp);
+                                    }
+
+
+                                }
+
+                                $("#line_configurations td#" + rowItem).html(res);
+                            }
+                            else if (jsonRes[i].Is_Up_Arrow == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_arrow_up);
+                            }
+                            else if (jsonRes[i].Is_Down_Arrow == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_arrow_down);
+                            }
+                            else if (jsonRes[i].Is_Left_Arrow == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_arrow_left);
+                            }
+                            else if (jsonRes[i].Is_Right_Arrow == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_arrow_right);
+                            }
+                            else if (jsonRes[i].Is_Start_Line == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_start);
+                            }
+                            else if (jsonRes[i].Is_Stop_Line == "1") {
+                                $("#line_configurations td#" + rowItem).html(line_end);
+                            }
+
+                            $("#station_" + jsonRes[i].Station_ID).droppable({
+                                accept: ".users-list li",
+                                activeClass: "ui-state-highlight",
+                                drop: function (event, ui) {
+                                    //deleteImage( ui.draggable );
+                                    // alert(ui.draggable.attr("id"));
+                                    // var deloperator=ui.draggable.attr("id");
+
+                                    var draggableId = ui.draggable.attr("id");
+                                    //var dropebaleId = ui.dropebaleId.att("id");
+                                    //alert(draggableId);
+                                    //alert(dropebaleId);
+
+                                    if (draggableId) {
+                                        url = "saveAssociateAllocation/";
+                                        // ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "", "stationId=" + $(this).attr("id") + "", showLineStationType, "json");
+                                        ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "&stationId=" + $(this).attr("id") + "&shopId=" + $("#Shop_ID").val() + "&lineId=" + $("#Line_ID").val(), SaveData, "json");
+
+
+                                    }
+                                    ui.draggable.remove();
+
+
+
+                                }
+                            });
+
+                        }
+
+                        $(".bg-aqua").droppable({
+                            cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                            revert: "invalid", // when not dropped, the item will revert back to its initial position
+                            containment: "document",
+                            helper: "clone",
+                            cursor: "move"
+
+                        });
+
+                        if (jsonRes.length > 0) {
+                            $("#hdnIsStartStaionAdded").val("1");
+                            $("#hdnIsEndStaionAdded").val("1");
+                        }
+                    }
+                }
+            }
+        })
+
+        function CheckAllocation(stationid) {
+            var url = "/OperatorStationAllocation/checkAllocatedEmployees";
+            $.getJSON(url, { stationid: stationid }, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#create-modal-body").append("<div class='col-md-1'>" + jsonRes[i].Employee_Name + "</div>");
+                }
+            });
+        }
+        function GetEmployeeDetails(stationid) {
+            var url = "/OperatorStationAllocation/GetEmployeeDetails";
+            $.getJSON(url, { stationid: stationid }, function (data) {
+                $("#ulprsentemp li").remove();
+                for (var i = 0; i < data.length; i++) {
+                    var ul = document.getElementById("ulprsentemp")
+                    var li = document.createElement("li");
+                    var img = document.createElement("img")
+                    img.setAttribute("alt", "User Image")
+                    img.setAttribute("src", "/Content/images/tractor.png")
+                    li.appendChild(img);
+                    var anchor = document.createElement("a")
+                    anchor.setAttribute("href", "#")
+                    anchor.setAttribute("class", "users-list-name")
+                    anchor.appendChild(document.createTextNode(data[i].Employee_Name));
+                    li.appendChild(anchor);
+                    var span = document.createElement("span")
+                    span.setAttribute("class", "users-list-date")
+                    span.appendChild(document.createTextNode(data[i].Employee_No));
+                    li.appendChild(span);
+                    //var str = "<img alt='User Image' src='~/Content/images/tractor.png'><a href='#' class='users-list-name'>" + data[i].Employee_Name + "</a><span class='users-list-date'>" + data[i].Employee_No + "</span>";
+                    //li.appendChild(document.createHTMLNode(str));
+                    ul.appendChild(li);
+                }
+            });
+        }
+        function ShowAllocation() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) {
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        $("#create-modal-body").append("<div class='col-md-1'>" + jsonRes[i].Employee_ID + "</div>");
+                    }
+                }
+            }
+        }
+
+        function showShiftName() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    // clearStationLists();
+                    //loadHTMLTable();
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    SelectOptionShiftHTML(jsonRes, "currentShift_Id");
+                }
+            }
+        }
+
+        function SelectOptionShiftHTML(jsonRes, targetId) {
+            //var jsonRes = $.parseJSON(myajax.responseText);
+            $("#" + targetId).html("");
+            var res = "";
+            for (var i = 0; i < jsonRes.length; i++) {
+                res += "<option>" + jsonRes[i].Value + "</option>";
+            }
+
+            res = "<option>" + $("#" + targetId).html() + "</option>" + res;
+            $("#" + targetId).html(res);
+        }
+
+        function operatorDroppable() {
+            $(".station_items").droppable({
+                accept: ".users-list li",
+                activeClass: "ui-state-highlight",
+                drop: function (event, ui) {
+                    //deleteImage( ui.draggable );
+                    //alert("pl");
+                    //console.log(ui.draggable.attr("id"));
+                    var draggableId = ui.draggable.attr("id");//123
+                    var droppableId = $(this).attr("id");//4
+                    var shopId = $("#Shop_ID").val();
+                    var lineId = $("#Line_ID").val();
+                    // alert(draggableId);
+                    // alert(droppableId);
+
+                    $("#hdnSelectedStation").val(droppableId);
+                    $("#hdnSelectedOperator").val(draggableId);
+                    if (draggableId) {
+                        url = "saveAssociateAllocation/";
+                        // ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "", "stationId=" + $(this).attr("id") + "", showLineStationType, "json");
+                        ajaxpack.getAjaxRequest(url, "EmployeeNo=" + ui.draggable.attr("id") + "&stationId=" + $(this).attr("id") + "&shopId=" + $("#Shop_ID").val() + "&lineId=" + $("#Line_ID").val(), SaveData, "json");
+                    }
+                }
+            });
+        }
+
+        function stationAssignedOperatorDraggable() {
+            $(".station_items").draggable({
+                cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                revert: "invalid", // when not dropped, the item will revert back to its initial position
+                containment: "document",
+                helper: "clone",
+                cursor: "move"
+            });
+        }
+
+        function presentOperatorDraggable() {
+            $(".users-list li").draggable({
+                cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                revert: "invalid", // when not dropped, the item will revert back to its initial position
+                containment: "document",
+                helper: "clone",
+                cursor: "move"
+            });
+        }
+
+        function upperOperatorDraggable() {
+            $(".users-list li").draggable({
+                cancel: "a.ui-icon", // clicking an icon won't initiate dragging
+                revert: "invalid", // when not dropped, the item will revert back to its initial position
+                containment: "document",
+                helper: "clone",
+                cursor: "move"
+            });
+        }
+
+        function deleteData() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    alert("Data deleted Sucessfully");
+                    //SelectOptionHTML(jsonRes, "defectCheckpoint");
+                    //SelectOptionHTML(jsonRes, "Shop_ID");
+                }
+            }
+        }
+
+        function SaveData() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    //alert(jsonRes);
+                    //check json res t or f
+                    if (jsonRes == true) {
+                        //allocaed suss
+                        var selectedStationId = $("#hdnSelectedStation").val();
+                        var selectedOperator = $("#hdnSelectedOperator").val();
+                        alert("Data Saved Sucessfully");
+                        //var operator_html = $("#" + selectedOperator).html();
+                        $("#" + selectedStationId).html("<li class='station_assigned_operator' id='assigned_operator_" + selectedStationId + "_" + selectedOperator + "' '>" + $("#" + selectedOperator).html() + "</li>" + $("#" + selectedStationId).html());
+                        stationAssignedOperatorDraggable();
+                    }
+                    else {
+                        //already allocated
+                        alert("This Employee Already Allocated to This Station");
+                    }
+                }
+            }
+        }
+    </script>
+}
+
+<style type="text/css">
+    .skin-yellow .main-header .logo {
+        background-color: white;
+    }
+
+    .main-footer {
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        padding: 22px 0;
+        width: 79px;
+    }
+
+    #line_configurations td {
+        border: 1px solid #cccccc;
+        height: 72px;
+        min-height: 72px;
+        min-width: 72px;
+        padding: 0;
+    }
+
+    .station_items {
+        height: 72px;
+        padding: 0;
+        width: 72px;
+        z-index: 9999999;
+    }
+
+    .station_icon_items {
+        /* width: 36px; */
+        text-align: center;
+        width: 72px;
+        z-index: 99;
+    }
+
+    td .station_items {
+        font-size: 12px;
+    }
+
+    .station_icon_items.line_arrow_down, .station_icon_items.line_arrow_up {
+        height: 72px;
+        margin: 0 22px;
+        width: 25px;
+    }
+
+    /* td .station_icon_items.line_arrow_down, td .station_icon_items.line_arrow_up {
+            height: 99px;
+            margin: 0 23px;
+            width: 25px;
+        } */
+
+    .site_trash_box {
+        border: 1px solid #cccccc;
+        font-size: 34px;
+        padding: 25px 0;
+        text-align: center;
+    }
+
+    .station_operator ul {
+        height: 140px;
+        overflow-y: scroll;
+    }
+
+    .station_operator .remove {
+        display: none;
+        position: absolute;
+        top: 81px;
+    }
+
+    li.remove-button {
+    }
+</style>

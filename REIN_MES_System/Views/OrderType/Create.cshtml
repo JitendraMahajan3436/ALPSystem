@@ -1,0 +1,217 @@
+﻿@model REIN_MES_System.Models.RS_OM_Order_Type
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+@using (Html.BeginForm("Create", "OrderType", FormMethod.Post, new { id = "add_OrderType", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="alert  alert-info alert-dismissable" style="display:none;">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa  fa-check"></i></h4>
+
+            </div>
+            <div class="col-md-3" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name + " *", htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, null, new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Shop_ID, null, "Select Shop", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Order_Type_Name, ResourceDisplayName.Order_Type, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Order_Type_Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Order_Type_Name, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Order_Type_Code, ResourceDisplayName.Order_Type_Code, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Order_Type_Code, new { @class = "form-control upperCase", @maxlength = "2" })
+                @Html.ValidationMessageFor(model => model.Order_Type_Code, null, new { @class = "validation_error" })
+
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Serial_No_Generation, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Serial_No_Generation, ResourceDisplayName.Is_Serial_No_Generation, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Serial_No_Generation, null, new { @class = "validation_error" })
+
+            </div>
+            <div id="serialNo" class="col-md-6">
+
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Is_Trial_Body_Serial_No, new { onchange = "", @class = "form-control" })
+                    @Html.LabelFor(model => model.Is_Trial_Body_Serial_No, "Trial", htmlAttributes: new { @class = "" })
+
+                    @Html.ValidationMessageFor(model => model.Is_Trial_Body_Serial_No, null, new { @class = "validation_error" })
+
+                </div>
+
+
+
+
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.Is_Tear_Down_Body_Serial_No, new { onchange = "", @class = "form-control" })
+                    @Html.LabelFor(model => model.Is_Tear_Down_Body_Serial_No, "Tear Down", htmlAttributes: new { @class = "" })
+
+                    @Html.ValidationMessageFor(model => model.Is_Tear_Down_Body_Serial_No, null, new { @class = "validation_error" })
+
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Build_Sheet_Print, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Build_Sheet_Print, ResourceDisplayName.Is_Build_Sheet_Print, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Build_Sheet_Print, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Production_Booking, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Production_Booking, ResourceDisplayName.Is_Production_Booking, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Production_Booking, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Spare, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Spare, ResourceDisplayName.Is_Spare, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Spare, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Authorize_By_Supervisor, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Authorize_By_Supervisor, ResourceDisplayName.Is_Authorize_By_Supervisor, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Authorize_By_Supervisor, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Quality_Check, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Quality_Check, ResourceDisplayName.Is_Quality_Check, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Quality_Check, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+
+        @*<br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Trial_Body_Serial_No, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Trial_Body_Serial_No, ResourceDisplayName.Is_Trial_Body_Serial_No, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Trial_Body_Serial_No, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <br />*@
+        @*//added by mukesh*@
+
+        @*<div class="row">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.Is_Tear_Down_Body_Serial_No, new { onchange = "", @class = "form-control" })
+                @Html.LabelFor(model => model.Is_Tear_Down_Body_Serial_No, ResourceDisplayName.Is_Tear_Down_Body_Serial_No, htmlAttributes: new { @class = "" })
+
+                @Html.ValidationMessageFor(model => model.Is_Tear_Down_Body_Serial_No, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+        <br />*@
+        @*///*@
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-5">
+            <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/Commonjs")
+}
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        $("#add_OrderType").validate({
+            ignore: [],
+            rules: {
+                Shop_ID: "required",
+                Order_Type_Name: "required",
+                Order_Type_Code: "required",
+            }
+        });
+        document.getElementById('serialNo').style.display = "none";
+
+    $('#Is_Serial_No_Generation').change(function () {
+        if ($('#Is_Serial_No_Generation').prop("checked")) {
+            document.getElementById('serialNo').style.display = "block";
+            $('#Is_Tear_Down_Body_Serial_No').prop("checked", false);
+            $('#Is_Trial_Body_Serial_No').prop("checked", false);
+            //document.getElementById('Is_Trial_Body_Serial_No').checked = false;
+            //document.getElementById('Is_Trial_Body_Serial_No').value = false;
+            //document.getElementById('Is_Tear_Down_Body_Serial_No').checked = false;
+            //document.getElementById('Is_Tear_Down_Body_Serial_No').value = false;
+        }
+        else {
+            $('#Is_Tear_Down_Body_Serial_No').prop("checked", false);
+            $('#Is_Trial_Body_Serial_No').prop("checked", false);
+            //document.getElementById('Is_Trial_Body_Serial_No').checked = false;
+            //document.getElementById('Is_Trial_Body_Serial_No').value = false;
+            //document.getElementById('Is_Tear_Down_Body_Serial_No').checked = false;
+            //document.getElementById('Is_Tear_Down_Body_Serial_No').value = false;
+            document.getElementById('serialNo').style.display = "none";
+        }
+    });
+    $("#Is_Trial_Body_Serial_No").on('change', function (e) {
+        $('#Is_Tear_Down_Body_Serial_No').prop("checked", false);
+        document.getElementById('Is_Tear_Down_Body_Serial_No').checked = false;
+        document.getElementById('Is_Tear_Down_Body_Serial_No').value = false;
+    });
+    $("#Is_Tear_Down_Body_Serial_No").on('change', function (e) {
+        $('#Is_Trial_Body_Serial_No').prop("checked", false);
+        document.getElementById('Is_Trial_Body_Serial_No').checked = false;
+        document.getElementById('Is_Trial_Body_Serial_No').value = false;
+    });
+    $("#submitBtn").on('click', function (e) {
+    });
+    });
+</script>

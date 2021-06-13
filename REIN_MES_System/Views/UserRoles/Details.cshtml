@@ -1,0 +1,50 @@
+﻿@model REIN_MES_System.Models.RS_User_Roles
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>User Role Details</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Roles.Role_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Roles.Role_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Roles.Role_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Roles.Role_Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", null, new { @class = "btn btn-sm btn-primary", id = Model.User_Role_Key }) |
+    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-sm btn-primary" })
+</p>
+

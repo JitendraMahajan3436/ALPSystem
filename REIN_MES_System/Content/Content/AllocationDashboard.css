@@ -1,0 +1,69 @@
+﻿
+/* Container DIV - automatically generated */
+.simply-scroll-container {
+    position: relative;
+         
+}
+
+/* Clip DIV - automatically generated */
+.simply-scroll-clip {
+    position: relative;
+    overflow: hidden;
+    /*width:1480px;*/    
+    padding-left:initial;
+    
+}
+
+ /*Custom class modifications - adds to / overrides above
+
+Vertical scroller example, with custom base class*/ 
+
+/* Container DIV */
+.vert {
+    /*width: 1480px;*/ /* wider than clip for custom button pos. */
+    height: auto;
+    margin-bottom: 1.5em;
+}
+
+    /* Clip DIV */
+    .vert .simply-scroll-clip {
+        
+        height: 600px;
+    }
+
+
+    .simply-scroll-btn-down:hover {
+        background-position: -42px -88px;
+    }
+
+    .simply-scroll-btn-up:hover {
+        background-position: -126px -88px;
+    }
+
+    .simply-scroll-btn-right:hover {
+        background-position: 84px -88px;
+    }
+
+    .simply-scroll-btn-left:hover {
+        background-position: 0 -88px;
+    }
+
+    .simply-scroll-btn-left.disabled {
+        background-position: 0 0 !important;
+    }
+
+    .simply-scroll-btn-right.disabled {
+        background-position: 84px 0 !important;
+    }
+    
+   
+    #scroller tr td,#scroller tr td{
+        width:25%;
+        font-size:x-large;
+        
+    }
+    #scroller1 tr th,#scroller1 tr th{
+        width:25%;
+         font-size:x-large;
+        
+    }

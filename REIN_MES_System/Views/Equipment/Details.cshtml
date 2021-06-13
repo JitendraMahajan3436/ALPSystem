@@ -1,0 +1,114 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<h2>Details</h2>*@
+
+<div>
+    
+  
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayName("Machine Number")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Number)
+        </dd>
+        <dt>
+            @Html.DisplayName("Machine Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Machine Part Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Equipment_Name)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayName("Is Deleted")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Is Transfered")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Is Purgeable")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted Host")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted User")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Updated Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Updated Host")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Employee Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>*@
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EQP_ID }, new {@class="btn btn-primary" }) @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+</p>

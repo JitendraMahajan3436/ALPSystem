@@ -1,0 +1,218 @@
+﻿@model REIN_MES_System.Models.RS_MT_Maintenance_Manual_Data
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+  
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BreakDown_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BreakDown_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Machine_No)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Machine_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DownTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DownTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RepairTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RepairTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Problem)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Problem)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Root_Cause)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Root_Cause)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Correction)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Correction)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Corrective_Action)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Corrective_Action)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Preventive_Action)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Preventive_Action)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Repaired_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Repaired_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Owner)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Owner)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Is_Transferred)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transferred)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Host)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

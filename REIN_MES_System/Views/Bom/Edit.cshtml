@@ -1,0 +1,155 @@
+﻿@model REIN_MES_System.Models.RS_BOM_Item
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12 manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Row_ID)
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Model_Code, "Model Code", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Model_Code, htmlAttributes: new { @class = "form-control", maxlength = 50, @readonly = true })
+                        @Html.ValidationMessageFor(model => model.Model_Code, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Model_Desc, "Model Description", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Model_Desc, htmlAttributes: new { @class = "form-control", maxlength = 100 })
+                        @Html.ValidationMessageFor(model => model.Model_Desc, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FGEffective_Date_From, "FG Model Effective Date From", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.FGEffective_Date_From, (String)ViewBag.FGEffective_Date_From, htmlAttributes: new { @class = "form-control", maxlength = 50 })
+                        @Html.ValidationMessageFor(model => model.FGEffective_Date_From, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FGEffective_Date_To, "FG Model Effective Date To", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.FGEffective_Date_To, (String)ViewBag.FGEffective_Date_To, htmlAttributes: new { @class = "form-control", maxlength = 100 })
+                        @Html.ValidationMessageFor(model => model.FGEffective_Date_To, null, new { @class = "validation_error" })
+                    </div>
+
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Part_No, "Part Number", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Part_No, htmlAttributes: new { @class = "form-control", maxlength = 100 })
+                        @Html.ValidationMessageFor(model => model.Part_No, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Part_Description, "Part Description", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Part_Description, htmlAttributes: new { @class = "form-control", maxlength = 100 })
+                        @Html.ValidationMessageFor(model => model.Part_Description, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Effective_Date_From, "Effective Date From", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Effective_Date_From,(String)ViewBag.Effective_Date_From, htmlAttributes: new { @class = "form-control", maxlength = 50 })
+                        @*@Html.TextBox(model => model.Effective_Date_From, (String)ViewBag.Effective_Date_From)*@
+                        @Html.ValidationMessageFor(model => model.Effective_Date_From, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Effective_Date_To, "Effective Date To", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Effective_Date_To, (String)ViewBag.Effective_Date_To, htmlAttributes: new { @class = "form-control", maxlength = 100 })
+                        @Html.ValidationMessageFor(model => model.Effective_Date_To, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Bom_Version, "Bom Version", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Bom_Version, htmlAttributes: new { @class = "form-control", maxlength = 100, @readonly = true })
+                        @Html.ValidationMessageFor(model => model.Bom_Version, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br>
+                <div class="">
+
+                    <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>
+
+
+<br>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+}
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $("#Effective_Date_From").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                //endDate: new Date()
+            });
+        $("#Effective_Date_To").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                //endDate: new Date()
+            });
+        $("#FGEffective_Date_From").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                //endDate: new Date()
+            });
+        $("#FGEffective_Date_To").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                //endDate: new Date()
+            });
+
+        $(function () {
+            $.validator.methods.date = function (value, element) {
+                if ($.browser.webkit) {
+
+
+
+                    //ES - Chrome does not use the locale when new Date objects instantiated:
+                    var d = new Date();
+
+
+
+                    return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
+                }
+                else {
+
+
+
+                    return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
+                }
+            };
+        });
+    });
+
+</script>
+
+

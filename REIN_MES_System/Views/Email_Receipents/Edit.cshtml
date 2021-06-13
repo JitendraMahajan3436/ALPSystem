@@ -1,0 +1,85 @@
+﻿@model REIN_MES_System.Models.MM_EMAIL_RECEIPENTS
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+  
+
+   
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>EmailID * </label>
+                            @Html.EditorFor(model => model.EmailID, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.EmailID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>EmailGroup *</label>
+                            @Html.EditorFor(model => model.EmailGroup, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.EmailGroup, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(Model =>Model.PlantID)
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-linkedin" />
+                        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+                    </div>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+}
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $("#mfgdatepicker").datetimepicker(
+        {
+
+            format: 'Y-m-d',
+
+            timepicker: false,
+
+        });
+</script>

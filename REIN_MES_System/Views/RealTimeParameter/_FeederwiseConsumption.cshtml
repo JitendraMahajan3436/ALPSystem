@@ -1,0 +1,221 @@
+﻿
+
+ @if (ViewData["pieData1"] as IList<REIN_MES_System.Models.Barchart> != null)
+ {
+
+<table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Consumption
+            </th>
+            @*<th>
+                Function
+            </th>*@
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["pieData1"] as IList<REIN_MES_System.Models.Barchart> != null)
+        {
+            foreach (var item in ViewData["pieData1"] as IList<REIN_MES_System.Models.Barchart>)
+            {
+                <tr>
+                    <td class="fixedcellwidth">
+                        @item.Label
+                    </td>
+                    <td class="fixedcellwidth">
+                        <b>@item.Y</b>
+                    </td>
+                    @*<td>@item.function</td>*@
+                </tr>
+            }
+        }
+        else
+
+        {
+            <h3>no data available</h3>
+        }
+
+    </tbody>
+</table>
+ }
+<script>
+    debugger;
+   
+    Date1 = new Array();
+    daywiseData = new Array();
+    Best = new Array();
+    Production = new Array();
+    kwhdata = new Array();
+    feeder = new Array();
+    Target = new Array();
+    debugger;
+    ShopspficData = new Array();
+    ShopspficData1 = new Array();
+    var shopdata = JSON.parse('@Html.Raw(Json.Encode(ViewData["Shopwise_Data"]))');
+    var CategoryData = JSON.parse('@Html.Raw(Json.Encode(ViewData["CategoryData"]))');
+    var chartdata = JSON.parse('@Html.Raw(Json.Encode(ViewData["pieData1"]))');
+      var ParetoData = JSON.parse('@Html.Raw(Json.Encode(ViewData["ParetoData"]))');
+    var shopDate = JSON.parse('@Html.Raw(Json.Encode(ViewData["Shopwise_Date"]))');
+    var fromdate = JSON.parse('@Html.Raw(Json.Encode(ViewData["start"]))');
+    var todate = JSON.parse('@Html.Raw(Json.Encode(ViewData["end"]))');
+    var SpecficData = JSON.parse('@Html.Raw(Json.Encode(ViewData["Shopwise_specfic_Data"]))');
+    var TargetData = JSON.parse('@Html.Raw(Json.Encode(ViewData["Target"]))');
+    var AreaINData = JSON.parse('@Html.Raw(Json.Encode(ViewData["AreaINData"]))');
+    var Avergedata = JSON.parse('@Html.Raw(Json.Encode(ViewData["Averge"]))');
+    var cumulativedata = JSON.parse('@Html.Raw(Json.Encode(ViewData["cumulative"]))');
+
+    var SpecficDataunit = '@ViewBag.specUnit';
+    var unit = '@ViewBag.ConsumeType';
+
+    var SpecficunitID = '@ViewBag.UnitId';
+
+    var Minute = '@ViewBag.Minute';
+    var Shiftwise = '@ViewBag.Shiftwise';
+    var ddlforamte = '@ViewBag.ddlforamte';
+    $('#fromdate').html(fromdate);
+    $('#todate').html(todate);
+
+
+    var Category_data = []
+    var feeder_data = []
+    var cumulative_data = []
+    var Averge_data = []
+    if (chartdata != null) {
+        $.each(chartdata, function (index, item) {
+            //kwhdata.push(item.Y);
+            //feeder.push(item.Label);
+            feeder_data.push({ "Name": item.Label, "y": item.Y });
+
+        })
+        $.each(ParetoData, function (index, item) {
+            kwhdata.push(item.Y);
+            feeder.push(item.Label);
+
+        })
+        feeerwiseLineChart(kwhdata, feeder);
+        feederwisechart(feeder_data);
+    }
+    $.each(shopDate, function (index, item) {
+
+        Date1.push(item);
+
+    })
+    $.each(TargetData, function (index, item) {
+
+        Target.push(item);
+
+    })
+    if (SpecficunitID == '5' && Minute == '60') {
+        $.each(SpecficData, function (index, item) {
+
+            ShopspficData.push(item.totalconsumption);
+
+        })
+    }
+    else if (SpecficunitID == '5') {
+        $.each(SpecficData, function (index, item) {
+
+            ShopspficData.push(item);
+
+        })
+    }
+    else {
+        $.each(SpecficData, function (index, item) {
+
+            ShopspficData.push(item.Consumption);
+
+        })
+    }
+    $.each(cumulativedata, function (index, item) {
+
+        cumulative_data.push(item);
+    })  
+  
+    $.each(Avergedata, function (index, item) {
+
+        Averge_data.push(item);
+
+    })
+    if (Shiftwise == '' && (ddlforamte == '3' || ddlforamte == '4' || (ddlforamte == '5' && Minute == "")))
+    {
+       
+        $.each(shopdata, function (index, item) {
+
+
+     
+            ShopspficData1.push(item.Consumption);
+            Production.push(item.Production);
+            Best.push(item.Best)
+            daywiseData.push(item.TotalConsumption);
+        })
+       
+
+        ShowPlantChart1(daywiseData, Date1, ShopspficData1, SpecficDataunit, Production, Best, Target, unit, cumulative_data, Averge_data);
+      }
+    else {
+        $.each(shopdata, function (index, item) {
+
+
+            //m = item.ConsumptionDate;
+            //d1 = m.replace("/Date(", " ");
+            //d2 = d1.replace(")/", " ");
+            //d2 = d1.replace("", " ")
+            //d3 = d2.trim();
+            //d4 = parseInt(d3);
+
+            //var d = new Date(d4);
+            //var plantdate = d.toLocaleDateString();
+            ////alert(d.toLocaleDateString())
+            //Date1.push(plantdate);
+            daywiseData.push(item.totalconsumption);
+        })
+    
+        shopwisechart(daywiseData, Date1, ShopspficData, SpecficDataunit, unit, cumulative_data, Averge_data);
+    }
+    
+    $.each(CategoryData, function (index, item) {
+        //kwhdata.push(item.Y);
+        //feeder.push(item.Label);
+        Category_data.push({ "Name": item.Label, "y": item.Y });
+
+    })
+    ShowCategoryChart(Category_data);
+    var Area_Indata = [];
+    //var Area_consudata = [];
+   
+    $.each(AreaINData, function (index, item) {
+
+        Area_Indata.push({ "Name": item.Label, "y": item.Y, "AreaId": item.AreaId });
+
+    })
+
+    //$.each(AreaconsumData, function (index, item) {
+
+    //    Area_consudata.push({ "Name": item.Label, "y": item.Y });
+
+    //})
+    //ShowAreaconsumechart(Area_consudata);
+    ShowAreainchart(Area_Indata);
+    if (Area_Indata.length > 0) {
+        $("#InAreatbl tbody").html("");
+       
+        for (var i = 0; i < Area_Indata.length; i++) {
+            debugger;
+           // var markup = "<tr><td>" + Area_Indata[i].Name + "</td><td>" + Area_Indata[i].y + "</td></tr>"
+
+            var markup = "<tr><td><button class='boxshadow' id='realtime'  data-target='#Areawisefeeder' data-toggle='modal'   value=" + Area_Indata[i].AreaId + ", onclick ='SubArea(" + Area_Indata[i].AreaId + ")'>" + Area_Indata[i].Name + "</button></td><td>" + Area_Indata[i].y + "</td></tr>"
+         
+            $("#InAreatbl tbody").append(markup);
+        }
+
+    }
+    else {
+        $("#InAreatbl tbody").html("");
+    }
+
+</script>

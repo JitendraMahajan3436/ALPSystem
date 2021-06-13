@@ -1,0 +1,72 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Configuration>
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })</p>*@
+<p class="position_absolute">
+
+    <a href="@Url.Action("Create", "OMConfiguration")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class=" table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayName("Plant Name")
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Shop_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Config_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OMconfig_Desc)
+            </th>
+
+            <th width="50px">
+
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (REIN_MES_System.Models.OM_ConfigurationIndex item in ViewBag.config_data)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Config_Name1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OMconfig_Desc)
+                </td>
+
+
+
+                <td>
+                    <a href="@Url.Action(ResourceGlobal.Edit, "OMConfiguration", new { id = item.OMconfig_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+
+                    <a href="@Url.Action(ResourceGlobal.Delete, "OMConfiguration", new { id = item.OMconfig_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

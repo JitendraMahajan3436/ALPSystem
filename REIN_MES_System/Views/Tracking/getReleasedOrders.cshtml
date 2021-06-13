@@ -1,0 +1,32 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Order No</td>
+                <td>Model Code</td>
+                <td>Series</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>  @item.Order_No </td>
+                    <td>  @item.partno </td>
+                    <td>
+                        @if (item.RS_Series != null)
+                        {
+                            @item.RS_Series.Series_Description
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3> No Released Orders to Show !</h3>
+}

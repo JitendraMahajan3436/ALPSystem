@@ -1,0 +1,107 @@
+﻿@model System.Data.DataTable
+@using REIN_MES_System.Models
+
+
+<div class="table-responsive">
+    <table class=" table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                @*<th>
+                        @Html.DisplayName("Plant OrderNo")
+                    </th>*@
+                <th>
+                    @Html.DisplayName("Order No")
+                </th>
+                <th>
+                    @Html.DisplayName("Model Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Order Type")
+                </th>
+                <th>
+                    @Html.DisplayName("Order Status")
+                </th>
+
+                <th>
+                    @Html.DisplayName("Remarks")
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (System.Data.DataRow dr in Model.Rows)
+            {
+                REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+                string Model_Series_Code;
+                string model_series_desc;
+                string Part_Series_Code;
+                string part_series_desc;
+                string model_code;
+                string part_no;
+                int row_id = Convert.ToInt32(dr["Row_ID"]);
+
+                RS_OM_OrderRelease release;
+                release = (from order_release in db.RS_OM_OrderRelease
+                           where order_release.Row_ID == row_id
+                           select order_release
+                    ).FirstOrDefault();
+
+                model_code = release.Model_Code;
+                part_no = release.partno;
+
+                RS_Model_Master model_master;
+                model_master = (from modelcode in db.RS_Model_Master
+                                where modelcode.Model_Code == model_code
+                                select modelcode
+                    ).FirstOrDefault();
+
+
+
+                <tr>
+                    <td>@dr["Order_No"]</td>
+                    <td>@dr["Model_Code"]</td>
+                    <td>@dr["Order_Type"]</td>
+
+                    <td>@dr["Order_Status"]</td>
+                    <td>@dr["Remarks"]</td>
+
+                    <td>
+                        @if (dr["Order_Status"].ToString() == "Release")
+                        {
+                            <input type="button" class="btn btn-primary hold_order" id="@dr["Order_No"].ToString()_@row_id" value="Hold" />
+
+                            @*@Html.ActionLink("Hold", "HoldOrder", new { id = dr.ItemArray[5].ToString() })*@
+                        }
+                        else if (dr["Order_Status"].ToString() == "Hold")
+                        {
+                            <input type="button" class="btn btn-primary resume_order" id="@dr["Order_No"].ToString()_@row_id" value="Unhold" />
+
+                            @*@Html.ActionLink("Resume", "HoldOrder", new { id = dr.ItemArray[5].ToString() })*@
+                        }
+                        else
+                        {
+                            @*<input type="button" class="btn btn-primary resume_order" id="@dr.ItemArray[5].ToString()" value="Resume" />*@
+                            @*@Html.ActionLink("Resume", "ResumeOrder", new { id = dr.ItemArray[5].ToString() })*@
+                        }
+                    </td>
+                </tr>
+            }
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="text-center" >No record found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+

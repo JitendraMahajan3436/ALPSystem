@@ -1,0 +1,42 @@
+﻿@model REIN_MES_System.Models.RS_AttributionType_Master
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper;
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+  
+    <dl class="dl-horizontal">
+        @{ 
+        <dt>
+            @Html.DisplayName("Plant Name :")
+        </dt>
+            string plant_name = db.RS_Plants.Where(a => a.Plant_ID == Model.Plant_ID).Select(a => a.Plant_Name).FirstOrDefault();
+        <dd>
+            @Html.Label(plant_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Attribution Type :")
+        </dt>
+            string attribute = Model.Attribution_Type;
+        <dd>
+            @Html.Label(attribute)
+        </dd>
+        }
+    </dl>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        @Html.ActionLink("Back", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+</div>
+
+
+

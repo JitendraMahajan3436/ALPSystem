@@ -1,0 +1,987 @@
+﻿
+
+
+@model IEnumerable<REIN_MES_System.Models.RS_MT_Clita>
+@{
+    ViewBag.Title = "ShowMachineDailyCLITA";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var parentObj = new object();
+    var thisObj = new object();
+    var nokthisObj = new object();
+}
+<style>
+    .modal-dialog {
+        width: 80%;
+        height: 100%;
+        margin-left: 10%;
+        overflow-y: auto;
+    }
+
+    .Khushi {
+        position: absolute;
+        top: 10px;
+        left: 1365px;
+    }
+
+    .modal-header {
+        margin-top: 0%;
+        background-color: brown;
+    }
+
+    .modal-open .modal {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+</style>
+<div class="row" id="ClitaDailyCheckContainer">
+    <div class="col-md-12">
+        @{ if (globalData != null)
+            {
+                if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+                {
+                    <div class="box-body">
+                        @{
+                            if (globalData != null)
+                            {
+                                <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>  } else { <text> style="display:none;" </text>  } }>
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4>
+                                        <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+                                    }
+                        }
+                    </div>
+                }
+            }
+        }
+
+        @*<input type="button" class="btn btn-primary" value="History" id="btnClitaHistory">*@
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs" style="z-index:1000">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+
+                        <a data-target="#ClitaChart" data-toggle="modal" data-id="@machineObj.Machine_ID" onclick="MyFunction4(@machineObj.Machine_ID)" style="cursor:pointer; float:right;margin-right: 2%;height: 31px;" class="btn btn-primary">History</a>
+
+
+
+                        @*<li>  <input type="button" class="btn btn-primary Khushi" value="History" id="btnClitaHistory" data-target="#ClitaChart" data-toggle="modal" data-id="@machineObj.Machine_ID" onclick="MyFunction4(@machineObj.Machine_ID)"> </li>*@
+
+                    }
+
+                }
+            </ul>
+
+
+
+            <div class="tab-content no-padding">
+                @if (ViewBag.MachineList != null)
+                {
+
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative">
+                            <div class="table-responsive no-border">
+                                <table class="table table-bordered table-condensed" style="margin-top:1%">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>
+                                                Clita Parameter
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Clita Standard")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Clita Tool")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Cycle)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Maintenance_Time_TACT)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+
+                                        @{ int j = 0; }
+                                        @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                        {
+                                            j++;
+
+                                            <tr class='@((item.isClitaChecked(item.Clita_ID)) ? (item.getClitaStatus(item.Clita_ID) == true) ? "bg-success" : "bg-danger" : "")' data-clitaid="">
+                                                <td>@j</td>
+                                                <td data-target="#ClitaChart" data-toggle="modal" data-id="@machineObj.Machine_ID" onclick="MyFunction4(@machineObj.Machine_ID)" style="cursor:pointer">
+                                                    @Html.DisplayFor(modelItem => item.Clita_Item)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Standard.Standard)
+                                                </td>
+                                                <td class="clita-images">
+                                                    @if (item.RS_MT_ClitaItems_Tools_Relation != null)
+                                                    {
+                                                        foreach (string tool in item.RS_MT_ClitaItems_Tools_Relation.Select(a => a.RS_MT_Clita_Tool.Tool_Name))
+                                                        {
+                                                            string toolImage = tool + ".png";
+                                                            <img src="~/Content/images/CLITAImages/@toolImage" />
+                                                        }
+                                                        //@String.Join(",", item.RS_MT_ClitaItems_Tools_Relation.Select(a => a.RS_MT_Clita_Tool.Tool_Name))
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Cycle)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Maintenance_Time_TACT)
+                                                </td>
+                                                <td>
+                                                    @if (item.Is_Value_Based == true)
+                                                    {
+                                                        string clitaValue = item.getClitaValue(item.Clita_ID);
+                                                        if (String.IsNullOrEmpty(clitaValue))
+                                                        {
+                                                            <span data-target="#ClitaPendingChart" data-toggle="modal" class="btn btn-danger btn-flat btn-sm log-clita-pending-btn" data-clitaid="@item.Clita_ID" onclick="PendingButtonClk(@item.Clita_ID,@item.Machine_ID)">Pending</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@clitaValue</span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Boolean? clitaStatus = item.getClitaStatus(item.Clita_ID);
+                                                        @*if (clitaStatus != null)
+                                                            {
+                                                                if (clitaStatus == true)
+                                                                {
+                                                                    <span>OK</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>NOK</span>
+                                                                }
+                                                            }*@
+                                                        //    else
+                                                        //    {
+                                                        //        < span class="btn btn-danger btn-flat">Pending</span>
+
+                                                        //}
+                                                        if (clitaStatus != null)
+                                                        {
+                                                            if (clitaStatus != true)
+                                                            {
+                                                                @*<span>@clitaValue</span>*@
+                                                                <button class="btn btn-success btn-flat btn-sm log-clita-btn" data-status="true" data-clitaid="@item.Clita_ID"> OK </button>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-success btn-flat btn-sm log-clita-btn" data-status="true" data-clitaid="@item.Clita_ID"> OK </button>
+                                                            @*<button class="btn btn-danger btn-flat btn-sm log-clita-btn" data-status="false" data-clitaid="@item.Clita_ID"> NOK </button>*@
+                                                            <button class="btn btn-danger btn-flat btn-sm log-clita-btn aaaaa" data-status="false" id="btNOK" value="@item.Clita_ID" onclick="ButtonClk(@item.Clita_ID)" data-clitaid="@item.Clita_ID"> NOK </button>
+                                                        }
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+        <input type="hidden" id="parentObj" />
+            <div id="testy"> </div>
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+    <div class="modal fade" id="NOK1" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+        <div class="modal-dialog" style="padding: 4px 169px 18px 166px ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title classModalTitle">CLITA Remark</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="hdnClitaID" style="margin-right: 35%;" />
+                    @*<div class="row">*@
+                    @*<input type="hidden" id="hdnTBMId" value="" />*@
+                    @*<div class="col-md-6" id="divSAPRNo">
+                            @Html.Label("SAP Reservation Number", new { @class = "slabel" })
+                            <input type="text" class="form-control" id="SAPRNo" onkeypress="return isNumber(event)" maxlength="10" />
+                            @Html.ValidationMessage("SAPRNo", null, new { @class = "validation_error", @id = "lblError" })
+
+                        </div>*@
+
+                    <div class="col-md-6">
+                        @Html.Label("Remark", new { @class = "" })     <span id="spanremark"></span>
+                        @Html.TextArea("Remark", null, 10, 80, new { @class = "form-control txtremark", id = "RemarkAccept", @style = "max-width: 150%; height: 128px; width: 905px; margin: 0px -293.496px 5px 0px; resize: none", autocomplete = "off", placeholder = "write remark" })
+
+                        @*@Html.ValidationMessage("</span>SAPRNo", null, new { @class = "validation_error", @id = "lblError" })*@
+                    </div>
+
+                    @*</div>*@
+
+                </div>
+                <div class="modal-footer" @*style="margin-right: 13%"*@>
+                    @*<button data-dismiss="modal" type="button" class="btn btn-primary smModalGen">Close</button>*@
+                    <div style="float:right">
+                        @*<button type="button" class="btn btn-success" onclick="ResetTBM()">Yes</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>*@
+                        <button type="button" class="btn btn-success" id="saveRemark" @*onclick="RemarkClita()"*@>SAVE</button>
+                        <button data-dismiss="modal" type="button" class="btn btn-primary ">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <div class="modal fade" id="ClitaChart" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title classModalTitle">Clita Data - @ViewBag.MachineName</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <input type="hidden" id="hdMachineId" value="" />
+                        <div class="col-md-3" id="divFromDate">
+                            @Html.Label("From Date", new { @class = "slabel" })
+                            <input type="text" id="FromDate" class="form-control" />
+                        </div>
+                        <div class="col-md-3" id="divToDateDate">
+                            @Html.Label("To Date", new { @class = "slabel" })
+                            <input type="text" id="ToDate" class="form-control" />
+
+                        </div>
+                        @*<div class="col-md-3">
+                                @Html.Label("History Data")
+                                <select id="Hdata" class="form-control">
+                                    <option id="Hdata" value="AllData">All Data</option>
+                                    <option id="Hdata" value="ExceptionalData">Exceptional Data</option>
+                                </select>
+                            </div>*@
+
+                        <div class="col-md-6">
+                            @Html.Label("To Date", new { @style = "display:none" })
+                            <input type="button" id="BtnGenerate" class="btn btn-primary smModalGen" value="View Trend" />
+                            <input type="button" id="BtnGenerateExcel" class="btn btn-primary smModalGen" value="ExportReport" />
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div id="ClitaDashboardDetails" value="">
+
+                    </div>
+
+
+
+                    <div id="chartContainer">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" type="button" class="btn btn-primary smModalGen">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ClitaPendingChart" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title classModalTitle">Clita Pending Data</h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="hdnClitaId" />
+                <input type="hidden" id="hdnMachineId" />
+                 <input type="text" id="txtValue"  autofocus="autofocus" />
+                 <button type="button" id="btnPendingCheck">Save</button>
+                  <span id="spanValue"></span>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-primary smModalGen">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.js"></script>
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.full.min.js"></script>
+<link href="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/datepicker")*@
+    @Scripts.Render("~/bundles/PDFHighchart")
+    @Styles.Render("~/Content/datepickercss")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css");
+}
+@Styles.Render("~/Content/datepickercss")
+<script type="text/javascript">
+    function logClitaRecord(clitaIDval, valueval, parentRowObj, clitaStatus) {
+        $.getJSON("/CLITADailyCheck/logCLITAData", { clitaID: clitaIDval, value: valueval, status: clitaStatus }, function (data) {
+           
+            if (data == "true") {
+                if (clitaStatus == true) {
+                    parentRowObj.addClass('bg-success').removeClass('bg-danger');
+                } else {
+                   // parentRowObj.removeClass('bg-success').addClass('bg-danger');
+                }
+            } else {
+                parentRowObj.removeClass('bg-success').removeClass('bg-danger');
+            }
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            alert('Please Reload the Page !');
+        });
+    }
+    function MyFunction4(machineID) {
+
+        $('#FromDate').val("");
+        $('#ToDate').val("");
+        $('#chartContainer').html();
+        $('#chartContainer').empty();
+
+
+        var date1 = new Date();
+        var toDate = new Date();
+        toDate = moment(toDate).format("DD/MM/YY");
+        var fromDate = new Date(date1.getTime() - 60000 * 60 * 24 * 30);
+        fromDate = moment(fromDate).format("DD/MM/YY");
+
+        $('#FromDate').val(fromDate);
+        $('#ToDate').val(toDate);
+
+        $('#hdMachineId').val(machineID);
+        $("#ClitaDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+        //$('#ccCharat').remove();
+        var xAxisLabel = 'Time';
+        $.ajax({
+            url: "/CLITADailyCheck/CustomClitaData",
+            data: "{ 'machine': '" + machineID + "', 'fromDate': '" + fromDate + "','toDate': '" + toDate + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data != "")
+                    $("#ClitaDashboardDetails").html(data);
+                //ddl = new Array();
+
+                //DesignatedData = new Array();
+                //ConsumedData = new Array();
+
+                //var Machine = data.Machine;
+                //var Startdate = data.Startdate;
+                //var Enddate = data.EndDate;
+                //for (var i = 0; i < data.allTimes.length; i++) {
+                //    ddl.push(data.allTimes[i]);
+
+                //    ConsumedData.push(data.ConsumedTime[i]);
+
+                //};
+                // ShowName(ddl, ConsumedData, Machine, Startdate, Enddate)
+
+                ddl = new Array();
+                IsOK = new Array();
+                IsNOK = new Array();
+                IsPending = new Array();
+
+                for (var i = 0; i < data.allTimes.length; i++) {
+                    ddl.push(data.allTimes[i]);
+
+                    IsOK.push(data.IsOK[i]);
+                    IsNOK.push(data.IsNOK[i]);
+                    IsPending.push(data.IsPending[i]);
+                };
+
+                ShowClitaHistoryGraph(ddl, IsOK, IsNOK, IsPending);
+
+
+            }
+        });
+    }
+
+    function ShowClitaHistoryGraph(ddl, IsOK, IsNOK, IsPending) {
+        Highcharts.chart('chartContainer', {
+            chart: {
+                type: 'column'
+            },
+            //title: {
+            //    text: 'Stacked column chart'
+            //},
+            xAxis: {
+                categories: ddl
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Number of CLITA Activites'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            //legend: {
+            //    align: 'right',
+            //    x: -30,
+            //    verticalAlign: 'top',
+            //    y: 25,
+            //    floating: true,
+            //    backgroundColor:
+            //        Highcharts.defaultOptions.legend.backgroundColor || 'white',
+            //    borderColor: '#CCC',
+            //    borderWidth: 1,
+            //    shadow: false
+            //},
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'OK',
+                data: IsOK,
+                color: 'rgba(38,168,49, 1)'
+            }, {
+                name: 'NOK',
+                data: IsNOK,
+                color: 'rgba(255,99,71, 1)'
+            }, {
+                name: 'Pending',
+                data: IsPending,
+                color: 'rgba(210,190,90, 1)'
+            }]
+        });
+    }
+
+
+    function ShowName(ddl, ConsumedData, Machine, Startdate, Enddate) {
+
+        Highcharts.chart('chartContainer', {
+            credits: {
+                enabled: false
+            },
+
+            chart: {
+                zoomType: 'x',
+
+            },
+            title: {
+                text: '<b>' + Machine + ' - Clita Data From -' + Startdate + ' To ' + Enddate + '</b>',
+                style: {
+                    font: 'normal 14px Verdana, sans-serif !important',
+                },
+            },
+            subtitle: {
+                text: null,
+                //style: { right: '80px' }
+
+            },
+
+
+            xAxis: {
+
+                title: {
+                    text: 'Date'
+                },
+                categories: ddl,
+                crosshair: true
+
+            },
+
+            yAxis: [
+                { // Primary yAxis
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        enabled: true
+                    }
+
+                },
+                {
+                    title: {
+                        text: "Consume Time"
+                    },
+                    labels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                        },
+                    },
+
+                }
+
+
+            ],
+            tooltip: {
+
+                shared: false,
+                valueSuffix: ' Minute'
+            },
+
+            series: [
+                {
+                    name: Machine,
+                    type: 'line',
+                    //color: '#339CFF',
+                    yAxis: 1,
+                    data: ConsumedData,
+                    dataLabels: {
+                        enabled: true
+                    },
+                    //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,
+                    //      194.1, 95.6, 54.4],
+                    //marker: {
+                    //    fillcolor: 'white',
+                    //    lineWidth: 1,
+                    //    lineColor: Highcharts.getOptions().colors[1]
+
+                    //},
+                    //tooltip: {
+                    //    valueSuffix:UserName
+                    //}
+                },
+
+                //{
+                //    name: 'Consumed Life ',
+                //    type: 'column',
+
+                //    yAxis: 1,
+                //    dataLabels: {
+                //        enabled: true
+                //    },
+                //    data: ConsumedData,
+
+                //    marker: {
+                //        fillcolor: 'white',
+                //        lineWidth: 1,
+                //        lineColor: Highcharts.getOptions().colors[1]
+                //    },
+
+                //    tooltip: {
+                //        categories:UserName
+                //    }
+                //},
+
+
+
+            ],
+            center: [150, 120],
+            size: 350,
+            showInLegend: false,
+            dataLabels: {
+                enabled: true
+
+            }
+
+        });
+
+
+
+
+
+
+        //Highcharts.chart('chartContainer',{
+        //    chart:{
+        //        type:'line'
+        //    },
+        //    title: {
+        //        text:   Machine + '-clita daily data from -' +Startdate + ' to ' +Enddate ,
+
+        //    },
+        //    subtitle: {
+        //        text: '',
+        //        style: { right: '80px' }
+
+        //    },
+        //    xAxis: {
+        //        //type:'categories'
+        //        categories: ddl,
+
+
+        //    },
+        //    yAxis:{
+        //        title: {
+        //            text:'Consumed Time',
+        //            pointFormat: 'Consumedtime'
+        //        },
+
+        //    },
+        //    plotOption:{
+        //        line:{
+        //            dataLabels:{
+        //                enabled:true
+        //            },
+        //            enableMouseTracking:false
+        //        }
+        //    },
+        //    series: [
+        //        {
+        //            Name :+Machine,
+        //            data:ConsumedData,
+
+
+        //        }]
+
+        //});
+
+
+    }
+
+    $("#txtValue").on("keypress", function (evt) {
+        debugger;
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+            return false;
+        return true;
+    });
+
+    $("#btnPendingCheck").click(function () {
+        var MachineID = $("#hdnMachineId").val();
+        var ClitaID = $("#hdnClitaId").val();
+        var Value = $("#txtValue").val();
+        $("#spanValue").val("");
+        if (Value != "") {
+            $.ajax({
+                url: "/CLITADailyCheck/CheckPendingClita",
+                data: "{ 'machine': '" + MachineID + "', 'clitaID': '" + ClitaID + "', 'value': '" + Value + "'}",
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    var parentRowObj = parentObj;
+                    //thisObj = $(this);
+                    thisObj.hide();
+                    //thisObj.siblings().hide();
+                    $('#ClitaPendingChart').modal('hide');
+
+                    if (data == true) {
+                        parentRowObj.addClass('bg-success').removeClass('bg-danger');
+                    }
+                    else {
+                        parentRowObj.removeClass('bg-success').addClass('bg-danger');
+                    }
+
+                }
+            });
+        }
+        else {
+            $("#spanValue").val("This field is required");
+        }
+    })
+
+
+    $("#BtnGenerate").click(function () {
+
+        $('#chartContainer').html();
+        $('#chartContainer').empty();
+        var fromDate = $('#FromDate').val();
+        var MachineID = $('#hdMachineId').val();
+
+        var ToDate = $('#ToDate').val();
+
+        //var HData = $("#Hdata").val();
+        //$('#ccCharat').remove();
+        var xAxisLabel = 'Time';
+        $("#ClitaDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+        $.ajax({
+            url: "/CLITADailyCheck/CustomClitaData",
+            data: "{ 'machine': '" + MachineID + "', 'fromDate': '" + fromDate + "','toDate': '" + ToDate + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data != "") {
+                    $("#ClitaDashboardDetails").html(data);
+                }
+
+                //ddl = new Array();
+
+                //DesignatedData = new Array();
+                //ConsumedData = new Array();
+
+                //var Machine = data.Machine;
+                //var Startdate = data.Startdate;
+                //var Enddate = data.EndDate;
+                //for (var i = 0; i < data.allTimes.length; i++) {
+                //    ddl.push(data.allTimes[i]);
+
+                //    ConsumedData.push(data.ConsumedTime[i]);
+                //};
+                //ShowName(ddl, ConsumedData, Machine, Startdate, Enddate)
+
+
+                ddl = new Array();
+                IsOK = new Array();
+                IsNOK = new Array();
+                IsPending = new Array();
+
+                for (var i = 0; i < data.allTimes.length; i++) {
+                    ddl.push(data.allTimes[i]);
+
+                    IsOK.push(data.IsOK[i]);
+                    IsNOK.push(data.IsNOK[i]);
+                    IsPending.push(data.IsPending[i]);
+                };
+
+                ShowClitaHistoryGraph(ddl, IsOK, IsNOK, IsPending);
+            }
+        });
+    });
+
+    $("#BtnGenerateExcel").click(function () {
+
+        $('#ccCharat').html();
+        $('#ccCharat').empty();
+        var fromDate = $('#FromDate').val();
+        var toDate = $("#ToDate").val();
+        var machineID = $('#hdMachineId').val();
+        var path = "/CLITADailyCheck/ExportData?fromDate=" + fromDate + "&toDate=" + toDate + "&machineID=" + machineID;
+
+        //window.open(path, '_blank');
+        window.open(path, '_blank');
+
+
+    });
+    function ButtonClk(ClitaID) {
+       
+        var clitaid = ClitaID;
+        $("#hdnClitaID").val(ClitaID);
+        $('#RemarkAccept').val('');
+        $("#NOK1").modal("show");
+
+
+    }
+
+    function PendingButtonClk(clitaID, machineID) {
+        $("#hdnClitaId").val(clitaID);
+        $("#hdnMachineId").val(machineID);
+    }
+
+    $(document).ready(function () {
+
+        $('#saveRemark').click(function () {
+            $("#spanremark").val("");
+            var remarkss = $("#RemarkAccept").val();
+            var valueval = "";
+            var clitaStatus = false;
+            //var clitaIDval = $(this).data('clitaid');
+            // var clitaIDval = $(this).data('clitaid');
+            var clitaIDval1 = $('.aaaaa').val();
+            debugger;
+            if (remarkss != "") {
+                $.getJSON("/CLITADailyCheck/logCLITAData", { clitaID: clitaIDval1, value: valueval, status: clitaStatus, remarkss: remarkss }, function (data) {
+                    debugger;
+                    if (data == "true") {
+
+                        parentRowObj.removeClass('bg-success').addClass('bg-danger');
+                        
+                        nokthisObj.hide();
+                        nokthisObj.siblings().hide();
+                       
+                        $('#testy').toastee({
+
+                            type: 'success',
+                            width: '200px',
+                            height: '100px',
+
+                            message: 'Remark Saved Successfully...',
+                        })
+                        $('#NOK1').modal('hide');
+                    }
+                    else {
+                        //parentRowObj.removeClass('bg-success').removeClass('bg-danger');
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Please Reload the Page !');
+                });
+            }
+            else {
+                $("#spanremark").val("Remark is required");
+            }
+        });
+
+
+        var remarkstatus = $('#RemarkAccept').val();
+        $('#ClitaDailyCheckContainer').on('keyup', '.log-clita-input', function (e) {
+            var code = e.keyCode || e.which;
+            if (code == 13) { //Enter keycode
+                debugger;
+                var clitaIDval = $(this).data('clitaid');
+                var valueval = $(this).val();
+                if (valueval.length > 0) {
+                    var parentRowObj = $(this).parent().parent();
+                    var clitaStatus = logClitaRecord(clitaIDval, valueval, parentRowObj, true);
+                    $(this).hide();
+                }
+            }
+        });
+        $('#ClitaDailyCheckContainer').on('click', '.log-clita-btn', function (e) {
+
+            var clitaIDval = $(this).data('clitaid');
+            var clitaValue = $(this).data('status');
+
+            parentRowObj = $(this).parent().parent();
+            nokthisObj = $(this);
+           
+            debugger;
+            if (clitaValue == true) {
+                var clitaStatus = logClitaRecord(clitaIDval, null, parentRowObj, clitaValue);
+                $(this).hide();
+                $(this).siblings().hide();
+            }
+        });
+
+        $('#ClitaDailyCheckContainer').on('click', '.log-clita-pending-btn', function (e) {
+           
+            var parentRowObj = $(this).parent().parent();
+            parentObj = parentRowObj;
+            thisObj = $(this);
+            //$("#parentObj").val(parentRowObj);
+            //$("#parentObj").val(parentRowObj.context.outerHTML);
+            //$(this).hide();
+           // $(this).siblings().hide();
+        });
+
+        $("#FromDate").datetimepicker(
+            {
+                format: 'd/m/y',
+                timepickerScrollbar: true,
+                hours12: false
+            });
+
+        $("#ToDate").datetimepicker(
+            {
+                format: 'd/m/y',
+                timepickerScrollbar: true,
+                hours12: false
+            });
+
+        //var MachineID = $('#hdMachineId').val();
+        //updateMachineStatus(MachineID);
+        //setInterval(updateMachineStatus(MachineID), 5000);
+        function updateMachineStatus(machineID) {
+
+            $.getJSON('/CBMDashboard/getMachineStatus', { machineId: machineID }, function (data) {
+
+                if (data.MStatus == false) {
+                    $("#result_" + machineID).css("background", "rgba(255, 255, 0, 1)");
+                    $("#spanStatus").html("Conn. Fail", "black");
+                    $("#PLCStatus").html("OPC Connection Fail");
+                    $("#PLCStatus").addClass('blinker1');
+
+                }
+                else if (data.MStatus == true && data.Status.length > 0) {
+
+                    if (data.MStatus == true && data.Status[0].Heart_Bit == true) {
+                        if (data.Status[0].isHealthy == true) {
+                            $("#result_" + machineID).css("background", "rgba(38,168,49, 1)");
+                            $("#spanStatus").html("Running", "black");
+                        }
+                        else if (data.Status[0].isFaulty == true) {
+                            $("#result_" + machineID).css("background", "rgba(255,99,71, 1)");
+                            $("#spanStatus").html("Faulty", "black");
+                        }
+                        else if (data.Status[0].isIdle == true) {
+                            $("#result_" + machineID).css("background", "rgba(210,190,90, 1)");
+                            $("#spanStatus").html("Idle", "black");
+                        }
+                        else {
+                            $("#result_" + machineID).css("background", "rgba(255, 220, 50, 1)");
+                            $("#spanStatus").html("Conn. Fail", "black");
+                            $("#PLCStatus").html("M/C PLC Connection Fail");
+                            $("#PLCStatus").addClass('blinker1');
+                        }
+                    }
+                    else if (data.MStatus == true && data.Status[0].Heart_Bit == false) {
+                        $("#result_" + machineID).css("background", "rgba(255, 220, 50, 1)");
+                        $("#spanStatus").html("Conn. Fail", "black");
+                        $("#PLCStatus").html("M/C PLC Connection Failed");
+                        $("#PLCStatus").addClass('blinker1');
+                    }
+                }
+                else if (data.MStatus == true && data.Status.length == 0) {
+                    $("#result_" + machineID).css("background", "rgba(255, 220, 50, 1)");
+                    $("#spanStatus").html("Conn. Fail", "black");
+                    $("#PLCStatus").html("M/C PLC Connection Failed");
+                    $("#PLCStatus").addClass('blinker1');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert(' !');
+
+
+            })
+        }
+    });
+</script>
+
+<style>
+    #testy {
+        z-index: 99999;
+    }
+</style>
+

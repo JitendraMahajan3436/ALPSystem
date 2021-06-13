@@ -1,0 +1,76 @@
+﻿@model REIN_MES_System.Models.RS_Ctrl_Machine_Alarms_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    string status = "No";
+}
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Alarm_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Alarm_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Alarm_Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Alarm_Message)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_MTTR)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.Is_MTTR)*@
+            @{
+                bool flag = Convert.ToBoolean(Model.Is_MTTR);
+            }
+            @if (flag)
+            {
+                status = "Yes";
+            }
+            else
+            {
+                status = "No";
+            }
+            @status
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Alarm_Type_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Ctrl_Machine_Alarm_Types.Alarm_Type_Name)
+        </dd>
+
+        <dt>
+            IO List
+        </dt>
+        <dd>
+            @if (Model.MM_MT_Machine_IO_Alarm_Relation != null)
+            {
+                <ol>
+                    @foreach (string ioName in Model.MM_MT_Machine_IO_Alarm_Relation.Select(a => a.MM_MT_Machine_IO.IO_Name))
+                    {
+                        <li>@ioName</li>
+                    }
+                </ol>
+            }
+            else
+            {
+                <p>No IO assigned against this Alarm</p>
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Alarm_ID }, new { @class = "btn btn-primary" }) @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+</p>

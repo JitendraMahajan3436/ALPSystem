@@ -1,0 +1,17 @@
+2019-04-30 06:46:13 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 06:43:42 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 06:42:58 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 06:42:34 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 06:36:33 PM  [ Info] Successfully Scanned SrNo: UBK3D00149 ! 
+2019-04-30 06:36:32 PM  [ Info] Main Order Serial No:UBK3D00149
+2019-04-30 06:36:16 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 02:59:34 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:58:43 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:57:15 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:45:17 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:41:52 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:38:50 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:37:54 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:31:38 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:14:12 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-30 12:00:43 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 

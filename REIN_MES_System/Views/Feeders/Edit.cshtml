@@ -1,0 +1,81 @@
+﻿@model REIN_MES_System.Models.RS_Feeders
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Feeder_ID)
+    @Html.Hidden("Plant_ID")
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="box-body">
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.FeederName, "Feeder Name", new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.TextBoxFor(model => model.FeederName, htmlAttributes: new { @placeholder = "Enter Shift Name", @class = "form-control", @maxlength = "30" })
+                            @Html.ValidationMessageFor(model => model.FeederName, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.FeederDesc, "Feeder Description", new { @class = "" })<i style="color:red">*</i>
+
+                            @Html.TextBoxFor(model => model.FeederDesc, htmlAttributes: new { @placeholder = "Enter Feeder desc.", @class = "form-control", @maxlength = "30" })
+                            @Html.ValidationMessageFor(model => model.FeederDesc, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Feeder Order</label>
+                            @Html.EditorFor(model => model.SortOrder, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.SortOrder, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+                @Html.Hidden("Plant_ID")
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-linkedin" />
+                        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts {
+
+    @Scripts.Render("~/bundles/jqueryval") }

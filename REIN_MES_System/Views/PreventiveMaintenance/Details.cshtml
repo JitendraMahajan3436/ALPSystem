@@ -1,0 +1,57 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Maintenance
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Machine Number")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Machine Part")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Preventive_Equipment.Equipment_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Scheduled Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Scheduled_Date, "{0:dd-MM-yyyy}")
+        </dd>
+
+      
+        <dt>
+            @Html.DisplayName("Cycle(Months)")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cycle_Period)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayName("Recipient Email")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipent_Email)
+        </dd>*@
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PM_ID }, new {@class="btn btn-primary" }) 
+    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+</p>

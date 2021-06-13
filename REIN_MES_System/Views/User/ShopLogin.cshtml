@@ -1,0 +1,32 @@
+﻿@model REIN_MES_System.Models.UserLogin
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/User/_Layout.cshtml";
+}
+
+<p class="login-box-msg">Please Enter UserId for Station Login</p>
+@using (Html.BeginForm("CheckShopLogin", "User"))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div class="form-group has-feedback">
+        @Html.TextBoxFor(model => model.User_Name, new { @class = "form-control", @placeholder = "User Name" })
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        @Html.ValidationMessageFor(model => model.User_Name, null, new { @class = "validation_error" })
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+﻿@model REIN_MES_System.Models.MM_Station_Based_Clita
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+ 
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+      
+        <dt>
+            @Html.DisplayName("Station Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayName("CLITA Item")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clita_Item)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Classification")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Classification.Classification)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Standards")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Standard.Standard)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("CLITA Tools")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Tool.Tool_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Method")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Method.Method)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Frequency")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cycle)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Expected Duration (HH:MM:SS)")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Maintenance_Time_TACT)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayName("Start Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Start_Date)
+        </dd>
+        @*<dt>
+            @Html.DisplayName("End Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.End_Date)
+        </dd>*@
+
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Station_Clita_ID }, htmlAttributes: new { @class = "btn btn-primary" }) |
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

@@ -1,0 +1,231 @@
+﻿@model REIN_MES_System.Models.RS_Email_Alert
+
+@{
+
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+<style type="text/css">
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        width: 80%;
+        height: 20px
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider,
+    input[type="checkbox"]:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:focus + input[type="hidden"] + .slider,
+    input[type="checkbox"]:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider:before,
+    input[type="checkbox"]:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>User*</label>
+
+                    @Html.DropDownListFor(model => model.Emp_ID, null, String.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessage("Emp_ID", null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Shop*</label>
+
+                    @Html.DropDownListFor(model => model.Shops, null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+                    @Html.ValidationMessageFor(model => model.Shops, null, new { @class = "validation_error" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="display:block" id="Incomer">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Alerts *</label>
+
+                  
+                    @Html.DropDownListFor(model => model.Alerts, null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+                    @Html.ValidationMessage("Alerts", null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label>Plant Level Alerts?</label>
+                @Html.CheckBox("Plant_Alert")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Escalation?</label>
+                @Html.CheckBox("Escalation")
+            </div>
+
+        </div>
+        <div class="row" style="display:block" id="EscalationWise">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>User For Escalation*</label>
+
+                    @Html.DropDownList("Escal_EmpId", null, htmlAttributes: new { @class = "form-control select2" })
+                    @Html.ValidationMessage("Delay_Escal", null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Delay_Escal*</label>
+
+                    @Html.TextBox("Delay_Escal", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessage("Delay_Escal", null, new { @class = "validation_error" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="form-group">
+            <input type="submit" value="Save" id="btnsubmit" class="btn btn-primary" />
+            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+            <br />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Emp_ID").select2({
+                placeholder: 'Select Employee',
+                allowClear: true,
+            });
+            $("#Escal_EmpId").select2({
+                placeholder: 'Select Escalation Employee',
+                allowClear: true,
+            });
+            $("#EscalationWise").hide();
+            $("#Alerts").select2({
+                allowClear: true,
+                placeholder: 'Assign Alert',
+                multiple: 'multiple',
+                tokenSeparators: [',', ' ', ';']
+            });
+            $("#Shops").select2({
+                allowClear: true,
+                placeholder: 'Assign Shop',
+                multiple: 'multiple',
+                tokenSeparators: [',', ' ', ';']
+            });
+            if ($("#Escalation").is(":checked")) {
+
+                $("#EscalationWise").show();
+            }
+            else {
+                $("#EscalationWise").hide();
+            }
+            $('#Emp_ID').change(function () {
+                debugger;
+                var uid = $(this).val();
+                $('#Shop_ID option').remove();
+
+                if (uid.length > 0) {
+                    $.getJSON('/Email_Alert/fillShopsDropDown', { userID: uid }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+
+                        $('#Shops').append('<option value=""></option>');
+                        for (i = 0; i < data.length; i++) {
+                            $('#Shops').append('<option value="' +
+                                data[i].Shop_ID + '">' + data[i].Shop_Name + '</option>');
+                        }
+                        $("#Shops").select2({
+                            allowClear: true,
+                            placeholder: 'Assign Shop',
+                            multiple: 'multiple'
+                        });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Roles!');
+                    });
+                }
+            });
+            $("#Escalation").change(function () {
+
+                // check if checkbox is being checked
+                // taken from /a/23007488 by Alexandru Chichinete
+                if ($("#Escalation").is(":checked")) {
+
+                    $("#EscalationWise").show();
+                }
+                else {
+                    $("#EscalationWise").hide();
+                }
+                // enable form submit
+
+            });
+        });
+    </script>
+}
+@section Styles {
+    <link href="~/Content/theme/RoleMgt.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}
+

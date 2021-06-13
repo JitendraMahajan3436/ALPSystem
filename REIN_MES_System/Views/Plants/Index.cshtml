@@ -1,0 +1,97 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Plants>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+
+<p class="position_absolute">
+
+    <a href="@Url.Action("Create", "Plants")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Plant_Name)
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Plant_Code_SAP)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+
+                <th>@ResourceGlobal.Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plant_Name)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plant_Code_SAP).ToString().ToUpper()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action(ResourceGlobal.Edit, "Plants", new { id = item.Plant_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Details, "Plants", new { id = item.Plant_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Delete, "Plants", new { id = item.Plant_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+
+</div>
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

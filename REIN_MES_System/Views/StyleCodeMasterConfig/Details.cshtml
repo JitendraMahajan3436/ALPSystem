@@ -1,0 +1,57 @@
+﻿@model REIN_MES_System.Models.VMStyleCodeMasterConfig
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-6">
+    <div>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Shop_ID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Shop_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Variant_Code)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Variant_Code)
+            </dd>
+
+
+            @*<dt>
+                @Html.DisplayName(ResourceGlobal.Inserted_Date)
+            </dt>*@
+
+            @*<dd>
+                @Html.DisplayFor(model => model.Inserted_Date)
+            </dd>*@
+
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Style_Code)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Style_Code)
+            </dd>
+
+
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Row_ID }, htmlAttributes: new { @class = "btn btn-primary" })
+        @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+    </p>
+</div>

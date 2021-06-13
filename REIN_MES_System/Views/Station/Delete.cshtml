@@ -1,0 +1,79 @@
+﻿@model REIN_MES_System.Models.RS_Stations
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.custom_Helper;
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Is_Buffer)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Convert.ToBoolean(Model.Is_Buffer))
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Station_IP_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_IP_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Station_Host_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Host_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Is_Critical_Station)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Is_Critical_Station)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+      
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="@ResourceGlobal.Delete" class="btn btn-primary" /> @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

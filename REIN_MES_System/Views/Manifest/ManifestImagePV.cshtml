@@ -1,0 +1,39 @@
+﻿<div class="row shopForm-wrapper" id="">
+    <div class="form-horizontal">
+        <div class="row">
+            @if (ViewBag.EFGeneologyParts != null)
+            {
+                <input type="hidden" name="modelCode" id="modelCode" value="@ViewBag.ModelCode" />
+                <input type="hidden" name="MainSerialNo" id="MainSerialNo" value="@ViewBag.SerialNo" />
+
+                int i = 0;
+                foreach (var obj in @ViewBag.EFGeneologyParts)
+                {
+                    i++;
+                    <div id="block_@obj.Part_No">
+                        <label class="control-label col-md-2">@obj.Part_No.ToString()</label>
+                        <div class="col-md-3">
+                            <input type="text" name="@obj.Part_No" data-partno="@obj.Part_No" data-currid="@i" class="form-control scanpart" />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+@if (ViewBag.Message == null)
+{
+    if (ViewBag.PartsImage != null)
+    {
+        foreach (var item in ViewBag.PartsImage)
+        {
+            <div class="col-md-6">
+                <img src="~/Content/images/@item.Image_Name" />
+            </div>
+        }
+    }
+}
+else
+{
+    <h3 class="bg-red-active text-center">@ViewBag.Message</h3>
+}

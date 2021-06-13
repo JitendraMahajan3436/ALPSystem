@@ -1,0 +1,121 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+
+@{
+    ViewBag.Title = "MonthlyProductionPlan";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal" id="div1">
+
+        @Html.ValidationSummary(true)
+        <div class="row">
+
+
+            <div class="col-sm-3">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })  *
+
+                @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-sm-3">
+                @Html.LabelFor(model => model.From_Date, "Month", htmlAttributes: new { @class = "" })
+
+                @*@Html.DropDownListFor(model => model.From_Date, new SelectList(new List<object> { new { value = "0", text = "-Select Month-" }, new { value = "01", text = "JAN" }, new { value = "02", text = "FEB" }, new { value = "03", text = "MAR" }, new { value = "04", text = "APRIL" }, new { value = "05", text = "MAY" }, new { value = "06", text = "JUNE" }, new { value = "07", text = "JULY" }, new { value = "08", text = "AUG" }, new { value = "09", text = "SEP" }, new { value = "10", text = "OCT" }, new { value = "11", text = "NOV" }, new { value = "12", text = "DEC" } }, "value", "text", 0), htmlAttributes: new { @class = "form-control" })*@
+                @Html.DropDownListFor(model => model.From_Date, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.From_Date, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-sm-3">
+                @Html.LabelFor(model => model.To_Date, "Year", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.To_Date, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.To_Date, null, new { @class = "validation_error" })
+
+            </div>
+           
+            <div class="col-sm-3">
+                <br />
+                <input id="MonthlyProductionPlan" type="button" onclick="return MonthlyProductionPlan();" value="Generate Report" class="btn btn-primary" /> @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+            </div>
+
+
+        </div>
+        <br />
+
+        <div class=" row">
+            
+        </div>
+
+    </div>
+
+    <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+    <div class="form-horizontal" style="height:70%;" id="div2">
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class=" col-sm-12">
+                @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                    height="1000" frameborder="0"></iframe>*@
+                <iframe name="ContentFrame" id="ContentFrame" width="100%" height="750px" ></iframe>
+            </div>
+        </div>
+    </div>
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+</script>
+
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#siderbarmenu").click();
+       // getDateD();
+    })
+
+    function getDateD() {
+        var d = new Date();
+        var today = d.getDate();
+        var yestrday = today - 1;
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        //$("#From_Date").val(04);
+       // $("#To_Date").val(year);
+    }
+</script>
+

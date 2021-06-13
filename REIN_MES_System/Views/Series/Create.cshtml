@@ -1,0 +1,50 @@
+﻿@model REIN_MES_System.Models.RS_Series
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name + " *", htmlAttributes: new { @class = "" })
+                    @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Series_Description, ResourceDisplayName.Series_Description + " *", htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Series_Description, htmlAttributes: new { @class = "form-control", @maxlength = "20" })
+                    @Html.ValidationMessageFor(model => model.Series_Description, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+            <br /><br />
+
+            <div class="">
+                <div class="">
+                    <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+</div>

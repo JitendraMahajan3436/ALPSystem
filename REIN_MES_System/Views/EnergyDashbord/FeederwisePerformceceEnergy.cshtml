@@ -1,0 +1,43 @@
+﻿
+<table class="table table-bordered table-striped table-condensed datatable_completes" id="feederPerformanceIndices" style="max-width:100%">
+    <thead>
+        <tr>
+            <th>
+                FeederNanme
+            </th>
+            <th>
+               (Kwh)
+            </th>
+            <th>
+                BOB Consumption (Kwh)
+            </th>
+            <th>
+                Average  Consumption (Kwh)
+            </th>
+            <th>
+                Effiency
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["Performance_Indices"] as IList<EnergyManagementMD.Models.Performance_Indices> != null)
+        {
+            foreach (var item in ViewData["Performance_Indices"] as IList<EnergyManagementMD.Models.Performance_Indices>)
+            {
+        <tr>
+            <td>
+                @item.Shopname
+
+            </td>
+            <td>@item.TotalConsumtion</td>
+            <td>@item.BestConsumption</td>
+            <td>@item.AvgConsumption</td>
+            <td>@item.Efficiency <b>%</b></td>
+        </tr>
+            }
+        }
+
+
+    </tbody>
+</table>

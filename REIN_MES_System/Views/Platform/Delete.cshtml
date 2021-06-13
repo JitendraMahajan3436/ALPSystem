@@ -1,0 +1,47 @@
+﻿@model REIN_MES_System.Models.RS_OM_Platform
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Plat Form Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Platform_Name)
+        </dd>
+       
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" />
+            @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

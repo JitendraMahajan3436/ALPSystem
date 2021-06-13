@@ -1,0 +1,227 @@
+﻿@model REIN_MES_System.Models.RS_History_LineStop
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+@*<h2>Edit</h2>*@
+
+<div class="col-md-12 history-linestop">
+    <div class="history-linestop">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Row_ID)
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        @Html.LabelFor(model => model.Stop_Time, new { @class = "" })
+                        <div class="">
+                            @Html.TextBoxFor(model => model.Stop_Time, "{0:hh\\:mm:ss}", htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.Stop_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.LabelFor(model => model.Resume_Time, new { @class = "" })
+                        <div class="">
+                            @Html.TextBoxFor(model => model.Resume_Time, "{0:hh\\:mm:ss}", htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.Resume_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="">
+                            <label>Total Time</label>
+                            <input type="text" class="form-control" value="@ViewBag.Total_Time" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        @Html.LabelFor(model => model.PrimaryOwner_Id, new { @class = "" })
+                        <div class="">
+                            @Html.DropDownList("PrimaryOwner_Id", null, "-Select Primary Owner-", new { @class = "form-control" })
+                            @*@Html.TextBoxFor(model => model.Primary_Owner, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.PrimaryOwner_Id, null, new { @class = "validation_error" })
+
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+
+                        @Html.LabelFor(model => model.SecondaryOwner_Id, new { @class = "" })
+                        <div class="">
+                            @*@Html.DropDownListFor(model => model.Secondary_Owner, null, "-Select Secondary Owner-", new { @class = "form-control" })*@
+                            @Html.DropDownList("SecondaryOwner_Id", null, "-Select SecondaryOwner-", new { @class = "form-control" })
+
+                            @*@Html.TextBoxFor(model => model.Secondary_Owner, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.SecondaryOwner_Id, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Line_Stop_By, new { @class = "" })
+                            @Html.DropDownList("Line_Stop_By", new List<SelectListItem>
+
+                  {
+                    new SelectListItem{ Text="Operator", Value = "Operator" },
+                    new SelectListItem{ Text="QA", Value = "QA" },
+                 }, "-Slect Line Stop By-", new { @class = "form-control" })
+                            @*@Html.TextBoxFor(model => model.Line_Stop_By, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.Line_Stop_By, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Stop_Reason, new { @class = "" })
+                        <div class="">
+
+                            @Html.DropDownListFor(model => model.Stop_Reason, null, "-Select Line Stop Reason-", new { @class = "form-control" })
+                            @*@Html.TextBoxFor(model => model.Stop_Reason, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.Stop_Reason, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Status, new { @class = "" })
+                            @Html.DropDownList("Status", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="Open", Value = "Open" },
+                    new SelectListItem{ Text="Resolved", Value = "Resolved" },
+                 }, "-Slect Status-", new { @class = "form-control" })
+                            @*@Html.TextBoxFor(model => model.Status, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.Status, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Remarks, new { @class = "" })
+                        <div class="">
+                            @Html.TextBoxFor(model => model.Remarks, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Remarks, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="submit" value="Save" id="btnSubmit" class="btn btn-primary" /> @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/master_file")*@
+    @*@Scripts.Render("~/bundles/Select2scripts")*@
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+
+            $("#btnSubmit").on("click", function () {
+                //alert("Hi");
+                var PrimOwner = $("#PrimaryOwner_Id").val();
+                var SecondaryOwner = $("#SecondaryOwner_Id").val();
+                var Linestopby = $("#Line_Stop_By").val();
+                var StopReason = $("#Stop_Reason").val();
+                var Status = $("#Status").val();
+                if (PrimOwner == "") {
+                    alert("Please Select Primary Owner");
+                    return false;
+                }
+                if (PrimOwner != "") {
+                    if (SecondaryOwner == "") {
+                        alert("Please Select Secondary Owner");
+                        return false;
+                    }
+                }
+                if (Linestopby == "") {
+                    alert("Please Select LineStopBy");
+                    return false;
+                }
+                if (StopReason == "") {
+                    alert("Please Select Stop Reason");
+                    return false;
+                }
+                if (Status == "") {
+                    alert("Please Select Status");
+                    return false;
+                }
+                //-Select Primary Owner-
+                //-Select SecondaryOwner-
+                //-Slect Line Stop By-
+                //-Select Line Stop Reason-
+                //-Slect Status-
+            });
+
+
+
+            $("#PrimaryOwner_Id").on("change", function () {
+
+                var PrimOwner = $("#PrimaryOwner_Id").val();
+                if (PrimOwner) {
+                    var url = "/HistoryLineStop/GetSecOwnerData";
+                    ajaxpack.getAjaxRequest(url, "primaryOwner_id=" + $("#PrimaryOwner_Id").val() + "", showsecondaryOwnerType, "json");
+
+                }
+
+            });
+            function showsecondaryOwnerType() {
+
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "SecondaryOwner_Id");
+                    }
+                }
+            }
+        });
+
+
+        function SelectOptionHTML(jsonRes, targetId) {
+            //var jsonRes = $.parseJSON(myajax.responseText);
+            var res = "";
+            for (var i = 0; i < jsonRes.length; i++) {
+                res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+            }
+
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+            $("#" + targetId).html(res);
+        }
+    </script>
+
+}
+

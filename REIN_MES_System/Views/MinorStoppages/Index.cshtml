@@ -1,0 +1,261 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_MinorStoppageCycle>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+<div class="row" id="MinorStoppagesCycleContainer">
+    <div class="col-md-12">
+        @{ if (globalData != null)
+         {
+             if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+             {
+                <div class="box-body">
+                    @{
+                 if (globalData != null)
+                 {
+                    <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>                                                          } else { <text> style="display:none;" </text>                                                         } }>
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4>
+                            <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+                 }
+                    }
+                </div>
+             }
+         }
+        }
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-machineid="@machineObj.Machine_ID" data-toggle="tab" class="machine-tab">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-machineid="@machineObj.Machine_ID" data-toggle="tab" class="machine-tab">@machineObj.Machine_Name</a></li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="tab-content">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative;">
+                            <div class="row">
+                                <div class="col-md-3 col-md-offset-2 machine-cycle-container">
+                                    @{ int j = 0; }
+                                    @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                    {
+                                        j++;
+                                        if (j == 1)
+                                        {
+                                            <div class="cycle-step-container">
+                                                <div class="cycle-step-box" data-cycle-step-id="@item.MS_CycleStep_ID">
+                                                    <p> @item.CycleStep_Name </p>
+                                                </div>
+                                                @*@if (!String.IsNullOrWhiteSpace(item.CycleFault_Check))
+                                                    {
+                                                        <div class="fault-check-box">
+                                                            <div class="cycle-arrow-right"><div></div></div>
+                                                            <div class="fault-check-title">
+                                                                @foreach (string alarm in (item.CycleFault_Check).Split(','))
+                                                                {
+                                                                    if (!String.IsNullOrWhiteSpace(alarm))
+                                                                    {
+                                                                        @Ajax.ActionLink(alarm, "getMachineIOList", "MinorStoppages", new { cycleId = item.MS_CycleStep_ID }, new AjaxOptions()
+                                                                        {
+                                                                            HttpMethod = "Get",
+                                                                            UpdateTargetId = "machineIOListBlock",
+                                                                            InsertionMode = InsertionMode.Replace,
+                                                                            OnBegin = "Loadingajax",
+                                                                            OnComplete = "showMachineIOModal"
+                                                                        },
+                                                                        new { @class = "", id = "" })
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }*@
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="cycle-arrow-down">
+                                                <div></div>
+                                            </div>
+                                            <div class="cycle-step-container">
+                                                <div class="cycle-step-box" data-cycle-step-id="@item.MS_CycleStep_ID">
+                                                    <p> @item.CycleStep_Name </p>
+                                                </div>
+                                                <div class="fault-check-box">
+                                                    <div class="cycle-arrow-right"><div></div></div>
+                                                </div>
+                                                @*@if (!String.IsNullOrWhiteSpace(item.CycleFault_Check))
+                                                    {
+                                                            <div class="fault-check-box">
+                                                                <div class="cycle-arrow-right"><div></div></div>
+                                                                <div class="fault-check-title">
+
+                                                                    @foreach (string alarm in (item.CycleFault_Check).Split(','))
+                                                                {
+                                                                    if (!String.IsNullOrWhiteSpace(alarm))
+                                                                    {
+                                                                        @Ajax.ActionLink(alarm, "getMachineIOList", "MinorStoppages", new { cycleId = item.MS_CycleStep_ID }, new AjaxOptions()
+                                                                        {
+                                                                            HttpMethod = "Get",
+                                                                            UpdateTargetId = "machineIOListBlock",
+                                                                            InsertionMode = InsertionMode.Replace,
+                                                                            OnBegin = "Loadingajax",
+                                                                            OnComplete = "showMachineIOModal"
+                                                                        },
+                                                                        new { @class = "", id = "" })
+                                                                    }
+                                                                }
+
+                                                                </div>
+                                                            </div>
+                                                    }*@
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="col-md-4 fault-alarms-container">
+                                    <div class="panel panel-gray">
+                                        <div class="panel-heading text-bold text-center">Currently Active Alarms</div>
+                                        <div class="panel-body active-fault-alarms"></div>
+                                    </div>
+                                    @*<div class="row ">
+                                            <h4 class="text-bold text-center bg-gray-active">Currently Active Alarms</h4>
+                                            <div class="active-fault-alarms"></div>
+                                        </div>*@
+                                    <div class="row history-fault-alarms">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+</div>
+@*<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="machineIOListBlock">
+
+            </div>
+        </div>
+    </div>*@
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel1">IO SIGNALS</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive" id="machineIOListBlock">
+
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/theme/minorStoppages.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+    <script type="text/javascript">
+        var repeater;
+        function Loadingajax() {
+            $('#myModal1').modal();
+            $("#machineIOListBlock").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+        function showMachineIOModal() {
+            $('#myModal1').modal();
+        }
+        function checkForSignals() {
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            $.post('/MinorStoppages/checkForCycleSignals', { machineId: machineID }, function (data) {
+                //resetAllLines();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, cycleStepObj) {
+
+                        var stepID = cycleStepObj.MS_CycleStep_ID;
+                        var stepStatus = cycleStepObj.Current_Status;
+                        var stepDomObj = $('*[data-cycle-step-id="' + stepID + '"]');
+                        if (stepStatus == "Idle") {
+                            //stepDomObj.next().hide();
+                            stepDomObj.removeClass("bg-faulty").removeClass("bg-success");
+                        } else if (stepStatus == "Ok") {
+                            //stepDomObj.next().hide();
+                            stepDomObj.removeClass("bg-faulty").addClass("bg-success");
+                        } else if (stepStatus == "Nok") {
+                            stepDomObj.addClass("bg-faulty").removeClass("bg-success");
+                            //stepDomObj.next().show();
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+        function getActiveFaultAlarms() {
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            var faultContainerObj = $("#machine_" + machineID);
+            $.getJSON('/MinorStoppages/getMachineFaultyAlarms', { machineId: machineID }, function (data) {
+                if (data.length > 0) {
+                    faultContainerObj.find('.fault-alarms-container').show();
+                    var faultAlarmDivObj = faultContainerObj.find('.active-fault-alarms');
+                    faultAlarmDivObj.empty();
+                    $.each(data, function (idx, alarmObj) {
+                        var alarmDate = moment(alarmObj.alarmDate, 'DD/MM/YYYY HH:mm:ss').format('DD MMM hh:mm:ss a');
+                        //var anchorTag = </a>';
+                        faultAlarmDivObj.append('<div class="bg-faulty text-center">' +
+                                                     '<a class="" data-ajax="true" data-ajax-begin="Loadingajax" data-ajax-complete="showMachineIOModal" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#machineIOListBlock" href="/MinorStoppages/getMachineIOList?alarmID=' + alarmObj.Alarm_ID + '">' +
+                                                     '<h5>' + alarmObj.Alarm_Name + '</h5>' +
+                                                     '<div class="">' + alarmDate + '</div></a>' +
+                                                 '</div>');
+
+
+
+                    });
+                } else {
+                    faultContainerObj.find('.fault-alarms-container').hide();
+                }
+            });
+        }
+        $(document).ready(function () {
+            checkForSignals();
+            //checkForSignals(currentMachineID);
+            repeater = setInterval(checkForSignals, 5000);
+            //checkForSignals(currentMachineID);
+            getActiveFaultAlarms();
+            setInterval(getActiveFaultAlarms, 5000);
+            $('.nav-tabs').on('click', '.machine-tab', function (e) {
+                currentMachineID = $(this).data('machineid');
+            });
+
+        });
+    </script>
+}

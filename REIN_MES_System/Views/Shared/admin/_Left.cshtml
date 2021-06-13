@@ -1,0 +1,245 @@
+﻿@using System.Globalization
+
+@using System.Threading;
+
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left info">
+                @*<p>@userSession.userName.ToUpperInvariant()</p>*@
+                @*<a href="#"><i class="fa fa-circle text-success"></i> Online</a>*@
+            </div>
+            <div class="pull-right">
+                @*<img src="~/Content/theme/dist/img/user2-160x160_blank.jpg" class="img-circle" alt="User Image" />*@
+                <a href="#" id="siderbarmenu" class="sidebar-toggle hidesidebar" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+            </div>
+        </div>
+        <!-- search form -->
+        @*<form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." />
+                    <span class="input-group-btn">
+                        <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>*@
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            @*<li class="header">MAIN NAVIGATION</li>*@
+            @if (userSession.rolesObj != null)
+            {
+                var i = 0;
+                foreach (var roles in userSession.rolesObj)
+                {
+                    if (@roles.Is_Qdms == true && @roles.Role_ID != 15)
+                    {
+
+                    }
+                    else
+                    {
+                        <li class="treeview" id="treeview_@roles.Role_ID" onclick="UpdateMainMenu('@roles.Role_ID')">
+                            <a href="#">
+                                <i class="@roles.Role_Icon_Class" style="color:@roles.Role_Icon_Color"></i>
+                                @*<i class="fa fa-pie-chart"></i>*@
+                                <span>@roles.Role_Name</span>
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu mn" id="treeview_menu_@roles.Role_ID" @*onclick="updateExpandRow('row_@roles.Role_ID')"*@>
+
+                                @foreach (var menu in db.RS_Menu_Role.Where(a => a.Role_ID == @roles.Role_ID).OrderBy(a => a.Sort_Order).Select(a => a.RS_Menus))
+                                {
+                                    if (roles.Role_ID == 15)
+                                    {
+                                        if (i != 1)
+                                        {
+                                            <li><a href="@menu.ControllerName" target="_blank"><i class="fa fa-circle-o"></i> @menu.LinkName</a></li>
+                                            i++;
+                                        }
+                                        @*<li id="li_@menu.Menu_ID" onclick="updateMenu('@menu.Menu_ID','@roles.Role_ID')">*@
+
+
+                                    }
+                                    else
+                                    {
+                                        <li id="li_@menu.Menu_ID" onclick="updateMenu('@menu.Menu_ID','@roles.Role_ID')"><a href="@Url.Action(menu.ActionName, menu.ControllerName)"><i class="fa fa-circle-o"></i> @menu.LinkName</a></li>
+
+                                    }
+                                    @*<li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
+                                <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
+                                <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>*@
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @*<li>
+                    <a href="@Url.Action(menu.ActionName, menu.ControllerName)">
+                        <i class="@menu.CSSClass"></i> <span> @menu.LinkName</span>
+                    </a>
+                </li>*@
+                }
+            }
+            <li>
+                @*<a href="#">
+                <i class="fa fa-book"></i> Documentation
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-right pull-right"></i>
+                </span>
+            </a>*@
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>PROJECT</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="@Url.Action("Index", "Documentations", new { documentName = "FRS" })"><i class="fa fa-circle-o"></i> FRS</a></li>
+                            <li><a href="@Url.Action("Index", "Documentations", new { documentName = "FD-ZHB-SDS-2017-02-06" })"><i class="fa fa-circle-o"></i> SDS</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>FUNCTIONAL</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (userSession.rolesObj != null)
+                            {
+                                foreach (var roles in userSession.rolesObj)
+                                {
+                                    if (Convert.ToBoolean(roles.Is_Show_Documentations))
+                                    {
+                                        if (!String.IsNullOrEmpty(roles.Functional_Documentations))
+                                        {
+                                            <li>
+
+                                                <a href="@Url.Action("Index", "Documentations", new { documentName = roles.Functional_Documentations})">
+                                                    <i class="fa fa-pie-chart"></i>
+                                                    <span>@roles.Role_Name</span>
+                                                    <i class="fa fa-angle-right pull-right"></i>
+                                                </a>
+                                                @*<ul class="treeview-menu">
+                                                @foreach (var menu in db.RS_Menu_Role.Where(a => a.Role_ID == @roles.Role_ID).Select(a => a.RS_Menus).Distinct().ToList())
+                                                {
+                                                    if (!String.IsNullOrEmpty(menu.Documents_Name))
+                                                    {
+                                                        <li><a href="@Url.Action("Index", "Documentations", new { documentName = menu.Documents_Name })"><i class="fa fa-circle-o"></i> @menu.LinkName</a></li>
+                                                    }
+                                                }
+                                            </ul>*@
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-pie-chart"></i>
+                            <span>TECHNICAL</span>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            @if (userSession.rolesObj != null)
+                            {
+                                foreach (var roles in userSession.rolesObj)
+                                {
+                                    if (Convert.ToBoolean(roles.Is_Show_Documentations))
+                                    {
+                                        if (!String.IsNullOrEmpty(roles.Technical_Documentations))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Documentations", new { documentName = roles.Technical_Documentations})">
+                                                    <i class="fa fa-pie-chart"></i>
+                                                    @*<span>@</span>*@
+                                                    <i class="fa fa-angle-right pull-right"></i>
+                                                </a>
+                                                @*<ul class="treeview-menu">
+                                                @foreach (var menu in db.RS_Menu_Role.Where(a => a.Role_ID == @roles.Role_ID).Select(a => a.RS_Menus).Distinct().ToList())
+                                                {
+                                                    if (!String.IsNullOrEmpty(menu.Technical_Name))
+                                                    {
+                                                        <li><a href="@Url.Action("Index", "Documentations", new { documentName = menu.Technical_Name })"><i class="fa fa-circle-o"></i> @menu.LinkName</a></li>
+                                                    }
+                                                }
+                                            </ul>*@
+                                            </li>
+                                        }
+                                    }
+                                }
+
+                            }
+                        </ul>
+                    </li>
+
+
+
+                    @*<li>
+                    <a href="#">
+                        <i class="fa fa-circle-o"></i> Level One
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i> Level Two
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                                <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>*@
+
+
+                </ul>
+            </li>
+            @*<li class="header">LABELS</li>*@
+            @{
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                @*<li><a href="/Global/ChangeCurrentCulture/0"><i class="fa fa-circle-o text-red"></i> <span>English</span></a></li>
+            <li><a href="/Global/ChangeCurrentCulture/1"><i class="fa fa-circle-o text-yellow"></i> <span>Hindi</span></a></li>*@
+                <!-- <li><a href="/Global/ChangeCurrentCulture/2"><i class="fa fa-circle-o text-aqua"></i> <span>Marathi</span></a></li>
+        <li><a href="/Global/ChangeCurrentCulture/3"><i class="fa fa-circle-o text-aqua"></i> <span>Arabic</span></a></li>
+        <li><a href="/Global/ChangeCurrentCulture/4"><i class="fa fa-circle-o text-aqua"></i> <span>Tamils</span></a></li> -->
+            }
+            <br />
+            <br />
+            <br />
+            <br />
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+    @*<div style="text-align: center; position: fixed; background: white none repeat scroll 0% 0%; left: 0px; bottom: 0px; padding: 11px;">
+            <a href="index2.html" class="logo">
+                <img width="208" src="~/Content/theme/dist/img/mestech_logo.png" />
+            </a>
+        </div>*@
+
+</aside>
+
+
+

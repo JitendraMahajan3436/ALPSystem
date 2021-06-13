@@ -1,0 +1,1749 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_WorkInstruction_Master>
+
+@{
+    ViewBag.Title = "WorkInstruction";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<div class="box box-info" style=" margin-left: 1%;width: 98%;border-top: 3px solid #00c0ef !important;">
+    <div class="box-header with-border">
+        <div class="row">
+            <div class="col-md-12">
+                @*<div class="col-md-2">
+                        <div class="form-group">
+                            <label>Scan Carrier</label>
+                            <div style="font-weight: bold;font-size: 17px;" id="showcarrierNo"></div>
+                        </div>
+                    </div>*@
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label>Order No</label>
+                        <div style="font-weight: bold;font-size: 17px;" id="orderno"></div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Model code</label>
+                        <div style="font-weight: bold;font-size: 17px;" id="modelcode"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Model Description</label>
+                        <div style="font-weight: bold;font-size: 17px;" id="modeldesc"></div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-2" id="carriernodiv">
+                    <div class="form-group carriernodivcls">
+                        <label>Carrier No</label>
+                        <div style="font-weight: bold;font-size: 17px;" id="CarrierNo"></div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Station Name</label>
+                        <div style="font-weight: bold;font-size: 17px;">@ViewBag.stationName</div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Sequence Number</label>
+                        <input type="number" id="sequenceNo" class="form-control" name="sequenceNo" placeholder="Enter Sequence Number:" autocomplete="off">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+            </div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-2">
+                <span class="btn btn-linkedin" id="scanNextJob">Scan Next</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="">
+    <div class="col-xs-12">
+        <div class="box" style="border-top: 3px solid #4CAF50 !important;">
+            @*<div class="box-header" style="text-align: center;font-weight: bold;">
+                    <h3 class="box-title" style="font:bold">WorkInstruction List</h3>
+
+                    <div class="box-tools">
+
+                    </div>
+                </div>*@
+            <!-- /.box-header -->
+            <div class="box-body table-responsive cover" style="overflow: scroll;height: 380px;">
+                <table class="table table" id="workInstructionListT">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center" width="10">Sequence</th>
+                            <th style="text-align:center">Type</th>
+                            <th style="text-align:center">Description</th>
+                            <th style="text-align:center">Part No</th>
+                            <th style="text-align:center" width="10">Status</th>
+                            @*<th>Operation</th>*@
+                        </tr>
+                    </thead>
+                    <tbody id="workInstructionListTbody">
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+
+
+
+<div class="row" id="okNokDiv">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            @* <input type="number" id="scanEFpart" class="form-control" name="scanEFpart" placeholder="" autocomplete="off">*@
+        </div>
+        <div class="col-md-3">
+            <button type="button" id="okbtn" class="btn btn-block btn-success">OK</button>
+
+        </div>
+        <div class="col-md-3">
+            <button type="button" id="Nokbtn" class="btn btn-block btn-danger">NOK</button>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="CurrentWIType" />
+<input type="hidden" id="CurrentWIId">
+<input type="hidden" id="LastWIId">
+<input type="hidden" id="CurrentpartNo">
+<input type="hidden" id="CurrentWIDesc" />
+<input type="hidden" id="CurrentSequence">
+<input type="hidden" id="stationID" value="@ViewBag.Station_ID">
+
+<input type="hidden" id="Is_Main_Assembly_Line" value="">
+<input type="hidden" id="Is_Sub_Assembly_Line" value="">
+
+<input type="hidden" id="partNumber" value="">
+<input type="hidden" id="Order_No" value="">
+<input type="hidden" id="scanBarcodeScanvalue" value="">
+<input type="hidden" id="ModelCode" value="@TempData["ModelCode"]">
+@*<input type="hidden" id="SerialNo" value="@TempData["SerialNo"]">*@
+
+<div class="modal fade" id="scanCarrierPopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Scan Carrier</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Scan Carrier</label>
+                                <input type="text" id="scancaarier" class="form-control" name="scancarrier" placeholder="Scan :" autocomplete="off">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>*@
+                @*<input type="submit" value="Scan" onclick="MyFunction2()" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scanEFPopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Error Proofing (<span class="WIDes"></span> )</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Scan Part No</label>
+                                <input type="text" id="scanEFpart" class="form-control" name="scanEFpart" placeholder="Scan :" autocomplete="off">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>*@
+                @*<input type="submit" value="Scan" onclick="MyFunction2()" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scanBarcodePopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Scan Barcode</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Scan Barcode</label>
+                                <input type="text" id="scanBarcode" class="form-control" name="scanBarcode" placeholder="Scan Barcode No:" autocomplete="off">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>*@
+                @*<input type="submit" value="Scan" onclick="MyFunction2()" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scanOrderCreatePopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Order Create</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                            <div class="form-group">
+                                @* <label>Scan Barcode</label>*@
+                                @*<input type="text" id="OrderCreate" class="form-control" name="OrderCreate" placeholder="Scan Barcode No:" autocomplete="off">*@
+                                <h4>do you want to Create Order?</h4>
+                            </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button"  class="btn btn-danger closedbtn">No</button>
+                <input type="submit" id="OrderCreate" value="Order Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scanOrderStartPopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Order Start</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                            <div class="form-group">
+                                @* <label>Scan Barcode</label>*@
+                                @*<input type="text" id="OrderCreate" class="form-control" name="OrderCreate" placeholder="Scan Barcode No:" autocomplete="off">*@
+                                <h4>do you want Start Order?</h4>
+                            </div>
+                       
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button"  class="btn btn-danger closedbtn">No</button>
+                <input type="submit" id="OrderStart" value="Order Start"  class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="scanSUBEPPopup" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Vendor  (<span class="WIDes"></span> )</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Scan Part No</label>
+                                <input type="text" id="scanSUBEPpart" class="form-control" name="scanSUBEPpart" placeholder="Scan :" autocomplete="off">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>*@
+                @*<input type="submit" value="Scan" onclick="MyFunction2()" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="supervisorLogin" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Supervisor Login</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Scan Supervisor User ID</label>
+                                <input type="text" id="supervisorLogininput" class="form-control" name="supervisorLogininput" placeholder="Scan :" autocomplete="off">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @*<button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>*@
+                @*<input type="submit" value="Scan" onclick="MyFunction2()" class="btn btn-primary" />*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="submittAll" data-backdrop="static" data-keyboard="false" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="height: 30px;" class="shop-notify order-start-notify message-block"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <h4>Do you want to submit?</h4>
+                              
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-info" id="resubmissionid">Resubmission</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger closedbtn">No</button>
+                <input type="button" value="Submit" id="updateAllSubmit" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function (e) {
+
+        //$('#myModal').modal('toggle');
+        //$('#myModal')
+        //$('#submittAll').modal('hide');
+
+        $('#scanBarcodePopup').modal('show');
+        setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+
+        $('#scanBarcode').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                debugger;
+                $("#Order_No").val("");
+                $("#partNumber").val("");
+                $("#Is_Sub_Assembly_Line").val("");
+                $("#Is_Main_Assembly_Line").val("");
+                $('#scanBarcodeScanvalue').val("");
+                var barcode = $('#scanBarcode').val();
+
+                if (barcode.length > 7) {
+                    var venbar = barcode.split("|");
+                    if (venbar.length>1)  // vendor barcode
+                    {
+
+                        debugger;
+                        // 40000182|RH|2.4|date|time|jm1|UniqueNo
+                        //length 7
+
+                        var vendorbarcode = $('#scanBarcode').val();
+                        $('#scanBarcodeScanvalue').val(vendorbarcode);
+                        var vendorbarcodelists = vendorbarcode.split("|");
+                        var orderNo = vendorbarcodelists[6];
+                        var partNo = vendorbarcodelists[0];
+
+                        if (vendorbarcodelists.length == 7) {
+
+                            if (orderNo && partNo) {
+                                $.getJSON('/WorkInstruction/CheckAlredayAllSubmitted',
+                                    { orderNo: orderNo, partNo: partNo },
+                                    function (data) {
+                                        if (data.status == true) {
+                                            $('.message-block').html("");
+                                            $('.message-block').html(data.message);
+                                            $('.message-block').removeClass('bg-error bg-correct');
+                                            $('.message-block').addClass('bg-error');
+                                            $("#scanBarcode").val("");
+                                            setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                        }
+                                        else if (data.status == false) {
+                                            $.getJSON('/WorkInstruction/CheckAssemblyPartNo',
+                                                { partNo: partNo },
+                                                function (data) {
+                                                    if (data.status == true) {
+                                                        //OrderNo
+                                                        debugger
+                                                        if (data.data.Is_SubAssembly == true) {
+                                                            $("#Order_No").val(orderNo);
+                                                            $("#partNumber").val(partNo);
+                                                            $("#Is_Sub_Assembly_Line").val(true);
+                                                            $("#Is_Main_Assembly_Line").val(false);
+
+                                                            loadworkinstruction();
+                                                        }
+                                                        else {
+                                                            $('.message-block').html("");
+                                                            $('.message-block').html(data.message);
+                                                            $('.message-block').removeClass('bg-error bg-correct');
+                                                            $('.message-block').addClass('bg-error');
+                                                            $("#scanBarcode").val("");
+
+                                                            setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                                        }
+                                                    }
+                                                    else if (data.status == false) {
+                                                        $('.message-block').html("");
+                                                        $('.message-block').html(data.message);
+                                                        $('.message-block').removeClass('bg-error bg-correct');
+                                                        $('.message-block').addClass('bg-error');
+                                                        $("#scanBarcode").val("");
+
+                                                        setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                                    }
+                                                });
+                                        }
+                                    });
+
+                               
+
+                            }
+                            else {
+                                $('.message-block').html("");
+                                $('.message-block').html("Barcode formate not match...!");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-error');
+                                $('#scanVBpart').val("");
+                                setTimeout(function () { $('#scanVBpart').focus(); }, 1000);
+
+                            }
+
+                        }
+                        else {
+                            $('.message-block').html("");
+                            $('.message-block').html("Barcode formate not match...!");
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-error');
+                            $('#scanBarcode').val("");
+                            setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+
+                        }
+
+
+                    }
+                    else  // main assmbly order number
+                    {
+                        var orderno = $('#scanBarcode').val();
+                        if (orderno.length > 7) {
+
+                            $.getJSON('/WorkInstruction/getOrderDetail',
+                                { orderno: orderno },
+                                function (data) {
+                                    if (data.status == true) {
+                                        $("#Order_No").val(data.OrderDetail.Order_No);
+                                        $("#partNumber").val(data.OrderDetail.Model_Code);
+                                        partNo = data.OrderDetail.Model_Code;
+                                        orderno = data.OrderDetail.Order_No;
+
+
+                                        $.getJSON('/WorkInstruction/CheckAlredayAllSubmitted',
+                                            { orderNo: orderno, partNo: partNo },
+                                            function (data) {
+                                                if (data.status == true) {
+                                                    $('.message-block').html("");
+                                                    $('.message-block').html(data.message);
+                                                    $('.message-block').removeClass('bg-error bg-correct');
+                                                    $('.message-block').addClass('bg-error');
+                                                    $("#scanBarcode").val("");
+                                                    setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                                }
+                                                else if (data.status == false) {
+                                                    $.getJSON('/WorkInstruction/CheckAssemblyPartNo',
+                                                        { partNo: partNo },
+                                                        function (data) {
+                                                            if (data.status == true) {
+                                                                //OrderNo
+                                                                debugger
+                                                                if (data.data.Is_Main == true) {
+                                                                    $("#Is_Sub_Assembly_Line").val(false);
+                                                                    $("#Is_Main_Assembly_Line").val(true);
+                                                                    // captureworkInstruction("SCR", "", partNo, orderno);
+                                                                    loadworkinstruction();
+                                                                }
+                                                                else {
+                                                                    $('.message-block').html("");
+                                                                    $('.message-block').html(data.message);
+                                                                    $('.message-block').removeClass('bg-error bg-correct');
+                                                                    $('.message-block').addClass('bg-error');
+                                                                    $("#scanBarcode").val("");
+
+                                                                    setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                                                }
+                                                            }
+                                                            else if (data.status == false) {
+                                                                $('.message-block').html("");
+                                                                $('.message-block').html(data.message);
+                                                                $('.message-block').removeClass('bg-error bg-correct');
+                                                                $('.message-block').addClass('bg-error');
+                                                                $("#scanBarcode").val("");
+
+                                                                setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                                            }
+                                                        });
+                                                }
+                                            });
+
+                                      
+
+                                    }
+                                    else {
+                                        $('.message-block').html("");
+                                        $('.message-block').html(data.message);
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-error');
+                                        $("#scanBarcode").val("");
+
+                                        setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                                    }
+                                });
+
+
+                        }
+                        else {
+                            $('.message-block').html("");
+                            $('.message-block').html("Please Scan valid order No...!");
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-error').removeClass('bg-correct');
+                            $("#scanBarcode").val("");
+                            setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+
+                        }
+
+                    }
+                }
+                else {
+                    $('.message-block').html("");
+                    $('#scanBarcode').val("");
+                    $('.message-block').html("Invalid Barcode...!");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error').removeClass('bg-correct');
+                    setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+                }
+
+            }
+        });
+
+
+        $('#okNokDiv').hide();
+        //alert($('#isfirstStation').val());
+
+        $('#scancaarier').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                var StationId = $('#stationID').val();
+                var currentWIID = $("#CurrentWIId").val();
+                var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+                var Order_No = $("#Order_No").val();
+                var partNumber = $("#partNumber").val();
+                var StationId = $('#stationID').val();
+                var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+                $.getJSON('/WorkInstruction/marriageCarrier',
+                    { carrierNo: $("#scancaarier").val(), OrderNo: Order_No },
+                    function (data) {
+                        if (data.status == true) {
+                            // add in submtitted workinstruction list
+                            $.getJSON('/WorkInstruction/captureworkInstructionForOrderScan',
+                                {
+                                    orderno: Order_No, partNumber: partNumber, StationId: StationId, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly,
+                                    currentWIID: currentWIID
+                                },
+                                function (data) {
+                                    if (data.status == true) {
+                                        /* loadworkinstruction();*/
+                                        loadworkinstruction();
+                                        $('#scanCarrierPopup').modal('hide');
+                                        $('.message-block').html("");
+                                        $('.message-block').html(data.message);
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-correct');
+
+                                    }
+                                    else if (data.status == false) {
+                                        $('.message-block').html("");
+                                        $('.message-block').html(data.message);
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-error');
+                                        $("#scancaarier").val("");
+                                        //$("#scanospart").focus();
+                                        setTimeout(function () { $('#scancaarier').focus(); }, 1000);
+                                    }
+                                });
+
+
+
+                        }
+                        else if (data.status == false) {
+                            $('.message-block').html("");
+                            $('.message-block').html(data.message);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-error');
+                            $("#scancaarier").val("");
+                            setTimeout(function () { $('#scancaarier').focus(); }, 1000);
+
+                            //$("#scanEFpart").focus();
+                        }
+                    });
+
+
+                //setTimeout(function () { captureworkInstruction("Scan"); }, 3000);
+
+            }
+            else {
+                //$('#workInstructionListTbody').html("");
+                //$('#modelcode').html("");
+                //$('#CarrierNo').html("");
+                //$('#scanospart').html("");
+            }
+        });
+
+        function captureworkInstruction(typename, okNok, partno, orderno) {
+            debugger;
+            //var carrierNo = $('#scancaarier').val();
+            var StationId = $('#stationID').val();
+            var currentWIID = $("#CurrentWIId").val();
+            var CurrentpartNo = $("#CurrentpartNo").val();
+            orderno = $("#Order_No").val();
+            //partno = $("#partNumber").val();
+
+            var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+            var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+            var partNumber = $("#partNumber").val();
+
+            $('.message-block').html("");
+
+
+            if (typename == "VI" || typename == "CT" || typename == "EP" || typename == "SCR" || typename == "LP" || typename == "SUBEP") {
+                $.getJSON('/WorkInstruction/captureworkInstruction',
+                    { orderno: orderno, StationId: StationId, currentWIID: currentWIID, partNumber: partNumber, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly, Partno: partno || null, okNok: okNok || null },
+                    function (data) {
+                        if (data.status == true) {
+                            loadworkinstruction();
+                            $('#scanCarrierPopup').modal('hide');
+                            $('.message-block').html("");
+                            $('.message-block').html(data.message);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-correct');
+                        }
+                        else if (data.status == false) {
+                            $('.message-block').html("");
+                            $('.message-block').html(data.message);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-error');
+                            if (typename == "SUBEP") {
+                                //
+                                $("#scanSUBEPpart").val("");
+
+                                setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+                            }
+                            else if (typename == "EP") {
+                                $("#scanEFpart").val("");
+
+                                setTimeout(function () { $("#scanEFpart").focus(); }, 1000);
+                            }
+                            else {
+                                $('#scanBarcode').val("");
+                                setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+                            }
+
+                        }
+                    });
+
+            }
+            else if (typename == "OL") {
+                var currentWIID = $("#CurrentWIId").val();
+                var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+                var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+                var Order_No = $("#Order_No").val();
+                var partNumber = $("#partNumber").val();
+                var StationId = $('#stationID').val();
+
+                $.getJSON('/WorkInstruction/isValidOrderno',
+                    {
+                        orderno: Order_No, partNumber: partNumber, StationId: StationId, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly,
+                        currentWIID: currentWIID
+                    },
+                    function (data) {
+                        if (data.status == true) {
+                            /* loadworkinstruction();*/
+                            // add in submtitted workinstruction list
+                            $.getJSON('/WorkInstruction/captureworkInstructionForOrderScan',
+                                {
+                                    orderno: Order_No, partNumber: partNumber, StationId: StationId, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly,
+                                    currentWIID: currentWIID
+                                },
+                                function (data) {
+                                    if (data.status == true) {
+                                        /* loadworkinstruction();*/
+                                        loadworkinstruction();
+                                        //$('#scanCarrierPopup').modal('hide');
+                                        $('.message-block').html("");
+                                        $('.message-block').html(data.message);
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-correct');
+
+                                    }
+                                    else if (data.status == false) {
+                                        $('.message-block').html("");
+                                        $('.message-block').html(data.message);
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-error');
+                                        //$("#scanEFpart").val("");
+                                        //$("#scanospart").focus();
+                                        $('#scanBarcode').val("");
+                                        setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+                                    }
+                                });
+
+                        }
+                        else if (data.status == false) {
+                            if (data.message.match('Already')) {
+                                loadworkinstruction();
+                                $('.message-block').html("");
+                                $('.message-block').html("Order Scan Successfully..");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-correct');
+                            }
+                            else {
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-error');
+                                $("#scanEFpart").val("");
+                                $('#scanBarcode').val("");
+                                setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+
+                            }
+
+                        }
+                    });
+
+            }
+        }
+
+        function loadworkinstruction() {
+            //label label - success
+            debugger;
+            var partNumber = "";
+            //var Order_No = $('#scanospart').val();
+            //var partNumber = $('#partNumber').val();
+            var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+            var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+            var Order_No = $("#Order_No").val();
+            var partNumber = $("#partNumber").val();
+            var StationId = $('#stationID').val();
+            $('.message-block').removeClass('bg-error bg-correct');
+            $('.message-block').html("");
+            $.getJSON('/WorkInstruction/WorkInstructionShow', { Order_No: Order_No, StationId: StationId, partNumber: partNumber, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly }, function (data) {
+                if (data != null) {
+                    debugger;
+                    $('#workInstructionListTbody').html("");
+                    if (data == false) {
+                        $('.message-block').html("");
+                        $('.message-block').html("Order number not available against Order: " + Order_No + " ..!");
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-error').removeClass('bg-correct');
+                        $('#scancaarier').val("");
+                        $('#scanBarcodePopup').modal('show');
+                        setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+                    } else if (data.WorkInstruction != null) {
+                        var allisOK = true;
+                        for (let i = 0; i < data.WorkInstruction.length; i++) {
+
+                            var html = "<tr id='trrow_" + data.WorkInstruction[i].WI_Number + "'><td  style='text-align: center' width='10'>" + data.WorkInstruction[i].Sequence_No + "</td>" +
+                                "<td id='type_" + data.WorkInstruction[i].WI_Number + "' style='text-align: center'>" + data.WorkInstruction[i].WI_Type_Name + "</td>" +
+                                "<td id='typeDesc_" + data.WorkInstruction[i].WI_Number + "' style='text-align: center'>" + data.WorkInstruction[i].WI_Description + "</td>" +
+                                "<td id='partno_" + data.WorkInstruction[i].WI_Number + "' style='text-align: center'>" + data.WorkInstruction[i].Part_No + "</td>" +
+                                "<td style='text-align: center' width='10'><span id='statusbtn_" + data.WorkInstruction[i].WI_Number + "'></span></td>";
+                            $('#workInstructionListTbody').append(html).show('slow');
+                            if (data.WorkInstruction[i].Status != "OK") {
+                                allisOK = false;
+                            }
+                        }
+                        var counts = 0;
+                        for (let i = 0; i < data.WorkInstruction.length; i++) {
+
+                            $("#statusbtn_" + data.WorkInstruction[i].WI_Number).removeClass('label-success label-danger label-warning');
+                            $("#statusbtn_" + data.WorkInstruction[i].WI_Number).html('');
+                            $("#trrow_" + data.WorkInstruction[i].WI_Number).removeClass('bkcolor nokbkcolor');
+
+                            if (data.WorkInstruction[i].Status == "OK") {
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).addClass('label label-success');
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).html('OK');
+
+                            }
+                            else if (data.WorkInstruction[i].Status == "NOK") {
+                                debugger;
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).addClass('label label-danger');
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).html('NOK');
+                                $("#trrow_" + data.WorkInstruction[i].WI_Number).addClass('nokbkcolor');
+
+                            } else if (data.WorkInstruction[i].Status == "Pending") {
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).addClass('label label-warning');
+                                $("#statusbtn_" + data.WorkInstruction[i].WI_Number).html('Pending');
+
+                            }
+
+                            if (data.WorkInstruction[i].Is_Submitted == true) {
+                                $("#trrow_" + data.WorkInstruction[i].WI_Number).addClass('bkcolor');
+                            }
+                            counts++;
+                        }
+                        if (data.CarrierOrderlist != null && data.CarrierOrderlist != "") {
+                            // $('#modelcode').html(data.CarrierOrderlist.Model_Code);
+                            //$('#serialno').html(data.CarrierOrderlist.Serial_No);
+                            // $('#orderno').html(data.CarrierOrderlist.Order_No);
+                            $("#CarrierNo").html(data.CarrierOrderlist.Carrier_Number);
+                        }
+                        /* else {*/
+                        $('#modelcode').html(partNumber);
+                        //$('#serialno').html(data.CarrierOrderlist.Serial_No);
+                        $('#orderno').html(Order_No);
+                        //$("#CarrierNo").html("");
+                        //}
+                        debugger;
+                        if (IsMainAssmbly == true || IsMainAssmbly == "true") {
+                            $(".carriernodivcls").show();
+
+                        }
+                        else {
+                            $(".carriernodivcls").hide();
+                        }
+
+                        //set current work instr.
+                        $("#CurrentWIId").val("");
+                        $("#CurrentWIType").val("");
+                        $("#LastWIId").val("");
+                        $("#CurrentpartNo").val("");
+                        $("#CurrentSequence").val("");
+                        $("#CurrentWIDesc").val("");
+
+                        var allsubmitted = true;
+
+
+                        for (let i = 0; i < data.WorkInstruction.length; i++) {
+                            if (i == (data.WorkInstruction.length - 1)) {
+                                $("#LastWIId").val(data.WorkInstruction[i].WI_Number);
+                            }
+                            if (data.WorkInstruction[i].Is_Submitted == false) {
+                                //$("#trrow_" + data.WorkInstruction[i].WI_Number)[0].scrollIntoView();
+
+                                //scroll down
+                                var rowpos = $('#trrow_' + data.WorkInstruction[i].WI_Number).position();
+                                rowpos.top = rowpos.top - 200;
+                                $("html, body").animate({ scrollTop: $('.cover').scrollTop(rowpos.top) });
+                                //$('.cover').scrollTop(rowpos.top);
+
+
+                                $("#trrow_" + data.WorkInstruction[i].WI_Number).fadeOut(500);
+                                $("#trrow_" + data.WorkInstruction[i].WI_Number).fadeIn(500);
+                                $("#trrow_" + data.WorkInstruction[i].WI_Number).addClass('bkcolorCurrent');
+                                //setTimeout(function () {  },3000);
+
+
+                                $("#CurrentWIId").val(data.WorkInstruction[i].WI_Number);
+                                $("#CurrentWIType").val(data.WorkInstruction[i].WI_Type_Name);
+                                $("#CurrentpartNo").val(data.WorkInstruction[i].Part_No);
+                                $("#CurrentSequence").val(data.WorkInstruction[i].Sequence_No);
+                                $("#CurrentWIDesc").val(data.WorkInstruction[i].WI_Description);
+
+                                allsubmitted = false;
+
+                                break;
+                            }
+                            else {
+                                allsubmitted = true;
+                            }
+                        }
+                        debugger;
+                        var sequence = $("#CurrentSequence").val();
+                        // call current work instruction
+                        var CurrentWIDesc = $("#CurrentWIDesc").val();
+                        var currentWIType = $("#CurrentWIType").val();
+                        var LastWIId = $("#LastWIId").val();
+                        var CurrentWIId = $("#CurrentWIId").val();
+                        $('#okNokDiv').hide();
+                        $('#scanEFPopup').modal('hide');
+                        $('#scanCarrierPopup').modal('hide');
+                        $('#scanOSPopup').modal('hide');
+                        $('#scanVBPopup').modal('hide');
+                        $('#scanSUBEPPopup').modal('hide');
+                        $('#supervisorLogin').modal('hide');
+                        $("#scanNextJob").hide();
+                        $('#scanOrderCreatePopup').modal('hide');
+                        $('#scanOrderStartPopup').modal('hide');
+                        $('#scanBarcodePopup').modal('hide');
+
+                        if (currentWIType == "SCR") {
+                            //captureworkInstruction(currentWIType, "", "", "");
+                            $('#scanCarrierPopup').modal('show');
+                            setTimeout(function () { $('#scancaarier').focus(); }, 1000);
+                        }
+                        else if (currentWIType == "EP") {
+                            //error proof
+                            setTimeout(function () {
+                                $('.message-block').html("");
+                                $("#scanEFpart").val("");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('#scanEFPopup').modal('show');
+                                $(".WIDes").html("");
+                                $(".WIDes").html(CurrentWIDesc);
+
+                                setTimeout(function () { $("#scanEFpart").focus(); }, 1000);
+                            }, 1000);
+
+                        }
+                        else if (currentWIType == "SUBEP") {
+                            //error proof
+                            setTimeout(function () {
+                                $('.message-block').html("");
+                                $("#scanSUBEPpart").val("");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('#scanSUBEPPopup').modal('show');
+                                $(".WIDes").html("");
+                                $(".WIDes").html(CurrentWIDesc);
+                                setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+
+                            }, 1000);
+
+                        }
+                        else if (currentWIType == "VI") {
+                            //ok nok popup
+                            $('#okNokDiv').show();
+
+                        }
+
+                        else if (currentWIType == "LP") {
+                            //print
+                            setTimeout(function () { captureworkInstruction(currentWIType, "", "", ""); }, 1000);
+
+                        }
+                        else if (currentWIType == "OL") {
+                            //print
+                            setTimeout(function () { captureworkInstruction(currentWIType, "", "", ""); }, 1000);
+
+                        }
+                        else if (currentWIType == "OC") {
+                            //error proof
+                            setTimeout(function () {
+                                $('.message-block').html("");
+                                //$("#scanSUBEPpart").val("");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('#scanOrderCreatePopup').modal('show');
+                                $(".WIDes").html("");
+                                $(".WIDes").html(CurrentWIDesc);
+                                //setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+
+                            }, 1000);
+
+                        }
+                        else if (currentWIType == "OS") {
+                            //error proof
+                            setTimeout(function () {
+                                $('.message-block').html("");
+                                //$("#scanSUBEPpart").val("");
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('#scanOrderStartPopup').modal('show');
+                                $(".WIDes").html("");
+                                $(".WIDes").html(CurrentWIDesc);
+                                //setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+
+                            }, 1000);
+
+                        }
+                        else if (currentWIType == "CT") {
+
+                            if (IsMainAssmbly == true || IsMainAssmbly == "true") {
+                                $.getJSON('/WorkInstruction/CheckCurationTime',
+                                    { orderno: Order_No },
+                                    function (data) {
+                                        if (data.status == true) {
+                                            //OrderNo
+                                            debugger
+                                            captureworkInstruction("CT", "", "", orderno);
+                                            $('.message-block').html("");
+                                            $('.message-block').html(data.message);
+                                            $('.message-block').removeClass('bg-error bg-correct');
+                                            $('.message-block').addClass('bg-correct');
+                                        }
+                                        else if (data.status == false) {
+                                            $('.message-block').html("");
+                                            $('.message-block').html(data.message);
+                                            $('.message-block').removeClass('bg-error bg-correct');
+                                            $('.message-block').addClass('bg-error');
+                                            $("#scanNextJob").show();
+                                        }
+                                    });
+
+                            }
+                            else if (IsSubAssmbly == true || IsSubAssmbly == "true") {
+                                $.getJSON('/WorkInstruction/CheckSubAssemblyCurationTime',
+                                    { orderno: Order_No, partNo: partNumber },
+                                    function (data) {
+                                        if (data.status == true) {
+                                            //OrderNo
+                                            debugger
+                                            captureworkInstruction("CT", "", "", Order_No)
+
+                                        }
+                                        else if (data.status == false) {
+                                            $('.message-block').html("");
+                                            $('.message-block').html(data.message);
+                                            $('.message-block').removeClass('bg-error bg-correct');
+                                            $('.message-block').addClass('bg-error');
+                                            $("#scanNextJob").show();
+                                        }
+                                    });
+                            }
+
+                        }
+                        else {
+                             $('.message-block').html("");
+                            $('.message-block').html("Logic not available again Workinstruction Name- " + currentWIType);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-error');
+                        }
+                        $("#showcarrierNo").html($("#CarrierNo").val());
+                        $("#modeldesc").html(data.Model_Desc);
+
+                        var lastrowsubmitted = $("#LastWIId").val();
+                        if (allsubmitted) {
+                            //$('.message-block').html("");
+                            //$('.message-block').html("All Workinstruction Completed against Order: " + Order_No + " ..!");
+                            //$('.message-block').removeClass('bg-error bg-correct');
+                            //$('.message-block').addClass('bg-correct');
+                            //$('#scancaarier').val("");
+
+                            //if (allisOK == true) {
+                            //    $("#scanNextJob").hide();
+
+                            //    setTimeout(function () {
+                            //        refresh();
+                            //        $('#scanBarcodePopup').modal('show');
+                            //        setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+
+                            //    }, 3000);
+
+                            //}
+                            //else {
+
+                            //    $("#scanNextJob").show();
+                            //}
+                            $('.message-block').html("");
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('#submittAll').modal('show');
+
+                        }
+                    }
+                    else if (data.status == false) {
+                        $('.message-block').html("");
+                        $('.message-block').html(data.message);
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-error');
+                        $("#scanEFpart").val("");
+                        $('#scancaarier').val("");
+                        $("#workInstructionListTbody").html("");
+                        //$('#scanCarrierPopup').modal('show');
+                        $('#scanBarcodePopup').modal('show');
+                        setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+
+                    }
+                } else {
+
+
+                    $('.message-block').html("");
+                    $('.message-block').html("Data not available against Order: " + Order_No + " ..!");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                    $("#scanEFpart").val("");
+                    $('#scancaarier').val("");
+                    $("#workInstructionListTbody").html("");
+                    $('#scanBarcodePopup').modal('show');
+                    setTimeout(function () { $("#scanBarcode").focus(); }, 1000);
+
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error Station Signals.Please try again !');
+            });
+        }
+
+
+        function refresh() {
+            $("#scanNextJob").hide();
+            $("#CurrentWIId").val("");
+            $("#CurrentWIType").val("");
+            $("#LastWIId").val("");
+            $("#CurrentpartNo").val("");
+            $("#CurrentWIDesc").val("");
+            $('#okNokDiv').hide();
+            $("#CurrentSequence").val("");
+            $('#scanEFPopup').modal('hide');
+            $('#scanCarrierPopup').modal('hide');
+            $("#showcarrierNo").html("");
+            $("#modeldesc").html("");
+            $("#modelcode").html("");
+            $("#orderno").html("");
+            $("#CarrierNo").html("");
+            $("#scanospart").html("");
+            $('.message-block').html("");
+            $("#scanEFpart").val("");
+            $("#scanSUBEPpart").val("");
+            $("#sequenceNo").val("");
+            $("#supervisorLogininput").val("");
+            $('#supervisorLogin').modal('hide');
+            $('#scanSUBEPPopup').modal('hide');
+            $('#supervisorLogin').modal('hide');
+            $("#scanVBpart").val("");
+            $("#scanospart").val("");
+            $('#scanOSPopup').modal('hide');
+            $('#scanVBPopup').modal('hide');
+            $('#scanBarcodeScanvalue').val("");
+            $('#scanBarcode').val("");
+            $('#scanOrderStartPopup').modal('hide');
+            $('#scanOrderCreatePopup').modal('hide');
+            $('.message-block').removeClass('bg-error bg-correct');
+            $('#workInstructionListTbody').html("");
+        }
+        $("#okbtn").click(function () {
+            captureworkInstruction("VI", "OK", "", "")
+        });
+
+        $("#Nokbtn").click(function () {
+            captureworkInstruction("VI", "NOK", "", "")
+        });
+
+        $('#scanEFpart').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                debugger;
+                var partno = $('#scanEFpart').val();
+                if (partno.length > 3) {
+                    captureworkInstruction("EP", "", partno, "")
+                }
+                else {
+                    $('.message-block').html("");
+                    $('.message-block').html("Wrong Error proofing...!");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error').removeClass('bg-error');
+                }
+
+            }
+        });
+
+        $('#scanSUBEPpart').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                debugger;
+                // 40000182|RH|2.4|date|time|UniqueNo|jm1
+                //length 6
+                var currentWIID = $("#CurrentWIId").val();
+                var vendorbarcode = $('#scanSUBEPpart').val();
+                var vendorbarcodelists = vendorbarcode.split("|");
+                var orderNo = vendorbarcodelists[6];
+                var partNo = vendorbarcodelists[0];
+                var MainOrder_No = $("#Order_No").val();
+                if (currentWIID) {
+
+                }
+                else {
+                    $('.message-block').html("");
+                    $('.message-block').html("Sequence number not selected...");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                    $("#scanSUBEPpart").val("");
+
+                    setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+                }
+                if (vendorbarcodelists.length == 7) {
+
+                    if (orderNo && partNo && MainOrder_No) {
+
+                        $.getJSON('/WorkInstruction/CheckBOMPart',
+                            { MainOrder_No: MainOrder_No, orderno: orderNo, partNo: partNo, currentWIID: currentWIID },
+                            function (data) {
+                                if (data.status == true) {
+                                    captureworkInstruction("SUBEP", "", partNo + ":" + orderNo, "")
+                                   
+                                }
+                                else if (data.status == false) {
+                                    $('.message-block').html("");
+                                    $('.message-block').html(data.message);
+                                    $('.message-block').removeClass('bg-error bg-correct');
+                                    $('.message-block').addClass('bg-error');
+                                    $("#scanSUBEPpart").val("");
+                                    setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+
+                                }
+                            });
+
+                    }
+                    else {
+                        $('.message-block').html("");
+                        $('.message-block').html("Barcode formate not match...!");
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-error');
+                        $('#scanVBpart').val("");
+                        setTimeout(function () { $('#scanVBpart').focus(); }, 1000);
+
+                    }
+
+                }
+                else {
+                    $('.message-block').html("");
+                    $('.message-block').html("Barcode formate not match...!");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                    $('#scanVBpart').val("");
+                    setTimeout(function () { $('#scanVBpart').focus(); }, 1000);
+
+                }
+
+            }
+        });
+
+        $('#supervisorLogininput').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                debugger;
+                var supervisorname = $('#supervisorLogininput').val();
+                if (supervisorname) {
+
+                    $.getJSON('/WorkInstruction/CheckValidSupervisor',
+                        { supervisorname: supervisorname },
+                        function (data) {
+                            if (data.status == true) {
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-correct');
+
+                                //process to remove existing data and backup
+                                var StationId = $('#stationID').val();
+                                var currentWIID = $("#CurrentWIId").val();
+                                var CurrentpartNo = $("#CurrentpartNo").val();
+                                var orderno = "";
+                                var partno = "";
+
+                                $('.message-block').html("");
+
+                                var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+                                var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+                                var Order_No = $("#Order_No").val();
+                                var partNumber = $("#partNumber").val();
+                                var StationId = $('#stationID').val();
+                                var seqNo = $('#sequenceNo').val();
+                                
+                                    if (seqNo && Order_No && partNumber) {
+                                        $.getJSON('/WorkInstruction/resubmitWorkinstruction',
+                                            { orderno: Order_No, IsSubAssmbly: IsSubAssmbly, IsMainAssmbly: IsMainAssmbly, seqNo: seqNo, supervisorname: supervisorname, partno: partNumber || null  },
+                                            function (data) {
+                                                if (data.status == true) {
+                                                    $("#sequenceNo").val("");
+                                                    $("#supervisorLogininput").val("");
+                                                    loadworkinstruction()
+                                                    $('.message-block').html("");
+                                                    $('.message-block').html(data.message);
+                                                    $('.message-block').removeClass('bg-error bg-correct');
+                                                    $('.message-block').addClass('bg-correct');
+                                                }
+                                                else {
+                                                    $('.message-block').html("");
+                                                    $('.message-block').html(data.message);
+                                                    $('.message-block').removeClass('bg-error bg-correct');
+                                                    $('.message-block').addClass('bg-error');
+                                                    $("#supervisorLogininput").val("");
+                                                    setTimeout(function () { $("#supervisorLogininput").focus(); }, 1000);
+
+                                                }
+                                            });
+                                    }
+                                    else {
+                                        $('.message-block').html("");
+                                        $('.message-block').html("Invalid Order number or Sequence Number or Part number");
+                                        $('.message-block').removeClass('bg-error bg-correct');
+                                        $('.message-block').addClass('bg-error');
+                                        $("#supervisorLogininput").val("");
+                                        setTimeout(function () { $("#supervisorLogininput").focus(); }, 1000);
+
+                                    }
+                                
+                             }
+                            else if (data.status == false) {
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-error');
+                                $("#supervisorLogininput").val("");
+                                setTimeout(function () { $("#supervisorLogininput").focus(); }, 1000);
+
+                            }
+                        });
+
+                    $('.message-block').html("");
+                    $('.message-block').html("Invalid Sequence Number...");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                }
+                else {
+                    $('.message-block').html("");
+                    $('.message-block').html(data.message);
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                }
+
+            }
+        });
+        $('#sequenceNo').keypress(function (e) {
+            $('.message-block').html("");
+            $('.message-block').removeClass('bg-error bg-correct');
+            var key = e.which;
+            if (key == 13)  // the enter key code
+            {
+                var seqNo = $('#sequenceNo').val();
+                var rowCount = $('#workInstructionListTbody tr').length;
+                if (seqNo) {
+                    if (seqNo > rowCount || seqNo == 0 || seqNo == 1) {
+                        $('.message-block').html("");
+                        $('.message-block').html("Invalid Sequence Number...");
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-error');
+                        $("#sequenceNo").val("");
+                        setTimeout(function () { $("#sequenceNo").focus(); }, 1000);
+
+                    }
+                    else {
+                        $('#supervisorLogin').modal('show');
+                        $("#supervisorLogininput").val("");
+                        setTimeout(function () { $("#supervisorLogininput").focus(); }, 1000);
+
+
+                        //$('#workInstructionListTbody tr').each(function () {
+                        //    //console.log(this.id)
+                        //})
+                    }
+
+                }
+                else {
+                    $('.message-block').html("");
+                    $('.message-block').html("Invalid Sequence Number...");
+                    $('.message-block').removeClass('bg-error bg-correct');
+                    $('.message-block').addClass('bg-error');
+                }
+            }
+        });
+
+        $("#updateAllSubmit").click(function () {
+            var StationId = $('#stationID').val();
+            orderNo = $("#Order_No").val();
+            var partNo = $("#partNumber").val();
+            debugger;
+            $.getJSON('/WorkInstruction/UpdateAllSubmitted',
+                { orderno: orderNo, partNo: partNo, StationId: StationId },
+                function (data) {
+                    if (data.status == true) {
+                        $('#submittAll').modal('hide');
+                        $('.message-block').html("");
+                        $('.message-block').html(data.message);
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-correct');
+                        setTimeout(function () {
+                            refresh();
+                            $('#scanBarcodePopup').modal('show');
+                            setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+                        }, 3000);
+
+                    }
+                    else if (data.status == false) {
+                        $('#submittAll').modal('hide');
+                        $('.message-block').html("");
+                        $('.message-block').html(data.message);
+                        $('.message-block').removeClass('bg-error bg-correct');
+                        $('.message-block').addClass('bg-error');
+                        setTimeout(function () {
+                            refresh();
+                            $('#scanBarcodePopup').modal('show');
+                            setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+                        },3000);
+
+                    }
+                });
+
+            
+        });
+
+        $(".closedbtn").click(function () {
+            refresh();
+            $('#scanBarcodePopup').modal('show');
+            setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+        });
+
+        $("#scanNextJob").click(function () {
+            refresh();
+            $('#scanBarcodePopup').modal('show');
+            setTimeout(function () { $('#scanBarcode').focus(); }, 1000);
+        });
+
+        $("#OrderCreate").click(function () {
+            OrderCreate();
+        });
+        function OrderCreate() {
+            var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+            var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+            var Order_No = $("#Order_No").val();
+            var partNumber = $("#partNumber").val();
+            var vendorbarcode = $('#scanBarcodeScanvalue').val();
+            var currentWI = $("#CurrentWIId").val();
+            var StationId = $('#stationID').val();
+            if (IsSubAssmbly == true || IsSubAssmbly == "true") {
+                $.getJSON('/WorkInstruction/AddingSubOrderList',
+                    { orderno: Order_No, partNo: partNumber, vendorBarcodevalue: vendorbarcode, Status: "Created", currentWI: currentWI },
+                    function (data) {
+                        if (data.status == true) {
+                            //OrderNo
+                            $('#orderno').val(data.SubAssemly.Order_No);
+                            $('#modelcode').val(data.SubAssemly.Part_No);
+
+                            loadworkinstruction();
+                            $('.message-block').html("");
+                            $('.message-block').html(data.message);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-correct');
+                            $('#scanOrderCreatePopup').modal('hide');
+                        }
+                        else if (data.status == false) {
+                            if (data.message.match("Already")) {
+                                $('#orderno').val(data.SubAssemly.Order_No);
+                                $('#modelcode').val(data.SubAssemly.Part_No);
+                                loadworkinstruction();
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-correct');
+                                $('#scanOrderCreatePopup').modal('hide');
+                                //$("#scanVBpart").val("");
+                                //$("#scanVBpart").focus();
+                            }
+                            else {
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-error');
+
+                            }
+
+                        }
+                    });
+            }
+            else if (IsMainAssmbly == true || IsMainAssmbly == "true") {
+
+            }
+
+        }
+
+        
+        $("#resubmissionid").click(function () {
+          
+            setTimeout(function () { $("#sequenceNo").focus(); }, 1000);
+        });
+        $("#OrderStart").click(function () {
+            OrderStart();
+        });
+        function OrderStart() {
+            var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+            var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
+            var Order_No = $("#Order_No").val();
+            var partNumber = $("#partNumber").val();
+            var vendorbarcode = $('#scanBarcodeScanvalue').val();
+            var currentWI = $("#CurrentWIId").val();
+            var StationId = $('#stationID').val();
+            if (IsSubAssmbly == true || IsSubAssmbly == "true") {
+                $.getJSON('/WorkInstruction/AddingSubOrderList',
+                    { orderno: Order_No, partNo: partNumber, vendorBarcodevalue: vendorbarcode, Status: "Started", currentWI: currentWI },
+                    function (data) {
+                        if (data.status == true) {
+                            //OrderNo
+                            $('#orderno').val(data.SubAssemly.Order_No);
+                            $('#modelcode').val(data.SubAssemly.Part_No);
+
+                            loadworkinstruction();
+                            $('.message-block').html("");
+                            $('.message-block').html(data.message);
+                            $('.message-block').removeClass('bg-error bg-correct');
+                            $('.message-block').addClass('bg-correct');
+                            $('#scanOrderStartPopup').modal('hide');
+                        }
+                        else if (data.status == false) {
+                            if (data.message.match("Already")) {
+                                $('#orderno').val(data.SubAssemly.Order_No);
+                                $('#modelcode').val(data.SubAssemly.Part_No);
+                                loadworkinstruction();
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-correct');
+                                $('#scanOrderStartPopup').modal('hide');
+                                //$("#scanVBpart").val("");
+                                //$("#scanVBpart").focus();
+                            }
+                            else {
+                                $('.message-block').html("");
+                                $('.message-block').html(data.message);
+                                $('.message-block').removeClass('bg-error bg-correct');
+                                $('.message-block').addClass('bg-error');
+
+                            }
+
+                        }
+                    });
+            }
+            else if (IsMainAssmbly == true || IsMainAssmbly == "true") {
+
+            }
+        }
+    });
+
+
+</script>
+
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    #workInstructionListT {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        #workInstructionListT td, #workInstructionListT th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+    /* #workInstructionListT tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }*/
+
+    .bkcolor {
+        background-color: #00c0ef85;
+    }
+
+    .bkcolorCurrent {
+        background-color: yellow;
+    }
+
+    .nokbkcolor {
+        background-color: tomato;
+    }
+
+    #workInstructionListT th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #383632;
+        color: white;
+    }
+
+
+
+    table {
+        text-align: left;
+        position: relative;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 0.25rem;
+    }
+
+    tr.red th {
+        background: red;
+        color: white;
+    }
+
+    tr.green th {
+        background: green;
+        color: white;
+    }
+
+    tr.purple th {
+        background: purple;
+        color: white;
+    }
+
+    th {
+        background: white;
+        position: sticky;
+        top: 0; /* Don't forget this, required for the stickiness */
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    .cover {
+        height: 100px;
+    }
+</style>

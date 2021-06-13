@@ -1,0 +1,195 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Serial_Number_Data>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+
+<div style="height:450px;width:99%;overflow:scroll;" class="form-control">
+    <p class="position_absolute">
+        <a href="@Url.Action("Create", "SerialNumberData")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    </p>
+    <table class="table table-bordered table-striped datatable_completes table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Part No")
+                </th>
+                <th>
+                    @Html.DisplayName("Plant Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Year Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Month Code")
+                </th>
+                <th>
+                    @Html.DisplayName("Model")
+                </th>
+                <th>
+                    @Html.DisplayName("Varient Group")
+                </th>
+                <th>
+                    @Html.DisplayName("Common")
+                </th>
+                <th>
+                    @Html.DisplayName("Tractor Family")
+                </th>
+                <th>
+                    @Html.DisplayName("Brand")
+                </th>
+                <th>
+                    @Html.DisplayName("Engine Family")
+                </th>
+                <th>
+                    @Html.DisplayName("Tractor Model")
+                </th>
+                <th>
+                    @Html.DisplayName("Tractor Feture A")
+                </th>
+                <th>
+                    @Html.DisplayName("Tractor Feture B")
+                </th>
+                <th>
+                    @Html.DisplayName("Model Year")
+                </th>
+                <th>
+                    @Html.DisplayName("Assembly Plant")
+                </th>
+                <th>
+                    @Html.DisplayName("Model Month")
+                </th>
+                <th>
+                    @Html.DisplayName("Trans Series")
+                </th>
+                <th>
+                    @Html.DisplayName("Trans Year")
+                </th>
+                <th>
+                    @Html.DisplayName("Trans Month")
+                </th>
+                <th>
+                    @Html.DisplayName("Hyd series")
+                </th>
+                <th>
+                    @Html.DisplayName("Hyd year")
+                </th>
+                <th>
+                    @Html.DisplayName("Hyd month")
+                </th>
+                <th>
+                    @Html.DisplayName("Prefix")
+                </th>
+                <th>
+                    @Html.DisplayName("Suffix")
+                </th>
+                <th>
+                    @Html.DisplayName("Running Serial")
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Part_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plant_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Month_Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Varient_Group)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Common)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tractor_Family)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Engine_Family)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tractor_Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tractor_Feture_A)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tractor_Feture_B)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model_Year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Assembly_Plant)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model_Month)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trans_Series)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trans_Year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Trans_Month)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hyd_series)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hyd_year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hyd_month)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prefix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Suffix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Running_Serial)
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Row_ID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Row_ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Row_ID })*@
+                        <a href="@Url.Action("Edit", "SerialNumberData", new { id = item.Row_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                        <a href="@Url.Action("Details", "SerialNumberData", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                        <a href="@Url.Action("Delete", "SerialNumberData", new { id = item.Row_ID })"><i class="fa fa-trash"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

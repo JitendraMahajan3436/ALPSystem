@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "ShopTractorUserManifest";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+<div class="row">
+    @if (ViewBag.userID == 23100023)
+    {
+        <h4 class="bg-dark text-center">TRACTOR SHOP - ERROR PROOFING STATION</h4>
+        <div class="row">
+            <label>Scan Engine Srno.</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" />
+            </div>
+            <label>Scan SubAssembly SrNo.</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <h4 class="bg-dark text-center">TRACTOR SHOP MANIFEST</h4>
+    }
+
+    <div class="col-md-12 manifest-wrapper">
+        <img src="~/Content/images/SOPImages/mainfest tr1.jpg" />
+    </div>
+</div>

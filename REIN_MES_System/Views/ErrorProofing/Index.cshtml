@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    @using (Ajax.BeginForm("Generate", "ErrorProofing", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "create-grid-body" }, new { }))
+    {
+
+        <div class="row">
+            <div class="col-md-4" id="os">
+                @Html.Label("SearchBy")
+                @Html.DropDownList("SearchBy", (IEnumerable<SelectListItem>)ViewBag.Category, "--Select--", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-md-4" id="shop">
+                @Html.Label("Shop_ID")
+                @Html.DropDownList("Shop_ID", (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-md-4" id="serial">
+                @Html.Label("Serial Number")
+                @Html.TextBox("Serial_No", "", new { @class = "form-control" })
+            </div>
+        </div>
+        <div id="date">
+            <div class="col-md-4">
+                @Html.Label("Date From")
+                @Html.TextBox("DateFrom", "", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Date To")
+                @Html.TextBox("DateTo", "", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="View Report" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+<div class="col-md-12">
+    <div class="box-body" id="create-grid-body"></div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#Shop_ID").prop("disabled", true);
+            $("#DateTo").prop("disabled", true);
+            $("#DateFrom").prop("disabled", true);
+            $("#serial").hide()
+            $("#DateFrom").datepicker({ format: "yyyy/MM/dd" });
+            $("#DateTo").datepicker({ format: "yyyy/MM/dd" });
+
+            $("#SearchBy").on("change", function () {
+
+                var value = $("#SearchBy").val();
+                if (value == "0") {
+                    $("#serial").hide()
+                    $("#date").show()
+                    $("#shop").show()
+                    $("#Shop_ID").prop("disabled", false);
+                    $("#DateTo").prop("disabled", false);
+                    $("#DateFrom").prop("disabled", false);
+
+                }
+                else {
+                    $("#serial").show()
+                    $("#date").hide()
+                    $("#shop").hide()
+                }
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+

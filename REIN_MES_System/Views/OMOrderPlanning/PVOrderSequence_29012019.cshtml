@@ -1,0 +1,936 @@
+﻿@model List<REIN_MES_System.Models.CummulativeFields>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    //int plantid = ((FDSession)this.Session["FDSession"]).plantId;
+    //var t = Model;
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-5" style="width: 45.833333315%;">
+
+@*//FOR AVAILABLE ORDERS*@
+<h3><button class="btn btn-primary btn-lg refresh-sequenceAvailable" id="removeSelectionBtnAvailable" style="width: 5%;margin-bottom: 0;padding: 1%;margin-right: 1%;"><i class="fa fa-refresh" style="padding-left: 0; float: left;"></i></button><button class="btn btn-primary" style="width: 90%;">Available Orders</button></h3>
+@*<h3><button class="btn btn-primary" id="availableOrderBtn" style="width: 100%;">Hide Available Orders</button></h3>*@
+
+
+            <table class="table table-bordered table-hover table-condensed table-sequence availableOrderTbl" id="availableOrderTbl">
+                <thead>
+                    <tr>
+                        @if (ViewBag.SequenceShop == "Tractor")
+            {
+                        <th># </th>
+                        <th></th>
+                        <th>Model Code</th>
+                        <th>
+                            Color
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Cumm. Qty
+                        </th>
+                        <th>
+                            Order Type
+                        </th>
+                        <th>Order Number</th>
+                        <th>Shift</th>
+                        <th>Remark</th>
+            }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int j = 0; int currQtyAvb = 0; string modelCodeAvb = ""; string cssclassAvb = ""; string datagroupAvb = ""; int groupcntrAvb = 0; string cssBlockedAvb = ""; string lockedClassAvb = ""; }
+                    @if (ViewBag.SequenceShop == "Tractor")
+            {
+                foreach (var item in ViewBag.orderSequenceObjReleased)
+                {
+                    j++;
+                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                    {
+                        cssclassAvb = "spillover";
+                    }
+                    if (j <= ViewBag.blockAfterQty)
+                    {
+                        cssBlockedAvb = "blocked";
+                    }
+                    else
+                    {
+                        cssBlockedAvb = "";
+                    }
+                    if (item.Locked)
+                    {
+                        lockedClassAvb = "locked";
+                    }
+                    else
+                    {
+                        lockedClassAvb = "";
+                    }
+                    if (!(modelCodeAvb.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase)))
+                    {
+                        currQtyAvb = 0;
+                        currQtyAvb++;
+                        groupcntrAvb++;
+                        datagroupAvb = "group" + "_" + groupcntrAvb;
+
+                    <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroupAvb" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order firstRow @cssBlockedAvb @lockedClassAvb">
+                        <td class="sequence-index">@j</td>
+                        <td class="fa fa-chevron-right"></td>
+                        <td class="sequence-modelcode">
+                            @item.Model_Code
+                            @*@Html.Display("Model Code")*@
+                        </td>
+                        @{
+                            var ModelCode = item.Model_Code;
+
+                            if (ModelCode != null)
+                            {
+                            }
+                           
+                        }
+                        @{
+           //var colorCode = item.Color_code;
+           //var colorName = db.RS_Colour.Where(m =>m.Colour_ID== Convert.ToString(colorCode)).Select(m => m.Colour_Desc).FirstOrDefault();
+            <td class="sequence-color">
+                @item.Color_Name
+            </td>
+                        }
+                        <td class="sequence-qty">
+                            @*@currQty*@
+                            @*</td>*@
+                        <td class="cumm-qty"></td>
+                        @{
+                            if (item.orderType.Trim() == "Trial")
+                            {
+            <td style="background-color: red;" class="sequence-ordertype">
+                @*@Html.Display("Order Type")*@
+                @item.orderType
+
+            </td>
+                            }
+                            else
+                            {
+            <td class="sequence-ordertype">
+                @*@Html.Display("Order Type")*@
+                @item.orderType
+
+            </td>
+                            }
+                        }
+                        <td class="">
+                            @item.Order_No
+                            @*@Html.Display("Order NO")*@
+                        </td>
+                        @{
+//var shiftName = "";
+//if (item.Planned_Shift_ID != null)
+//{
+//    shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+//}
+
+            <td class="sequence-shiftname">
+                @item.shiftName
+            </td>
+                        }
+
+                        <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled/></td>
+                    </tr>
+                            }
+                            else
+                            {
+                                currQtyAvb++;
+                    <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order @cssBlockedAvb @datagroupAvb @lockedClassAvb">
+                        <td class="sequence-index">@j</td>
+                        <td><i class="fa fa-chevron-right"></i></td>
+                        <td class="sequence-modelcode">
+                            @*@Html.Display("Model Code")*@
+                            @item.Model_Code
+                        </td>
+                        @{
+                                        var ModelCode = item.Model_Code;
+                        }
+                        @*@{
+                                        var colorCode = item.Color_code;
+                                        var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();*@
+            <td class="sequence-ColorName">
+                @item.Color_Name
+            </td>
+                        @*}*@
+
+                        <td class="sequence-qty"></td>
+                        <td class="cumm-qty"></td>
+
+                        @{
+                                        if (item.orderType.Trim() == "Trial")
+                                        {
+            <td style="background-color: red;" class="sequence-ordertype">
+                @*@Html.Display("Order Type")*@
+                @item.orderType
+
+            </td>
+                                        }
+                                        else
+                                        {
+            <td class="sequence-ordertype">
+                @*@Html.Display("Order Type")*@
+                @item.orderType
+
+            </td>
+                                        }
+                        }
+
+                        <td class="">
+                            @item.Order_No
+                            @*@Html.Display("Order No")*@
+
+
+                        </td>
+
+                       
+
+            <td class="sequence-shiftname">
+                @item.shiftName
+
+            </td>
+                       
+                        <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled /></td>
+                    </tr>
+                                                }
+                                                modelCodeAvb = item.Model_Code;
+                                                //orderType = item.orderType;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in Model)
+                                            {
+                                                j++;
+                                                if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                {
+                                                    cssclassAvb = "spillover";
+                                                }
+                                                if (j <= ViewBag.blockAfterQty)
+                                                {
+                                                    cssBlockedAvb = "blocked";
+                                                }
+                                                else
+                                                {
+                                                    cssBlockedAvb = "";
+                                                }
+                                                if (item.Locked)
+                                                {
+                                                    lockedClassAvb = "locked";
+                                                }
+                                                else
+                                                {
+                                                    lockedClassAvb = "";
+                                                }
+
+                                                {
+                                                    currQtyAvb++;
+                    <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" class="not-hidden-order @cssBlockedAvb @datagroupAvb">
+                        <td class="sequence-index">@j</td>
+                        <td><i class="fa fa-chevron-right"></i></td>
+                        <td class="sequence-parentmodelcode">
+                            @Html.DisplayFor(modelItem => item.parentModel_Code)
+                        </td>
+                        <td class="sequence-parentseriescode">
+                            @Html.DisplayFor(modelItem => item.parentSeries)
+                        </td>
+                        <td class="sequence-modelcode">
+                            @item.Model_Code
+                            @*@Html.DisplayFor(modelItem => item.Model_Code)*@
+                        </td>
+                        <td class="sequence-series @cssclassAvb">
+                            @Html.DisplayFor(modelItem => item.Series)
+                        </td>
+                        <td class="sequence-qty"></td>
+                        <td class="cumm-qty"></td>
+                        <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled/></td>
+                    </tr>
+                                                }
+                                                modelCodeAvb = item.Model_Code;
+                                            }
+                                        }
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <div class="col-md-1">
+            <div class="box box-primary">
+                <!-- form start -->
+                @*<form role="form">*@
+                    <div class="box-body" style="text-align: center;">
+
+
+                        <br /><br /><br /><br /><br /><br /><br /><br /><br />
+                        <div class="btn-group-vertical">
+                            <button class="btn btn-info btnavailableMoveUP" title="Move Order Up" id="btnavailableMoveUP" type="button" style="font-size: 40px;font-weight: bold;"><i class="fa fa-angle-up"></i></button><br />
+                            <button class="btn btn-info btnavailableToSchedule" title="Available To Schedule" id="btnavailableToSchedule" type="button" style="font-size: 40px;font-weight: bold;">></button><br />
+                            <button class="btn btn-info btnScheduleToAvailable" title="Schedule To Available" id="btnScheduleToAvailable" type="button" style="font-size: 40px;font-weight: bold;"><</button><br />
+                            <button class="btn btn-primary btn-lg btnTactSheetPrepare"  id ="btnTactSheetPrepare"title="Generate Tact Sheet for Selected Shift" style="font-size: 40px;"><i class="fa fa-print" style="padding-left: 0; float: left;"></i></button><br />
+                            <button class="btn btn-primary btn-lg DownloadFile"  id="DownloadFile" title="Download Tacksheet" style="font-size: 40px;"><i class="fa fa-download" style="padding-left: 0; float: left;"></i><b></b></button><br />
+                            <button class="btn btn-info btnavailableMoveDown" title="Move Order Up" id="btnavailableMoveDown" type="button" style="font-size: 40px;font-weight: bold;"><i class="fa fa-angle-down"></i></button><br />
+                            <a href="#" class="DownloadPdfFile" id="DownloadPdfFile" hidden></a>
+
+
+
+
+
+
+
+
+
+
+
+
+                        </div>
+                        <br /><br /><br /><br /><br /><br /><br /><br />
+                    </div><!-- /.box-body -->
+
+
+                @*</form>*@
+            </div>
+        </div>
+        <div class="col-md-5" style="width: 45.833333315%;">
+
+            @*//FOR SCHEDULED ORDERS*@
+            <h3><button class="btn btn-primary btn-lg refresh-sequenceScheduled" id="removeSelectionBtnScheduled" style="width: 5%;margin-bottom: 0;padding: 1%;margin-right: 1%;"><i class="fa fa-refresh" style="padding-left: 0; float: left;"></i></button><button class="btn btn-primary" style="width: 90%;">Scheduled Orders</button></h3>
+
+
+            <table class="table table-bordered table-hover table-condensed table-sequence scheduledOrderTbl" id="scheduledOrderTbl">
+                <thead>
+                    <tr>
+                        @if (ViewBag.SequenceShop == "Tractor")
+            {
+                        <th># </th>
+                        <th></th>
+                        <th>Model Code</th>
+                        <th>
+                            Color
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Cumm. Qty
+                        </th>
+                        <th>
+                            Order Type
+                        </th>
+                        <th>Order Number</th>
+                        <th>Shift</th>
+                        <th>Remark</th>
+                }
+                else if (ViewBag.SequenceShop == "Hydraulic")
+                {
+                        <th># </th>
+                        <th></th>
+                        <th>Parent Model Code</th>
+                        <th>Parent Series</th>
+                        <th>
+                            Model Code
+                        </th>
+                        <th>
+                            Series
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Cumm. Qty
+                        </th>
+                        <th></th>
+                }
+                else
+                {
+                        <th># </th>
+                        <th></th>
+                        <th>Parent Model Code</th>
+                        <th>Parent Series</th>
+                        <th>
+                            Model Code
+                        </th>
+                        <th>
+                            Series
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Cumm. Qty
+                        </th>
+                        <th></th>
+                }
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int jCount = 0; int currQty = 0; string modelCode = ""; string cssclass = ""; string datagroup = ""; int groupcntr = 0; string cssBlocked = ""; string lockedClass = ""; }
+                    @if (ViewBag.SequenceShop == "Tractor")
+            {
+                foreach (var item in ViewBag.orderSequenceObjSheduled)
+                {
+                    jCount++;
+                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                    {
+                        cssclass = "spillover";
+                    }
+                    if (jCount <= ViewBag.blockAfterQty)
+                    {
+                        cssBlocked = "blocked";
+                    }
+                    else
+                    {
+                        cssBlocked = "";
+                    }
+                    if (item.Locked)
+                    {
+                        lockedClass = "locked";
+                    }
+                    else
+                    {
+                        lockedClass = "";
+                    }
+                    if (!(modelCode.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase)))
+                    {
+                        currQty = 0;
+                        currQty++;
+                        groupcntr++;
+                        datagroup = "group" + "_" + groupcntr;
+
+                                <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroup" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order firstRow @cssBlocked @lockedClass">
+                                    <td class="sequence-index">@jCount</td>
+                                    <td class="fa fa-chevron-right"></td>
+                                    <td class="sequence-modelcode">
+                                        @item.Model_Code
+                                        @*@Html.Display("Model Code")*@
+                                    </td>
+                                    @{
+                                        var ModelCode = item.Model_Code;
+                                    }
+                                    @*@{
+                                        var colorCode = item.Color_code;
+                                        var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();*@
+                                        <td class="sequence-color">
+                                            @item.Color_Name
+                                        </td>
+                                    @*}*@
+                                    <td class="sequence-qty">
+                                        @*@currQty*@
+                                        @*</td>*@
+                                    <td class="cumm-qty"></td>
+                                    @{
+                                        if (item.orderType.Trim() == "Trial")
+                                        {
+                                            <td style="background-color: red;" class="sequence-ordertype">
+                                                @item.orderType
+                                                @*@Html.Display("Order Type")*@
+
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="sequence-ordertype">
+                                                @item.orderType
+                                                @*@Html.Display("Order Type")*@
+
+                                            </td>
+                                        }
+                                    }
+                                    <td class="">
+                                        @item.Order_No
+                                        @*@Html.Display("Order No")*@
+                                    </td>
+                                    @{
+
+                                        <td class="sequence-shiftname">
+                                            @item.shiftName
+                                        </td>
+                                    }
+
+                                    <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled /></td>
+                                </tr>
+                                        }
+                                        else
+                                        {
+                                            currQty++;
+                                            <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order @cssBlocked @datagroup @lockedClass">
+                                                <td class="sequence-index">@jCount</td>
+                                                <td><i class="fa fa-chevron-right"></i></td>
+                                                <td class="sequence-modelcode">
+                                                    @item.Model_Code
+                                                    @*@Html.Display("Model Code")*@
+                                                </td>
+                                                @{
+                                                    var ModelCode = item.Model_Code;
+                                                }
+                                                @*@{
+                                                    var colorCode = item.Color_code;
+                                                    var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();*@
+                                                    <td class="sequence-ColorName">
+                                                        @item.Color_Name
+                                                    </td>
+                                                @*}*@
+
+                                                <td class="sequence-qty"></td>
+                                                <td class="cumm-qty"></td>
+
+                                                @{
+                                                    if (item.orderType.Trim() == "Trial")
+                                                    {
+                                                        <td style="background-color: red;" class="sequence-ordertype">
+                                                            @Html.Display("Color Name")
+
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="sequence-ordertype">
+                                                            @item.orderType
+                                                            @*@Html.Display("Order Type")*@
+
+                                                        </td>
+                                                    }
+                                                }
+
+                                                <td class="">
+                                                    @item.Order_No
+                                                    @*@Html.Display("Order Type")*@
+                                                </td>
+
+                                                @{
+//var shiftName = "";
+//if (item.Planned_Shift_ID != null)
+//{
+//    shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+//}
+
+                                                    <td class="sequence-shiftname">
+                                                        @item.shiftName
+                                                    </td>
+                                                }
+                                                <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled/></td>
+                                            </tr>
+                                                            }
+                                                            modelCode = item.Model_Code;
+                                                            //orderType = item.orderType;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var item in Model)
+                                                        {
+                                                            j++;
+                                                            if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                            {
+                                                                cssclass = "spillover";
+                                                            }
+                                                            if (j <= ViewBag.blockAfterQty)
+                                                            {
+                                                                cssBlocked = "blocked";
+                                                            }
+                                                            else
+                                                            {
+                                                                cssBlocked = "";
+                                                            }
+                                                            if (item.Locked)
+                                                            {
+                                                                lockedClass = "locked";
+                                                            }
+                                                            else
+                                                            {
+                                                                lockedClass = "";
+                                                            }
+
+                                                            {
+                                                                currQty++;
+                                                                <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" class="not-hidden-order @cssBlocked @datagroup">
+                                                                    <td class="sequence-index">@jCount</td>
+                                                                    <td><i class="fa fa-chevron-right"></i></td>
+                                                                    <td class="sequence-parentmodelcode">
+                                                                        @Html.DisplayFor(modelItem => item.parentModel_Code)
+                                                                    </td>
+                                                                    <td class="sequence-parentseriescode">
+                                                                        @Html.DisplayFor(modelItem => item.parentSeries)
+                                                                    </td>
+                                                                    <td class="sequence-modelcode">
+                                                                        @item.Model_Code
+                                                                        @*@Html.DisplayFor(modelItem => item.Model_Code)*@
+                                                                    </td>
+                                                                    <td class="sequence-series @cssclass">
+                                                                        @Html.DisplayFor(modelItem => item.Series)
+                                                                    </td>
+                                                                    <td class="sequence-qty"></td>
+                                                                    <td class="cumm-qty"></td>
+                                                                    <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" disabled/></td>
+                                                                </tr>
+                                                            }
+                                                            modelCode = item.Model_Code;
+                                                        }
+                                                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+
+    //$(document).ready(function () {
+    //$("#orderSequenceWrapper table.table-sequence.availableOrderTbl").show();
+    //$("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl").show();
+    //});
+    $('#btnTactSheetPrepare').click(function () {
+
+        var shiftCount = parseInt($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr").length);
+        $("#shiftProductionCount").val(shiftCount);
+            
+        //alert("inside buildsheet");
+        saveSequence();
+
+
+
+
+
+    });
+    $("#DownloadFile").click(function () {
+
+
+        var isValid = true;
+        var shiftId = $('#Shift_ID option:selected').val();
+        //var shiftProdCount = selectedSequence.length;// $('#shiftProductionCount').val();
+        if (shiftId == null || shiftId != undefined && shiftId == "") {
+            infoMessage("Please Select Shift")
+            return false;
+        }
+        var shiftId = $('#Shift_ID option:selected').val();
+        //}
+        var totalShift = [];
+        totalShift.push({
+            shift_ID: $('#Shift_ID option:selected').val(),
+            Shift_Name: $('#Shift_ID option:selected').text(),
+        });
+        var platformNameArray = [];
+
+
+        $(".loading_global_spinner_image").hide();
+        var platform_Id = $('#Platform_ID').val();
+        var Shop_Id = $('#Shop_ID').val();
+        //var plannedDate = $('#Planned_Date').val();
+        $.ajax({
+            type: "POST",
+            url: '/OMOrderPlanning/GenerateAndDownloadTactSheet',
+            data: JSON.stringify({ allShift: JSON.stringify(totalShift), platform_Id: platform_Id, ShopID: Shop_Id }),
+            contentType: 'application/json',
+            processData: false,
+            success: function (response) {
+                debugger;
+
+                //alert(response.type);
+                if (response.status == true) {
+                    if (response.type != null) {
+                        successMessage("Tactsheet will downloaded shortly")
+                        //alert(response.message);
+                        $(".loading_global_spinner_image").hide();
+                        document.getElementById("DownloadPdfFile").removeAttribute("style");
+                        //$('#DownloadPdfFile').attr("style", "display:block");
+
+                        $('#DownloadPdfFile').attr("class", "btn btn-lg btn-success col-md-12");
+                        $('#DownloadPdfFile').attr('href', '');
+                        document.getElementById("DownloadPdfFile").removeAttribute("href");
+                        $('#DownloadPdfFile').attr('href', '/OMOrderPlanning/DownloadPdf?Length=15&fileName=' + response.type)
+                        $('#DownloadPdfFile').attr('download', '');
+                        document.getElementById("DownloadPdfFile").removeAttribute("download");
+                        var tacksheet = $('#DownloadPdfFile').attr('href');
+                        var fileNameIndex = tacksheet.lastIndexOf("\\") + 1;
+                        var filename = tacksheet.substr(fileNameIndex);
+
+                        $('#DownloadPdfFile').attr('download', filename)
+                        $('#DownloadPdfFile').html('');
+                        $('#DownloadPdfFile').html('<i class="fa fa-download" style="padding-left: 0; float: left;"><b class="vertical">|</b></i><b>Download Tactsheet</b>');
+                        $('#DownloadPdfFile').attr('style', 'display:none;margin-right: 4rem;position: relative;margin-bottom: 2rem;')
+                        //successMessage(response.message, "TackSheet Generated Successfully");
+                        //$('#showSequenceBtn').click();
+                        //$('#Shift_ID').get(0).selectedIndex = 0;
+                        $('#DownloadPdfFile')[0].click();
+
+
+                        //alert(filename);
+                        //$("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(0).find("td").eq(6).click();
+                    }
+                }
+                else {
+                    errorMessage(response.message);
+                    //alert(response.message);
+                    $(".loading_global_spinner_image").hide();
+                }
+            },
+            error: function (error) {
+                $(".loading_global_spinner_image").hide();
+                errorMessage("Error")
+                //alert("errror");
+            }
+        });
+
+        //}
+    });
+    $(".refresh-sequenceAvailable").click(function () {
+        console.log("check locked");
+
+        if ($(this).hasClass("selected") && ($('#Shift_ID').val() > 0)) {
+            if ($(this).hasClass("locked")) {
+
+                errorMessage("This operation is not allowed on locked orders");
+                return;
+            }
+        }
+        //reset selected shift
+        //$('#Shift_ID').get(0).selectedIndex = 0;
+        //$('#shiftProductionCount').val("");
+        //
+        $("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > .hidden-order.selected").click();
+        //$("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(0).find("td").eq(6).click();
+        $("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr.selected").removeClass("bg-green-gradient selected");
+        // $("#orderSequenceWrapper table.table-sequence > tbody > tr.hidden-order").click()
+    });
+    $(".refresh-sequenceScheduled").click(function () {
+        console.log("check locked");
+
+        //if ($(this).hasClass("selected") && ($('#Shift_ID').val() > 0)) {
+        //    if ($(this).hasClass("locked")) {
+
+        //        errorMessage("This operation is not allowed on locked orders");
+        //        return;
+        //    }
+        //}
+        //reset selected shift
+        //$('#Shift_ID').get(0).selectedIndex = 0;
+        $('#shiftProductionCount').val("");
+        //
+        $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > .hidden-order.selected").click();
+        //$("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(0).find("td").eq(6).click();
+        $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr.selected").removeClass("bg-green-gradient selected");
+        // $("#orderSequenceWrapper table.table-sequence > tbody > tr.hidden-order").click()
+    });
+    $("#scheduledOrderBtn").click(function () {
+        //alert();
+        //debugger;
+        //if ($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl").css("display") === "none") {
+        if ($("#scheduledOrderBtn").text() == "Show Scheduled Orders") {
+            $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl").show();
+            $("#scheduledOrderBtn").text("Hide Scheduled Orders");
+        }
+        else {
+            $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl").hide();
+            $("#scheduledOrderBtn").text("Show Scheduled Orders");
+
+
+        }
+        //$(this).text(function (i, text) {
+        //    return text === "Show Schduled Orders" ? "Hide Schduled Orders" : "Show Schduled Orders";
+        //});
+
+    });
+    $("#availableOrderBtn").click(function () {
+        //alert();
+        //debugger;
+        //if ($("#orderSequenceWrapper table.table-sequence.availableOrderTbl").css("display") === "none") {
+        if ($("#availableOrderBtn").text() == "Show Available Orders") {
+            $("#orderSequenceWrapper table.table-sequence.availableOrderTbl").show();
+            $("#availableOrderBtn").text("Hide Available Orders");
+
+        }
+        else {
+            $("#orderSequenceWrapper table.table-sequence.availableOrderTbl").hide();
+            $("#availableOrderBtn").text("Show Available Orders");
+
+        }
+        //$(this).text(function (i, text) {
+        //    return text === "Show Available Orders" ? "Hide Available Orders" : "Show Available Orders";
+        //});
+
+    });
+    $(".btnScheduleToAvailable").click(function () {
+        console.log("check locked");
+        debugger;
+        //if ($(this).hasClass("selected")) {
+        //    if ($(this).hasClass("locked")) {
+        //        errorMessage("This operation is not allowed on locked orders");
+        //        return;
+        //    }
+        //}
+        //reset selected 
+        $("#removeSelectionBtnAvailable").click()
+
+        var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr").length);
+        if (insertRowIndex < 1) {
+            insertRowIndex = 1;
+        }
+        changeSequenceScheduleToavailable(insertRowIndex, false, true);
+
+        //if (insertRowIndex > $("#BlockQty").val()) {
+        //    changeSequenceavailableToSchedule(insertRowIndex - 1, false, true);
+        //} else {
+        //    errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+        //    //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+        //}
+    });
+    //    console.log("check locked");
+    //    debugger;
+    //    if ($(this).hasClass("selected")) {
+    //        if ($(this).hasClass("locked")) {
+
+    //            errorMessage("This operation is not allowed on locked orders");
+    //            return;
+    //        }
+    //    }
+    //    var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr").length);
+    //    if (insertRowIndex > $("#BlockQty").val()) {
+    //        changeSequence(insertRowIndex - 1, false, true);
+    //    } else {
+    //        errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+    //        //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+    //    }
+    //});
+    $(".btnavailableToSchedule").click(function () {
+        //alert();
+        console.log("check locked");
+        debugger;
+        //if ($(this).hasClass("selected")) {
+        //    if ($(this).hasClass("locked")) {
+        //        errorMessage("This operation is not allowed on locked orders");
+        //        return;
+        //    }
+        //}
+        //reset sheduled
+        $("#removeSelectionBtnScheduled").click()
+
+        var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr").length);
+        if (insertRowIndex < 1) {
+            insertRowIndex = 1;
+        }
+        changeSequenceavailableToSchedule(insertRowIndex, false, true);
+
+            //if (insertRowIndex > $("#BlockQty").val()) {
+            //    changeSequenceavailableToSchedule(insertRowIndex - 1, false, true);
+            //} else {
+            //    errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            //    //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            //}
+    });
+    $(".btnavailableMoveUP").click(function () {
+        console.log("check locked");
+
+        //if( $("tr").hasClass("selected")){
+        //    if( $("tr").hasClass("locked")){
+
+        //        errorMessage("This operation is not allowed on locked orders");
+        //        return;
+        //    }
+        //}
+        var insertRowIndex = 0
+        if ($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr.selected").index() + 1) {
+            insertRowIndex = $("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr.selected").index();
+
+            var sequenceTableLength = parseInt($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr").length);
+
+            if (sequenceTableLength < insertRowIndex) {
+                // alert("Invalid Position");
+                errorMessage("Invalid Position");
+            }
+            else if (insertRowIndex > $("#BlockQty").val()) {
+                changeSequenceAvailable(insertRowIndex, false, false);
+
+            } else {
+                //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            }
+
+        }
+        else if ($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr.selected").index() + 1) {
+
+            insertRowIndex = $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr.selected").index();
+
+            var sequenceTableLength = parseInt($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr").length);
+
+            if (sequenceTableLength < insertRowIndex) {
+                // alert("Invalid Position");
+                errorMessage("Invalid Position");
+            }
+            else if (insertRowIndex > $("#BlockQty").val()) {
+                changeSequenceScheduled(insertRowIndex, false, false);
+
+            } else {
+                //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            }
+        }
+        else {
+            errorMessage("Please select order..");
+        }
+
+
+
+
+    });
+    $(".btnavailableMoveDown").click(function () {
+        console.log("check locked");
+        debugger;
+ 
+        var insertRowIndex = 0
+        if ($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr.selected:last").index() !=-1) {
+            insertRowIndex = $("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr.selected:last").index()+1;
+
+            var sequenceTableLength = parseInt($("#orderSequenceWrapper table.table-sequence.availableOrderTbl > tbody > tr").length);
+
+            if (sequenceTableLength < insertRowIndex) {
+                // alert("Invalid Position");
+                errorMessage("Invalid Position");
+            }
+            else if (insertRowIndex > 0) {
+                changeSequenceAvailable(insertRowIndex, false, false);
+
+            }
+            else {
+                //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            }
+
+        }
+        else if ($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr.selected:last").index() !=-1) {
+
+            insertRowIndex = $("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr.selected:last").index() + 1;
+
+            var sequenceTableLength = parseInt($("#orderSequenceWrapper table.table-sequence.scheduledOrderTbl > tbody > tr").length);
+
+            if (sequenceTableLength < insertRowIndex) {
+                // alert("Invalid Position");
+                errorMessage("Invalid Position");
+            }
+            else if (insertRowIndex > 0) {
+                changeSequenceScheduled(insertRowIndex, false, false);
+
+            }
+            else {
+                //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+            }
+        }
+        else {
+            errorMessage("Please select order..");
+        }
+
+
+
+
+    });
+</script>

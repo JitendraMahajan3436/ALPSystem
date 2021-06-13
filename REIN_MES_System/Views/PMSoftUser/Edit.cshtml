@@ -1,0 +1,276 @@
+﻿@model REIN_MES_System.Models.RS_PM_Activity_Log
+@using REIN_MES_System.custom_Helper
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PM_Activity_Log_ID)
+
+
+
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Activity_ID, htmlAttributes: new { @class = "" })
+                @Html.DropDownList("Activity_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Activity_ID)
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Machine_ID, htmlAttributes: new { @class = "" })
+                @Html.TextBox("Machine_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Activity_ID)
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Plant_ID, htmlAttributes: new { @class = "" })
+                @Html.TextBox("Plant_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Plant_ID)
+
+            </div>
+           
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, htmlAttributes: new { @class = " " })
+                @Html.TextBox("Shop_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Shop_ID)
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Line_ID,  htmlAttributes: new { @class = "" })
+                @Html.TextBox("Line_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Line_ID)
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Station_ID, htmlAttributes: new { @class = "" })
+                @Html.TextBox("Station_ID", null, new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.Station_ID)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+           
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Due_Date, new { @class = "" })
+
+                    @Html.TextBox("Due_Date",(string)ViewBag.dueDate, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Due_Date)
+
+                </div>
+            </div>
+        <div class="row">
+            @*<div class="col-md-4">
+                    @Html.LabelFor(model => model.Is_Confirmed, new { @class = "" })
+
+                    @Html.YesNo(Convert.ToBoolean(model=>model.Is_Confirmed))
+                    @Html.ValidationMessageFor(model => model.Is_Confirmed)
+
+                </div>*@
+
+            @*<div class="row">
+                    <div class="col-md-4">
+                        @Html.Label("Assigned Parts :-", new { @class = "" })
+                    </div>
+                </div>*@
+        </div>
+        @if (Model.partsData.Count > 0)
+        {
+
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="" class="control-label">Please Fill Quantity Of Below "@Model.partsData.Count" Parts :</label>
+
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="" class="control-label">No Part Assigned to this activity :</label>
+
+
+                </div>
+            </div>
+        }
+
+        <div class="row" id="months">
+            @if(Model.partsData!=null && Model!= null)
+            {
+                for (int i = 0; i < Model.partsData.Count; i++)
+                {
+                <div class="col-md-4">
+           
+                    @*<label for="@item.Part_Name" class="control-label">@item.Part_Name</label> *
+
+                    <input type="text" id="@item.Part_ID" name="months" class="form-control dynamicTxt" placeholder="Enter Quantity">
+                    <span class="validation_error" id="lblPart_@item.Part_ID"></span>*@
+
+                    <label for="@Model.partsData[i].Part_Name" class="control-label">@Model.partsData[i].Part_Name</label> *
+                    @Html.TextBoxFor(modelItem => Model.partsData[i].part_Quantity, htmlAttributes: new { @class = "form-control months dynamicTxt", @placeholder = "Enter Quantity",@id=Model.partsData[i].Part_ID })
+                    @Html.HiddenFor(modelItem => Model.partsData[i].Part_ID)
+
+                    @*@Html.HiddenFor(model => item.part_Quantity)
+                    @Html.HiddenFor(model => item.Part_Name)*@
+                    <span class="validation_error" id="lblPart_@Model.partsData[i].Part_ID"></span>
+                    @*@Html.ValidationMessageFor(model => item.Part_ID)*@
+                </div>
+                }
+            }
+
+        </div>
+
+        @*@if (ViewBag.assigned_Part.Count > 0)
+        {
+
+            <div class="row">
+                <div class="col-md-8">
+                    <label for="" class="control-label">Please Fill Quantity Of Below "@ViewBag.assigned_Part.Count" Parts :</label>
+
+
+                </div>
+            </div>
+        }
+        else
+        {
+             <div class="row">
+                <div class="col-md-8">
+                    <label for="" class="control-label">No Part Assigned to this activity :</label>
+
+
+                </div>
+            </div> 
+        }
+
+        <div class="row" id="months">
+            @foreach (var item in ViewBag.assigned_Part)
+            {
+
+                <div class="col-md-4">
+                    <label for="@item.Part_Name" class="control-label">@item.Part_Name</label> *
+
+                    <input type="text" id="@item.Part_ID" name="months" class="form-control dynamicTxt" placeholder="Enter Quantity">
+                    <span class="validation_error" id="lblPart_@item.Part_ID"></span>
+                </div>
+            }
+
+        </div>*@
+
+        <br />
+
+
+        <div class="row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Observation_Before_PM, new { @class = "" }) *
+                @Html.TextBoxFor(model => model.Observation_Before_PM, null, htmlAttributes: new { @class = "form-control", @maxlength = "200" })
+                @Html.ValidationMessageFor(model => model.Observation_Before_PM)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Observation_After_PM, new { @class = "" }) *
+                @Html.TextBoxFor(model => model.Observation_After_PM, null, htmlAttributes: new { @class = "form-control", @maxlength = "200" })
+                @Html.ValidationMessageFor(model => model.Observation_After_PM)
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-6">
+
+                <input type="submit" value="Save" class="btn btn-success" id="btnsave" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+
+}
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+    @Scripts.Render("~/bundles/Select2scripts")
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnsave").click(function (e) {
+
+                $(".months").each(function () {
+                    if ($(this).val() == "" || $(this).val() == "0") {
+                        var id = $(this).prop("id");
+                        $(this).addClass("input-validation-error");
+                        $("#lblPart_" + id).html("This Field is Required");
+                        $("#lblPart_" + id).addClass("field-validation-error");
+                        e.preventDefault();
+                    }
+                    //else {
+                    //    $(this).parent().find("div").html("");
+                    //    $(this).val($(this).prop("id") + "_" + $(this).val());
+                    //}
+                });
+
+            });
+            $(".months").change(function () {
+                var id = $(this).prop("id");
+                if ($(this).val() == "" || $(this).val() == "0") {
+                     $("#lblPart_"+id).html("This Field is Required");
+                    $("#lblPart_"+id).addClass("field-validation-error");
+                    $(this).addClass("input-validation-error");
+                }
+                else {
+                    $("#lblPart_" + id).html("");
+                    $("#lblPart_" + id).removeClass("field-validation-error");
+                    $(this).removeClass("input-validation-error");
+                }
+            });
+
+       var specialKeys = new Array();
+            specialKeys.push(8); //Backspace
+            $(function () {
+                $(".dynamicTxt").bind("keypress", function (e) {
+                    var keyCode = e.which ? e.which : e.keyCode
+                    var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+                    $(".error").css("display", ret ? "none" : "inline");
+                    return ret;
+                });
+                $(".dynamicTxt").bind("paste", function (e) {
+                    return false;
+                });
+                $(".dynamicTxt").bind("drop", function (e) {
+                    return false;
+                });
+            });
+
+
+            $("#Due_Date").datepicker(
+                {
+                    format: 'yyyy-mm-dd',
+                    startDate: $("#Due_Date").val(),
+                    endDate:"+0D",
+                });
+
+        });
+</script>
+}

@@ -1,0 +1,52 @@
+﻿@model REIN_MES_System.Models.RS_Shops
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-6">
+    <div>
+        
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Shop_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Shop_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Shop Category")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Major_Sub_Assembly.Sub_Assembly_Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayName(ResourceGlobal.Inserted_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Inserted_Date)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Shop_ID }, new { @class = "btn btn-primary" })
+         @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+    </p>
+
+</div>

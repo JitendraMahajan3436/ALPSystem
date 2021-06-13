@@ -1,0 +1,1179 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* styles for validation helpers */
+.field-validation-error {
+    color: #b94a48;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+input.input-validation-error {
+    border: 1px solid #b94a48;
+}
+
+input[type="checkbox"].input-validation-error {
+    border: 0 none;
+}
+
+.validation-summary-errors {
+    color: #b94a48;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+.dropzonePreview {
+   height:200px;
+   border:5px solid #eaeaea;
+   cursor:pointer;
+}
+
+.skin-yellow .main-header .navbar .nav>li>.logo:hover {
+    background-color:#fff;
+}
+
+/***************TRACKING RELATED CSS START**************/
+
+.tracking-table {
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+}
+
+.parent-container {
+    text-align: center;
+    /* May want to do this if there is risk the container may be narrower than the element inside */
+    white-space: nowrap;
+}
+
+    .parent-container:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+.tracking-table td.line-item {
+    min-height: 50px;
+    background: #bbb;
+    text-align: center;
+    position: relative;
+    padding: 7px 3px;
+}
+
+.tracking-table td {
+    height: 1px;
+    position: relative;
+}
+
+    .tracking-table td.line-item.line-horizontal:after {
+        content: "";
+        font-weight: normal;
+        font-style: normal;
+        border-bottom: 2px solid #333;
+        text-decoration: inherit;
+        position: absolute;
+        width: 100%;
+        height: 5px;
+        left: 0;
+        top: 58%;
+        z-index: 100;
+    }
+
+    .tracking-table td.line-item.line-vertical:before {
+        content: "";
+        font-weight: normal;
+        font-style: normal;
+        border-right: 2px solid #333;
+        text-decoration: inherit;
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 100;
+    }
+
+    .tracking-table td.line-item > .station-box {
+        border: 3px solid #333;
+        min-width: 45px;
+        -webkit-border-radius: 2px;
+        /* border-radius: 2px; */
+        -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 200;
+        cursor: pointer;
+        font-size: 11px !important;
+    }
+
+        .tracking-table td.line-item > .station-box:hover {
+            transform: scale(1.2);
+            -moz-transform: scale(1.2);
+            -webkit-transform: scale(1.2);
+            -ms-transform: scale(1.2);
+            z-index: 300;
+        }
+
+
+        .tracking-table td.line-item > .station-box.buffer-area > .station-title {
+            /*background: rgb(210, 215, 211) !important;*/
+            background: rgb(51, 51, 51) !important;
+        }
+
+    .tracking-table td.line-item > div > div.station-body {
+        font-weight: bold;
+        min-height: 20px;
+        background: #fff;
+    }
+    /*.tracking-table tr td {
+    border:1px solid #000;
+}*/
+    .tracking-table td.line-item > .station-box > .station-title {
+        border-bottom: 3px solid #333;
+        font-weight: 900;
+    }
+
+        .tracking-table td.line-item > .station-box > .station-title a {
+            display: block;
+        }
+
+    .tracking-table td.line-item.line-type-1 > .station-box > .station-title {
+        background: rgb(3, 201, 169);
+         
+    }
+
+    .tracking-table td.line-item.line-type-2 > .station-box > .station-title {
+        /*background: rgb(65, 131, 215);*/
+        background: rgb(113, 171, 245);
+    }
+
+    .tracking-table td.line-item.line-type-3 > .station-box > .station-title {
+        /*background: rgb(211, 84, 0);*/
+          background: rgb(226, 124, 56);
+       
+    }
+
+    .tracking-table td.line-item.line-type-4 > .station-box > .station-title {
+        /*background: rgb(210, 82, 127);*/
+            background: rgb(255, 133, 176);
+    }
+
+    .tracking-table td.line-item.line-type-5 > .station-box > .station-title {
+        background: rgb(162, 222, 208);
+    }
+
+    .tracking-table td.line-item.line-type-6 > .station-box > .station-title {
+        background: rgb(244, 208, 63);
+    }
+
+    .tracking-table td.line-item.line-type-7 > .station-box > .station-title {
+        background: rgb(96, 255, 0);
+    }
+
+    .tracking-table td.line-item.line-type-8 > .station-box > .station-title {
+        background: rgb(162, 222, 208);
+    }
+
+.arrow-box {
+    width: 7px;
+    height: 20px;
+    border-bottom: 2px solid #000;
+    z-index: 100;
+}
+
+.line-arrow-box {
+    position: relative;
+}
+
+.line-right, .line-left {
+    border-bottom: 2px solid #000;
+    min-width: 51px;
+    width: 100%;
+    height: 20px;
+    z-index: 100;
+}
+
+.tracking-table .join-td {
+    padding: 0;
+    position: relative;
+}
+
+td.line-right-connector:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 50%;
+    height: 21px;
+    border-bottom: 2px solid #000;
+    z-index: 100;
+}
+
+.tracking-table .join-up-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 39px;
+    border-right: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+    .tracking-table .join-up-left.arrow-join {
+        top: 0;
+        left: 0;
+        height: 21px;
+        z-index: 100;
+    }
+
+        .tracking-table .join-up-left.arrow-join:after {
+            content: "\f053";
+            font-family: FontAwesome;
+            font-weight: normal;
+            font-style: normal;
+            display: inline-block;
+            text-decoration: inherit;
+            position: absolute;
+            left: 0%;
+            bottom: -11px;
+        }
+
+.tracking-table .join-up-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 53%;
+    height: 40px;
+    border-left: 2px solid #000;
+    border-bottom: 2px solid #000;
+    z-index: 100;
+}
+.tracking-table .join-up-right.arrow-join {
+        top: 0;
+        right: 0;
+        height: 21px;
+        z-index: 100;
+    }
+
+        .tracking-table .join-up-right.arrow-join:after {
+            content: "\f054";
+            font-family: FontAwesome;
+            font-weight: normal;
+            font-style: normal;
+            display: inline-block;
+            text-decoration: inherit;
+            position: absolute;
+            right: 0%;
+            bottom: -11px;
+        }
+.tracking-table .join-bottom-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 53%;
+    height: 22px;
+    border-top: 2px solid #000;
+    border-left: 2px solid #000;
+    z-index: 100;
+}
+
+.tracking-table .join-bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 22px;
+    border-top: 2px solid #000;
+    border-right: 2px solid #000;
+    z-index: 100;
+}
+
+.line-up, .line-down {
+    border-right: 2px solid #000;
+    width: 50%;
+    min-height: 41px;
+    height: 100%;
+    z-index: 100;
+}
+
+.line-right:after {
+    content: "\f054";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    position: absolute;
+    left: 50%;
+    bottom: -11px;
+}
+
+.line-left:after {
+    content: "\f053";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    position: absolute;
+    left: 50%;
+    bottom: -11px;
+}
+
+.line-up:after {
+    content: "\f077";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    position: relative;
+    right: -56%;
+    top: 10%;
+}
+
+.line-down:after {
+    content: "\f078";
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    position: relative;
+    /*right: -75%;*/
+    right: -53%;
+    top: 10%;
+}
+
+.station-box {
+    min-width: 45px;
+}
+
+    .station-box.arrow-top:before {
+        /*content:"\f077";*/
+        content: "";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        border-left: 2px solid #333;
+        text-decoration: inherit;
+        position: absolute;
+        height: 20px;
+        left: 50%;
+        top: -90%;
+    }
+
+    .station-box.arrow-top:after {
+        content: "\f077";
+        font-family: FontAwesome;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: inherit;
+        position: absolute;
+        left: 36%;
+        top: -70%;
+    }
+
+.line-item .station-info {
+    position: absolute;
+    background: #fff;
+    border: 2px solid #000;
+    z-index: 1000;
+    font-size: 11px;
+    font-weight: bold;
+    width: 100px;
+    border-radius: 9px;
+    left: -35%;
+}
+
+    .line-item .station-info.station-info-top {
+        top: -18px;
+        left: -20px;
+        width: 200%;
+    }
+
+        .line-item .station-info.station-info-top:after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            position: absolute;
+            border-right: 8px solid transparent;
+            border-left: 8px solid transparent;
+            border-top: 8px solid black;
+            left: 38%;
+            bottom: -8px;
+        }
+
+.line-item .station-info-vertical {
+    left: -7px !important;
+    width: 250%;
+}
+
+.line-item .station-info.station-info-left {
+    top: 17px;
+    left: -54px;
+}
+
+.line-item .station-info.station-info-right {
+    top: 19px;
+    left: 5px;
+}
+
+.line-item .station-info-crankcase {
+    top: 20px;
+    left: -21px !important;
+    width: 300%;
+}
+
+.tracking-container {
+    min-height: 650px;
+    /*width: 1360px;*/
+    width: 100%;
+    position: relative;
+    padding: 0 10px;
+    margin: 0 auto;
+    text-align: center;
+    /*display: inline-block;
+    vertical-align: middle;
+      width: 1360px;
+    position: relative;
+    padding: 0 10px;
+    text-align: center;*/
+}
+
+@media screen and (max-width: 1280px) {
+    .tracking-container {
+        transform: scale(0.9);
+        -moz-transform: scale(0.9);
+        -webkit-transform: scale(0.9);
+        -ms-transform: scale(0.9);
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    .tracking-container {
+        transform: scale(1.01);
+        -moz-transform: scale(1.01);
+        -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+    }
+}
+
+@-webkit-keyframes serialHighlight {
+    0% {
+        background-color: green;
+        opacity: 1;
+        filter: alpha(opacity=100);
+    }
+
+    22% {
+        background-color: limegreen;
+    }
+
+    77% {
+        background-color: mintcream;
+    }
+
+    100% {
+        background-color: white;
+    }
+}
+
+@keyframes serialHighlight {
+    0%{
+    background-color: green;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+22% {
+    background-color: limegreen;
+}
+
+77% {
+    background-color: mintcream;
+}
+
+100% {
+    background-color: white;
+}
+
+}
+
+.serialHighlight {
+    -webkit-animation-name: serialHighlight;
+    animation-name: serialHighlight;
+    -webkit-animation-duration: 900ms;
+    animation-duration: 900ms;
+    -webkit-animation-iteration-count: 5;
+    animation-iteration-count: 5;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+
+.shop-header-block {
+    margin: 5px 0;
+}
+
+.srl-search-field {
+    padding: 0;
+}
+
+    .srl-search-field div {
+        margin: 0;
+    }
+
+.no-gutter > [class*='col-'] {
+    padding-right: 0;
+    padding-left: 0;
+    margin: 0;
+}
+
+.tracking-srl-search-div {
+    position: absolute;
+}
+
+    .tracking-srl-search-div.engine-srl {
+        left: 63%;
+    }
+
+    .tracking-srl-search-div.tractor-srl {
+        left: 18%;
+    }
+
+.floating-div {
+    position: absolute;
+    border: 2px dotted rgba(0, 0, 0,0.5);
+    background: #bbb;
+    overflow: hidden;
+}
+
+    .floating-div > div {
+        position: absolute;
+    }
+
+    .floating-div div.horizontal-title-box {
+        padding: 0 20px;
+        background: rgba(0, 0, 0,0.5);
+        left: 30%;
+        text-align: center;
+        font-weight: bold;
+        border: 1px dotted rgba(0, 0, 0,0.5);
+        color: #fff;
+        word-spacing: 3px;
+    }
+
+    .floating-div div.vertical-title-box {
+        padding: 0 20px;
+        background: rgba(0, 0, 0,0.5);
+        top: 55px;
+        left: -14%;
+        text-align: center;
+        font-weight: bold;
+        border: 1px dotted rgba(0, 0, 0,0.5);
+        color: #fff;
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+        -webkit-transform-origin: 50% 50%;
+        -moz-transform-origin: 50% 50%;
+        -ms-transform-origin: 50% 50%;
+        -o-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        /* Should be unset in IE9+ I think. */
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    }
+
+/************/
+.main-line-seperator {
+    top: -27px;
+    left: -12px;
+    width: 790px;
+    height: 112px;
+}
+
+    .main-line-seperator .direction-box {
+        top: 80%;
+        left: 30%;
+        width: 40%;
+    }
+
+.dressing-line-seperator {
+    top: -27px;
+    left: -12px;
+    width: 380px;
+    height: 112px;
+}
+
+    .dressing-line-seperator .direction-box {
+        top: 80%;
+        left: 20%;
+        width: 50%;
+    }
+
+.testing-line-seperator {
+    top: -14px;
+    left: -54px;
+    width: 340px;
+    height: 135px;
+}
+
+.docking-line-seperator {
+    top: -27px;
+    left: -12px;
+    width: 280px;
+    height: 118px;
+}
+
+    .docking-line-seperator .horizontal-title-box {
+        left: 0px !important;
+    }
+
+    .docking-line-seperator .direction-box {
+        top: 80%;
+        left: 20%;
+        width: 50%;
+    }
+
+.prepaint-line-seperator {
+    top: -28px;
+    left: -10px;
+    width: 994px;
+    height: 118px;
+}
+
+    .prepaint-line-seperator .direction-box {
+        bottom: 0;
+        left: 20%;
+        width: 60%;
+    }
+
+.postpaint-line-seperator {
+    top: -25px;
+    left: -14px;
+    width: 1250px;
+    height: 110px;
+}
+
+.vtu-line-seperator {
+    top: -27px;
+    left: -15px;
+    width: 388px;
+    height: 110px;
+}
+
+.cv-line-seperator {
+    top: -27px;
+    left: -15px;
+    width: 440px;
+    height: 100px;
+}
+
+.direction-bottom .direction-box {
+    top: 80%;
+    left: 20%;
+    width: 60%;
+}
+
+.postpaint-line-seperator .direction-box {
+    top: 80%;
+    left: 20%;
+    width: 60%;
+}
+
+.a-line-seperator {
+    top: -27px;
+    left: -27px;
+    width: 100px;
+    height: 340px;
+}
+
+
+.d-line-seperator {
+    top: -24px;
+    left: -11px;
+    width: 634px;
+    height: 102px;
+}
+
+    .d-line-seperator .direction-box {
+        top: 80%;
+        left: 30%;
+        width: 40%;
+    }
+
+    .d-line-seperator .horizontal-title-box.title-box-bottom {
+        top: 0;
+        left: 30%;
+    }
+
+.testbed-line-seperator {
+    top: -3px;
+    left: -29px;
+    width: 310px;
+    height: 85px;
+}
+
+    .testbed-line-seperator .horizontal-title-box {
+        top: 70%;
+        left: 30%;
+    }
+
+.b1-line-seperator {
+    top: -29px;
+    left: -28px;
+    width: 920px;
+    height: 110px;
+}
+
+    .b1-line-seperator .horizontal-title-box.title-box-bottom {
+        top: 0px;
+        left: 41%;
+    }
+
+    .b1-line-seperator .direction-box {
+        top: 80%;
+        left: 20%;
+        width: 60%;
+    }
+
+.b2-line-seperator {
+    top: -29px;
+    left: -2px;
+    width: 79px;
+    height: 245px;
+}
+
+.b3-line-seperator {
+    top: -24px;
+    left: -22px;
+    width: 660px;
+    height: 100px;
+}
+
+    .b3-line-seperator .direction-box {
+        bottom: 75%;
+        left: 20%;
+        width: 60%;
+    }
+
+    .b3-line-seperator div.horizontal-title-box {
+        top: -1px;
+        left: 0;
+    }
+
+/*.floating-div .direction-box.vertical-direction {
+    top: 30%;
+    left: 5px;
+    width: 20px;
+    height: 100px;
+}*/
+
+.floating-div .vertical-direction.direction-box {
+    top: 20%;
+    left: 5px;
+    width: 20px;
+    height: 90px;
+}
+
+.floating-div.a-line-seperator div.vertical-title-box {
+    left: -72px;
+    top: 50%;
+}
+
+.tracking-table .empty-shop {
+    height: 100%;
+    min-height: 60px;
+    background: #fff;
+    border: 3px solid #333;
+    position: relative;
+}
+
+    .tracking-table .empty-shop span {
+        background: #333;
+        color: #fff;
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+
+        .tracking-table .empty-shop span.vertical-title {
+            width: 200%;
+            left: -40px;
+            top: 37px;
+        }
+
+.rotate {
+    position: absolute;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    /* Should be unset in IE9+ I think. */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+.modal-body .station-detail-table tr td:first-child {
+    width: 200px;
+}
+
+.backgroundRed {
+    background: #F00;
+    -webkit-transition: background 0.1s ease-in-out;
+    -moz-transition: background 0.1s ease-in-out;
+    -ms-transition: background 0.1s ease-in-out;
+    transition: background 0.1s ease-in-out;
+}
+
+@keyframes MaterialProduction {
+    0%{
+    background: rgba(244,105,85, 1) !important;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+50% {
+   background: rgba(247, 255, 53, 1) !important;
+}
+
+}
+@keyframes MaterialQuality {
+    0%{
+    background: rgba(244,105,85, 1) !important;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+50% {
+    background: rgba(255, 166, 43, 1) !important;
+}
+
+}
+@keyframes ProductionQuality {
+    0%{
+     background: rgba(247, 255, 53, 1) !important;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+50% {
+    background: rgba(255, 166, 43, 1) !important;
+}
+
+}
+@keyframes MaterialProductionQuality {
+    0%{
+    background: rgba(244,105,85, 1) !important;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+33% {
+     background: rgba(247, 255, 53, 1) !important;
+}
+67%{
+     background: rgba(255, 166, 43, 1) !important;
+}
+}
+
+.backgroundMaterialCall.backgroundProductionCall.backgroundQualityCall{
+       -webkit-animation-name: MaterialProductionQuality;
+    animation-name: MaterialProductionQuality;
+    -webkit-animation-duration: 3000ms;
+    animation-duration: 3000ms;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-timing-function: initial;
+    animation-timing-function: initial;
+}
+.backgroundMaterialCall.backgroundProductionCall{
+       -webkit-animation-name: MaterialProduction;
+    animation-name: MaterialProduction;
+    -webkit-animation-duration: 2000ms;
+    animation-duration: 2000ms;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-timing-function: initial;
+    animation-timing-function: initial;
+}
+.backgroundMaterialCall.backgroundQualityCall{
+       -webkit-animation-name: MaterialQuality;
+    animation-name: MaterialQuality;
+    -webkit-animation-duration: 2000ms;
+    animation-duration: 2000ms;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-timing-function: initial;
+    animation-timing-function: initial;
+}
+.backgroundProductionCall.backgroundQualityCall{
+    -webkit-animation-name: ProductionQuality;
+    animation-name: ProductionQuality;
+    -webkit-animation-duration: 2000ms;
+    animation-duration: 2000ms;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-timing-function: initial;
+    animation-timing-function: initial;
+}
+.backgroundMaterialCall {
+    background: rgba(244,105,85, 1) !important;
+}
+
+.backgroundProductionCall {
+    background: rgba(247, 255, 53, 1) !important;
+}
+
+.backgroundQualityCall {
+    background: rgba(255, 166, 43, 1) !important;
+}
+
+.triggeredStation {
+    border-color: red !important;
+}
+
+.lineStopTrigger {
+    transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+}
+
+.modal-overlay {
+    position: relative;
+}
+
+    .modal-overlay:after {
+        content: "Loading...";
+        margin-top: 35px;
+        height: 120px;
+        padding: 10px 50px;
+        position: absolute;
+        font-size: 30px;
+        font-style: italic;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+    }
+
+.tractorShopLabel {
+       bottom: 11px;
+}
+
+.alarmColorLabel {
+    display: block;
+    position: absolute;
+    border: none;
+    width: 285px;
+    border: 5px solid #bbb;
+    z-index: 200;
+}
+
+    .alarmColorLabel div {
+        margin: 0;
+    }
+
+    /*Jitendra Mahajan*/
+    .legend-block1 > .row1 > div {
+            height: 50px;
+            text-align: left;
+            padding: 0;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+    .alarmColorLabel1 {
+    display: block;
+    position: absolute;
+    border: none;
+    width: 185px;
+    border: 5px solid #bbb;
+    z-index: 200;
+}
+
+    .alarmColorLabel1 div {
+        margin: 200px;
+    }
+    .tractorShopLabel1 {
+       bottom: 11px;
+}
+    .clearfix1:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+     /*Jitendra Mahajan*/
+
+.legend-block {
+    padding: 0 5px;
+}
+
+    .legend-block > .row {
+        border-bottom: 1px solid #bbb;
+    }
+
+        .legend-block > .row > .lineStopTrigger {
+            border: 2px solid red;
+        }
+
+        .legend-block > .row > div {
+            height: 15px;
+            text-align: left;
+            padding: 0;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+
+        .legend-block > .row > .legend-symbol {
+            margin: 5px 8px 3px 0;
+            width: 10%;
+        }
+
+        .legend-block > .row > .legend-title {
+            width: 80%;
+        }
+/*.legend-block > .row > .col-md-1 {
+            margin: 3px;
+        }*/
+
+.tracking-orders-wrapper {
+    height: 540px;
+    overflow: scroll;
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.TakeInOut.TakeOutBlock:after {
+    content: "";
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    position: absolute;
+    top: 29%;
+    left: 28%;
+    background: red;
+    border: 2px solid #fff;
+}
+
+.TakeInOut.TakeInBlock:after {
+    content: "";
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    position: absolute;
+    top: 29%;
+    left: 28%;
+    background: limegreen;
+    border: 2px solid #fff;
+}
+
+#defectlist-tracking{
+    margin:0;
+}
+.alarmsummary-content{
+ display: none;
+    position: absolute;
+    top: -189px;
+    left: -100px;
+    width: 300px;
+    background: #fff;
+    border: 1px solid #000;
+    z-index: 300;
+    margin-bottom:10px!important;
+    -webkit-box-shadow: -1px 7px 20px -4px rgba(0,0,0,0.38);
+    -moz-box-shadow: -1px 7px 20px -4px rgba(0,0,0,0.38);
+    box-shadow: -1px 7px 20px -4px rgba(0,0,0,0.38);
+}
+.alarmsummary-content *{
+    margin:0;
+    padding:0;
+}
+.alarmsummary-content::after{
+  content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #000;
+    clear: both;
+}
+.btn-showcallsummary{
+    z-index:300;
+}
+
+.btn-showcallsummary:hover + .alarmsummary-content,.alarmsummary-content:hover{
+     display:block;
+}
+.loading-img{
+    width:41px;
+    height:41px;
+    display:block;
+    margin:10px auto;
+}
+#defectlist-tracking tr th{
+    background:rgba(0,0,0,0.1);
+    color:#333;
+}
+.tracking-table td.buffer-line-item{
+    background:transparent;
+}
+
+/****__________________________TRACKING RELATED CSS END______________________________**/
+
+.modal-header {
+    background: rgb(68,108,179);
+    color: rgb(228, 241, 254);
+}
+.bg-dark {
+    background:rgb(34, 49, 63);
+    color:#fff;
+    font-weight:bold;
+}
+
+.homeslider {
+    margin-top: 20px!important;
+}

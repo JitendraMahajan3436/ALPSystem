@@ -1,0 +1,30 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Ajax.BeginForm("uploadFile", "PreventiveEquipment", new AjaxOptions() { HttpMethod = "POST" }, new { @class = "col-md-6", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Machine_ID, "Machine Number", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Machine_ID, (IEnumerable<SelectListItem>)ViewBag.Machine_ID, "Select Machine", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Machine_ID)
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-10">
+                <input type="file" name="files" class="form-control"><br>
+                <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

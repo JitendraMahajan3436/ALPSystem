@@ -1,0 +1,198 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+@{
+    ViewBag.Title = "HourlyProduction";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+            <div class="row" style="margin-bottom: 6px;">
+
+                <div style="display:none;">
+                    <input type="text" id="FirstShiftStartTime" value="07:00" />
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>:
+                    @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Platform_ID", "Platform", htmlAttributes: new { @class = "" })<i style="color:red">*</i>:
+                    @Html.DropDownList("Platform_ID", null, "All", new { @class = "form-control", @disabled = "true" })
+                    @Html.ValidationMessage("Platform_ID", null, new { @class = "validation_error", @id = "spanPlatformValidation" })
+
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        <label id="fromdatelabel">Date:</label>
+                        <input type="text" id="txtOnDate" name="OnDate" class="form-control" placeholder="FromDate" />
+                        @*@Html.LabelFor(model => model.Inserted_Date, "Planned Date *", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Inserted_Date, new { onchange = "", @class = "form-control", @readonly = true })
+                        @Html.ValidationMessageFor(model => model.Inserted_Date, null, new { @class = "validation_error" })*@
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input type="button" id="HourlyProductionReportGenerate" value="Generate Report" class="btn btn-primary" /> @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        @*<br />*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-md-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame_ShopProduction" id="ContentFrame_ShopProduction" width="100%" height="900px"></iframe>
+                </div>
+            </div>
+        </div>
+    }
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/DateTime")*@
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <style>
+        iframe {
+            border: 2px #2036a7 solid;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            //$("#Order_Type").on("change", function ()
+
+            $("#txtOnDate").datepicker(
+              {
+                  format: 'yyyy-mm-dd',
+                  endDate: '+0d',
+                  autoclose: true
+              });
+            $("#txtOnDate").datepicker().datepicker('setDate', 'today');
+        });
+        $("#Shop_ID").on("change", function () {
+            var Shop_Id = $("#Shop_ID").val();
+
+            $('#Platform_ID option').remove();
+            $("#Platform_ID").prepend("<option value='0' selected='selected'>All</option>");
+            if (Shop_Id.length) {
+                $("#Platform_ID").prop('disabled', false);
+                $("#OrderState").prop('disabled', false);
+                $("#TimePeriod").prop('disabled', false);
+                $.getJSON('/ProductionReports/GetPlatformID', { Shop_Id: Shop_Id }, function (data) {
+                    if (data.length > 0) {
+                        //$('#Line_ID option').remove();
+
+                        if (data.length > 1) {
+                            for (i = 0; i < data.length; i++) {
+                                $('#Platform_ID').append('<option value="' +
+                                             data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                            }
+                        } else {
+                            for (i = 0; i < data.length; i++) {
+                                $('#Platform_ID').append('<option value="' +
+                                             data[i].Platform_ID + '" selected>' + data[i].Platform_Name + '</option>');
+                            }
+                        }
+                        $("#Platform_ID").change();
+                       
+
+                    }
+                    else {
+                        $('#Platform_ID option').remove();
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    $("#Platform_ID").change();
+                });
+            }
+            else {
+                $("#Platform_ID").prop('disabled', true);
+                $("#OrderState").prop('selectedIndex', 0);
+                $("#OrderState").prop('disabled', true);
+                $("#TimePeriod").prop('disabled', true);
+            }
+
+
+        });
+        function hideshow(which) {
+            if (!document.getElementById)
+                return
+            if (which.style.display == "block") {
+                which.style.display = "none"
+                var iFrameID = document.getElementById('ContentFrame');
+                var CFdivID = document.getElementById('div1');
+                iFrameID.style.minHeight = 470 + "px";
+            }
+            else {
+                which.style.display = "block"
+                var iFrameID = document.getElementById('ContentFrame');
+                var CFdivID = document.getElementById('div1');
+            }
+        }
+        $('#HourlyProductionReportGenerate').click(function () {
+            debugger;
+            var atDate = $("#txtOnDate").val();
+            
+            var Platform = $("#Platform_ID").val();
+            var Shopid = $("#Shop_ID").val();
+            var PlatformId = $("#Platform_ID").val();
+
+            if (Shopid == '') {
+                alert('Select Shop');
+                return false;
+            }
+            if (!(PlatformId >= 0)) {
+                alert('Please select platform');
+                return false;
+            }
+            
+            console.log('http://mvml-sql2012/ReportServer/Pages/ReportViewer.aspx?%2fREIN_MES_System%2fZHB_Report%2fBIW_HOURLY_REPORT&rs:Command=Render&rc:Zoom=Page%20Width&Shop=' + Shopid + '&atDate=' + atDate + '&Platform=' + PlatformId);
+            $('#ContentFrame_ShopProduction').attr('src', 'http://mvml-sql2012/ReportServer/Pages/ReportViewer.aspx?%2fREIN_MES_System%2fZHB_Report%2fBIW_HOURLY_REPORT&rs:Command=Render&rc:Zoom=Page%20Width&Shop=' + Shopid + '&atDate=' + atDate + '&Platform=' + PlatformId);
+
+
+            //start
+            //////var pageURL = $(location).attr("href");
+            //////var ReportName = $('#hdviewname').val();
+            //////var ReportCat = "Production Report";
+            //////$.ajax({
+            //////    url: '/Home/SaveLogData',
+            //////    type: 'POST',
+            //////    data: JSON.stringify({ "ReportName": ReportName, "pageURL": pageURL, "ReportCat": ReportCat }),
+            //////    dataType: "json",
+            //////    contentType: "application/json; charset=utf-8",
+            //////    success: function (result) {
+            //////        //alert("Save");
+            //////    }
+            //////});
+            //End
+
+        });
+    </script>
+
+
+
+

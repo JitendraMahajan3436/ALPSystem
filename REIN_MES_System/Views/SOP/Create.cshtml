@@ -1,0 +1,350 @@
+﻿@model REIN_MES_System.Models.RS_SOP
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12">
+    @using (Html.BeginForm("Create", "SOP", FormMethod.Post, new { @class = "dropzone nodzimage", id = "mydropzone", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            <div style="display:none">
+                @Html.LabelFor(model => model.Plant_ID,ResourceDisplayName.Plant_Name+" *", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(model => model.Plant_ID, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID)
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    @Html.LabelFor(model => model.SOP_Name,ResourceDisplayName.SOP_Name+" *", htmlAttributes: new { @class = "control-label"})
+                    @Html.TextBoxFor(model => model.SOP_Name, new { @class = "form-control", @maxlength = "50" })
+                    @Html.ValidationMessageFor(model => model.SOP_Name)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Shop_ID,ResourceDisplayName.Shop_Name+" *", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Shop_ID, null,ResourceDisplayName.Select_Shop, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID)
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Line_ID,ResourceDisplayName.Line_Name+" *", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(),ResourceDisplayName.select_Line, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Line_ID)
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Station_ID,ResourceDisplayName.Station_Name+" *", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Station_ID, Enumerable.Empty<SelectListItem>(), ResourceDisplayName.Select_Station, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Station_ID)
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Platform_ID, ResourceDisplayName.Platform_Name, htmlAttributes: new { @class = "control-label" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Platform_ID, null, ResourceDisplayName.Select_Platform, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Platform_ID)
+                </div>
+                <div class="col-md-4  modelBased-box">
+                    @Html.LabelFor(model => model.Model_Attribute_ID, ResourceDisplayName.Attribute_Name, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Model_Attribute_ID, null, "Select Model Attribute", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Model_Attribute_ID)
+                </div>
+                <div class="col-md-2" style="margin-left: 46em;top: 25px;">
+
+                    <button class="btn btn-primary checkUncheckAllBtn" onclick="checkUncheckAll()" style="width: 8em;" type="button">Uncheck all</button>
+
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-10" id="modelcodes"></div>
+            </div><br />
+            <div class="form-group">
+                <div class="fallback">
+                    <input name="SOPImage" type="file" />
+                </div>
+                <div id="dropzonePreview" class="dropzone-previews dz-default">
+                    <h5>Click here to upload SOP Image .</h5>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="@ResourceGlobal.Save" id="uploadSOP" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/DZscripts")
+    @*@Scripts.Render("~/bundles/Select2scripts")*@
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        function checkUncheckAll() {
+            if ($("input:checkbox").length == 0) {
+                alert("No Series to Uncheck");
+                return false;
+            }
+            if ($('.checkUncheckAllBtn').html() == "Uncheck All") {
+                $("input:checkbox").prop('checked', false);
+                $('.checkUncheckAllBtn').html("Check All") 
+                return false;
+
+            }
+            else {
+                $("input:checkbox").prop('checked', true);
+                $('.checkUncheckAllBtn').html("Uncheck All") 
+
+                return false;
+
+
+            }
+        };
+        $(document).ready(function () {
+            
+            //$("#ModelCodes").select2({
+            //    allowClear: true,
+            //    placeholder: 'Assign Models',
+            //    multiple: 'multiple',
+            //    tokenSeparators: [',', ' ', ';']
+            //});
+            //$("#ModelCodes").select2('val', '');
+
+            $('#Attribute_ID').change(function () {
+                var modelfamily = $(this).val();
+                var shopid = $('#Shop_ID').val();
+                if (modelfamily.length > 0 && shopid.length > 0) {
+                    $.getJSON('/SOP/getModelCheckBoxList', { modelFamilyCode: modelfamily, shopID: shopid }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#modelcodes').html("");
+                        $.each(data, function (index, obj) {
+                            $('#modelcodes').append('<div class="modelCheckboxList col-xs-2">' +
+                                                    '<input type="checkbox" id="series' + index + '" name="ModelCodes" value="' + obj.Id + '" checked="' + obj.Checked + '"/><label for="series' + index + '">' + obj.Name + '</label>' +
+                                                    '</div>');
+                        });
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Shops!');
+                    });
+                }
+            });
+
+            $('#Model_Attribute_ID').change(function () {
+                debugger;
+                var attributeid = $(this).val();
+                var shopid = $('#Shop_ID').val();
+                if (attributeid.length > 0 && shopid.length > 0) {
+                    $.getJSON('/SOP/ModelCheckBoxList', { attributeID: attributeid, shopID: shopid }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#modelcodes').html("");
+                        $.each(data, function (index, obj) {
+                            $('#modelcodes').append('<div class="modelCheckboxList col-md-3">' +
+                                '<input type="checkbox" id="series' + index + '" name="ModelCodes" value="' + obj.Id + '" checked="' + obj.Checked + '"/><label for="series' + index + '">' + obj.Name + '</label>' +
+                                '</div>');
+                        });
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Modelcodes!');
+                    });
+                }
+                else {
+                    $('#modelcodes').html("");
+                }
+            });
+
+            $("#uploadSOP").prop("disabled", true);
+
+            $('#Shop_ID').change(function () {
+                var shopid = $(this).val();
+
+                if (shopid.length > 0) {
+                    $.getJSON('/SOP/getLineID', { shopId: shopid }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Line_ID option').remove();
+                        $('#Station_ID option').remove();
+                        $('#Line_ID').append('<option value=""></option>');
+                        for (i = 0; i < data.length; i++) {
+                            $('#Line_ID').append('<option value="' +
+                            data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Lines!');
+                    });
+                    //$.getJSON('/SOP/getFamilyList', { shopID: shopid }, function (data) {
+
+                    //    // Ajax success callback function.
+                    //    // Populate dropdown from Json data returned from server.
+                    //    $('#Attribute_ID option').remove();
+                    //    $('#modelcodes').html("");
+                    //    $('#Attribute_ID').append('<option value=""></option>');
+                    //    for (i = 0; i < data.length; i++) {
+                    //        $('#Attribute_ID').append('<option value="' +
+                    //        data[i].Attribute_ID + '">' + data[i].Attribute_Desc + '</option>');
+                    //    }
+                    //}).fail(function (jqXHR, textStatus, errorThrown) {
+                    //    // Ajax fail callback function.
+                    //    alert('Error getting Model Family!');
+                    //});
+                }
+
+            });
+
+            $('#Line_ID').change(function () {
+                var lineid = $(this).val();
+                if (lineid.length > 0) {
+                    $.getJSON('/SOP/getStationID', { lineId: lineid }, function (data) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Station_ID option').remove();
+                        $('#Station_ID').append('<option value=""></option>');
+                        for (i = 0; i < data.length; i++) {
+                            $('#Station_ID').append('<option value="' +
+                            data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Stations!');
+                        });
+
+                    setTimeout(
+                        $.getJSON('/SOP/getPlatformID', { lineId: lineid }, function (data) {
+                            $('#Platform_ID option').remove();
+                            $('#Platform_ID').append('<option value="">Select Platform</option>');
+                            for (i = 0; i < data.length; i++) {
+                                $('#Platform_ID').append('<option value="' +
+                                    data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            alert('Error getting Platforms!');
+                        }), 1000)
+                }
+            });
+
+            $('#Platform_ID').change(function () {
+                var platformid = $(this).val();
+                var lineid = $('#Line_ID').val();
+                var shopid = $('#Shop_ID').val();
+                if (platformid.length > 0) {
+                    $.getJSON('/SOP/getModelAttributeData', { ShopId: shopid, lineId: lineid, PlatformId: platformid }, function (data) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Model_Attribute_ID option').remove();
+                        $('#Model_Attribute_ID').append('<option value="">Select Model Attribute</option>');
+                        for (i = 0; i < data.length; i++) {
+                            $('#Model_Attribute_ID').append('<option value="' +
+                                data[i].Model_Attribute_ID + '">' + data[i].Attribution + '</option>');
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Model Attribute!');
+                    });
+                }
+                else {
+                    $('#Model_Attribute_ID option').remove();
+                    $('#Model_Attribute_ID').append('<option value="">Select Model Attribute</option>');
+
+                    $('#modelcodes').html("");
+                }
+            });
+
+            Dropzone.options.mydropzone = {
+                // url: 'saveitemedit/savenewimage.php',
+                maxFiles: 1,
+                maxFilesize: 20, //mb
+                acceptedFiles: 'image/*',
+                addRemoveLinks: true,
+                autoProcessQueue: false,
+                autoDiscover: false,
+                paramName: 'SOPImage',
+                previewsContainer: '#dropzonePreview',
+                clickable: '#dropzonePreview',
+                dictDefaultMessage: '',
+                thumbnailWidth: "350",
+                thumbnailHeight: "170",
+                accept: function (file, done) {
+                    done();
+                    // $( "#uploadproduct" ).show();
+                    $("#uploadSOP").prop("disabled", false);
+                },
+                error: function (file, msg) {
+                    alert(msg);
+                    // this.removeFile(file);
+                },
+                init: function () {
+                    // var totalFiles = 0;
+                    this.on("maxfilesexceeded", function (file) {
+                        //alert("No more files please!Only One image file accepted.");
+                        this.removeFile(file);
+                    });
+                    var myDropzone = this;
+                    $("#uploadSOP").on('click', function (e) {
+                        e.preventDefault();
+                        if ($('form').data('unobtrusiveValidation').validate()) {
+                            myDropzone.processQueue();
+                        }
+                    });
+                    // this.on("addedfile", function (file) {
+                    //       totalFiles += 1;
+                    //        if (totalFiles > 0) {
+                    //         $('.sbmt').show();
+                    //       }
+                    //   });
+                    //   this.on("removedfile", function (file) {
+                    //       totalFiles -= 1;
+                    //         if (totalFiles < 1) {
+                    //         $('.sbmt').hide();
+                    //       }
+                    //   });
+                    this.on("reset", function (file) {
+                        $("#uploadSOP").prop("disabled", true);
+                    });
+
+                    this.on("success", function (file, data) {
+                        //$('html, body').animate({ scrollTop: 0 }, 'slow');
+                        //var myDropzone = this;
+                        //$("#Shop_ID").val("");
+                        //$("#ModelCodes").select2('val', '');
+                        //$('#Line_ID option').remove();
+                        //$('#Station_ID option').remove();
+                        //$('#SOP_Name').text();
+                        //myDropzone.removeAllFiles();
+                        //alert(data.success);
+                        if (data.success) {
+                            window.location.replace("/SOP");
+                        } else {
+                            //window.location.replace("/SOP/Create");
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                        '<div class="alert alert-warning alert-dismissable">' +
+                                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                        '<h4><i class="icon fa fa-ban"></i> Operation Failed </h4>'
+                                        + data.responseText +
+                                        '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
+                        }
+                    });
+                }
+            };
+
+        });
+
+    </script>
+}
+@section Styles {
+    @Styles.Render("~/Content/DZstyles")
+    @Styles.Render("~/Content/Select2styles")
+
+}

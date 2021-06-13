@@ -1,0 +1,474 @@
+﻿@model REIN_MES_System.Models.RS_Partgroup
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+        <div class="row">
+            @Html.HiddenFor(model=>Model.Order_Create)
+            <div class="col-md-3" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name + " *", htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Plant_ID, null, string.Empty, new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Shop_ID, null, string.Empty, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Line_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Line_ID, null, string.Empty, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Station_ID, ResourceDisplayName.Station_Name, htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Station_ID, null, ResourceDisplayName.Select_Station, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+
+            </div>
+        </div>
+
+        <div class="row">
+            <br />
+            <div class="col-md-3" style="display:none;">
+                @Html.LabelFor(model => model.Partgroup_ID, htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.Partgroup_ID, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Partgroup_ID)
+
+            </div>
+
+            <div class="col-md-4">
+                @Html.Label(ResourceDisplayName.Part_Group_desc, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.TextBoxFor(model => model.Partgrup_Desc, new { @maxlength = "50", @class = "form-control", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.Partgrup_Desc)
+            </div>
+        </div>
+
+        <div class="row">
+            <br />
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Order_Create, htmlAttributes: new { @class = "" })
+
+               @Html.CheckBox("Order_Create", new { onchange = "", @type = "CheckBox" })
+
+                @Html.ValidationMessageFor(model => model.Order_Create)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3" id="Cons_LineId">
+                @Html.LabelFor(model => model.Consumption_Line_ID, htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Consumption_Line_ID, null, ResourceDisplayName.Select_Consuption_Line, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Consumption_Line_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-md-3" id="Cons_ShopId">
+                @Html.LabelFor(model => model.Consumption_Station_ID, htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Consumption_Station_ID, null, ResourceDisplayName.Select_Consumption_Station, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Consumption_Station_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-3" id="Cons_PartGroupCode">
+                @Html.LabelFor(model => model.Partgroup_Code, ResourceDisplayName.Part_Group_Code, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Partgroup_Code, new { onchange = "", @class = "form-control", @maxlength = "5" })
+                @Html.ValidationMessageFor(model => model.Partgroup_Code, null, new { @class = "validation_error" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5" id="serial" style="display:none;">
+                @Html.LabelFor(model => model.Serial_Config_ID, ResourceDisplayName.Serial_No_Config, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                @Html.DropDownListFor(model => model.Serial_Config_ID, null, ResourceDisplayName.Select_Serial_Config, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Serial_Config_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Is_Print, ResourceDisplayName.Is_Print, htmlAttributes: new { @class = "" })
+
+                @Html.CheckBox("Is_Print", new { })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div id="kitting_section">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Is_Kitting, htmlAttributes: new { @class = "" })
+
+                    @Html.CheckBox("Is_Kitting", new { onchange = "", @type = "CheckBox" })
+                    @Html.ValidationMessageFor(model => model.Is_Kitting)
+                </div>
+                @*@if (Model.Is_Kitting == true)
+                    {*@
+                <div class="col-md-3" id="Kitting_ReleaseId">
+                    @Html.LabelFor(model => model.Kitting_Release_Line_ID, ResourceDisplayName.Kitting_Release_Line, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Kitting_Release_Line_ID, null, ResourceDisplayName.Select_Release_Line, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Kitting_Release_Line_ID, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3" id="kitting_stationId">
+                    @Html.LabelFor(model => model.Kitting_Release_Station_ID, ResourceDisplayName.Kitting_Release_Station, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownListFor(model => model.Kitting_Release_Station_ID, null, ResourceDisplayName.Select_Release_Station, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Kitting_Release_Station_ID, null, new { @class = "validation_error" })
+                </div>
+                @*}*@
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Qty, ResourceDisplayName.Quantity_1, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Qty, new { onchange = "", @class = "form-control", @maxlength = "5", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.Qty, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <div class="row">
+            <br />
+            <div class="col-md-3">
+                <input type="submit" id="btn_Save" value="@ResourceGlobal.Save" class="btn btn-primary center" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/jqueryCustom")
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //Added by ketan as per Nashik 
+        document.getElementById("Order_Create").checked = true;
+
+
+        var checkedValue = document.getElementById("Order_Create").checked;
+        if (checkedValue == true) {
+            //document.getElementById("serial").style.display = "block"
+            document.getElementById("Cons_PartGroupCode").style.display = "none"
+            document.getElementById("Cons_LineId").style.display = "none"
+            document.getElementById("Cons_ShopId").style.display = "none"
+            $('#kitting_section').attr("style", " display:none")
+            $('#KittingSection').attr("style", " display:none")
+            document.getElementById("Is_Kitting").checked = false
+
+        }
+        else {
+                document.getElementById("serial").style.display = "none"
+                document.getElementById("Cons_PartGroupCode").style.display = "block"
+                document.getElementById("Cons_LineId").style.display = "block"
+                document.getElementById("Cons_ShopId").style.display = "block"
+                $('#kitting_section').attr("style", " display:block")
+        }
+
+
+        //getSerailConfigDataCheck();
+        //added by ketan
+        var checkedValue = document.getElementById("Is_Kitting").checked;
+        if (checkedValue == true) {
+            $('#Kitting_ReleaseId').attr("style", " display:block")
+            $('#kitting_stationId').attr("style", " display:block")
+        }
+        else {
+            $('#Kitting_ReleaseId').attr("style", " display:none")
+            $('#kitting_stationId').attr("style", " display:none")
+        }
+    });
+
+    $("#Order_Create").on("change", function () {
+        //getSerialConfigData();
+        var checkedValue = document.getElementById("Order_Create").checked;
+        if (checkedValue == true) {
+            //document.getElementById("serial").style.display = "block"
+            document.getElementById("Cons_PartGroupCode").style.display = "none"
+            document.getElementById("Cons_LineId").style.display = "none"
+            document.getElementById("Cons_ShopId").style.display = "none"
+        }
+        else {
+            document.getElementById("serial").style.display = "none"
+            document.getElementById("Cons_PartGroupCode").style.display = "block"
+            document.getElementById("Cons_LineId").style.display = "block"
+            document.getElementById("Cons_ShopId").style.display = "block"
+        }
+
+        var checkedValue = document.getElementById("Is_Kitting").checked;
+        if (checkedValue == true) {
+            $('#KittingSection').attr("style", " display:block")
+            $('#btn_Save').attr('disabled', true);
+        }
+        else {
+            $('#KittingSection').attr("style", " display:none")
+            //$('#btn_Save').attr('disabled', false);
+        }
+    });
+
+
+    function getSerailConfigDataCheck() {
+        var order_create = $("#Order_Create").val();
+        var checkedValue = document.getElementById("Order_Create").checked;
+        if (checkedValue == true) {
+            document.getElementById("serial").style.display = "block"
+            document.getElementById("Cons_LineId").style.display = "none"
+            document.getElementById("Cons_ShopId").style.display = "none"
+            document.getElementById("Cons_PartGroupCode").style.display = "none"
+            //added by ketan
+            $('#kitting_section').attr("style", " display:none");
+            $('#btn_Save').attr('disabled', false);
+            document.getElementById("Is_Kitting").checked = false
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/Partgroup/CheckSerialConfig', { Order_Create: order_create }, function (data) {
+                if (data.length > 0) {
+
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Serial_Config_ID option').remove();
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Serial_Config_ID').append('<option value="' +
+                        data[i].Config_ID + '">' + data[i].Serial_Logic + '</option>');
+                    }
+                }
+                else {
+                    // $('#Order_Create option').remove();
+                    // alert("No Line Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Error getting Line Selection !');
+            });
+        }
+        else {
+            document.getElementById("serial").style.display = "none"
+            document.getElementById("Cons_PartGroupCode").style.display = "block"
+            document.getElementById("Cons_LineId").style.display = "block"
+            document.getElementById("Cons_ShopId").style.display = "block"
+            document.getElementById("kitting_section").style.display = "block"
+            $('#btn_Save').attr('disabled', false);
+
+        }
+    }
+
+
+    function getSerialConfigData() {
+        var checkedValue = document.getElementById("Order_Create").checked;
+        if (checkedValue == true) {
+            document.getElementById("serial").style.display = "block"
+            document.getElementById("Cons_PartGroupCode").style.display = "none"
+            document.getElementById("Cons_LineId").style.display = "none"
+            document.getElementById("Cons_ShopId").style.display = "none"
+            document.getElementById("kitting_section").style.display = "none"
+            // Populate categories when the page is loaded.
+            var Shop_ID = $("#Shop_ID").val();
+            $.getJSON('/Partgroup/GetSerial_ID', { Shop_ID: Shop_ID }, function (data) {
+                if (data.length > 0) {
+                    $('#btn_Save').attr("disabled", false);
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Serial_Config_ID option').remove();
+                    $('#Serial_Config_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+
+                        $('#Serial_Config_ID').append('<option value="' +
+                  data[i].Config_ID + '">' + data[i].Serial_Logic + '</option>');
+                    }
+                } else {
+                    $('#Serial_Config_ID option').remove();
+                    $("#Serial_Config_ID").val(null).trigger("change");
+                    $('#btn_Save').attr("disabled", true);
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Error getting Line Selection !');
+            });
+
+        }
+        else {
+            document.getElementById("serial").style.display = "none"
+            document.getElementById("Cons_PartGroupCode").style.display = "block"
+            document.getElementById("Cons_LineId").style.display = "block"
+            document.getElementById("Cons_ShopId").style.display = "block"
+            document.getElementById("kitting_section").style.display = "block"
+            var Shop = $("#Shop_ID").val();
+            var Line = $("#Line_ID").val();
+
+            // Populate categories when the page is loaded.
+            //$.getJSON('/Partgroup/UpdateSerial_ID', {Shop_Id:Shop,Line_Id:Line}, function (data) {
+            //});
+
+        }
+    }
+
+
+
+    //Line JavaScript
+    $("#Shop_ID").on("change", function () {
+        var Shop = $("#Shop_ID").val();
+        $('Line_ID').html("");
+        if (Shop.length > 0) {
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/Partgroup/GetLineID', { Shopid: Shop }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    getSerialConfigData();
+                    $('#Line_ID option').remove();
+                    $('#Line_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Line_ID').append('<option value="' +
+                  data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                    }
+                } else {
+                    $('#Line_ID option').remove();
+                    alert("No Line Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting Line Selection !');
+            });
+        }
+        else {
+            $("#Line_ID").val(null).trigger("change");
+            $('#Line_ID option').remove();
+            document.getElementById("Order_Create").checked = false;
+            document.getElementById("serial").style.display = "none"
+            document.getElementById("Cons_PartGroupCode").style.display = "block"
+            document.getElementById("Cons_LineId").style.display = "block"
+            document.getElementById("Cons_ShopId").style.display = "block"
+            $('#kitting_section').attr("style", " display:block");
+            $('#btnSave').attr('disabled', false);
+        }
+    });
+
+
+    $("#Line_ID").change(function (e) {
+        var LineID = $(this).val();
+        if (LineID) {
+            $.getJSON('/Partgroup/GetStationID', { Lineid: LineID }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Station_ID option').remove();
+                    $('#Station_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Station_ID').append('<option value="' +
+                  data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+
+                    }
+                } else {
+                    $('#Station_ID option').remove();
+                    alert("No Station Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting station List Selection !');
+            });
+        }
+
+    });
+
+    //added by ketan
+    $("#Is_Kitting").on("change", function () {
+
+        var checkedValue = document.getElementById("Is_Kitting").checked;
+        if (checkedValue == true) {
+            var Shop = $("#Shop_ID").val();
+            // alert(Shop);
+            $('#Kitting_ReleaseId').attr("style", " display:block");
+            $('#kitting_stationId').attr("style", " display:block");
+
+            if (Shop.length > 0) {
+
+                // Populate categories when the page is loaded.
+                $.getJSON('/Partgroup/GetLineID', { Shopid: Shop }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        /* $('#Kitting_Release_Line_ID option').remove();
+                        $('#Kitting_Release_Line_ID').append('<option value=""></option>');
+                        */
+                        for (i = 0; i < data.length; i++) {
+
+                            //  $('#Kitting_Release_Line_ID').append('<option value="' +
+                            //data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                        }
+                    } else {
+
+                        //$('#Kitting_Release_Line_ID option').remove();
+                        alert("No Line Available for this Plant or Shop!");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Line Selection !');
+                });
+            }
+        }
+        else {
+            $('#kitting_stationId').attr("style", " display:none")
+            $('#Kitting_ReleaseId').attr("style", " display:none")
+        }
+    });
+    $("#Kitting_Release_Line_ID").on("change", function () {
+        var LineID = $("#Kitting_Release_Line_ID").val();
+        $('#Kitting_Release_Station_ID').html("");
+        if (LineID.length > 0) {
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/Partgroup/GetStationID', { Lineid: LineID }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Kitting_Release_Station_ID option').remove();
+                    $('#Kitting_Release_Station_ID').append('<option value=""></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Kitting_Release_Station_ID').append('<option value="' +
+                  data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                    }
+                } else {
+                    $('#Kitting_Release_Station_ID option').remove();
+                    alert("No Station Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting station List Selection !');
+            });
+        }
+    });
+</script>

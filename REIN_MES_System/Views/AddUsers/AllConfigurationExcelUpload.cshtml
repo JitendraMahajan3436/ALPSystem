@@ -1,0 +1,280 @@
+﻿@model REIN_MES_System.Models.ExcelAllConfiguration
+@using REIN_MES_System.Models;
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "AllConfigurationExcelUpload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var totalCount = 0;
+    var successCount = 0;
+    var errorCount = 0;
+}
+<br />
+<div class="col-md-6 show_family_quality plant_line_configuration">
+    @using (Ajax.BeginForm("AllConfigurationExcelUpload", "AddUsers", new AjaxOptions
+    {//GetPatients is name of method in PatientController
+        InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+
+        UpdateTargetId = "QualityChecklist",
+        LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
+    }, new { @class = "", id = "upload_bom_form", enctype = "multipart/form-data" }))
+    {
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.FromDate, "From Date *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.FromDate, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.FromDate, null, new { @class = "validation_error" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ToDate, "To Date *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.ToDate, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.ToDate, null, new { @class = "validation_error todate" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("From Day", new { @class = "" })
+            @*@Html.DropDownListFor(model => model.Day, new SelectList(new List<object> { new { value = "", text = "Day" }, new { value = "0", text = "Monday" }, new { value = "1", text = "Tuesday" }, new { value = "2", text = "Wednesday" }, new { value = "3", text = "Thursday" }, new { value = "4", text = "Friday" },  new { value = "5", text = "Saturday" } }, "value", "text", @ViewBag.CurrentDay), new { @class = "form-control" })*@
+            @Html.DropDownListFor(model => model.FromDay, new SelectList(new List<object> { new { value = "", text = "Day" }, new { value = "2", text = "Monday" }, new { value = "3", text = "Tuesday" }, new { value = "4", text = "Wednesday" }, new { value = "5", text = "Thursday" }, new { value = "6", text = "Friday" }, new { value = "7", text = "Saturday" }, new { value = "1", text = "Sunday" } }, "value", "text", @ViewBag.CurrentDay), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FromDay, null, new { @class = "validation_error ofDay" })
+        </div>
+        
+        <div class="form-group">
+            @Html.Label("To Day", new { @class = "" })
+            @*@Html.DropDownListFor(model => model.Day, new SelectList(new List<object> { new { value = "", text = "Day" }, new { value = "0", text = "Monday" }, new { value = "1", text = "Tuesday" }, new { value = "2", text = "Wednesday" }, new { value = "3", text = "Thursday" }, new { value = "4", text = "Friday" },  new { value = "5", text = "Saturday" } }, "value", "text", @ViewBag.CurrentDay), new { @class = "form-control" })*@
+            @Html.DropDownListFor(model => model.Day, new SelectList(new List<object> { new { value = "", text = "Day" }, new { value = "2", text = "Monday" }, new { value = "3", text = "Tuesday" }, new { value = "4", text = "Wednesday" }, new { value = "5", text = "Thursday" }, new { value = "6", text = "Friday" }, new { value = "7", text = "Saturday" }, new { value = "1", text = "Sunday" } }, "value", "text", @ViewBag.CurrentDay), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Day, null, new { @class = "validation_error oDay" })
+        </div>
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.TextBoxFor(m => m.Excel_File, new { type = "file", @onchange = "checkfile(this);", @id = "file" })@*<input type="file" name="Excel_File" />*@
+            @Html.ValidationMessage("Excel_File", null, new { @class = "validation_error", @id = "excelReq" })
+            <span id="lblExcelmsg" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Upload" class="btn btn-primary" />
+           @*@Html.ActionLink("Download Sample Template", "Download", new { ImageName = "RS_All_Configuration.xlsx", @class = "btn btn-primary" })*@
+            
+            <a href="/AddUsers/Download" download class="btn btn-primary">
+                    Download Sample Template
+                </a>
+            <a href="javascript:history.back()" class="btnback">BACK</a>
+
+        </div>
+    }
+
+    <div id="QualityChecklist"></div>
+</div>
+
+@*<div class="col-md-6">
+
+</div>
+
+<div style="margin-left: -22px;" class="col-md-12 show_family_quality plant_line_configuration">
+    <h4 style="color:red">Excel Format</h4>
+    <h4 style="color:red">Note:Columns Name Should Be Same As Below Columns Name.</h4>
+    <table class="table table-bordered table-striped datatable_completes" style="
+    font-size: 13px;
+">
+        <thead>
+            <tr>
+                <th>Plant_Name</th>
+                <th>Shop_Name</th>
+                <th>Line_Name</th>
+                <th>Station_Name</th>
+                <th>Shift_Name</th>
+                <th>Token_No</th>
+                <th>Skill_Set</th>
+                <th>Line_Officer_Name</th>
+                <th>Line_Officer_Token</th>
+                <th>Manager_Name</th>
+                <th>Manager_Token</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>Chakan</td>
+            <td>XUV500 - BIW</td>
+            <td>ECA</td>
+            <td>ECA 10 RH</td>
+            <td>A</td>
+            <td>23000229</td>
+            <td>L3</td>
+            <td>Akshay Khot</td>
+            <td>23179484</td>
+            <td>Sandip Shinde</td>
+            <td>210662</td>
+        </tr>
+        </table>
+</div>*@
+
+<div class="clearfix"></div>
+@{
+    AllConfigurationUploadRecords[] orderUploadRecords = (AllConfigurationUploadRecords[])ViewBag.OrderUploadRecords;
+    <label id="lblTotalRecord">Total Record in Excel : @ViewBag.TotalRecord</label><br/>
+    <label id="lblTotalSuccess">Success Count : @ViewBag.TotalSuccess</label><br />
+    <label id="lblTotalError">Error Count : @ViewBag.TotalError</label>
+
+    if (ViewBag.OrderUploadRecords != null)
+    {
+        <table class="table table-bordered table-striped datatable_completes">
+            <thead>
+                <tr style="background-color:aqua;color:white;font-weight:bold">
+                    <th>Plant Name</th>
+                    <th>Shop Name</th>
+                    <th>Line Name</th>
+                    <th>Setup Name</th>
+                    <th>Station Name</th>
+                    <th>Shift Name</th>
+                    <th>Token Number</th>
+                    <th>SkillSet</th>
+                    <th>LineOfficer Name</th>
+                    <th>Manager Name</th>
+                    <th>Error/Success</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in (IEnumerable<REIN_MES_System.Models.AllConfigurationUploadRecords>)ViewBag.OrderUploadRecords)
+            {
+                if (item != null)
+                {
+                    if (item.SS_Error_Sucess != null)
+                    {
+                        totalCount++;
+                        if (item.SS_Error_Sucess != "Record add successfully")
+                        {
+                            errorCount++;
+                <tr style="background-color:red;color:white;font-weight:bold;font-size:18px">
+                    <td>@Html.DisplayFor(modelItem => item.Plant_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Shop_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Line_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Setup_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Station_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Shift_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Token_No)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Skill_Set)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Line_Officer_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Manager_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                </tr>
+                        }
+                        else
+                        {
+                            successCount++;
+                    <tr style="font-weight:bold;font-size:18px">
+                        <td>@Html.DisplayFor(modelItem => item.Plant_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Shop_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Line_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Setup_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Station_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Shift_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Token_No)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Skill_Set)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Line_Officer_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Manager_Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                    </tr>
+                        }
+                    }
+                }
+            }
+        </table>
+
+    }
+    <script type="text/javascript" language="javascript">
+       // myFunction();
+    </script>
+}
+
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+    @*@Scripts.Render("~/Scripts/user_datatable")*@
+}
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript">
+    function myFunction()
+    {
+        debugger;
+        $('#lblTotalRecord').html("Total Record in Excel : " + totalCount);
+        $('#lblTotalSuccess').html("Total Success Count : " + successCount);
+        $('#lblTotalError').html("Total Error Count : " + errorCount);
+    }
+
+    function checkfile(sender) {
+        var validExts = new Array(".xlsx", ".xls");
+        var fileExt = sender.value;
+        fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+        if (validExts.indexOf(fileExt) < 0) {
+            //alert("Invalid file selected, valid files are of " +
+            //         validExts.toString() + " types.");
+            $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                     validExts.toString() + " types.");
+            $('#excelReq').hide();
+            $('#file').val('');
+            return false;
+        }
+        else {
+            $('#lblExcelmsg').html('');
+            return true;
+        }
+    }
+    $(document).ready(function () {
+        var date = new Date();
+        date.setDate(date.getDate());
+       
+        var start = $("#FromDate").val();
+        $("#FromDate").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                startDate:date
+            });
+        $("#ToDate").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                startDate: start
+            });
+
+        $("#ToDate").change(function () {
+            debugger
+            var startDate = document.getElementById("FromDate").value;
+            var endDate = document.getElementById("ToDate").value;
+            if (startDate != "" && endDate != "") {
+                if (startDate> endDate){
+                    debugger
+                    $(".todate").html("To date should be greater than or equal to From date");
+                    document.getElementById("ToDate").value = "";
+                }
+                else {
+                    $('.todate').html(null);
+                }
+            }
+        })
+        //$("#FromDate").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy',
+        //        start: new Date()
+        //    });
+        //$("#ToDate").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy',
+        //        start: new Date()
+        //    });
+       
+    });
+
+   
+</script>
+
+
+
+
+
+
+
+

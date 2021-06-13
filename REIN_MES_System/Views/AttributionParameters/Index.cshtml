@@ -1,0 +1,60 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Attribution_Parameters>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "AttributionParameters")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>            
+            <th>
+                @Html.DisplayNameFor(model => model.Shop_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attribute_Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attribute_Desc)
+            </th>           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>                
+                <td>
+                    @if (item.Shop_ID != null)
+                    {
+                        @Html.DisplayFor(modelItem => item.Shop_ID)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Attribute_Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Attribute_Desc)
+                </td>                
+                <td>
+                    @*<a href="@Url.Action("Edit", "AttributionParameters", new { id = item.Attribute_ID })"><i class="fa fa-edit" style="color:blue" title="Edit"></i></a>*@ 
+                    <a href="@Url.Action("Details", "AttributionParameters", new { id = item.Attribute_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet" title="Details"></i></a>
+                    <a href="@Url.Action("Delete", "AttributionParameters", new { id = item.Attribute_ID })"><i class="fa fa-trash" style="color:red" title="Delete"></i></a>
+
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Attribute_ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Attribute_ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Attribute_ID })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

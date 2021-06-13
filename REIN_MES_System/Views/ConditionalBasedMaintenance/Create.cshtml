@@ -1,0 +1,405 @@
+﻿@model REIN_MES_System.Models.MM_MT_Conditional_Based_Maintenance
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var imgsrcing = "";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Machine_ID, "Machine Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.DropDownListFor(model => model.Machine_ID, (IEnumerable<SelectListItem>)ViewBag.Machine_ID, "--Select Machine--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Machine_Parameter, "Machine Parameters", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Machine_Parameter, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Machine_Parameter, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Sequence_No, "Dashboard Display Priority", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Sequence_No, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Sequence_No, null, new { @class = "validation_error" })
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Type_ID, "Parameter Type", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @*@Html.DropDownListFor(model => model.CBM_Check_Type, (IEnumerable<SelectListItem>)ViewBag.CBM_Check_Type,"--Select Type--", htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownListFor(model => model.Type_ID, (SelectList)ViewBag.Type_ID, "--Select Type--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Type_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.M_ID, "Unit Of Measurement", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.M_ID, (IEnumerable<SelectListItem>)ViewBag.M_ID, "--Select Measurement--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.M_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Scale_Denominator, "Denominator Value", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Scale_Denominator, "1", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Scale_Denominator, null, new { @class = "validation_error" })
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        @*<div class="col-md-4">
+                @Html.LabelFor(model => model.Data_Retention_Period, htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Data_Retention_Period, string.Empty, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Data_Retention_Period, null, new { @class = "validation_error" })
+            </div>*@
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.IOT_Tag_Name, "IOT Tag Name", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.IOT_Tag_Name, (IEnumerable<SelectListItem>)ViewBag.IOT_Tag_Name, "--Select IOTTag Name--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IOT_Tag_Name, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.IsActive)
+            @Html.LabelFor(model => model.IsActive, new { @class = "" })
+            @Html.ValidationMessageFor(model => model.IsActive)
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Data_Retention_Period, "Data Retention Period (In Months)", htmlAttributes: new { @class = "" })<i style="color:red"></i>
+            @Html.TextBoxFor(model => model.Data_Retention_Period, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Data_Retention_Period, null, new { @class = "validation_error" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @*@Html.LabelFor(model => model.Category_ID, "Parameter Category *", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Category_ID, (SelectList)ViewBag.Category_ID, "--Select Category--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Category_ID, null, new { @class = "validation_error" })*@
+            @Html.LabelFor(model => model.C_ID, "Parameter Category", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.DropDownListFor(model => model.C_ID, (SelectList)ViewBag.C_ID, "--Select Category--", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.C_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4" style="display:none">
+            @Html.LabelFor(model => model.Image_ID, "Image Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Image_ID, null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Image_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-8">
+            @Html.Label("Select Image", htmlAttributes: new { @class = "" })
+            <div id="CategoryImage">
+                @if (ViewBag.CategoryImage != null)
+                {
+
+                    foreach (var image in (List<REIN_MES_System.Controllers.ConditionalBasedMaintenanceController.CategoryImage>)ViewBag.CategoryImage)
+                    {
+                        var base64imag = Convert.ToBase64String(image.Content);
+
+                        if (image.Content_Type == "image/jpeg" || image.Content_Type == "image/png" || image.Content_Type == "image/gif" || image.Content_Type == "image/jpg")
+                        {
+                            imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+
+                        }
+                        else
+                        {
+                            imgsrcing = string.Format("data:application/pdf;base64,{0}", base64imag);
+
+                        }
+                        var selectedImageClass = "";
+                        if (Model.Image_ID == image.Id)
+                        {
+                            selectedImageClass = "selectedImage";
+                        }
+                        <img id="@image.Id" class="@selectedImageClass CategoryImage" onclick="GetImageID(@image.Id)" style="width:60px;height:70px" title="Image" src="@imgsrcing" frameborder="1">
+                    }
+                }
+            </div>
+        </div>
+        @*<div class="col-md-4">
+                @Html.Label("Image Name", htmlAttributes: new { @class = "" })
+                <div id="CategoryImage">
+                    @if (Model != null && Model.MM_CBM_Parameter_Category != null && Model.MM_CBM_Parameter_Category.Image_Content != null)
+                    {
+                        var base64imag = Convert.ToBase64String(Model.MM_CBM_Parameter_Category.Image_Content);
+
+                        if (Model.MM_CBM_Parameter_Category.Content_Type == "image/jpeg" || Model.MM_CBM_Parameter_Category.Content_Type == "image/png" || Model.MM_CBM_Parameter_Category.Content_Type == "image/gif" || Model.MM_CBM_Parameter_Category.Content_Type == "image/jpg")
+                        {
+                            imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+
+                        }
+                        else
+                        {
+                            imgsrcing = string.Format("data:application/pdf;base64,{0}", base64imag);
+
+                        }
+                        <img id="ItemPreview" style="border:1px solid #000000;width:60px;height:70px" title="Image" src="@imgsrcing" frameborder="1">
+                    }
+                </div>
+            </div>*@
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Min_Val, "Min Value", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Min_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Min_Val, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Max_Val, "Max Value", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Max_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Max_Val, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Green_Min_Val, "Green Min Val", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Green_Min_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Green_Min_Val, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Green_Max_Val, "Green Max Val", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Green_Max_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Green_Max_Val, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Warning_Min_Val, "Yellow Min Val", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Warning_Min_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Warning_Min_Val, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.Warning_Max_Val, "Yellow Max Val", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+            @Html.TextBoxFor(model => model.Warning_Max_Val, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Warning_Max_Val, null, new { @class = "validation_error" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+        </div>
+    </div>
+}
+<div id="dialog" title="Error"></div>
+@*<div>
+        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class="bn btn-primary"})
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            //$("#Machine_ID").select2();
+            //$("#Parameter_Category").select2();
+            //$("#CBM_Check_Type").select2();
+            $("#IOT_Tag_Name").select2();
+            //$("#C_ID").change(function () {
+            //    var category = $("#C_ID").val();
+            //    if (category != "") {
+            //        var url = "/ConditionalBasedMaintenance/GetParameterCategoryImageName";
+            //        ajaxpack.getAjaxRequest(url, "category=" + category + "", showParameterCategoryImageName, "json");
+            //    }
+            //    else {
+            //        clearSelectBox('Image_ID');
+            //        $("#CategoryImage").html("");
+            //    }
+            //});
+
+            //function showParameterCategoryImageName() {
+            //    var myajax = ajaxpack.ajaxobj
+            //    if (myajax.readyState == 4) {
+            //        var res = "";
+            //        if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+            //            var jsonRes = $.parseJSON(myajax.responseText);
+            //            SelectOptionHTML(jsonRes, "Image_ID");
+            //        }
+
+            //    }
+            //}
+
+            //function SelectOptionHTML(jsonRes, targetId) {
+            //    //var jsonRes = $.parseJSON(myajax.responseText);
+            //    var res = "";
+            //    for (var i = 0; i < jsonRes.length; i++) {
+            //        res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+            //    }
+
+            //    res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+            //    $("#" + targetId).html(res);
+            //}
+
+            //function clearSelectBox(targetId) {
+            //    var res = "";
+            //    res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+
+            //    $("#" + targetId).html(res);
+            //}
+
+            $("#C_ID").change(function () {
+
+                var cId = $("#C_ID").val();
+                var CBMId = 0;
+                if (cId != "") {
+                    var url = "/ConditionalBasedMaintenance/GetParameterCategoryImage";
+                    ajaxpack.getAjaxRequest(url, "CID=" + cId + "&CBMID=" + CBMId, showParameterCategoryImage, "json");
+                }
+                else {
+                    $("#CategoryImage").html("");
+                }
+            });
+
+            function showParameterCategoryImage() {
+                var myajax = ajaxpack.ajaxobj
+                if (myajax.readyState == 4) {
+                    var res = "";
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        for (var i = 0; i < jsonRes.length; i++) {
+                            var selectedClass = "";
+                            if(jsonRes[i].isSelected){
+                                selectedClass = "selectedImage";
+                                res += '<img class="' + selectedClass + '" onclick="GetImageID(' + jsonRes[i].Id + ')"  id="' + jsonRes[i].Id + '" alt="user image" style="width:60px;height:70px;margin-left:2%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes[i].Content) + '">';
+                            }
+                            else {
+                                res += '<img class="CategoryImage" onclick="GetImageID(' + jsonRes[i].Id + ')"  id="' + jsonRes[i].Id + '" alt="user image" style="border:1px solid #000000;width:60px;height:70px;margin-left:2%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes[i].Content) + '">';
+                            }
+                            //res += '<img class="'+selectedClass+'" onclick="GetImageID(' + jsonRes[i].Id + ')"  id="' + jsonRes[i].Id + '" alt="user image" style="border:1px solid #000000;width:60px;height:70px;margin-left:2%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes[i].Content) + '">';
+
+                            //<img id="ItemPreview" style="border:1px solid #000000;width:60px;height:70px" title="Image" src="@imgsrcing" frameborder="1">
+                        }
+
+                    }
+                    $("#CategoryImage").html(res);
+                }
+            }
+
+            function arrayBufferToBase64(buffer) {
+                var binary = '';
+                var bytes = new Uint8Array(buffer);
+                var len = bytes.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return window.btoa(binary);
+            }
+
+            if ($('#Is_InterLock').val() == "true") {
+                $("#max").addClass('display-div');
+                $("#min").addClass('display-div');
+                $("#UOM").addClass('display-div');
+            }
+            else {
+                $("#max").removeClass('display-div');
+                $("#min").removeClass('display-div');
+                $("#UOM").removeClass('display-div');
+            }
+            $('#Is_InterLock').on('change', function () {
+                if ($('#Is_InterLock').val() == "true") {
+                    $("#max").addClass('display-div');
+                    $("#min").addClass('display-div');
+                    $("#UOM").addClass('display-div');
+                }
+                else {
+                    $("#max").removeClass('display-div');
+                    $("#min").removeClass('display-div');
+                    $("#UOM").removeClass('display-div');
+                }
+            })
+
+            $('#mails').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var t = $("#mails").select2('val');
+                    valid(t);
+                }
+            });
+
+            $("#mails").select2({
+                allowClear: true,
+                multiple: 'multiple',
+                tags: true,
+                placeholder: 'select an email',
+                tokenSeparators: [',', ';']
+
+            });
+
+            $("#users").select2({
+                allowClear: true,
+                placeholder: 'select a user',
+                multiple: 'multiple'
+            });
+
+
+            //$("input[name='Scale_Denominator']").on("keypress", function (e) {
+            //    if ((e.keyCode < 49 || e.keyCode > 57)) {
+            //        e.preventDefault();
+            //    }
+            //});
+        });
+
+
+
+
+        function valid(value) {
+            if (value && value.length != 0) {
+                var emailText = "";
+                var isValidEmail = true;
+                var isEmailLengthValid = true;
+                for (var i in value) {
+                    var email = value[i];
+                    isValidEmail = validateEmail(email);
+                    if (isValidEmail == false) {
+                        break;
+                    } else {
+                        emailText = (i == 0) ? emailText : ", " + emailText;
+                        if (emailText.length > 250) {
+                            isEmailLengthNotValid = false;
+                            break;
+                        }
+                    }
+                    if (isValidEmail == false) {
+                        return 'Enter a valid email Address';
+
+                    } else if (isEmailLengthValid == false) {
+                        return "Maximum 250 Character allowed";
+                    }
+                }
+            }
+
+        }
+
+        function validateEmail(email) {
+            var re = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+            return re.text(re);
+        }
+
+        function GetImageID(id) {
+
+            $('.CategoryImage').removeClass("selectedImage");
+            $("#"+id).addClass("selectedImage");
+            $("#Image_ID").val(id);
+            //$("#" + id).attr("class", "activeImg");
+        }
+    </script>
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+
+    <style>
+        .display-div {
+            display: none;
+        }
+
+        .selectedImage {
+            border: 3px solid #00a65a !important;
+        }
+    </style>
+}

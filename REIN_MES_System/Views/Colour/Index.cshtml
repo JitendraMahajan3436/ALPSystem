@@ -1,0 +1,112 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Colour>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Colour")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Plant_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Colour_Desc)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Colour_Batch)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Export_Colour)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Active)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </th>*@
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Plant_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colour_Desc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colour_Batch)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Export_Colour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Is_Transfered)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Is_Purgeable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Is_Edited)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inserted_User_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inserted_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_User_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_Date)
+            </td>*@
+          
+            <td>
+                <a href="@Url.Action("Edit", "Colour", new { id = item.Colour_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                <a href="@Url.Action("Details", "Colour", new { id = item.Colour_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                <a href="@Url.Action("Delete", "Colour", new { id = item.Colour_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+
+
+}

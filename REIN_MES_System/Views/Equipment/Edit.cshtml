@@ -1,0 +1,52 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.EQP_ID)
+    <div class="row">
+        <div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Machine_ID, "Machine Name *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.RS_MT_Machines.Machine_Name, null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+        </div>
+        @*<div class="form-group col-md-4">
+                @Html.LabelFor(model => model.RS_MT_Machines.Machine_Name, "Machine Name", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model=>model.RS_MT_Machines.Machine_Name, null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                @Html.ValidationMessageFor(model => model.RS_MT_Machines.Machine_Name, null, new { @class = "validation_error" })
+            </div>*@
+        <div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Equipment_Name, "Machine Part Name *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Equipment_Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Equipment_Name, null, new { @class = "validation_error" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-0 col-md-10">
+            <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+
+}
+<div id="dialog" title="Error"></div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+}

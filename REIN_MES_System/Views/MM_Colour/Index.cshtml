@@ -1,0 +1,121 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Colour>
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.custom_Helper;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "RS_Colour")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Color Code")
+            </th>
+            <th>
+                @Html.DisplayName("Color Description")
+            </th>
+            <th>
+                @Html.DisplayName("Color Batch")
+            </th>
+            <th>
+                @Html.DisplayName("Export Color")
+            </th>
+            <th>
+                @Html.DisplayName("Active")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Is_Transfered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Purgeable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Edited)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                </th>*@
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+    </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colour_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colour_Desc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Colour_Batch)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Export_Colour)
+                </td>*@
+                <td>
+                    @Html.DisplayTextFor(modelItem => item.Export_Colour)
+                </td>
+                <td>
+                    @Html.DisplayTextFor(modelItem => item.Active)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Is_Transfered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Edited)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_User_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_User_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>*@
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Colour_ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Colour_ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Colour_ID })*@
+                    <a href="@Url.Action("Edit", "RS_Colour", new { id = item.Row_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a> 
+                    <a href="@Url.Action("Details", "RS_Colour", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a>
+                    <a href="@Url.Action("Delete", "RS_Colour", new { id = item.Row_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+                </td>
+            </tr>
+        }
+
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

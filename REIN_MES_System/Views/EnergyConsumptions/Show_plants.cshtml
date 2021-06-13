@@ -1,0 +1,115 @@
+﻿    <div class="col-md-12" id="showlist">
+
+    <div class="panel">
+        <div class="panel-heading" style="background-color:lightcoral; text-align:center">
+            <h style="color:white;font-size:15px"><b>Plant List</b> </h>
+        </div>
+    </div>
+</div>
+<div id="showplantdata" class="row">
+    @foreach (var items in ViewBag.Plants)
+    {
+
+        <div class="col-md-3">
+            <div class="panel" style="border:solid;color:lightseagreen">
+                <!-- small box -->
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+                    @*<p style="color:white"><b>PRESS SHOP</b></p>*@
+                    <button type="button" class="btn shopchartbtn" onclick="getShopGroupFromPlantId(@items.Plant_ID)"><b style="color:  black;">@items.Plant_Name </b> </button>
+                </div>
+                <div id="image_show" style="text-align:center">
+                    <img class="center-image-wrapper text-center" style="width:37%" src="~/Content/images/SOPImages/meter1.png" />
+                </div>
+                <div style="/* MARGIN-TOP: 0%; */font-size:large;text-align:center;font-family:'Times New Roman';color:white;FONT-WEIGHT: BOLD;BORDER: 1PX SOLID black;BACKGROUND-COLOR:  #20b2aa;">
+                    HIII <label>kWh</label>
+
+                </div>
+
+            </div>
+        </div>
+
+        @*<div>
+                <div >
+
+                    <div >
+                        <a href="#" onclick="getShopGroupFromPlantId(@items.Plant_ID)" class="col-md-3 panel panel-heading" style="background-color:lightcoral; text-align:center; margin-left: 1%;color:black;font-weight:bold">@items.Plant_Name </a>
+                    </div>
+                </div>
+            </div>*@
+    }
+</div>
+<div id="show-shopgroup-by-plantid">
+
+</div>
+
+<div id="show-shops-by-shopgroup">
+
+</div>
+
+@*<script type="text/javascript">
+                $(document).ready(function () {
+
+                    $(".btn").click(function () {
+
+                        var SHOPWISE = $(this).button(".btn").val();
+                        if (SHOPWISE == null || SHOPWISE == '') {
+
+                        }
+                        else {
+                            var path = "/EnergyHome/ShopwiseChart?SHOPWISE=" + SHOPWISE;
+                            window.location.href = path;
+                        }
+
+
+
+                    });
+
+
+
+
+     });
+
+             
+     function getShopGroupFromPlantId(plantid) {
+            
+         debugger
+         $("#showplantdata").html('');
+                    $.ajax({
+                        url: '/EnergyConsumptions/getshopgroupByPlantID?plantid=' + plantid,
+                            type: 'GET',
+                        data: "",
+                        contentType: 'application/json;charset-utf-8',
+                        success: function (data) {
+
+                            if (data != "") {
+                                $("#show-plantgroupbybutton").html('');
+                                $("#show-shopgroup-by-plantid").html(data);
+                            }
+                        }
+                    });
+                }
+
+     function getShopsByshopGroupID(shopgroupid) {
+
+                    debugger;
+                    $("#show-shopgroup-by-plantid").html('');
+                 
+                   $.ajax({
+                       url: '/EnergyConsumptions/GetShopByShopGroup?shopid=' + shopgroupid,
+                        type: 'GET',
+                        data: "",
+                        contentType: 'application/json;charset-utf-8',
+                        success: function (data) {
+                         
+                            if (data != "") {
+                                $("#show-shopgroup-by-plantid").html('');
+                                $("#show-shops-by-shopgroup").html(data);
+
+                            }
+                        }
+                    });
+                }
+</script>*@
+
+

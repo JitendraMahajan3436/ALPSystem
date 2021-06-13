@@ -1,0 +1,401 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+
+@using (Ajax.BeginForm("GetMachineDetails", "MachineAlarmDashboard", new AjaxOptions() { HttpMethod = "POST", LoadingElementId = "loading_global_spinner_image", OnSuccess = "show_machine_status_details", UpdateTargetId = "show_machine_details", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "frm_show_machine_details" }))
+{
+    <input type="hidden" id="hdnShopId" name="shopId" value="@ViewBag.User_Shop_ID" />
+    @*<input type="submit" value="Show" />*@
+}
+
+
+
+
+<div id="show_machine_details"></div>
+
+<div class="modal" id="shop_alarm_details" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Machine Alarm Details</h4>
+            </div>
+            <br />
+            <div class="">
+                <div class="col-md-12">
+                    <table id="alarm_details" style="display:none;" class="table table-bordered table-striped datatable_completes"></table>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p class="no_alarm_data" style="display:none;">No alarm data found for the day</p>
+            </div>
+            <br />
+            <div class="clearfix"></div>
+
+            <br />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary edit_ticket">Close Ticket</button>*@
+                <input type="hidden" id="hdnHelpDeskId" value="" />
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="col-md-2">
+    @Html.Label(ResourceShop.Shop_Label_Shop_Name, new { @class = "" })
+    @Html.DropDownList("Shop_ID", null, ResourceShop.Shop_Label_Shop_Select, htmlAttributes: new { @class = "form-control" })
+
+</div>
+
+<div class="machine_footer">
+    <div class="row">
+        <div class="col-lg-2">
+            Cycle Running
+            <span class="gree_footer_icon">1</span>
+        </div>
+        <div class="col-lg-2">
+            Machine Alarm
+            <span class="red_footer_icon">1</span>
+        </div>
+        <div class="col-lg-2">
+            Starved
+            <span class="yellow_footer_icon">1</span>
+        </div>
+    </div>
+</div>
+<button class="btn btn-block btn-info btn-lg" id="shop_alarm_details_popup" data-toggle="modal" data-target="#shop_alarm_details" style="display:none;">TAKE OUT</button>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+
+    @Styles.Render("~/fdtheme/notification_css");
+}
+<script type="text/javascript">
+    $(document).ready(function (e) {
+
+        setInterval(function (e) {
+            //$("#frm_show_help_desk_list").submit();
+        }, 5000);
+
+        setInterval(function (e) {
+            //$('#testy').toastee({
+            //    type: 'success',
+            //    message: 'You have successfully created this Toast!!!!!',
+            //});
+            //$('#testy').toastee({
+            //    header: 'Warning!',
+            //    type: 'error',
+            //    message: 'Alarm started on Crank case cleaning machine',
+            //    background: '#FFBB00',
+            //    fadeout: 500
+            //});
+
+
+        }, 5000);
+
+        $("#Shop_ID").change(function (e) {
+            var shopId = $(this).val();
+            if (shopId) {
+                $("#hdnShopId").val(shopId);
+                $("#frm_show_machine_details").submit();
+            }
+        });
+
+
+        $("#frm_show_machine_details").submit();
+
+        function blink(selector) {
+            $(selector).fadeOut('slow', function () {
+                $(this).fadeIn('slow', function () {
+                    blink(this);
+                });
+            });
+        }
+
+        blink('.blink');
+
+        setInterval(function (e) {
+
+            var shopId = $("#hdnShopId").val();
+            if (shopId) {
+                //var url = "/MachineAlarmDashboard/GetMachineAlarmStatus";
+                //ajaxpack.postAjaxRequest(url, "shopId=" + shopId, showMachineAlarmStatusDetails, "json");
+
+                var url = "/MachineAlarmDashboard/getStatusByShop";
+                ajaxpack.postAjaxRequest(url, "shopId=" + shopId, showMachineAlarmStatusDetails, "json");
+            }
+
+        }, 5000);
+
+        function getMachineDownTime() {
+            var shopId = $("#hdnShopId").val()
+            if (shopId) {
+                var url = "/MachineAlarmDashboard/GetMachineDownTimeByShop";
+                ajaxpack.postAjaxRequest(url, "shopId=" + shopId, showMachineDownTimeDetails, "json");
+            }
+        }
+
+        setInterval(function (e) {
+            getMachineDownTime();
+        }, 7000);
+
+
+
+        function showMachineDownTimeDetails() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    setDefault();
+                    //$(".working_time").html("<h4>00:00:00</h4>");
+                    //$(".starved_time").html("<h4>00:00:00</h4>");
+                    //$(".downtime").html("<h4>00:00:00</h4>");
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        var machineId = jsonRes[i].Machine_ID;
+
+                        var type = jsonRes[i].Type;
+                        if (jsonRes[i].DownTime == null || jsonRes[i].DownTime == "") { }
+                        else {
+
+                            var time = new Date(parseInt(jsonRes[i].DownTime.substr(6)));
+                            time = "<h4>" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "</h4>";
+                            if (type == "Idle") {
+                                $("li #" + machineId + " .starved_time").html(time);
+                            }
+                            else if (type == "Faulty") {
+                                $("li #" + machineId + " .downtime").html(time);
+                            } else
+                                if (type == "Healthy") {
+                                    $("li #" + machineId + " .working_time").html(time);
+                                }
+                        }
+                    }
+                }
+            }
+        }
+
+        function showMachineAlarmStatusDetails() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    setDefault();
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        var machineId = jsonRes[i].Machine_ID;
+
+                        //$("#" + machineId).removeClass("bg-green-gradient");
+                        //$("#" + machineId).removeClass("mt-red");
+                        //$("#" + machineId).removeClass("mt-yellow");
+                        //$("#" + machineId).addClass("blinker");
+                        //$("#" + machineId).addClass("mt-red");
+
+                        var isFaulty = jsonRes[i].isFaulty;
+                        var isHealthy = jsonRes[i].isHealthy;
+                        var isIdle = jsonRes[i].isIdle;
+
+                        if (isFaulty == true) {
+                            $("#" + machineId).removeClass("bg-green-gradient");
+                            $("#" + machineId).removeClass("mt-yellow");
+
+                            $("#" + machineId).addClass("mt-red");
+                            $("#" + machineId).addClass("blinker");
+                        }
+                        else
+                            if (isHealthy == true) {
+                                $("#" + machineId).removeClass("mt-red");
+                                $("#" + machineId).removeClass("mt-yellow");
+                                $("#" + machineId).removeClass("blinker");
+
+                                $("#" + machineId).addClass("bg-green-gradient");
+                            }
+                            else
+                                if (isIdle == true) {
+                                    $("#" + machineId).removeClass("bg-green-gradient");
+                                    $("#" + machineId).removeClass("mt-red");
+                                    $("#" + machineId).removeClass("blinker");
+
+                                    $("#" + machineId).addClass("mt-yellow");
+                                    //$("#" + machineId).addClass("blinker");
+                                }
+                                else {
+                                    $("#" + machineId).removeClass("mt-yellow");
+                                    $("#" + machineId).removeClass("mt-red");
+                                    $("#" + machineId).removeClass("blinker");
+
+                                    $("#" + machineId).addClass("bg-green-gradient");
+                                }
+                    }
+                }
+            }
+        }
+
+        function setDefault() {
+            $(".machine_box").addClass("bg-green-gradient");
+            $(".machine_box").removeClass("blinker");
+            $(".machine_box").removeClass("mt-red");
+        }
+
+        $("#show_machine_details").on("click", ".show_alarm_details", function (e) {
+            var machineId = $(this).attr("id");
+            //alert(machineId);
+            machineId = machineId.split("_");
+            machineId = machineId[1];
+
+            var url = "/MachineAlarmDashboard/GetMachineAlarmDetails";
+            ajaxpack.postAjaxRequest(url, "machineId=" + machineId, showMachineAlarmDetails, "json");
+        });
+
+        function showMachineAlarmDetails() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    $("#alarm_details").hide();
+                    $(".no_alarm_data").hide();
+                    if (jsonRes.length > 0) {
+                        var res = "";
+                        res = "<tr>";
+                        res = res + "<th>Alarm Name</th>";
+                        res = res + "<th>Start Time</th>";
+                        res = res + "<th>End Time</th>";
+                        res = res + "<th>Total Duration</th>";
+                        res = res + "</tr>";
+                        for (var i = 0; i < jsonRes.length; i++) {
+                            res = res + "<tr>";
+                            res = res + "<td>" + jsonRes[i].Alarm_Name + "</td>";
+                            var startTime = "";
+                            if (jsonRes[i].Start_Time == null)
+                                startTime = "";
+                            else {
+                                startTime = jsonRes[i].Start_Time;
+                            }
+
+
+                            res = res + "<td>" + startTime + "</td>";
+
+                            var stopTime = "";
+                            if (jsonRes[i].Stop_Time == null)
+                                stopTime = "";
+                            else {
+                                stopTime = jsonRes[i].Stop_Time;
+                            }
+
+
+                            res = res + "<td>" + stopTime + "</td>";
+
+                            res = res + "<td>" + jsonRes[i].Total_Time + "</td>";
+                            res = res + "</tr>";
+                        }
+
+                        $("#alarm_details").html(res);
+                        $("#alarm_details").show();
+                    }
+                    else {
+                        $(".no_alarm_data").show();
+                    }
+
+                    $("#shop_alarm_details_popup").trigger("click");
+                }
+            }
+        }
+
+    });
+
+</script>
+
+<style type="text/css">
+    .machine_footer {
+        background: #333 none repeat scroll 0 0;
+        bottom: 0;
+        color: white;
+        padding: 10px;
+        position: fixed;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .gree_footer_icon {
+        background: rgb(1, 225, 0) none repeat scroll 0 0;
+        border-radius: 6px;
+        color: rgb(1, 225, 0);
+        display: inline-block;
+        width: 20px;
+    }
+
+    .yellow_footer_icon {
+        background: yellow none repeat scroll 0 0;
+        border-radius: 6px;
+        color: yellow;
+        display: inline-block;
+        width: 20px;
+    }
+
+
+    .red_footer_icon {
+        background: #ff0000 none repeat scroll 0 0;
+        border-radius: 6px;
+        color: #ff0000;
+        display: inline-block;
+        width: 20px;
+    }
+
+
+
+
+
+
+    #testy {
+        z-index: 99999;
+    }
+</style>
+
+<link href="~/Content/jquery.bxslider.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.bxslider.js"></script>
+<script src="~/Scripts/jquery.bxslider.min.js"></script>
+<script src="~/Scripts/jquery.easing.1.3.js"></script>
+<script src="~/Scripts/jquery.fitvids.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+        function loadSlider() {
+            //$('#slider2').bxSlider({
+            //    auto: true,
+            //    autoControls: true,
+            //    pause: 8000,
+            //    slideMargin: 20,
+            //    video: true,
+            //    useCSS: false
+            //});
+        }
+
+
+
+    });
+
+    function show_machine_status_details() {
+        $('#slider2').bxSlider({
+            auto: true,
+            autoControls: true,
+            pause: 8000,
+            slideMargin: 20,
+            video: true,
+            useCSS: false
+        });
+    }
+</script>

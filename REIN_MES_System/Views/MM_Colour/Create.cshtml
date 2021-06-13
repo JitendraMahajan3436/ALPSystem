@@ -1,0 +1,89 @@
+﻿@model REIN_MES_System.Models.RS_Colour
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="col-md-12">
+    <div class="">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                <br />
+                <div class="row">
+                    <div class="col-md-6" style="display:none">
+
+                        @*@Html.LabelFor(model => model.Plant_ID, "Plant_ID", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                     @*   @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name, new { @class = "" }) **@
+
+                        @Html.DropDownList("Plant_ID", null, htmlAttributes: new { @class = "form-control" })
+                        @*@Html.ValidationMessageFor(model => model.Plant_ID, "", new { @class = "text-danger" })*@
+                    </div>
+
+                    <div class="col-md-6">
+                        @*@Html.LabelFor(model => model.Colour_ID, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        @Html.LabelFor(model => model.Colour_ID, ResourceDisplayName.Colour_ID, new { @class = "" })<i style="color:red">*</i>
+                        @Html.EditorFor(model => model.Colour_ID, new { htmlAttributes = new { @class = "form-control", @maxlength = "2" } })
+                        @*@Html.EditorFor(model => model.Colour_ID, htmlAttributes: new { @class = "form-control", @maxlength = "2" })*@
+                        @Html.ValidationMessageFor(model => model.Colour_ID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        @*@Html.LabelFor(model => model.Colour_Desc, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        @Html.LabelFor(model => model.Colour_Desc, ResourceDisplayName.Colour_Desc, new { @class = "" })
+                        @Html.EditorFor(model => model.Colour_Desc, new { htmlAttributes = new { @class = "form-control", @maxlength = "15" } })
+                        @Html.ValidationMessageFor(model => model.Colour_Desc, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @*@Html.LabelFor(model => model.Colour_Batch, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        @Html.LabelFor(model => model.Colour_Batch, ResourceDisplayName.Colour_Batch, new { @class = "" })
+                        @Html.EditorFor(model => model.Colour_Batch, new { htmlAttributes = new { @class = "form-control", @maxlength = "15" } })
+                        @Html.ValidationMessageFor(model => model.Colour_Batch, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                    &nbsp;&nbsp;&nbsp; @Html.LabelFor(model => model.Export_Colour, ResourceDisplayName.Export_Colour, new { @class = "" })
+                    @Html.EditorFor(model => model.Export_Colour)
+                    @Html.ValidationMessageFor(model => model.Export_Colour, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                    &nbsp;&nbsp;&nbsp;@Html.LabelFor(model => model.Active, new { @class = "" })
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                </div>
+
+
+                <div class="form-group">
+                    @*<input type="submit" value="Create" class="btn btn-default" />*@
+                    <div class="col-md-5">
+                        <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                    </div>
+                </div>
+            </div>
+        }
+
+     
+    </div>
+</div>
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+}
+

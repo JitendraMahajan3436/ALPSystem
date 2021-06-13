@@ -1,0 +1,401 @@
+﻿
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    @{
+        /**/
+
+        
+        var Text = ViewBag.equipmentObj.SAP_Part_No != null ? ViewBag.equipmentObj.Equipment_Name + "    " + ViewBag.equipmentObj.SAP_Part_No : ViewBag.equipmentObj.Equipment_Name;
+
+                    <h4 class="modal-title text-center text-uppercase" id="myModalLabel1">@Text</h4>
+    }
+</div>
+<div class="modal-body no-padding table-responsive" id="TBMEquipmentDetailsModal">
+    <input type="hidden" value="@ViewBag.equipmentObj.EQP_ID" id="EQID" />
+
+   
+    <div class="table-responsive">
+        @if (ViewBag.equipmentObj != null)
+        {
+            <table class="table table-condensed table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="bg-gray-active text-bold">Designated Life</td>
+                        <td>@ViewBag.equipmentObj.Designated_Life</td>
+                        <td class="bg-gray-active text-bold">Life per Cycle</td>
+                        <td>@ViewBag.equipmentObj.Life_Per_Cycle</td>
+
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-active text-bold">Remaining Life</td>
+                        <td>@ViewBag.equipmentObj.Remaining_Life</td>
+                        <td class="bg-gray-active text-bold">Consumed Life</td>
+                        <td>@(ViewBag.equipmentObj.Designated_Life - ViewBag.equipmentObj.Remaining_Life)</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-active text-bold">Warning At</td>
+                        <td>@ViewBag.equipmentObj.Warning_At</td>
+                        <td class="bg-gray-active text-bold">Stop At</td>
+                        <td>@ViewBag.equipmentObj.Stop_At</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+    <div id="tblHistoryData">
+
+    </div>
+    <div class="row" style="margin-left:2%">
+        <input type="hidden" id="hdnTBMId" value="" />
+        <div class="col-md-3" id="divFromDate">
+            @Html.Label("From Date", new { @class = "slabel" })
+            <input type="text" id="FromDate" class="form-control" />
+        </div>
+        <div class="col-md-3" id="divFromDate">
+            @Html.Label("To Date", new { @class = "slabel" })
+            <input type="text" id="ToDate" class="form-control" />
+
+        </div>
+
+        <div class="col-md-6">
+            @Html.Label("To Date", new { @style = "display:none" })
+            <input type="button" id="BtnGenerate" class="btn btn-primary smModalGen" value="Show Trend" />
+            <input type="button" id="BtnGenerateExcel" class="btn btn-primary smModalGen" value="ExportReport" />
+        </div>
+
+    </div>
+    <div id="TBMDashboardDetails" value="" style="margin-left:2%">
+
+    </div>
+    <div id="chartContainer" value="" style="margin-left:2%">
+
+    </div>
+</div>
+
+<script src="~/Content/Content/theme/plugins/daterangepicker/moment.js"></script>
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.full.min.js"></script>
+<link href="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.css" rel="stylesheet" />
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        getTBMResetHistory();
+        getTBMResetHistoryGraph();
+
+        function getTBMResetHistory() {
+            var EQ_ID = $("#EQID").val();
+
+            $.ajax({
+                url: '/TBMDashboard/getTBMResetHistory?EQID=' + EQ_ID,
+                type: 'GET',
+                data: "",
+                contentType: 'application/json;charset-utf-8',
+                success: function (data) {
+
+                    if (data != "") {
+                        $("#tblHistoryData").html(data);
+                    }
+                }
+            });
+        }
+
+        function getTBMResetHistoryGraph() {
+            debugger;
+
+            //var TBMId = $("#EQID").val();
+
+               $('#chartContainer').html();
+             $('#chartContainer').empty();
+
+
+             var date1 = new Date();
+             var toDate = new Date();
+            toDate = moment(toDate).format("DD/MM/YY");
+
+             var fromDate = new Date(date1.getTime() - 60000*60*24*30);
+             fromDate = moment(fromDate).format("DD/MM/YY");
+           
+
+           $('#FromDate').val(fromDate);
+           $('#ToDate').val(toDate);
+             var TBMId = $("#EQID").val();
+            IsValidDate = true
+            if (fromDate > toDate)
+            {
+
+            }
+            else
+            {
+                $("#TBMDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+                $.ajax({
+                    url: "/TBMDashboard/CustomTBMData",
+                    data: "{ 'tbmid': '" + TBMId + "', 'fromDate': '" + fromDate + "', 'ToDate': '" + toDate + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        debugger;
+                        if (data != "")
+                        {
+                            $("#TBMDashboardDetails").html(data);
+                        }
+                        ddl = new Array();
+                        UserName = new Array();
+                        DesignatedData = new Array();
+                        ConsumedData = new Array();
+                        //var diff = 3;
+                        //var unit = data.unit;
+                        //var name = data.paramName;
+                        var ParameterName = data.Parameter;
+                        var Startdate = data.Startdate;
+                        var Enddate = data.EndDate;
+                        for (var i = 0; i < data.allTimes.length; i++) {
+                            var values = data.allTimes[i].split(',');
+                            ddl.push('Date - ' + values[0] + '<br/>Token Number - ' + '<b>' + values[2] + '</b>' + '<br/> User Name - ' + '<b>' + values[1] + '</b>' + '<br/> Designated Life - ' + '<b>' + values[3] + '</b>' + '<br/> Consumed Life -' + '<b>' + values[4] + '</b>')
+
+                            //ddl.push(data.allTimes[i]);
+                            DesignatedData.push(data.DesignatedData[i]);
+                            ConsumedData.push(data.ConsumedData[i]);
+                            UserName.push(data.UserName[i]);
+                        };
+
+
+
+                        ShowName(ddl, DesignatedData, ConsumedData, UserName, ParameterName, Startdate, Enddate)
+                    }
+                });
+            }
+
+        }
+
+        $("#FromDate").datetimepicker(
+            {
+                format: 'd/m/y',
+                //formatTime: 'H:i',
+                //formatDate: 'd/m/Y',
+                defaultDate: new Date(),
+                timepickerScrollbar: true,
+                hours12: false
+            });
+        $("#ToDate").datetimepicker(
+            {
+                format: 'd/m/Y',
+                //formatTime: 'H:i',
+                //formatDate: 'd/m/Y',
+                defaultDate: new Date(),
+                timepickerScrollbar: true,
+                hours12: false
+            });
+
+         $("#BtnGenerate").click(function () {
+            $('#chartContainer').html();
+             $('#chartContainer').empty();
+
+             var date1 = new Date();
+             var toDate = new Date();
+             toDate = moment(toDate).format("DD/MM/YY");
+             var fromDate = new Date(date1.getTime() - 60000*60*24*30);
+             fromDate = moment(fromDate).format("DD/MM/YY");
+
+             var fromDate = $('#FromDate').val();
+             var ToDate = $('#ToDate').val();
+             var TBMId = $("#EQID").val();
+            IsValidDate = true
+            if(fromDate > ToDate)
+            {
+
+            }
+            else
+            {
+                $("#TBMDashboardDetails").html("<img class=loading-img1 height='150px' style='position=Absolute' src='@(Url.Content("/Content/images/gears.GIF"))'/>");
+                $.ajax({
+                    url: "/TBMDashboard/CustomTBMData",
+                    data: "{ 'tbmid': '" + TBMId + "', 'fromDate': '" + fromDate + "', 'ToDate': '" + ToDate + "'}",
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data != "")
+                        {
+                            $("#TBMDashboardDetails").html(data);
+                        }
+                        ddl = new Array();
+                        UserName = new Array();
+                        DesignatedData = new Array();
+                        ConsumedData = new Array();
+                        //var diff = 3;
+                        //var unit = data.unit;
+                        //var name = data.paramName;
+                        var ParameterName = data.Parameter;
+                        var Startdate = data.Startdate;
+                        var Enddate = data.EndDate;
+                        for (var i = 0; i < data.allTimes.length; i++) {
+                            var values = data.allTimes[i].split(',');
+                            ddl.push('Date - ' + values[0] + '<br/>Token Number - ' + '<b>' + values[2] + '</b>' + '<br/> User Name - ' + '<b>' + values[1] + '</b>' + '<br/> Designated Life - ' + '<b>' + values[3] + '</b>' + '<br/> Consumed Life -' + '<b>' + values[4] + '</b>')
+
+                            //ddl.push(data.allTimes[i]);
+                            DesignatedData.push(data.DesignatedData[i]);
+                            ConsumedData.push(data.ConsumedData[i]);
+                            UserName.push(data.UserName[i]);
+                        };
+
+
+
+                        ShowName(ddl, DesignatedData, ConsumedData, UserName, ParameterName, Startdate, Enddate)
+                    }
+                });
+            }
+
+        });
+
+        $("#BtnGenerateExcel").click(function () {
+
+            //$('#ccCharat').html();
+            //$('#ccCharat').empty();
+            var fromDate = $('#FromDate').val();
+            var ToDate = $('#ToDate').val();
+            var TBMId = $("#EQID").val();
+
+            var path = "/TBMDashboard/ExportData?tbmid=" + TBMId + "&fromDate=" + fromDate + "&ToDate=" + ToDate;
+
+            window.open(path,'_blank');
+
+        });
+
+        function ShowName(ddl, DesignatedData, ConsumedData, UserName, ParameterName, Startdate, Enddate) {
+
+
+            Highcharts.chart('chartContainer', {
+                credits: {
+                    enabled: false
+                },
+
+                chart: {
+                    zoomType: 'x',
+
+                },
+                title: {
+                    text: '<b>' + ParameterName +  '</b>',
+                    style: {
+                        font: 'normal 14px Verdana, sans-serif !important',
+                    },
+                },
+                subtitle: {
+                    text: '',
+                    style: { right: '80px' }
+
+                },
+
+
+                xAxis: {
+                    //visible:false,
+                    categories: ddl,
+                    crosshair: true,
+                    labels:
+                    {
+                        formatter: function () {
+                            var item = this.value
+                            var ddlitem = item.split("-");
+                            var finalitem = ddlitem[1].replace("Token Number", " ");
+                            return finalitem;
+                        }
+                    }
+
+                },
+
+                yAxis: [
+                    { // Primary yAxis
+                        title: {
+                            text: null
+                        },
+                        labels: {
+                            enabled: true
+                        }
+
+                    },
+                    { // Secondary yAxis
+                        title: {
+                            text: 'Values'
+                        },
+                        labels: {
+                            enabled: true
+                        }
+                    }
+
+
+                ],
+                tooltip: {
+
+                    //headerFormat: '{point.key}',
+                    //shared: true,
+                    //useHTML:true,
+                    formatter: function () {
+                        return this.point.category;
+                    },
+
+                },
+
+                series: [
+                    {
+                        name: 'Designated Life ',
+                        type: 'column',
+                        //color: '#339CFF',
+                        yAxis: 1,
+                        data: DesignatedData,
+                        dataLabels: {
+                            enabled: true
+                        },
+                        //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,
+                        //      194.1, 95.6, 54.4],
+                        marker: {
+                            fillcolor: 'white',
+                            lineWidth: 1,
+                            lineColor: Highcharts.getOptions().colors[1]
+
+                        },
+                        //tooltip: {
+                        //    valueSuffix:UserName
+                        //}
+                    },
+
+                    {
+                        name: 'Consumed Life ',
+                        type: 'column',
+                        //color: '#339CF1',
+                        //tag
+                        //FF5733
+                        yAxis: 1,
+                        dataLabels: {
+                            enabled: false
+                        },
+                        data: ConsumedData,
+                        //data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2,
+                        //   1013.1, 1016.9, 1018.2, 1016.7],xB0C
+                        marker: {
+                            fillcolor: 'white',
+                            lineWidth: 1,
+                            lineColor: Highcharts.getOptions().colors[1]
+                        },
+                        //dashStyle: 'shortdot',
+                        //tooltip: {
+                        //    categories:UserName,
+                        //    shared:true
+                        //}
+                    },
+
+
+
+                ],
+                center: [150, 120],
+                size: 350,
+                showInLegend: false,
+                dataLabels: {
+                    enabled: true
+
+                }
+
+            });
+
+        }
+    })
+</script>

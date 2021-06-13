@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "dyamaicIndex";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<div class="col-md-offset-4 col-md-4 ">
+    <div class="panel" style="background-color:chocolate">
+        <div class="panel-heading" style="text-align:center">
+            <h style="color:white; font:bold; font-size:25px"><b>@ViewBag.ShopName</b></h>
+        </div>
+    </div>
+
+
+</div>
+<div class="col-md-2 col-md-offset-2" style=" margin-top: 1%;" id="showbuttons">
+    @*  <button class="btn btn-primary" id="backtoShopGroup" click="backtohome()">Back To ShopGroup</button>*@
+    <a class="btn shopchartbtn" href="/HomeEnergy/Index" style="background-color: #007bb6;"><b style="color:  white;">Back To Home Energy </b></a>
+    @*<a class="btn shopchartbtn" href="/EnergyConsumptions/Index" style="background-color: #007bb6;margin-top: 1%;margin-bottom: 1%;"><b style="color:  white;">Back To Plant </b></a>*@
+    @* <button class="btn btn-primary" id="backtoplant" click="backtoplant()">Back To Plant</button>*@
+</div>
+<div class="row">
+    <div class="col-md-5">
+        <div class="panel">
+            <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                <p style="color:white"><b>Category wise Consumption Chart</b> </p>
+            </div>
+            <div id="container">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>Category wise Consumption Table</b> </p>
+                        <p style="color:white">@ViewBag.yesterdayfromdate  to @ViewBag.yesterdaytoday</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">
+                                        Category  Name
+                                    </th>
+                                    <th style="width:50%">
+                                        Category Consumption
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewData["pieData1"] as IList<REIN_MES_System.Models.Barchart>)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Label
+                                    </td>
+                                    <td>
+                                        @item.Y
+                                    </td>
+                                </tr>
+                        }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>Production Data</b> </p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">
+                                        Absolute
+
+                                    </th>
+                                    <th style="width:50%">
+                                        Equivalent
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td> @ViewBag.Productiondata</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="panel">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>Today's Data</b> </p>
+                        <p style="color:white">@ViewBag.Todayfromdate  to @ViewBag.Todaytodate</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">
+                                        Actual Consumption
+                                        (KWh)
+                                    </th>
+                                    <th style="width:50%">
+                                        Specific Consumption
+                                        (kWh per Vehicle)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@ViewBag.TodayConsumption</td>
+                                    <td>@ViewBag.TodaySpecificConsumption</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>Yesterday's Data</b> </p>
+                        <p style="color:white">@ViewBag.yesterdayfromdate  to @ViewBag.yesterdaytoday</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">
+                                        Actual Consumption
+                                        (KWh)
+                                    </th>
+                                    <th style="width:50%">
+                                        specific Consumption
+                                        (kWh per Vehicle)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @ViewBag.yesturdayConsumption
+                                    </td>
+                                    <td>@ViewBag.yesturdayspecificConsumption</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                        <p style="color:white"><b>Monthly Data</b> </p>
+                        <p style="color:white">@ViewBag.Monthfromdate  to @ViewBag.MonthtoDate</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">
+                                        Actual Consumption
+                                        (KWh)
+                                    </th>
+                                    <th style="width:50%">
+                                        specific Consumption
+                                        (KWh per Vehicle)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        @ViewBag.Monthconsumption
+                                    </td>
+                                    <td>@ViewBag.Monthlyspecificconsumption</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    @*<script src="~/Content/theme/plugins/jQuery/jQuery-2.1.4.min.js"></script>*@
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    <script src="~/Scripts/highcharts.js"></script>
+    <script src="~/Scripts/exporting.js"></script>
+    <script src="~/Scripts/offline-exporting.js"></script>
+    <script src="~/Scripts/jspdf.min.js"></script>
+    <script src="~/Scripts/highcharts-export-clientside-master/highcharts-export-clientside.js"></script>
+    <script>
+
+        window.onload = function () {
+            $("#bodyid").addClass('sidebar-collapse');
+       
+            Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.label}</b>: {point.percentage:.1f}% ',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            },
+                            connectorColor: 'silver'
+                        }
+                    }
+                },
+                series: [{
+                   
+                    name : 'Share',
+                 
+                    data: @Html.Raw(ViewBag.pieData),
+                    dataLabels: {
+                        //rotation: 30,
+                        style: {
+                                    fontSize: '10px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                }
+                    //dataLabels: {
+                    //    enabled: true,
+                    //    rotation: 30,
+                    //    color: '#FFFFFF',
+                    //    align: 'right',
+                    //    format: '{point.y:.1f}', // one decimal
+                    //    y: 10, // 10 pixels down from the top
+                    //    style: {
+                    //        fontSize: '13px',
+                    //        fontFamily: 'Verdana, sans-serif'
+                    //    }
+                    //}
+                    }]
+                        //data: id
+
+                        @*data: @Html.Raw(ViewBag.pieData) *@
+
+                        @*data: @Html.Raw(ViewData["pieData"]) *@
+                 
+               
+            })
+
+        }
+
+
+        //};
+        //options.error = function () {
+        //    alert("Invalid Shop ");
+        //};
+        //$.ajax(options);
+
+        //}
+
+
+
+
+        // Create the chart
+
+
+    </script>
+
+    <script>
+        Highcharts.setOptions({
+            colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                return {
+                    radialGradient: {
+                        cx: 0.5,
+                        cy: 0.3,
+                        r: 0.7
+                    },
+                    stops: [
+                        [0, color],
+                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                    ]
+                };
+            })
+        });
+
+    </script>
+

@@ -1,0 +1,110 @@
+﻿@model IEnumerable<REIN_MES_System.Models.Barchart>
+<div id="chartContainer1">
+
+</div>
+
+<script>
+
+    window.onload = function () {
+        
+       
+        CanvasJS.addColorSet("colorset",
+              [//colorSet Array
+
+              "#2F4F4F",
+              "#008080",
+              "#2E8B57",
+              "#3CB371",
+              "#90EE90" ,
+               "#2F4F4F",
+              "#008080",
+              "#2E8B57",
+              "#3CB371",
+              "#90EE90"
+              ]);
+        $("#bodyid").addClass('sidebar-collapse');
+     
+        var chart = new CanvasJS.Chart("chartContainer1", {
+      
+            animationEnabled: true,
+            theme: "light2", // "light1", "light2", "dark1", "dark2"
+            title: {
+                text: "Shop Consumption"
+            },
+            axisY: {
+                title: "KWh per Vehicle"
+            },
+
+            axisX: {
+                title: " Shop Name"
+            },
+            tooltip: {
+                pointFormat: '<b>{point.label}</b>: {point.y:.1f} '
+            },
+            data: [{
+                type: "column",
+                colorSet: "colorset",
+                name: "Yesterday's Data",
+                showInLegend: true,
+                yValueFormatString: "#,##0",
+                indexLabel: " {y}",
+                dataPoints: showchart
+                },
+
+                {
+                    type: "column",
+
+                    animationEnabled: true,
+                    theme: "light2",
+                    name: "Today's Data",
+                    indexLabel: " {y}",
+                    showInLegend: true,
+                    yValueFormatString: "#,##0",
+                    dataPoints: showchart
+
+
+                    },
+                {
+                    type: "line",
+                    color: "red",
+                    //animationEnabled: true,
+                    //theme: "light2",
+                    name: "Target Data",
+                    showInLegend: true,
+                    yValueFormatString: "$#,##0",
+                    dataPoints: showchart
+
+
+                    }
+
+            ],
+
+
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                format: '{point.y:.1f}%', // one decimal
+                //y: 10, // 10 pixels down from the top
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+
+
+
+        });
+        chart.render();
+    }
+</script>
+
+<script src="~/Content/Barchart/barchart.min.js"></script>
+@*<script src="~/Scripts/highcharts.js"></script>
+    <script src="~/Scripts/exporting.js"></script>
+    <script src="~/Scripts/offline-exporting.js"></script>
+    <script src="~/Scripts/jspdf.min.js"></script>
+    <script src="~/Scripts/highcharts-export-clientside-master/highcharts-export-clientside.js"></script>*@
+
+

@@ -1,0 +1,203 @@
+﻿@*@model REIN_MES_System.Models.RS_Status*@
+@{
+    ViewBag.Title = "ShopStatus";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-3">
+                    <input id="Details" name="Details" type="radio" value="Details" checked />
+                    <label>Details</label>
+                </div>
+                <div class="col-md-3">
+                    <input id="Summary" name="Summary" type="radio" value="Summary" />
+                    <label>Summary</label>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 6px;">
+                <div class="col-md-3">
+                    @Html.Label("Shop_ID", "Shop Name", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                    @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("FromStage", "From Stage", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("FromStage", null, "-From Stage-", new { @class = "form-control" })
+                    @Html.ValidationMessage("FromStage", null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("ToStage", "To Stage", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("ToStage", null, "-Select To Stage-", new { @class = "form-control" })
+                    @Html.ValidationMessage("ToStage", null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input type="button" id="ShopStatusReportGenerate" value="Generate Report" class="btn btn-primary" />
+                </div>
+            </div>
+
+            <br />
+
+
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        @*<br />*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="" col-md-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame_ShopStatus" id="ContentFrame_ShopStatus" width="100%" height="900px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/DateTime")*@
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+
+    <style>
+        iframe {
+            border: 2px #2036a7 solid;
+        }
+    </style>
+</div>
+<script>
+    $("#Details").click(function () {
+        $("#Details").prop("checked", true);
+        $("#Summary").prop("checked", false);
+    });
+    $("#Summary").click(function () {
+        $("#Summary").prop("checked", true);
+        $("#Details").prop("checked", false);
+    });
+
+    $("#Shop_ID").on("change", function () {
+        //  $('#FromStage').append('<option value="">-Select Stage- </option>');
+        $('#FromStage option').remove();
+        $('#FromStage').append('<option value="">Select Stage </option>');
+
+        $('#ToStage option').remove();
+        $('#ToStage').append('<option value="">Select Stage </option>');
+
+        var Shop_ID = $('#Shop_ID').val();
+        if (Shop_ID != "") {
+            //debugger;
+
+            $.getJSON('/ProductionReports/GetFromStageByShop', { shopid: Shop_ID }, function (data) {
+                //  alert(data);
+                if (data.length > 0) {
+                   $('#FromStage option').remove();
+                    $('#FromStage').append('<option value="">Select Stage</option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#FromStage').append('<option value="' +
+                            data[i].Status + '">' + data[i].Status + '</option>');
+                    }
+                }
+
+            });
+        }
+        else {
+            $("#FromStage").html(" ");
+        }
+
+    });
+
+    $("#FromStage").on("change", function () {
+        debugger;
+        $('#ToStage option').remove();
+        $('#ToStage').append('<option value="">Select Stage </option>');
+        var Shop_ID = $('#Shop_ID').val();
+        var fromStage = $('#FromStage').val();
+        if (fromStage != "") {
+            debugger;
+            $.getJSON('/ProductionReports/GetToStageByShop', { shopid: Shop_ID, stage: fromStage }, function (data) {
+
+                if (data.length > 0) {
+                   $('#ToStage option').remove();
+                  //  $('#ToStage').append('<option value=""></option>');
+                    for (var i = 0; i < data.length; i++) {
+                        $('#ToStage').append('<option value="' +
+                            data[i].Status + '">' + data[i].Status + '</option>');
+                    }
+                }
+
+            });
+        }
+        else {
+          // $("#ToStage").html(" ");
+
+        }
+    });
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+
+    $('#ShopStatusReportGenerate').click(function () {
+        var details = $('#Details').val();
+        var Shop_ID = $("#Shop_ID").val();
+        var FromStage = $("#FromStage").val() ;
+        var ToStage = $("#ToStage").val();
+        if (Shop_ID == '') {
+            alert('Select Shop');
+            return false;
+        }
+        if (FromStage == '') {
+            alert('Select From Stage');
+            return false;
+
+        }
+        if (ToStage == '') {
+            alert('Select To Stage');
+            return false;
+
+        }
+        var ReportType = "";
+        var Detail = document.getElementById("Details").checked;
+        if (Detail == true)
+            ReportType = "Detailed";
+        else
+            ReportType = "Summary";
+        $('#ContentFrame_ShopStatus').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fDrona%2fWIP_REPORT_ZHBDRONA&rs:Command=Render&rc:Zoom=Page%20Width&Shop=' + Shop_ID + '&FromStage=' + FromStage + '&ToStage=' + ToStage + '&ReportType=' + ReportType);
+
+    });
+</script>
+

@@ -1,0 +1,93 @@
+﻿@model REIN_MES_System.Models.RS_PM_Activity
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_MT_Machines.Machine_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activity_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activity_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activity_Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activity_Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Frequency)
+        </dt>
+        <dd>
+            @Convert.ToInt32(Model.Frequency)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Start_Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Start_Date)
+        </dd>
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Last_Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Last_Date)
+        </dd>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Activity_Owner_ID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_PM_Equipment.Equipment_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_PM_Equipment.Equipment_Name)
+        </dd>
+    </dl>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>
+

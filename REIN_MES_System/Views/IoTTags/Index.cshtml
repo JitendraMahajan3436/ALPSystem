@@ -1,0 +1,63 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_IoT_Tags>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "IoTTags")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            <th>
+                @Html.DisplayName("Station Name")
+            </th>
+            <th>
+                @Html.DisplayName("Tag Name")
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tag_Name)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "IoTTags", new { id = item.Tag_ID })"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "IoTTags", new { id = item.Tag_ID })"><i class="fa fa-fw fa-laptop" title="Details"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "IoTTags", new { id = item.Tag_ID })"><i class="fa fa-trash" title="Delete"></i></a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

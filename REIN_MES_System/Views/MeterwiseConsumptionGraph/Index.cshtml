@@ -1,0 +1,1696 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+<link href="~/Content/theme/plugins/timepicker1/timepickerCSS.css" rel="stylesheet" />
+<style>
+    .select2-selection .select2-selection--single {
+        height: 30px;
+    }
+</style>
+
+<div class="row">
+    @using (Html.BeginForm(@*new { id = "feedergraph" }*@))
+    {
+        @Html.AntiForgeryToken()
+
+
+        @*//****************************************************** Added by Ajay 22-12-2018 */*@
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-8">
+                </div>
+                <div class="col-md-2" style="margin-left:16%">
+                    <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary  generate"  />
+                    @*<input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary  generate" style="margin-left:91%" />*@
+                </div>
+                <div class="col-md-2">
+                    @*<input type="button" value="Back" class="btn btn-primary shopchartbtn" style="background-color: #007bb6;margin-left: -30%" onclick="realtime(@ViewBag.ShopID)" />*@
+                </div>
+            </div>
+        </div>
+
+
+
+        @*<a class="btn shopchartbtn" onclick="realtime(@ViewBag.ShopID)" style="background-color: #007bb6;margin-left:95%"><b style="color:white;">Back</b></a>*@
+        @*<input type="button" class="btn btn-primary"  onclick="realtime(@ViewBag.ShopID)" value="Trend">*@
+        @*//****************************************************** Added by Ajay 22-12-2018 */*@
+
+
+
+
+        <input id="hdnShopId" type="hidden" value="@ViewBag.ShopID" />
+        <input id="hdnbtnType" type="hidden" />
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <div class="col-md-2 col-sm-2 col-lg-3">
+                        <div class="form-group">
+                            <label>CategoryType</label>
+                            <br />
+                            <button type="button" id="btnkWh" class="btn btn-default   generate" style="margin-top:0px"><b>kWh</b></button>
+                            <button type="button" id="btnVehicle" class="btn btn-default  generate" style="margin-top:0px"><b>Vehicle</b></button>
+                            <button type="button" id="btnkWhVehicle" class="btn btn-default" style="margin-top:0px;background-color:forestgreen"><b>kWh/Vehicle</b></button>
+                        </div>
+                    </div>
+                    @*<div class="col-md-2 col-sm-2 col-lg-2" style="display:none">
+                        <div class="form-group">
+                            @*<label>Shop Name</label>
+                            @Html.Label("Shop Name")
+                            @Html.DropDownList("ShopName", null, "Select Shop", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                            <span class="error" id="ShopID" style="color:red;display:none">Shop Name field is required</span>
+                        </div>
+                    </div>*@
+                    <div class="col-md-2 col-sm-2 col-lg-2" id="btnkWhclick" style="display:none;">
+                        <div class="form-group">
+                            @*<label>Feeder</label>*@
+                            @Html.Label("Feeder Name")
+                            @*@Html.DropDownList("Shift", null, "ALL", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })*@
+                            @Html.DropDownList("Feeder", Enumerable.Empty<SelectListItem>(), "Select Feeder", new { @class = "form-control select2", @style = "max-width:100%" })
+
+                            <span class="error" id="FeederId" style="color:red; display:none">Feeder field is required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-5">
+
+
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                @Html.DropDownList("ddlDateRange", null, null, htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                                <span class="error" id="ddlDateRangeId" style="color:red; display:none">Date field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+
+                            <div class="form-group">
+                                <label> From Date</label>
+                                @Html.TextBox("StartDate", null, new { @class = "startdate form-control example1", @style = "max-width:100%", ReadOnly = "true", disabled = "false" })
+                                <span class="error" id="StartDateId" style="color:red; display:none">Date field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                @Html.TextBox("EndDate", null, new { @class = "enddate form-control example1", @style = "max-width:100%", ReadOnly = "true", disabled = "false"  })
+                                <span class="error" id="EndDateId" style="color:red; display:none">Date field is required</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-lg-2" id="StartTime" style="display:none">
+
+                        <div class="form-group">
+                            <label> From Time</label>
+                            @Html.TextBox("FromTime", null, new { @class = "startdate form-control example1", @style = "max-width:100%" })
+                            <span class="error" id="StartTimeId" style="color:red; display:none">From Time is required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-lg-2" id="EndTime" style="display:none">
+                        <div class="form-group">
+                            <label>To Time</label>
+                            @Html.TextBox("ToTime", null, new { @class = "enddate form-control example1", @style = "max-width:100%" })
+                            <span class="error" id="EndTimeId" style="color:red; display:none">To Time is required</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-lg-2" style="margin-top:5px">
+                        <div class="form-group">
+                            <div>
+                                <br />
+                                <input type="button" value="Submit" id="button"  class="btn btn-primary  generate" />
+                                @*<button type="button" id="btnkWh" class="btn btn-default   generate" style="margin-top:0px"><b>kWh</b></button>
+                                <button type="button" id="btnVehicle" class="btn btn-default  generate" style="margin-top:0px"><b>Vehicle</b></button>*@
+                                <input type="button" value="Back" class="btn btn-primary shopchartbtn" style="background-color: #007bb6;" onclick="realtime(@ViewBag.ShopID)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">*@
+                @*<div class="col-md-12">*@
+                @*<div class="col-md-1">
+                        <div class="form-group">
+                            <div>
+                                <br />
+                                <input type="button" value="Submit" id="button" style="margin-top:10%" class="btn btn-primary  generate" />
+
+                            </div>
+                        </div>
+                    </div>*@
+                @*</div>*@
+                @*</div>*@
+            </div>
+
+
+            @*<div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-11">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary  generate" style="max-width:100%;position:fixed;margin-top:-4%;" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="col-md-9" >
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <div class="form-group" style="display:none">
+                                <label>Shop Name</label>
+                                @Html.DropDownList("ShopName", null, "Select Shop", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                                <span class="error" id="ShopID" style="color:red;display:none">Shop Name field is required</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" id="btnkWhclick" style="display:none">
+                            <div class="form-group">
+                                <label>Feeder</label>
+
+                                @Html.DropDownList("Feeder", Enumerable.Empty<SelectListItem>(), "Select Feeder", new { @class = "form-control select2", @style = "max-width:100%" })
+
+                                <span class="error" id="FeederId" style="color:red; display:none">Feeder field is required</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                @Html.DropDownList("ddlDateRange", null, "Select Date Range", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                                <div class="col-md-10">
+                                    <span class="error" id="ddlDateRangeId" style="color:red; display:none">Date field is required</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <div class="form-group">
+                                <label> From Date</label>
+                                @Html.TextBox("StartDate", null, new { @class = "startdate form-control example1", @style = "max-width:100%", ReadOnly = "true" })
+                                <span class="error" id="StartDateId" style="color:red; display:none">Date field is required</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                @Html.TextBox("EndDate", null, new { @class = "enddate form-control example1", @style = "max-width:100%", ReadOnly = "true" })
+                                <span class="error" id="EndDateId" style="color:red; display:none">Date field is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            @*</div>*@
+            @*<div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Plant Name</label>
+                        @Html.DropDownList("Plant_ID", null, "Select Plant", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+
+                    </div>
+                </div>*@
+
+            @*</div>*@
+            @*<div class="col-md-12 col-sm-12 col-lg-12">
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <input type="button" value="Submit" id="button" class="btn btn-primary  generate" />
+
+                        </div>
+                        <br />
+                    </div>
+                </div>*@
+
+            @*<div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12">
+                        <div id="container">
+                            <div id="loading">
+                                <div class="center-block">
+                                    <img src="/content/images/loader/gears.gif" style="height:200px;margin: 0 0 0 40%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+
+
+
+
+
+        <div class="col-md-12 col-sm-12 col-lg-12">
+            <div id="container">
+                @*<div id="loading">
+                        <div class="center-block">
+                            <img src="/content/images/loader/gears.gif" style="height:200px;margin: 0 0 0 40%;">
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+        <div id="loading" class="highcharts-loading" style="display:none">
+            <div class="center-block">
+                <img src="/content/images/loader/gears.gif" style="height:200px;margin: 0 0 0 40%;">
+            </div>
+        </div>
+        @*<div id="loading">
+                <div class="center-block">
+                    <img src="/content/images/loader/gears.gif" style="height:200px;margin: 0 0 0 40%;">
+                </div>
+            </div>*@
+
+        <div id="">
+
+        </div>
+    }
+
+
+
+
+
+</div>
+
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+<script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="~/Content/theme/plugins/timepicker1/timepicker.js"></script>
+<style>
+    .highcharts-loading {
+        position: absolute;
+        background-color: #ffffff;
+        opacity: 0.6;
+        text-align: center;
+        margin-left: 33%;
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+
+
+
+        $("#btnSubmit").click(function () {
+
+            debugger;
+
+            var isValid = true
+            $("#ShopID").hide();
+            $("#ddlDateRangeId").hide();
+            $("#StartDateId").hide();
+            $("#EndDateId").hide();
+            if (!$("#ddlDateRange").val() != "") {
+                isvalid = false;
+                $("#ddlDateRangeId").show();
+            }
+            else if (!$("#StartDate").val() != "") {
+                isvalid = false;
+                $("#StartDateId").show();
+            }
+            else if (!$("#EndDate").val() != "") {
+                isvalid = false;
+                $("#EndDateId").show();
+            }
+            else if (isValid == true) {
+                debugger;
+                //$("input[name='GridHtml']").val($("#Grid").html());
+
+                var StartDate = $("#StartDate").val();
+                var EndDate = $("#EndDate").val();
+                var Shop = $("#hdnShopId").val();
+                //var Shift = $("#Shift").val();
+                var Shift = "";
+                var Plant = $("#Plant_ID").val();
+
+                var path = "/MeterwiseConsumptionGraph/ExportData?StartDate=" + StartDate + "&EndDate=" + EndDate + "&Shop=" + Shop + "&Shift=" + Shift;
+                //var path1 = "/MeterwiseConsumptionGraph/Index?Shop_ID=" + Shop;
+                //window.open(path, '_blank');
+                window.open(path);
+
+            }
+
+        });
+        $("#ddlDateRange").change(function () {
+            debugger;
+            $("#container").hide();
+            $("#container").html("");
+            $("#container").empty("");
+        })
+       
+        $("#btnkWh").click(function () {
+            debugger;
+            $("#hdnbtnType").val(1);
+            $("#container").hide();
+            $("#container").html("");
+            $("#container").empty("");
+            $("#btnkWhclick").css("display", "block");
+            $("#btnkWh").css("background-color", "green");
+            $("#btnVehicle").css("background-color", "white");
+            $("#btnkWhVehicle").css("background-color", "white");
+            $('#Feeder option').remove();
+            var Shop_Id = $("#hdnShopId").val();
+            //var Plant = $("#Plant_ID").val();
+            var options = {};
+            options.url = "/Shop_Power_Index_Mapping/Shopwiseconfig";
+            options.type = "POST";
+            options.data = JSON.stringify({ Shop_Id: Shop_Id });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (id) {
+                debugger;
+                $('#ShopID').hide();
+                $('#Feeder option').remove();
+                //31-12-2018 ....chenges kakasaheb //
+                $('#loading').hide();
+                //31-12-2018 ....chenges kakasaheb //
+                $('<option></option>').val(0).html("Select Feeder").prop('selected', true);
+                $("#Feeder").append(
+                $('<option></option>').val(-1).html("All Feeder").prop('selected', false));
+                //  $("#TagIndex").html(""); // clear before appending new list
+                $.each(id, function (i, test) {
+                    $("#Feeder").append(
+
+
+                        $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                });
+
+                var elements = [];
+                elements = document.getElementsByClassName("mdl");
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].value = "";
+                }
+
+            };
+            $("#Feeder").change(function () {
+                debugger;
+                var value = $("#Feeder").val();
+                if(value != null && value[0] == -1)
+                {
+                    $("#Feeder").val(-1);
+                }
+                else {
+                    $("#Feeder").select2({
+                        allowClear: true,
+                        placeholder: 'Assign Feeder',
+                        multiple: 'multiple'
+                    });
+                }
+            })
+            $("#Feeder").select2({
+                allowClear: true,
+                placeholder: 'Assign Feeder',
+                multiple: 'multiple'
+            });
+            options.error = function () {
+                alert("Invalid Feeder ");
+                $("#ShopID").show()
+            };
+            $.ajax(options);
+        });
+        $("#btnVehicle").click(function () {
+            debugger;
+            $("#hdnbtnType").val(2);
+            $("#btnkWhclick").css("display", "none");
+            $("#btnkWh").css("background-color", "white");
+            $("#btnkWh").css("color", "black");
+            $("#btnVehicle").css("background-color", "green");
+            $("#btnkWhVehicle").css("background-color", "white");
+            $("#container").hide();
+            $("#container").html("");
+            $("#container").empty("");
+
+        });
+        $("#btnkWhVehicle").click(function () {
+            debugger;
+            $("#hdnbtnType").val(3);
+            $("#container").hide();
+            $("#container").html("");
+            $("#container").empty("");
+            $("#btnkWhclick").css("display", "none");
+            $("#btnkWh").css("background-color", "white");
+            $("#btnVehicle").css("background-color", "white");
+            $("#btnkWh").css("color", "black");
+            $("#btnkWhVehicle").css("background-color", "green");
+        });
+        //$.validator.method.date = function (DATE_SORTIE_TITRE, TITRE) {
+        //    return Globalis = ze.parseDate(value);
+        //};
+
+        //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' });
+        //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' });
+
+        //$.fn.datepicker.defaults.format = "dd/mm/yyyy";
+        //var start = new Date();
+        //// set end date to max one year period:
+        //var end = new Date(new Date().setYear(start.getFullYear() + 1));
+
+        //$('#StartDate').datepicker({
+        //    format: 'dd/mm/yyyy',
+        //    //startDate: start,
+        //    //endDate: end
+        //    // update "toDate" defaults whenever "fromDate" changes
+        //}).on('changeDate', function () {
+           
+        //    // set the "toDate" start to not be later than "fromDate" ends:
+        //    //$('#EndDate').datepicker('setStartDate', new Date($(this).val()));
+        //});
+
+        //$('#EndDate').datepicker({
+        //    format: 'dd/mm/yyyy',
+        //    //startDate: start,
+        //    //endDate: end
+        //    // update "fromDate" defaults whenever "toDate" changes
+        //}).on('changeDate', function () {
+        //    debugger
+        //    var startDate = $('#StartDate').val();
+        //    var endDate = $('#EndDate').val();
+        //    var dateRange = $("#ddlDateRange").val();
+        //    if (dateRange == "7" && startDate == endDate) {
+        //        $('#StartTime').css("display", "block");
+        //        $('#EndTime').css("display", "block");
+
+        //    }
+        //    else
+        //    {
+        //        $('#StartTime').css("display", "none");
+        //        $('#EndTime').css("display", "none");
+        //    }
+        //    // set the "fromDate" end to not be later than "toDate" starts:
+        //    //$('#StartDate').datepicker('setEndDate', new Date($(this).val()));
+        //});
+
+    });
+
+
+    //*********************** From Added Kaka 03012019
+    $("#FromTime").timepicker();
+    $("#ToTime").timepicker();
+   
+    $(function () {
+      
+    });
+
+
+
+
+</script>
+<script type="text/javascript">
+
+    /****************************************************** Added by kaka 28-12-2018 */
+    function realtime(shopId) {
+
+        var path1 = "/RealTimeParameter/Index?Shop_ID=" + shopId;
+        window.location.href = path1;
+    }
+
+
+    /****************************************************** Added by kaka 28-12-2018 */
+
+
+    $(document).ready(function () {
+        debugger;
+        $(".select2").select2();
+
+        $("#container").hide();
+        $("#container").html("");
+        $("#container").empty("");
+        var isValid = true
+
+        if (isValid == true) {
+            $("#ShopID").hide();
+            $("#FeederId").hide();
+            $("#ddlDateRangeId").hide();
+            $("#StartDateId").hide();
+            $("#EndDateId").hide();
+            $("#hdnbtnType").val(3);
+            //$today = new Date();
+            //$startDate = new Date($today);
+            //$endDate = new Date($today);
+            //var $mm = $startDate.getMonth() + 1;
+            //var $yyyy = $startDate.getFullYear();
+            //if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+            //$("#StartDate").val($startDate);
+
+
+            //var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+            //var $dd1 = $endDate.getDate();
+            //var $mm1 = $endDate.getMonth() + 1;
+            //var $yyyy1 = $endDate.getFullYear();
+
+            //if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+            //$("#EndDate").val($endDate);
+
+            $today = new Date();
+            $yesterday = new Date($today);
+            $yesterday.setDate($today.getDate() - 1);
+            var $dd = $yesterday.getDate();
+            var $mm = $yesterday.getMonth() + 1;
+            var $yyyy = $yesterday.getFullYear();
+            if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+            $("#StartDate").val($yesterday);
+            $("#EndDate").val($yesterday);
+
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+            var Shop = $("#hdnShopId").val();
+            var Shift = $("#Shift").val();
+            var ddlformate = $("#ddlDateRange").val(2);
+            if (StartDate != EndDate) {
+                startTime = "";
+                endTime = "";
+            }
+            //$("#ddlDateRange").change();
+            //var Plant = $("#Plant_ID").val();
+
+            var temp = new Array();
+            //StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime
+            //dailydatewisethismonth(StartDate, EndDate, Shop, Shift, ddlformate, 0);
+            var feederId = -1;
+           var startTime = "";
+            var endTime = "";
+            //thisMonthConsumption(StartDate, EndDate, Shop, Shift, ddlformate, 0);
+            debugger;
+           // LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId, 3);
+            dailyConsumption(StartDate, EndDate, Shop, Shift, 2, feederId, 3, startTime, endTime)
+            $("#container").show();
+        }
+
+
+        $("#ddlDateRange").change(function () {
+            debugger;
+            if ($("#ddlDateRange").val() == "1") {
+                $('#StartTime').css("display", "none");
+                $('#EndTime').css("display", "none");
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate());
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+                //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+                //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+
+            }
+            else if ($("#ddlDateRange").val() == "2") {
+                $('#StartTime').css("display", "none");
+                $('#EndTime').css("display", "none");
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+
+            else if ($("#ddlDateRange").val() == "3") {
+                $('#StartTime').css("display", "none");
+                $('#EndTime').css("display", "none");
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                //$startDate.setDate($today.getDate() - $today.getDay());
+                $endDate = new Date($today);
+                //$endDate.setDate($startDate.getDate() + 7);
+
+
+                var $mm = $startDate.getMonth() + 1;
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+            //else if ($("#ddlDateRange").val() == "4") {
+            //    $('#StartTime').css("display", "none");
+            //    $('#EndTime').css("display", "none");
+            //    $("#StartDate").prop('readonly', true);
+            //    $("#EndDate").prop('readonly', true);
+            //    $today = new Date();
+            //    $startDate = new Date($today);
+            //    $endDate = new Date($today);
+
+            //    var $yyyy = $startDate.getFullYear();
+            //    if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+            //    $("#StartDate").val($startDate);
+
+            //    var $yyyy = $endDate.getFullYear();
+            //    if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+            //    $("#EndDate").val($endDate);
+
+            //}
+
+            else if ($("#ddlDateRange").val() == "4") {
+                $('#StartTime').css("display", "none");
+                $('#EndTime').css("display", "none");
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+                //******************* Added by Ajay 01012019
+                debugger;
+                var prevDate = new Date($startDate.getFullYear(), $startDate.getMonth() - 1, 1);
+                var $mm = prevDate.getMonth() + 1;
+                var $yyyy = prevDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } prevDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val(prevDate);
+                //******************* Added by Ajay 01012019
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth(), 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+            //else if ($("#ddlDateRange").val() == "6") {
+            //    $('#StartTime').css("display", "none");
+            //    $('#EndTime').css("display", "none");
+            //    $("#StartDate").prop('readonly', true);
+            //    $("#EndDate").prop('readonly', true);
+            //    $today = new Date();
+            //    $startDate = new Date($today);
+            //    $endDate = new Date($today);
+
+            //    var $yyyy = $startDate.getFullYear() - 1;
+            //    if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+            //    $("#StartDate").val($startDate);
+
+            //    var $yyyy = $endDate.getFullYear() - 1;
+            //    if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+            //    $("#EndDate").val($endDate);
+            //}
+            else {
+                $('#StartTime').css("display", "none");
+                $('#EndTime').css("display", "none");
+                
+                $("#StartDate").prop('readonly', false);
+                $("#EndDate").prop('readonly', false);
+                $("#StartDate").prop('disabled', false);
+                $("#EndDate").prop('disabled', false);
+                $("#StartDate").val('');
+                $("#EndDate").val('');
+
+
+
+            }
+
+        });
+        //$("#ShopName").change(function () {
+        //    debugger;
+        //    $('#Feeder').val(null).trigger('change');
+        //    var Shop_Id = $("#ShopName").val();
+        //    //var Plant = $("#Plant_ID").val();
+        //    var options = {};
+        //    options.url = "/Shop_Power_Index_Mapping/Shopwiseconfig";
+        //    options.type = "POST";
+        //    options.data = JSON.stringify({ Shop_Id: Shop_Id });
+        //    options.contentType = "application/json";
+        //    options.dataType = "json";
+        //    options.success = function (id) {
+        //        $('#ShopID').hide()
+        //        $('#Feeder option').remove();
+        //        //  $("#TagIndex").html(""); // clear before appending new list
+        //        $.each(id, function (i, test) {
+        //            $("#Feeder").append(
+
+
+        //                $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+        //        });
+
+        //        var elements = [];
+        //        elements = document.getElementsByClassName("mdl");
+        //        for (var i = 0; i < elements.length; i++) {
+        //            elements[i].value = "";
+        //        }
+
+        //    };
+        //    $("#Feeder").select2({
+        //        allowClear: true,
+        //        placeholder: 'Assign Feeder',
+        //        multiple: 'multiple'
+        //    });
+        //    options.error = function () {
+        //        alert("Invalid Feeder ");
+        //        $("#ShopID").show()
+        //    };
+        //    $.ajax(options);
+
+
+        //})
+    });
+</script>
+
+
+<script type='text/javascript'>
+
+
+
+    $('#button').click(function () {
+
+        debugger;
+        $("#container").hide();
+        $("#container").html("");
+        $("#container").empty("");
+        $("#container").hide();
+        $("#container").html("");
+        $("#container").empty("");
+        debugger;
+        var isValid = true
+        if (!$("#ddlDateRange").val() != "") {
+            isvalid = false;
+            $("#ddlDateRangeId").show();
+        }
+        else if (!$("#StartDate").val() != "") {
+            isvalid = false;
+            $("#StartDateId").show();
+        }
+        else if (!$("#EndDate").val() != "") {
+            isvalid = false;
+            $("#EndDateId").show();
+        }
+        else if (isValid == true) {
+            $("#ShopID").hide();
+            $("#FeederId").hide();
+            $("#ddlDateRangeId").hide();
+            $("#StartDateId").hide();
+            $("#EndDateId").hide();
+            //var chart = $('#container').highcharts();
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+            var Shop = $("#hdnShopId").val();
+            var Shift = $("#Shift").val();
+            var ddlformate = $("#ddlDateRange").val();
+            var buttonType = $("#hdnbtnType").val();
+
+            var startTime = $("#FromTime").val();
+            var endTime = $("#ToTime").val();
+            //var Plant = $("#Plant_ID").val();
+            if (StartDate != EndDate)
+            {
+                startTime = "";
+                endTime = "";
+            }
+            var Feeder = $.map($('#Feeder'), function (e) {
+
+                return $(e).val();
+            });
+            var temp = new Array();
+            //$("#loading").show();
+            $("#loading").css("display", "block");
+
+
+            if (ddlformate == 1 || ddlformate == 2) {
+                //for (var i = 0; i < Feeder.length; i++) {
+
+                //    temp.push(Feeder[i]);
+                //}
+                // var feederId = 0;
+
+                if (ddlformate == 1) {
+                    //datewise(StartDate, EndDate, Shop, Shift, ddlformate, buttonType);
+                    if (buttonType == "2" || buttonType == "3")
+                    {
+                        var feederId = -1;
+                        LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId, buttonType);
+                    }
+                    if (buttonType == "1")
+                    {
+                        if (Feeder[0] == "-1") {
+                            //var sel = document.getElementById("Feeder");
+                            //var opt = sel.options;
+
+                            //debugger;
+                            //for (var i = 0; i < opt.length; i++) {
+                            //    if (i != 0) {
+                            //        temp.push(opt[i].value);
+
+                            //    }
+                            //}
+                            //var feederId = opt[i];
+                            temp = "";
+
+                            LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType);
+                           
+                        }
+                        else {
+                            debugger;
+                            for (var i = 0; i < Feeder.length; i++) {
+
+                                temp.push(Feeder[i]);
+                            }
+                            var feederId = Feeder[i];
+
+                            LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType);
+                            
+                        }
+                    }
+                     
+                }
+                else {
+                    //datewise(StartDate, EndDate, Shop, Shift, ddlformate, buttonType);
+                    if (buttonType == "2" || buttonType == "3") {
+                        var feederId = -1;
+                        dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId, buttonType, startTime, endTime);
+                    }
+                    if(buttonType == "1")
+                    {
+                        if (Feeder[0] == "-1") {
+                            //var sel = document.getElementById("Feeder");
+                            //var opt = sel.options;
+                            //for (var i = 0; i < opt.length; i++) {
+                            //    if (i != 0) {
+                            //        temp.push(opt[i].value);
+                            //                                        }
+                            //}
+                            //var feederId = opt[i];
+                            temp.push(Feeder[0].value);
+                            dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime);
+                        }
+                        else {
+                            for (var i = 0; i < Feeder.length; i++) {
+
+                                temp.push(Feeder[i]);
+                            }
+                            var feederId = Feeder[i];
+                            dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime);
+                        }
+                    }
+                }
+
+            }
+
+            else {
+
+                if (buttonType == "2" || buttonType == "3") {
+                    var feederId = -1;
+                    dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId, buttonType, startTime, endTime);
+
+                }
+                if (buttonType == "1") {
+                    if (Feeder[0] == "-1") {
+                        //var sel = document.getElementById("Feeder");
+                        //var opt = sel.options;
+                        //for (var i = 0; i < opt.length; i++) {
+                        //    if (i != 0) {
+                        //        temp.push(opt[i].value);
+                        //    }
+                        //}
+                        //var feederId = opt[i];
+                        temp.push(Feeder[0].value);
+                            dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime);
+
+                    }
+                    else {
+                        debugger;
+                        for (var i = 0; i < Feeder.length; i++) {
+
+                            temp.push(Feeder[i]);
+                        }
+                        var feederId = Feeder[i];
+
+
+                        //setTimeout(function (e) {
+                        dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime);
+
+                        //}, 3000);
+                    }
+
+                }
+            }
+
+        }
+        $("#container").show();
+
+    })
+    //}
+    function LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType) {
+        $.ajax({
+            url: "/MeterwiseConsumptionGraph/Livehowchart",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'Shift': '" + Shift + "',  'temp': '" + temp + "', 'buttonType':'" + buttonType + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                //alert(data.length); debugger; if(data.length){
+                debugger;
+                Shop = new Array();
+                yesterday = new Array();
+                today = new Array();
+                target = new Array();
+
+                var feeder = data.FeederName;
+                ddl = new Array();
+                for (var i = 0; i < data.allTimes.length; i++)
+                {
+                    ddl.push(data.allTimes[i]);
+                }
+                var titleName = "Average consumption = " + data.cummCountAvg + " kWh";
+                if (data.AllConsumption.length > 1)
+                    titleName = "Power Consumption (kWh)";
+                if (buttonType == "2")
+                    titleName = "Vehicle Production ";
+                if (buttonType == "3")
+                    //titleName = "Power Consumption (kWh / Vehicle) Cummulative = " + data.cummCountAvg + " kWh / Vehicle";
+                    titleName = "";
+                var YAxistext = "Power Consumption (kWh)";
+
+                if (buttonType == "2")
+                    YAxistext = "Vehicle Production";
+                if (buttonType == "3")
+                    YAxistext = "Power Consumption (kWh / Vehicle)";
+                //for (var i = 0; i < data.AllConsumption.length; i++) {
+                //    yesterday.push(data.AllConsumption[i]);
+                //}
+                //alert(data.length); debugger; if(data.length){
+                ShowName(ddl, titleName, YAxistext);
+                for (var j = 0 ; j < data.AllConsumption.length; j++) {
+                    yesterday = new Array();
+                    var feeder = data.Names[j];
+                    if (data.buttonType == "1")
+                        feeder = data.Names[j];
+                    if (data.buttonType == "2")
+                        feeder = "Vehicle";
+                    if (data.buttonType == "3")
+                        //feeder = "KWH/Vehicle";
+                    feeder = data.Names[j];
+                    for (var i = 0; i < data.AllConsumption[j].length; i++) {
+                        yesterday.push(data.AllConsumption[j][i]);
+
+                    }
+                    ShowCellGraph(yesterday, feeder);
+                }
+                //}
+                //for (var i = 0; i < data.TodayData.length; i++) {
+                //    today.push(data.TodayData[i]);
+                //}
+                //for (var i = 0; i < data.Target.length; i++) {
+                //    target.push(data.Target[i]);
+                //}
+                //for (var i = 0; i < data.ShopName.length; i++) {
+                //    Shop.push(data.ShopName[i]);
+                //}
+                //ShowCellGraph(yesterday, feeder)
+            },
+            error: function () {
+                debugger;
+            }
+            //}
+        })
+    }
+
+    function thisMonthConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId) {
+        debugger;
+        $.ajax({
+
+            url: "/MeterwiseConsumptionGraph/ThisMonthConsumption",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'ddlformate': '" + ddlformate + "',  'feederId': '" + feederId + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                //alert(data.Consumption.length); debugger; if(data.length){
+
+
+                Shop = new Array();
+                //yesterday = new Array();
+                today = new Array();
+                target = new Array();
+                ddl = new Array();
+                //var feeder = data.FeederName;
+                feeder = data
+                for (var i = 0; i < data.allDates.length; i++)
+                {
+                    ddl.push(data.allDates[i]);
+                }
+                // var cumm = data.cummCountAvg;
+                var titleName = "";
+                var YAxistext = "Power Consumption (kWh)"
+                ShowName(ddl, titleName, YAxistext);
+                //ShowNamethismonth(ddl, cumm)
+                debugger;
+                for (var j = 0 ; j < data.AllConsumption.length; j++) {
+                    yesterday = new Array();
+                    debugger;
+                    feeder = data.Names[j];
+
+                    for (var i = 0; i < data.AllConsumption[j].length; i++) {
+                        yesterday.push(data.AllConsumption[j][i]);
+
+                    }
+                    ShowCellGraph(yesterday, feeder)
+                }
+                    
+                    
+
+                //}, 1000);
+
+
+            }
+            //}
+        })
+    }
+
+    function dailyConsumption(StartDate, EndDate, Shop, Shift, ddlformate, temp, buttonType, startTime, endTime) {
+       
+        $.ajax({
+
+            url: "/MeterwiseConsumptionGraph/Jsonshowchart",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'ddlformate': '" + ddlformate + "',  'temp': '" + temp + "', 'buttonType': '" + buttonType + "','fromTime':'" + startTime + "','toTime':'" + endTime + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                //alert(data.length); debugger; if(data.length){
+
+                Shop = new Array();
+                debugger;
+                today = new Array();
+                target = new Array();
+                ddl = new Array();
+                for (var i = 0; i < data.allDates.length; i++)
+                {
+                    ddl.push(data.allDates[i]);
+                }
+
+                var titleName = "Average consumption = " + data.cummCountAvg + " kWh";
+                if (data.AllConsumption.length > 1 && buttonType == "1")
+                {
+                    titleName = "Power Consumption (kWh)";
+                }
+                
+                if (buttonType == "2")
+                    titleName = "Vehicle Production ";
+                if (buttonType == "3")
+                    titleName = "";
+
+
+                var YAxistext = "Power Consumption (kWh)";
+
+                if (buttonType == "2")
+                    YAxistext = "Vehicle Production";
+                if (buttonType == "3")
+                    YAxistext = "Power Consumption (kWh/Vehicle)";
+                ShowName(ddl, titleName, YAxistext);
+                for (var j = 0 ; j < data.AllConsumption.length; j++) {
+                    debugger;
+                    yesterday = new Array();
+                   
+                    var feeder = data.Names[j];
+                    if (data.buttonType == "1")
+                        feeder = data.Names[j];
+                    if (data.buttonType == "2")
+                        feeder = "Vehicle";
+                    if (data.buttonType == "3")
+                        feeder = data.Names[j];
+
+                    for (var i = 0; i < data.AllConsumption[j].length; i++) {
+                        yesterday.push(data.AllConsumption[j][i]);
+
+                    }
+
+                   
+
+                    //setTimeout(function (e) {
+                    
+                    ShowCellGraph(yesterday, feeder);
+                    //  },1000);
+                        //setTimeout(function (e) {
+                          //  ShowName(ddl, textName);
+                       // }, 1000);
+                }
+            },
+            error: function () {
+                debugger;
+            }
+
+            //for (var i = 0; i < data.Consumption.length; i++) {
+            //    yesterday.push(data.Consumption[i]);
+            //}
+            //for (var i = 0; i < data.TodayData.length; i++) {
+            //    today.push(data.TodayData[i]);
+            //}
+            //for (var i = 0; i < data.Target.length; i++) {
+            //    target.push(data.Target[i]);
+            //}
+            //for (var i = 0; i < data.ShopName.length; i++) {
+            //    Shop.push(data.ShopName[i]);
+            //}
+
+
+            //}
+        })
+    }
+    function ShowCellGraph(yesterday, feeder) {
+
+        var chart = $('#container').highcharts();
+        chart.hideLoading();
+        $("#loading").css("display", "none");
+
+        chart.addSeries(
+            {
+                name: feeder,
+                type: 'spline',
+                dataLabels: {
+                    enabled: true
+                },
+                data: yesterday
+            })
+
+    }
+
+    function datewise(StartDate, EndDate, Shop, Shift, ddlformate, buttonType) {
+        debugger;
+        $.ajax({
+            url: "/MeterwiseConsumptionGraph/LiveDatewise",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'Shift': '" + Shift + "', 'ddlformate':'" + ddlformate + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                debugger;
+                if (data.length > 0) {
+                    $("#loading").css("display", "none");
+                    ddl = new Array();
+
+                    var textName = "Power Consumption (kWh)";
+
+                    if (buttonType == "2")
+                        textName = "Vehicle Production";
+                    if (buttonType == "3")
+                        textName = "Power Consumption (kWh / Vehicle)";
+
+
+
+                    for (var i = 0; i < data.length; i++) {
+                        ddl.push(data[i]);
+                    }
+                    ShowName(ddl, textName)
+                }
+
+            }
+        })
+    }
+
+    function dailydatewise(StartDate, EndDate, Shop, Shift, ddlformate, feederId, buttonType) {
+        debugger;
+        $.ajax({
+            url: "/MeterwiseConsumptionGraph/Datewise",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'Shift': '" + Shift + "', 'ddlformate':'" + ddlformate + "', 'buttonType': '" + buttonType +"'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                if (data.allDates.length > 0) {
+                    ddl = new Array();
+
+                    //alert(data.totalConsPerVehicle);
+                    debugger;
+                    var textName = "Average consumption = " + data.totalConsPerVehicle + " kWh";
+                    if (buttonType == "2")
+                        textName = "Vehicle Production ";
+                    if (buttonType == "3")
+                        textName = "Average consumption = " + data.totalConsPerVehicle + " kWh / Vehicle";
+
+                    for (var i = 0; i < data.length; i++) {
+                        ddl.push(data[i].allDates);
+                    }
+                    //var cumm = data.totalConsPerVehicle;
+                    //var unit = data.unit;
+                    //alert();
+                    setTimeout(function (e) {
+                        ShowName(ddl, textName);
+
+                    }, 2000);
+                }
+            }
+        })
+    }
+
+
+    function dailydatewisethismonth(StartDate, EndDate, Shop, Shift, ddlformate, feederId) {
+
+        debugger;
+        $.ajax({
+            url: "/MeterwiseConsumptionGraph/Datewise",
+            data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'Shift': '" + Shift + "', 'ddlformate':'" + ddlformate + "'}",
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                //alert(data.length); debugger; if(data.length){
+                ddl = new Array();
+
+
+
+
+                for (var i = 0; i < data.length; i++) {
+                    ddl.push(data[i]);
+                }
+
+                ShowNamethismonth(ddl)
+            }
+
+            //}
+        })
+    }
+
+    function ShowNamethismonth(ddl, cumm) {
+        debugger;
+        $('#container').highcharts({
+            chart: {
+                name: 'kWh/Vehicle',
+            
+                zoomType: 'xy',
+                events: {
+
+                    addSeries: function () {
+                        //var label = this.renderer.label('Feederwise Chart', 100, 120)
+                        //    .attr({
+                        //        fill: Highcharts.getOptions().colors[0],
+                        //        //padding: 10,
+                        //        //r: 5,
+                        //        //zIndex: 8
+
+                        //    })
+
+                            //.css({
+                            //    color: '#FFFFFF'
+                            //})
+
+                            //.add();
+
+                        //setTimeout(function () {
+                        //    label.fadeOut();
+                        //}, 1000);
+                    }
+                }
+            },
+            title: {
+                text: 'Power Consumption  (kWh/Vehicle) Cumulative = ' + cumm + ' kWh/Vehicle',
+
+
+            },
+            xAxis: {
+                categories: ddl
+            },
+            yAxis: {
+                title: {
+                    text: 'kWh/Vehicle',
+
+                },
+            },
+
+            // series: [{
+            //    name: 'kWh / Vehicle'
+            //data: [129.9, 171.5, 106.4, 19.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 195.6, 4.4]
+            //}]
+        });
+    }
+
+    function ShowName(ddl, titleName, YAxisText) {
+        debugger;
+        //$("#loading").hide();
+        $("#loading").css("display", "none");
+        $('#container').highcharts({
+            chart: {
+                zoomType: 'xy',
+                events: {
+
+                    addSeries: function () {
+                        //var label = this.renderer.label('Feederwise Chart', 100, 120)
+                        //    .attr({
+                        //        fill: Highcharts.getOptions().colors[0],
+                        //        //padding: 10,
+                        //        //r: 5,
+                        //        //zIndex: 8
+
+                        //    })
+
+                        //    .css({
+                        //        color: '#FFFFFF'
+                        //    })
+
+                        //    .add();
+
+                        //setTimeout(function () {
+                        //    label.fadeOut();
+                        //}, 1000);
+                    }
+                }
+            },
+            title: {
+                text: titleName,
+
+            },
+            xAxis: {
+                categories: ddl
+            },
+            yAxis: {
+                title: {
+                    text: YAxisText,
+
+                },
+            },
+
+            //series: [{
+            //    //data: [129.9, 171.5, 106.4, 19.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 195.6, 4.4]
+            //}]
+        });
+    }
+    function LiveGraphData() {
+        debugger;
+        $("#container").hide();
+        $('#container').empty();
+        $('#container').html("");
+        var chart = $('#container').highcharts();
+        chart.hideLoading();
+        $("#loading").css("display", "none");
+        var StartDate = $("#StartDate").val();
+        var EndDate = $("#EndDate").val();
+        var Shop = $("#ShopName").val();
+        var Shift = $("#Shift").val();
+        var ddlformate = $("#ddlDateRange").val();
+        //var Plant = $("#Plant_ID").val();
+        var Feeder = $.map($('#Feeder'), function (e) {
+            return $(e).val();
+        });
+        var temp = new Array();
+
+
+        if (ddlformate == 1) {
+
+
+            //$.ajax({
+            //    url: "/MeterwiseConsumptionGraph/LiveDatewise",
+            //    data: "{ 'StartDate': '" + StartDate + "', 'EndDate': '" + EndDate + "',  'Shop': '" + Shop + "', 'Shift': '" + Shift + "', 'ddlformate':'" + ddlformate + "'}",
+            //    dataType: "json",
+            //    type: "POST",
+            //    contentType: "application/json; charset=utf-8",
+            //    success: function (data) {
+
+            //        //alert(data.length); debugger; if(data.length){
+            //        ddl = new Array();
+
+
+            //        var textName = "Power Consumption (kWh)";
+            //        if (buttonType == "2")
+            //            textName = "Vehicle Production";
+            //        if (buttonType == "3")
+            //            textName = "Power Consumption (kWh / Vehicle)";
+
+            //        for (var i = 0; i < data.length; i++) {
+            //            ddl.push(data[i]);
+            //        }
+            //        ShowName(ddl, textName)
+            //    }
+
+            //    //}
+            //})
+            for (var i = 0; i < Feeder.length; i++) {
+
+                temp.push(Feeder[i]);
+
+                var feederId = Feeder[i];
+
+                LiveConsumption(StartDate, EndDate, Shop, Shift, ddlformate, feederId);
+
+
+            }
+        }
+
+    }
+    $(document).ready(function () {
+        debugger;
+        var ddlformate = $("#ddlDateRange").val();
+        //if (ddlformate == 1) {
+        //    setInterval(function () { LiveGraphData(); }, 60000);
+
+        //}
+
+    })
+
+
+
+
+
+
+
+
+</script>
+<script>
+    window.onload = function () {
+        $(function () {
+            $("#loading").css("display", "block");
+
+            debugger;
+            $("#bodyid").addClass('sidebar-collapse');
+            if ($("#ddlDateRange").val() == "1") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate());
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+                //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+                //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+
+            }
+            else if ($("#ddlDateRange").val() == "2") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+
+            else if ($("#ddlDateRange").val() == "3") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                //$startDate.setDate($today.getDate() - $today.getDay());
+                $endDate = new Date($today);
+                //$endDate.setDate($startDate.getDate() + 7);
+
+
+                var $mm = $startDate.getMonth() + 1;
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+            //else if ($("#ddlDateRange").val() == "4") {
+            //    $("#StartDate").prop('readonly', true);
+            //    $("#EndDate").prop('readonly', true);
+            //    $today = new Date();
+            //    $startDate = new Date($today);
+            //    $endDate = new Date($today);
+
+            //    var $yyyy = $startDate.getFullYear();
+            //    if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+            //    $("#StartDate").val($startDate);
+
+            //    var $yyyy = $endDate.getFullYear();
+            //    if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+            //    $("#EndDate").val($endDate);
+
+            //}
+
+            else if ($("#ddlDateRange").val() == "4") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+                var $mm = $startDate.getMonth();
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth(), 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+            //else if ($("#ddlDateRange").val() == "6") {
+            //    $("#StartDate").prop('readonly', true);
+            //    $("#EndDate").prop('readonly', true);
+            //    $today = new Date();
+            //    $startDate = new Date($today);
+            //    $endDate = new Date($today);
+
+            //    var $yyyy = $startDate.getFullYear() - 1;
+            //    if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+            //    $("#StartDate").val($startDate);
+
+            //    var $yyyy = $endDate.getFullYear() - 1;
+            //    if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+            //    $("#EndDate").val($endDate);
+            //}
+            else {
+                $("#StartDate").prop('readonly', false);
+                $("#EndDate").prop('readonly', false);
+                $("#StartDate").val('');
+                $("#EndDate").val('');
+
+
+
+            }
+
+        });
+
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    $(function () {
+        //var date = new Date();
+        //var maxdate = new Date(date.getFullYear(), date.getMonth() + 1, -0);
+        ////var date1=$(this).datepicker('getdate');
+
+        //date.setDate(date.getDate());
+        //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' });
+        //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' });
+
+
+        var start = $("#StartDate").val();
+        $("#StartDate").datepicker(
+            {
+                format :'dd/mm/yyyy',
+                autoclose: true,
+                endDate: '+0d'
+            })
+
+        $("#EndDate").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                startDate: start,
+                endDate: '+0d'
+            });
+
+        //$("#EndDate").datepicker(
+        //    {
+        //        defaultDate: "+1w",
+        //        onClose: function (selectedDate) {
+        //            $("#StartDate").datepicker("option","maxdate",selectedDate);
+        //        }
+        //    });
+
+        $("#EndDate").change(function () {
+           debugger
+           var startDate = (document.getElementById("StartDate").value);
+           var fromDate = new Date(startDate);
+           var maxDate = new Date(fromDate.getFullYear(), fromDate.getMonth() + 1, -0);
+           var dateformat = [(maxDate.getDate()), (maxDate.getMonth() + 1), maxDate.getFullYear()].join('/');
+
+
+           var endDate = document.getElementById("EndDate").value;
+           var to = new Date(endDate);
+           var todate = [(to.getDate()), (to.getMonth() + 1), to.getFullYear()].join('/');
+           var dateRange = $("#ddlDateRange").val();
+        
+           if (dateRange == "5" && startDate == endDate) {
+               $('#StartTime').css("display", "block");
+               $('#EndTime').css("display", "block");
+
+           }
+           else {
+               $('#StartTime').css("display", "none");
+               $('#EndTime').css("display", "none");
+           }
+          
+            if ((Date.parse(endDate) > Date.parse(dateformat))) {
+                $('.EndDate').html("To date should be greater than or equal to From date");
+                $("#EndDateId").show("To date should be greater than or equal to From date");
+                document.getElementById("EndDate").value = "";
+            }
+            else if ((Date.parse(startDate) > Date.parse(endDate))) {
+                $("#EndDateId").show("To date should be greater than or equal to From date");
+                $('.EndDate').html("To date should be greater than or equal to From date");
+                document.getElementById("EndDate").value = "";
+            }
+            else {
+                $('.EndDate').html(null);
+            }
+            //    }
+            //})
+        });
+    })
+     
+
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/PDFHighchart")
+}
+

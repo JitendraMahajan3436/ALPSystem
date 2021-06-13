@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/User/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div class="form-group has-feedback">
+        <br />
+        <div class="col-md-12" style="margin-top: -15px;">
+            @Html.Label("Plant_Name", "Plant Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownList("Plant_ID", (IEnumerable<SelectListItem>)ViewBag.Plant_ID, "Select Plant", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessage("Plant_ID", null, new { @class = "validation_error" })
+        </div>
+        <br />
+       
+        <span id="lblError" style="color:red;"></span>
+    </div>
+
+
+
+}
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#User_Name").keypress(function (e) {
+            if (e.which == 13) {
+                //Login();
+                form.submit();
+            }
+        });
+        $("#Plant_ID").change(function (e) {
+          
+            var plant_id = $("#Plant_ID").val();
+
+
+            var path = "/User/ChangePlant?plant_id=" + plant_id ;
+            window.location.href = path;
+           
+        });
+
+
+    });
+
+    
+
+</script>
+
+
+
+
+
+

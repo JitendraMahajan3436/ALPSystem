@@ -1,0 +1,435 @@
+﻿@model REIN_MES_System.Models.Shop_Index_Config
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+<style type="text/css">
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            display: none;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        width: 80%;
+        height: 20px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 15px;
+            width: 15px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider,
+    input[type="checkbox"]:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:focus + input[type="hidden"] + .slider,
+    input[type="checkbox"]:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    /* include generated hidden field here */
+    input[type="checkbox"]:checked + input[type="hidden"] + .slider:before,
+    input[type="checkbox"]:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div class="col-md-12">
+
+    <div class=" row">
+        <div class="col-md-6">
+
+            <div class="form-group">
+                <label>Shop Name </label>
+
+                @Html.DropDownListFor(model => model.Shop_ID, null, htmlAttributes: new { @class = "form-control", @readonly = "true", })
+                @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label>Shared Feeder</label><br />
+            <label class="switch">
+                <input type="checkbox" id="Shop_Feeder" />
+                <div class="slider round">
+                </div>
+            </label>
+            <div id="commanFeederShop" style="display:none">
+
+
+
+                <div class="form-group">
+                    @*@Html.DropDownList("ComFeederShopID", Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2", @style = "max-width:100%" })*@
+                    @Html.DropDownListFor(model => model.ComFeederShopID, null, htmlAttributes: new { @class = "form-control select2" })
+                    @Html.ValidationMessageFor(model => model.ComFeederShopID, "", new { @class = "text-danger" })
+                    @Html.Hidden("Plant_ID");
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <label style="float:left">Formula For Shop Incoming  Power</label>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Add Feeder for Addition *</label>
+
+                @Html.DropDownListFor(model => model.IncomeraddFeeder, null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+                @*@Html.DropDownListFor(model => model.Menu_ID, (IEnumerable<SelectListItem>)ViewBag.Menu_Roles, htmlAttributes: new { @class = "form-control", multiple = "true" })*@
+                @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Add Feeder for Subraction </label>
+
+                @Html.DropDownListFor(model => model.IncomersubFeeder, null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+      
+                @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <label>InComing power & Consume Formula same?</label>
+            @Html.CheckBox("Consume_Power")
+            @*<label class="switch" style="height: 10px">
+                    <input type="checkbox" id="Consume_Power" />
+                    <div class="slider round">
+                    </div>
+                </label>*@
+        </div>
+    </div>
+
+    <div class="row" id="ShopconsumePower">
+        <div class="col-md-12">
+
+
+            <label>Formula For Shop Cosume  Power</label>
+
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Add Feeder for Addition *</label>
+
+                @Html.DropDownListFor(model => model.ConsumeaddFeeder, null, htmlAttributes: new { @class = "form-control", multiple = "true" })
+
+                @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Add Feeder for Subraction </label>
+
+                @Html.DropDownListFor(model => model.ConsumesubFeeder, null, htmlAttributes: new { @class = "form-control", multiple = "true" })          
+                @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+</div>
+    <div class="box-footer">
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+            <br />
+        </div>
+    </div>
+
+
+
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @*<script src="~/Content/theme/plugins/select2/select2.full.js"></script>*@
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+           // $("#ComFeederShopID").select2();
+            //$("#Shop_ID").select2();
+
+            $(".select2").select2();
+            $("#IncomeraddFeeder").select2({
+                placeholder: 'Assign Feeder',
+                allowClear: true,
+            });
+            $("#IncomersubFeeder").select2({
+                placeholder: 'Assign Feeder',
+                allowClear: true,
+            });
+            $("#ConsumeaddFeeder").select2({
+                placeholder: 'Assign Feeder',
+                allowClear: true,
+            });
+            $("#ConsumesubFeeder").select2({
+                placeholder: 'Assign Feeder',
+                allowClear: true,
+            });
+
+         
+
+            $("#Shop_ID").change(function () {
+
+                var Shop_Id = $("#Shop_ID").val();
+
+                var options = {};
+                options.url = "/Shop_Power_Index_Mapping/Shopwiseconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: Shop_Id });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $.each(id, function (i, test) {
+                        $("#IncomeraddFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#IncomersubFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#ConsumeaddFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#ConsumesubFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+
+                };
+                //$("#Feeder").select2({
+                //    allowClear: true,
+                //    placeholder: 'Assign Feeder',
+                //    multiple: 'multiple'
+                //});
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+
+
+            })
+
+            $("#Plant_ID").change(function () {
+
+                var Plant_ID = $("#Plant_ID").val();
+                $('#Shop_ID option').remove();
+                $('#ComFeederShopID option').remove();
+                var options = {};
+                options.url = "/CommanMethod/PlantwiseShopconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Plant_ID: Plant_ID });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $("#Shop_ID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#Shop_ID").append(
+
+
+                            $('<option></option>').val(test.Shop_ID).html(test.Shop_Name).prop('selected', true));
+                    });
+
+                    $("#ComFeederShopID").html(""); // clear before appending new list
+                    $.each(id, function (i, test) {
+                        $("#ComFeederShopID").append(
+
+
+                            $('<option></option>').val(test.Shop_ID).html(test.Shop_Name).prop('selected', true));
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid Shop ");
+                };
+                $.ajax(options);
+
+
+            })
+
+            $(".Comman").click(function () {
+
+                $("#commanFeederShop").show();
+
+            })
+
+            $("#ComFeederShopID").change(function () {
+             
+                var Shop_Id = $("#ComFeederShopID").val();
+                //var Plant = $("#Plant_ID").val();
+                var options = {};
+                options.url = "/CommanMethod/SharedFeederwiseconfig";
+                options.type = "POST";
+                options.data = JSON.stringify({ Shop_Id: Shop_Id, ParameterId:1});
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (id) {
+
+                    $.each(id, function (i, test) {
+                        $("#IncomeraddFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#IncomersubFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#ConsumeaddFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+                    $.each(id, function (i, test) {
+                        $("#ConsumesubFeeder").append(
+
+
+                            $('<option></option>').val(test.TagIndex).html(test.FeederName).prop('selected', false));
+                    });
+
+                    var elements = [];
+                    elements = document.getElementsByClassName("mdl");
+                    for (var i = 0; i < elements.length; i++) {
+                        elements[i].value = "";
+                    }
+
+                };
+                //$("#Feeder").select2({
+                //    allowClear: true,
+                //    placeholder: 'Assign Feeder',
+                //    multiple: 'multiple'
+                //});
+                options.error = function () {
+                    alert("Invalid Feeder ");
+                };
+                $.ajax(options);
+
+
+            })
+            // change event may modified to other events
+            $("#Shop_Feeder").change(function () {
+                
+                // check if checkbox is being checked
+                // taken from /a/23007488 by Alexandru Chichinete
+                if ($("#Shop_Feeder").is(":checked")) {
+
+                    $("#commanFeederShop").show();
+                }
+                else {
+                    $("#commanFeederShop").hide();
+                }
+                    // enable form submit
+
+            });
+            $("#Consume_Power").change(function () {
+
+                // check if checkbox is being checked
+                // taken from /a/23007488 by Alexandru Chichinete
+                if ($("#Consume_Power").is(":checked")) {
+
+                    $("#ShopconsumePower").hide();
+                }
+                else {
+                    $("#ShopconsumePower").show();
+                }
+                // enable form submit
+
+            });
+        })
+    </script>
+    <script>
+        window.onload = function () {
+
+            //$("#Feeder").html("");
+            //$("#Shop_ID").html("");
+        };
+    </script>
+
+}
+@section Styles {
+    <link href="~/Content/theme/RoleMgt.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}

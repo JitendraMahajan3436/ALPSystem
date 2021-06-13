@@ -1,0 +1,51 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Major_Sub_Assembly>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "ChildPartSubAssembly")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName(ResourceDisplayName.Sub_Assembly_Name)
+                </th>
+                <th>@ResourceGlobal.Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sub_Assembly_Name)
+                    </td>
+                    <td>
+                        <a href="@Url.Action(ResourceGlobal.Edit, "ChildPartSubAssembly", new { id = item.Sub_Assembly_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Details, "ChildPartSubAssembly", new { id = item.Sub_Assembly_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Delete, "ChildPartSubAssembly", new { id = item.Sub_Assembly_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+           
+        });
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

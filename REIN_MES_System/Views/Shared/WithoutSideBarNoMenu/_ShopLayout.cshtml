@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>@ViewBag.Title</title>
+    @{
+        var sessionObj = ((REIN_MES_System.Helper.FDSession)this.Session["FDSession"]);
+    //@item.FileName  // instead .FileName use property which u used in ur model class
+
+    }
+    @Styles.Render("~/fdtheme/bootstrap")
+    <!-- Font Awesome Icons -->
+    <link href="~/Content/theme/fonts/font-awesome.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link href="~/Content/theme/fonts/ionicons.min.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+    <!-- Ionicons -->
+    <!-- <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" /> -->
+    @Styles.Render("~/fdtheme/Font_Icons")
+
+    @Styles.Render("~/fdtheme/css")
+
+    @Styles.Render("~/Content/site")
+
+    @Styles.Render("~/Content/shopfloor")
+
+    @Scripts.Render("~/fdtheme/js")
+
+    @Scripts.Render("~/fdtheme/ajaxroutine")
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="skin-yellow layout-top-nav ">
+    <div class="wrapper">
+            <!-- TOP NAVIGATIONS -->
+        @Html.Partial("WithoutSideBarNoMenu/_Header")
+            @*@Html.Partial("WithoutSideBar/_Header")*@
+            <!-- =============================================== -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <div class="container-fluid no-padding">
+                    <!-- Main content -->
+                    <section class="content padding-top-only">
+                          @RenderBody()
+                    </section><!-- /.content -->
+                </div><!-- /.container -->
+            </div><!-- /.content-wrapper -->
+        
+        <input type="hidden" id="hdnShopId" value="@sessionObj.shopId"/>
+        <div class="container-fluid shop-details-bar footer_news_sections">
+            <div class="row container top-bar top-bar1">
+                @*<div class="col-md-4"> </div>
+                <div class="col-md-6 text-center shop-title">
+
+
+                </div>
+                <div class="col-xs-2 pull-right text-right">Shift - <span id="shop-shift">General</span></div>*@
+
+                <div class="news_container">
+                    <div class="marquee-sibling">
+                        Notifications
+                    </div>
+                    <div class="marquee">
+                        <ul class="marquee-content-items">
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                            <li>Item 4</li>
+                            <li>Item 5</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @RenderSection("scripts", required: false)
+    <script src="~/Content/theme/plugins/jQueryTextSlide/marquee.js"></script>
+    <link href="~/Content/theme/plugins/jQueryTextSlide/marquee.css" rel="stylesheet" />
+    <script type="text/javascript">
+        function centerTable() {
+            var tableContainer = $('.tracking-container');
+            var table = $('.tracking-container .tracking-table');
+            $('.tracking-container').css('min-height', $(window).height() - 84);
+            $('.tracking-container .tracking-table').css('margin-top', ((tableContainer.height() - table.height()) / 3) + 'px');
+        }
+        function getCurrentShift() {
+            debugger;
+            $.getJSON('/Shift/getRunningShift', function (data) {
+                if (data != null) {
+                    $("#shop-shift").html(data);
+                }
+                else {
+                    $("#shop-shift").html("Genral");
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Faild to get shift details');
+            });
+        }
+        $(document).ready(function () {
+            //get current shift
+            getCurrentShift();
+            //end
+            centerTable();
+            $(window).resize(centerTable);
+
+            $("#srchsrl").click(function () {
+                $('.station-body').removeClass("serialHighlight");
+                var srno = $("#srlno").val();
+                if (srno.length > 2) {
+                    $('.station-body').filter(function () { return $(this).text().toLowerCase() === srno; }).addClass("serialHighlight");
+                }
+            });
+            $('.btnback').click(function () {
+                parent.history.back();
+                return false;
+            });
+
+        });
+
+
+
+
+
+        $(document).ready(function (e) {
+            var shopId = $("#hdnShopId").val();
+            var url = "/Notifications/GetTodaysNews";
+            ajaxpack.getAjaxRequest(url, "shopId=" + shopId, showNewsDetails, "json");
+            
+        });
+
+
+        function showNewsDetails() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    var res = "";
+                    for(var i=0;i<jsonRes.length;i++)
+                    {
+                        res = res + "<li>" + jsonRes[i].Message + "</li>";
+                    }
+                    $(".marquee-content-items").html(res);
+                    loadBirthday();
+                }
+            }
+        }
+
+
+        function loadBirthday()
+        {
+            var shopId = $("#hdnShopId").val();
+            var url = "/Notifications/GetTodaysBirthday";
+            ajaxpack.getAjaxRequest(url, "shopId=" + shopId, showBirthdayDetails, "json");
+        }
+
+        function showBirthdayDetails()
+        {
+            alert("birth");
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    alert(jsonRes);
+                    if (jsonRes.length > 0)
+                    {
+
+                    
+                    var res = "<li>HAPPY BIRTHDAY :</li>";
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        res = res + "<li><i class='fa fa-fw fa-birthday-cake'></i>" + jsonRes[i].Employee_Name + "(" + jsonRes[i].Employee_No + ")</li>";
+                    }
+                    $(".marquee-content-items").html($(".marquee-content-items").html()+res);
+                    
+                    }
+                    createMarquee({
+                    });
+                }
+            }
+        }
+
+    </script>
+
+    <style type="text/css">
+        .footer_news_sections {
+            bottom: 0;
+            position: fixed;
+            width: 100%;
+        }
+
+    </style>
+</body>
+</html>

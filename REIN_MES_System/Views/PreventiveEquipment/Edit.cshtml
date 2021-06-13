@@ -1,0 +1,278 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+                /**/
+
+                ViewBag.Title = "Edit";
+                Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Edit", "PreventiveEquipment", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.EQP_ID)
+    @Html.Hidden("InitialEquipmentName", Model.Equipment_Name)
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Equipment_Name, "Part / Tool Description", htmlAttributes: new { @class = "" })*
+                @Html.TextBoxFor(model => model.Equipment_Name, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Equipment_Name)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Machine_ID, "Machine Name *", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Machine_ID, null, "Select Machine", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Machine_ID)
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Designated_Life, "Designated Life *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Designated_Life, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Designated_Life)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Life_Per_Cycle, "Life Per Cycle *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Life_Per_Cycle, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Life_Per_Cycle)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Warning_At, "Warning At *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Warning_At, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Warning_At)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Stop_At, "Stop At *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Stop_At, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Stop_At)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Remaining_Life, "Remaining Life", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Remaining_Life, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.Remaining_Life)
+        </div>
+        @*<div class="col-md-3">
+                @Html.LabelFor(model => model.Reset_Consumelife, "Reset At *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Reset_Consumelife, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Reset_Consumelife)
+            </div>*@
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Action_taken, "Action Taken *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Action_taken, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Action_taken)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Sequence_No, "Sequence No *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Sequence_No, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Sequence_No)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.SAP_Part_No, "SAP Part No", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.SAP_Part_No, htmlAttributes: new { @class = "form-control", @maxlength = "18" })
+            @Html.ValidationMessageFor(model => model.SAP_Part_No)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Data_Retention_Period, "Data Retention Period(In Months)", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Data_Retention_Period, htmlAttributes: new { @class = "form-control", @maxlength = "18" })
+            @Html.ValidationMessageFor(model => model.Data_Retention_Period)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("upload", "TBM Part Image", htmlAttributes: new { @class = "control-label" })
+            <input type="file" id="upload" name="upload" onchange="checkfile(this)" />
+            <span style="font-size:10px">@ViewBag.FileNameImage</span>
+            @Html.ValidationMessage("Image_Content", null, new { @class = "validation_error", @id = "excelReq" })
+            <span id="lblExcelmsg" style="color:red;"></span>
+        </div>
+
+        <div class="col-md-3">
+            @Html.CheckBoxFor(model => model.Is_PM_Equipment)
+            @Html.LabelFor(model => model.Is_PM_Equipment, "PM Equipment", htmlAttributes: new { @class = "" })
+            @Html.ValidationMessageFor(model => model.Is_PM_Equipment)
+        </div>
+        <div class="col-md-3">
+            @Html.CheckBoxFor(model => model.IsActive)
+            @Html.LabelFor(model => model.IsActive, "Active", htmlAttributes: new { @class = "" })
+            @Html.ValidationMessageFor(model => model.IsActive)
+        </div>
+
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" name="Savebtn" value="Save" class="btn btn-success" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                <input type="button" name="Resetbtn" onclick="ResetButton()" value="Reset" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="TBMResetModal" tabindex="-1" role="basic" aria-hidden="true" style="display: none;width:100%;height:100%;position:center">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    @*<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>*@
+                    <h4 class="modal-title classModalTitle">TBM Reset Data</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <input type="hidden" id="hdnTBMId" value="" />
+                        <div class="col-md-6" id="divSAPRNo">
+                            @Html.Label("SAP Reservation Number *", new { @class = "slabel" })
+                            <input type="text" class="form-control" id="SAPRNo" onkeypress="return isNumber(event)" maxlength="10" />
+                            @Html.ValidationMessage("SAPRNo", null, new { @class = "validation_error", @id = "lblError" })
+                            @*@Html.TextBox("SAPRNo", new { @class = "form-control", @onkeypress = "return isNumber(event)", @MaxLength = "10" })*@
+                        </div>
+
+                        <div class="col-md-6" id="divSAPRNo">
+                            @Html.Label("Remark", new { @class = "" })
+                            <input type="text" class="form-control" id="remarkk" />
+                            @*@Html.ValidationMessage("SAPRNo", null, new { @class = "validation_error", @id = "lblError" })*@
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    @*<button data-dismiss="modal" type="button" class="btn btn-primary smModalGen">Close</button>*@
+                    <div style="float:right">
+                        <button type="button" class="btn btn-success" onclick="ResetTBM()">Yes</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+        @Html.ActionLink("Show All", "Index")
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Scripts.Render("~/bundles/PartToMachineManagement_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+    <script>
+        function initializeRemotelyValidatingElementsWithAdditionalFields($form) {
+            var remotelyValidatingElements = $form.find("[data-val-remote]");
+
+            $.each(remotelyValidatingElements, function (i, element) {
+                var $element = $(element);
+
+                var additionalFields = $element.attr("data-val-remote-additionalfields");
+
+                if (additionalFields.length == 0) return;
+
+                var rawFieldNames = additionalFields.split(",");
+
+                var fieldNames = $.map(rawFieldNames, function (fieldName) { return fieldName.replace("*.", ""); });
+
+                $.each(fieldNames, function (i, fieldName) {
+                    $form.find("#" + fieldName).change(function () {
+                        // force re-validation to occur
+                        $element.removeData("previousValue");
+                        $element.valid();
+                    });
+                });
+            });
+        }
+        $(document).ready(function () {
+            $("#Machine_ID").select2();
+            initializeRemotelyValidatingElementsWithAdditionalFields($("form"));
+        });
+        function ResetButton() {
+            $("#TBMResetModal").modal("show");
+
+        }
+
+        function ResetTBM() {
+            debugger
+            var sapNo = $("#SAPRNo").val();
+            var TBMID = $("#EQP_ID").val();
+            var remarkss = $("#remarkk").val();
+            $.post('/PreventiveEquipment/ResetTBM', { TBMID: TBMID, SAPRNo: sapNo, remarks: remarkss }, function (data) {
+                if (data == true) {
+                    $("#TBMResetModal").modal("hide");
+
+                    window.location.href = "/PreventiveEquipment/Index";
+
+                    successMessage("TBM Reset Successfully");
+
+                }
+                if (data == false) {
+                    $("#lblError").html("SAP Reservation Number Required");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+
+            });
+        }
+
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            $("#lblError").html("");
+            return true;
+        }
+
+        function successMessage(msg) {
+            var headermsg = "Success";
+            $('.content-wrapper div.myalert').remove();
+
+            alertHtml = '<div class="box-body myalert">' +
+                '<div class="alert alert-info alert-dismissable" style="dispaly:block">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i>' + headermsg + '</h4>' +
+                msg +
+                '</div></div>';
+            $('.content-wrapper .content').html(alertHtml);
+        }
+
+        function checkfile(sender) {
+            var validExts = new Array(".png", ".jpg", ".jpeg");
+            var fileExt = sender.value;
+            fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+            if (validExts.indexOf(fileExt) < 0) {
+                //alert("Invalid file selected, valid files are of " +
+                //         validExts.toString() + " types.");
+                $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                    validExts.toString() + " types.");
+                $('#excelReq').hide();
+                $('#upload').val('');
+                return false;
+            }
+            else {
+                $('#lblExcelmsg').html('');
+                return true;
+            }
+        }
+    </script>
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+    @Styles.Render("~/fdtheme/notification_css")
+}

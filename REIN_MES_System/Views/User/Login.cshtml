@@ -1,0 +1,53 @@
+﻿@model REIN_MES_System.Models.UserLogin
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/User/_Layout.cshtml";
+}
+
+<p class="login-box-msg">Sign in to start your session</p>
+@using (Html.BeginForm("CheckLogin","User")) 
+{
+    @Html.AntiForgeryToken()
+    
+          @ViewBag.IPAddress
+        @Html.ValidationSummary(true)
+        <div class="form-group has-feedback">         
+                @Html.TextBoxFor(model => model.User_Name, new { @class = "form-control", @placeholder = "User Name" })
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                @Html.ValidationMessageFor(model => model.User_Name,null, new { @class = "validation_error" })
+        </div>
+
+        <div class="form-group has-feedback">
+            
+            @Html.PasswordFor(model => model.User_Password, new { @class = "form-control", @placeholder = "User Password" })
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            @Html.ValidationMessageFor(model => model.User_Password, null, new { @class = "validation_error" })
+            
+        </div>
+
+    <div class="row">
+        <div class="col-xs-8">
+            <div class="checkbox icheck">
+                <label>
+                    <input type="checkbox"> Remember Me
+                </label>
+            </div>
+        </div><!-- /.col -->
+        <div class="col-xs-4">
+            <input type="submit" value="Login" class="btn btn-primary btn-block btn-flat" />            
+        </div>
+    </div>
+}
+
+
+<a href="#">I forgot my password</a><br>
+<a href="register.html" class="text-center">Register a new membership</a>
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

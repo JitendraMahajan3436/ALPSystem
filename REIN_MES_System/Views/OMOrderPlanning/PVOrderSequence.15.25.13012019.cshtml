@@ -1,0 +1,766 @@
+﻿@model List<List<REIN_MES_System.Models.CummulativeFields>>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    int plantid = ((FDSession)this.Session["FDSession"]).plantId;
+    var t = Model;
+}
+
+
+@if (ViewBag.startedOrders != null)
+{
+
+    <div id="startedOrdersBlock">
+        <h3><button class="btn btn-primary btn-startedOrders">Hide started Orders</button></h3>
+        <div class="table-responsive" id="startedOrderstbl">
+            <table class="table table-bordered table-hover table-condensed table-startedOrders">
+                <thead>
+                    <tr>
+                        @if (ViewBag.SequenceShop == "Tractor")
+                        {
+                            <th></th>
+                            <th></th>
+                            <th>
+                                Model Code
+                            </th>
+                            <th>
+                                Planned
+                            </th>
+                            <th>
+                                Started
+                            </th>
+                            <th>
+                                Hold
+                            </th>
+                            <th>
+                                Cumm. Qty
+                            </th>
+                            <th>
+                                Order Type
+                            </th>
+                        }
+                        else
+                        {
+                            <th># </th>
+                            <th></th>
+                            <th>Parent ModelCode</th>
+                            <th>
+                                Parent Series
+                            </th>
+                            <th>Model Code</th>
+                            <th>
+                                Color
+                            </th>
+                            <th>
+                                Planned
+                            </th>
+                            <th>
+                                Started
+                            </th>
+                            <th>
+                                Hold
+                            </th>
+                            <th>
+                                Cumm. Qty
+                            </th>
+                            <th>Remarks</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @if (ViewBag.SequenceShop == "Tractor")
+                    {
+                        int startTotal = 0;
+                        int holdTotal = 0;
+                        int plannedTotal = 0;
+                        foreach (var item in (List<REIN_MES_System.Models.CummulativeFields>)ViewBag.startedOrders)
+                        {
+                            startTotal += item.StartedQty;
+                            holdTotal += item.HoldQty;
+                            plannedTotal += item.PlannedQty;
+                            <tr class='@(((item.StartedQty + item.HoldQty) == item.PlannedQty) ? "bg-success":"" )'>
+                                <td>###</td>
+                                <td>#</td>
+                                <td>@item.Model_Code</td>
+                                @{
+                                    var ModelCode = item.Model_Code;
+                                    if (ModelCode != null)
+                                    {
+
+                                    }
+                                }
+
+
+                                <td>@item.PlannedQty</td>
+                                <td>@item.StartedQty</td>
+                                <td>@item.HoldQty</td>
+
+                                <td>@item.CummlQty</td>
+                                <td>@item.orderType</td>
+
+                            </tr>
+                                    }
+                                    <tr class='bg-gray-active text-bold'>
+                                        <td colspan="3" class="text-right">Total</td>
+                                        <td>@plannedTotal</td>
+                                        <td>@startTotal</td>
+                                        <td>@holdTotal</td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+                                    }
+                                    else
+                                    {
+                                        int startTotal = 0;
+                                        int holdTotal = 0;
+                                        int plannedTotal = 0;
+                                        foreach (var item in (List<REIN_MES_System.Models.CummulativeFields>)ViewBag.startedOrders)
+                                        {
+                                            startTotal += item.StartedQty;
+                                            holdTotal += item.HoldQty;
+                                            plannedTotal += item.PlannedQty;
+                                            <tr class='@(((item.StartedQty + item.HoldQty) == item.PlannedQty) ? "bg-success":"" )'>
+                                                <td>###</td>
+                                                <td>#</td>
+                                                <td>@item.parentModel_Code</td>
+                                                <td>@item.parentSeries</td>
+                                                <td>@item.Model_Code</td>
+                                                <td class="sequence-series">@item.Series</td>
+                                                <td>@item.PlannedQty</td>
+                                                <td>@item.StartedQty</td>
+                                                <td>@item.HoldQty</td>
+                                                <td>@item.CummlQty</td>
+                                                <td>@item.remarks</td>
+                                            </tr>
+                                        }
+                                        <tr class='bg-gray-active text-bold'>
+                                            <td colspan="3" class="text-right">Total</td>
+                                            <td>@plannedTotal</td>
+                                            <td>@startTotal</td>
+                                            <td>@holdTotal</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+                                    }
+
+                                    @*//FOR SCHEDULED ORDERS*@
+                                    <table class="table table-bordered table-hover table-condensed table-sequence scheduledOrderTbl">
+                                        <thead>
+                                            <tr>
+                                                @if (ViewBag.SequenceShop == "Tractor")
+            {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Model Code</th>
+                                                    <th>
+                                                        Color
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th>
+                                                        Order Type
+                                                    </th>
+                                                    <th>Order Number</th>
+                                                    <th>Shift</th>
+                                                    <th>Remark</th>
+                                                }
+                                                else if (ViewBag.SequenceShop == "Hydraulic")
+                                                {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Parent Model Code</th>
+                                                    <th>Parent Series</th>
+                                                    <th>
+                                                        Model Code
+                                                    </th>
+                                                    <th>
+                                                        Series
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th></th>
+                                                }
+                                                else
+                                                {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Parent Model Code</th>
+                                                    <th>Parent Series</th>
+                                                    <th>
+                                                        Model Code
+                                                    </th>
+                                                    <th>
+                                                        Series
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{int i = 0; int currQty = 0; string modelCode = ""; string cssclass = ""; string datagroup = ""; int groupcntr = 0; string cssBlocked = ""; string lockedClass = ""; }
+                                            @if (ViewBag.SequenceShop == "Tractor")
+                                            {
+                                                foreach (var item in Model[0])
+                                                {
+                                                    i++;
+                                                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                    {
+                                                        cssclass = "spillover";
+                                                    }
+                                                    if (i <= ViewBag.blockAfterQty)
+                                                    {
+                                                        cssBlocked = "blocked";
+                                                    }
+                                                    else
+                                                    {
+                                                        cssBlocked = "";
+                                                    }
+                                                    if (item.Locked)
+                                                    {
+                                                        lockedClass = "locked";
+                                                    }
+                                                    else
+                                                    {
+                                                        lockedClass = "";
+                                                    }
+                                                    if (!(modelCode.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase)))
+                                                    {
+                                                        currQty = 0;
+                                                        currQty++;
+                                                        groupcntr++;
+                                                        datagroup = "group" + "_" + groupcntr;
+
+                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroup" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order firstRow @cssBlocked @lockedClass">
+                                                            <td class="sequence-index">@i</td>
+                                                            <td class="fa fa-chevron-right"></td>
+                                                            <td class="sequence-modelcode">
+                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                            </td>
+                                                            @{
+                                                                var ModelCode = item.Model_Code;
+
+                                                                if (ModelCode != null)
+                                                                {
+                                                                }
+                                                            }
+                                                            @{
+                                                                var colorCode = item.Color_code;
+                                                                var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                                                                <td class="sequence-color">
+                                                                    @colorName
+                                                                </td>
+                                                            }
+                                                            <td class="sequence-qty">
+                                                                @*@currQty*@
+                                                                @*</td>*@
+                                                            <td class="cumm-qty"></td>
+                                                            @{
+                                                                if (item.orderType.Trim() == "Trial")
+                                                                {
+                                                                    <td style="background-color: red;" class="sequence-ordertype">
+                                                                        @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="sequence-ordertype">
+                                                                        @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            <td class="">
+                                                                @Html.DisplayFor(modelItem => item.Order_No)
+                                                            </td>
+                                                            @{
+                                                                var shiftName = "";
+                                                                if (item.Planned_Shift_ID != null)
+                                                                {
+                                                                    shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+                                                                }
+
+                                                                <td class="sequence-shiftname">
+                                                                    @shiftName
+                                                                </td>
+                                                            }
+
+                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                        </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    currQty++;
+                                                                    <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order @cssBlocked @datagroup @lockedClass">
+                                                                        <td class="sequence-index">@i</td>
+                                                                        <td><i class="fa fa-chevron-right"></i></td>
+                                                                        <td class="sequence-modelcode">
+                                                                            @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                        </td>
+                                                                        @{
+                                                                            var ModelCode = item.Model_Code;
+                                                                            if (ModelCode != null)
+                                                                            {
+                                                                            }
+                                                                        }
+                                                                        @{
+                                                                            var colorCode = item.Color_code;
+                                                                            var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                                                                            <td class="sequence-ColorName">
+                                                                                @colorName
+                                                                            </td>
+                                                                        }
+
+                                                                        <td class="sequence-qty"></td>
+                                                                        <td class="cumm-qty"></td>
+
+                                                                        @{
+                                                                            if (item.orderType.Trim() == "Trial")
+                                                                            {
+                                                                                <td style="background-color: red;" class="sequence-ordertype">
+                                                                                    @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                                </td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td class="sequence-ordertype">
+                                                                                    @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                                </td>
+                                                                            }
+                                                                        }
+
+                                                                        <td class="">
+                                                                            @Html.DisplayFor(modelItem => item.Order_No)
+                                                                        </td>
+
+                                                                        @{
+                                                                            var shiftName = "";
+                                                                            if (item.Planned_Shift_ID != null)
+                                                                            {
+                                                                                shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+                                                                            }
+
+                                                                            <td class="sequence-shiftname">
+                                                                                @shiftName
+                                                                            </td>
+                                                                        }
+                                                                        <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                    </tr>
+                                                                                    }
+                                                                                    modelCode = item.Model_Code;
+                                                                                    //orderType = item.orderType;
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                foreach (var item in Model[0])
+                                                                                {
+                                                                                    i++;
+                                                                                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                                                    {
+                                                                                        cssclass = "spillover";
+                                                                                    }
+                                                                                    if (i <= ViewBag.blockAfterQty)
+                                                                                    {
+                                                                                        cssBlocked = "blocked";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        cssBlocked = "";
+                                                                                    }
+                                                                                    if (item.Locked)
+                                                                                    {
+                                                                                        lockedClass = "locked";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        lockedClass = "";
+                                                                                    }
+                                                                                    if (!modelCode.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase))
+                                                                                    {
+                                                                                        currQty = 0;
+                                                                                        currQty++;
+                                                                                        groupcntr++;
+                                                                                        datagroup = "group" + "_" + groupcntr;
+                                                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroup" data-ordertype="@item.orderType" class="not-hidden-order firstRow @cssBlocked">
+                                                                                            <td class="sequence-index">@i</td>
+                                                                                            <td class="fa fa-chevron-right"><i class="fa fa-th-list"></i></td>
+                                                                                            <td class="sequence-parentmodelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentModel_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-parentseriescode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentSeries)
+                                                                                            </td>
+                                                                                            <td class="sequence-modelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-series @cssclass">
+                                                                                                @Html.DisplayFor(modelItem => item.Series)
+                                                                                            </td>
+                                                                                            <td class="sequence-qty">
+                                                                                                @*@currQty*@
+                                                                                                @*</td>*@
+                                                                                            <td class="cumm-qty"></td>
+                                                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        currQty++;
+                                                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" class="not-hidden-order @cssBlocked @datagroup">
+                                                                                            <td class="sequence-index">@i</td>
+                                                                                            <td><i class="fa fa-chevron-right"></i></td>
+                                                                                            <td class="sequence-parentmodelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentModel_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-parentseriescode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentSeries)
+                                                                                            </td>
+                                                                                            <td class="sequence-modelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-series @cssclass">
+                                                                                                @Html.DisplayFor(modelItem => item.Series)
+                                                                                            </td>
+                                                                                            <td class="sequence-qty"></td>
+                                                                                            <td class="cumm-qty"></td>
+                                                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    modelCode = item.Model_Code;
+                                                                                }
+                                                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                    @*//FOR AVAILABLE ORDERS*@
+                                    <table class="table table-bordered table-hover table-condensed table-sequence availableOrderTbl">
+                                        <thead>
+                                            <tr>
+                                                @if (ViewBag.SequenceShop == "Tractor")
+            {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Model Code</th>
+                                                    <th>
+                                                        Color
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th>
+                                                        Order Type
+                                                    </th>
+                                                    <th>Order Number</th>
+                                                    <th>Shift</th>
+                                                    <th>Remark</th>
+                                                }
+                                                else if (ViewBag.SequenceShop == "Hydraulic")
+                                                {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Parent Model Code</th>
+                                                    <th>Parent Series</th>
+                                                    <th>
+                                                        Model Code
+                                                    </th>
+                                                    <th>
+                                                        Series
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th></th>
+                                                }
+                                                else
+                                                {
+                                                    <th># </th>
+                                                    <th></th>
+                                                    <th>Parent Model Code</th>
+                                                    <th>Parent Series</th>
+                                                    <th>
+                                                        Model Code
+                                                    </th>
+                                                    <th>
+                                                        Series
+                                                    </th>
+                                                    <th>
+                                                        Qty
+                                                    </th>
+                                                    <th>
+                                                        Cumm. Qty
+                                                    </th>
+                                                    <th></th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{int j = 0; int currQtyAvb = 0; string modelCodeAvb = ""; string cssclassAvb = ""; string datagroupAvb = ""; int groupcntrAvb = 0; string cssBlockedAvb = ""; string lockedClassAvb = ""; }
+                                            @if (ViewBag.SequenceShop == "Tractor")
+                                            {
+                                                foreach (var item in Model[1])
+                                                {
+                                                    j++;
+                                                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                    {
+                                                        cssclassAvb = "spillover";
+                                                    }
+                                                    if (j <= ViewBag.blockAfterQty)
+                                                    {
+                                                        cssBlockedAvb = "blocked";
+                                                    }
+                                                    else
+                                                    {
+                                                        cssBlockedAvb = "";
+                                                    }
+                                                    if (item.Locked)
+                                                    {
+                                                        lockedClassAvb = "locked";
+                                                    }
+                                                    else
+                                                    {
+                                                        lockedClassAvb = "";
+                                                    }
+                                                    if (!(modelCodeAvb.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase)))
+                                                    {
+                                                        currQtyAvb = 0;
+                                                        currQtyAvb++;
+                                                        groupcntrAvb++;
+                                                        datagroupAvb = "group" + "_" + groupcntrAvb;
+
+                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroupAvb" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order firstRow @cssBlockedAvb @lockedClassAvb">
+                                                            <td class="sequence-index">@j</td>
+                                                            <td class="fa fa-chevron-right"></td>
+                                                            <td class="sequence-modelcode">
+                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                            </td>
+                                                            @{
+                                                                var ModelCode = item.Model_Code;
+
+                                                                if (ModelCode != null)
+                                                                {
+                                                                }
+                                                            }
+                                                            @{
+                                                                var colorCode = item.Color_code;
+                                                                var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                                                                <td class="sequence-color">
+                                                                    @colorName
+                                                                </td>
+                                                            }
+                                                            <td class="sequence-qty">
+                                                                @*@currQty*@
+                                                                @*</td>*@
+                                                            <td class="cumm-qty"></td>
+                                                            @{
+                                                                if (item.orderType.Trim() == "Trial")
+                                                                {
+                                                                    <td style="background-color: red;" class="sequence-ordertype">
+                                                                        @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="sequence-ordertype">
+                                                                        @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            <td class="">
+                                                                @Html.DisplayFor(modelItem => item.Order_No)
+                                                            </td>
+                                                            @{
+                                                                var shiftName = "";
+                                                                if (item.Planned_Shift_ID != null)
+                                                                {
+                                                                    shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+                                                                }
+
+                                                                <td class="sequence-shiftname">
+                                                                    @shiftName
+                                                                </td>
+                                                            }
+
+                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                        </tr>
+                                                                }
+                                                                else
+                                                                {
+                                                                    currQtyAvb++;
+                                                                    <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" data-plannedShiftId="@item.Planned_Shift_ID" class="not-hidden-order @cssBlockedAvb @datagroupAvb @lockedClassAvb">
+                                                                        <td class="sequence-index">@j</td>
+                                                                        <td><i class="fa fa-chevron-right"></i></td>
+                                                                        <td class="sequence-modelcode">
+                                                                            @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                        </td>
+                                                                        @{
+                                                                            var ModelCode = item.Model_Code;
+                                                                            if (ModelCode != null)
+                                                                            {
+                                                                            }
+                                                                        }
+                                                                        @{
+                                                                            var colorCode = item.Color_code;
+                                                                            var colorName = db.RS_Colour.Where(m => m.Colour_ID == colorCode).Select(m => m.Colour_Desc).FirstOrDefault();
+                                                                            <td class="sequence-ColorName">
+                                                                                @colorName
+                                                                            </td>
+                                                                        }
+
+                                                                        <td class="sequence-qty"></td>
+                                                                        <td class="cumm-qty"></td>
+
+                                                                        @{
+                                                                            if (item.orderType.Trim() == "Trial")
+                                                                            {
+                                                                                <td style="background-color: red;" class="sequence-ordertype">
+                                                                                    @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                                </td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td class="sequence-ordertype">
+                                                                                    @Html.DisplayFor(modelItem => item.orderType)
+
+                                                                                </td>
+                                                                            }
+                                                                        }
+
+                                                                        <td class="">
+                                                                            @Html.DisplayFor(modelItem => item.Order_No)
+                                                                        </td>
+
+                                                                        @{
+                                                                            var shiftName = "";
+                                                                            if (item.Planned_Shift_ID != null)
+                                                                            {
+                                                                                shiftName = db.RS_Shift.Where(m => m.Shift_ID == item.Planned_Shift_ID).Select(m => m.Shift_Name).FirstOrDefault();
+                                                                            }
+
+                                                                            <td class="sequence-shiftname">
+                                                                                @shiftName
+                                                                            </td>
+                                                                        }
+                                                                        <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                    </tr>
+                                                                                    }
+                                                                                    modelCodeAvb = item.Model_Code;
+                                                                                    //orderType = item.orderType;
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                foreach (var item in Model[1])
+                                                                                {
+                                                                                    j++;
+                                                                                    if (item.Inserted_Date < DateTime.Today && item.Inserted_Date > DateTime.Today.AddDays(-2))
+                                                                                    {
+                                                                                        cssclassAvb = "spillover";
+                                                                                    }
+                                                                                    if (j <= ViewBag.blockAfterQty)
+                                                                                    {
+                                                                                        cssBlockedAvb = "blocked";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        cssBlockedAvb = "";
+                                                                                    }
+                                                                                    if (item.Locked)
+                                                                                    {
+                                                                                        lockedClassAvb = "locked";
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        lockedClassAvb = "";
+                                                                                    }
+                                                                                    if (!modelCodeAvb.Equals(item.Model_Code, StringComparison.CurrentCultureIgnoreCase))
+                                                                                    {
+                                                                                        currQtyAvb = 0;
+                                                                                        currQtyAvb++;
+                                                                                        groupcntrAvb++;
+                                                                                        datagroupAvb = "group" + "_" + groupcntrAvb;
+                                                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-group="@datagroupAvb" data-ordertype="@item.orderType" class="not-hidden-order firstRow @cssBlockedAvb">
+                                                                                            <td class="sequence-index">@j</td>
+                                                                                            <td class="fa fa-chevron-right"><i class="fa fa-th-list"></i></td>
+                                                                                            <td class="sequence-parentmodelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentModel_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-parentseriescode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentSeries)
+                                                                                            </td>
+                                                                                            <td class="sequence-modelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-series @cssclassAvb">
+                                                                                                @Html.DisplayFor(modelItem => item.Series)
+                                                                                            </td>
+                                                                                            <td class="sequence-qty">
+                                                                                                @*@currQty*@
+                                                                                                @*</td>*@
+                                                                                            <td class="cumm-qty"></td>
+                                                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        currQtyAvb++;
+                                                                                        <tr data-rowid="@item.Row_ID" data-orderno="@item.Order_No" data-ordertype="@item.orderType" class="not-hidden-order @cssBlockedAvb @datagroupAvb">
+                                                                                            <td class="sequence-index">@j</td>
+                                                                                            <td><i class="fa fa-chevron-right"></i></td>
+                                                                                            <td class="sequence-parentmodelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentModel_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-parentseriescode">
+                                                                                                @Html.DisplayFor(modelItem => item.parentSeries)
+                                                                                            </td>
+                                                                                            <td class="sequence-modelcode">
+                                                                                                @Html.DisplayFor(modelItem => item.Model_Code)
+                                                                                            </td>
+                                                                                            <td class="sequence-series @cssclassAvb">
+                                                                                                @Html.DisplayFor(modelItem => item.Series)
+                                                                                            </td>
+                                                                                            <td class="sequence-qty"></td>
+                                                                                            <td class="cumm-qty"></td>
+                                                                                            <td class="sequence-remarks"><input type="text" name="sequenceRemarks" class="form-control" value="@item.remarks" /></td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    modelCodeAvb = item.Model_Code;
+                                                                                }
+                                                                            }
+
+                                        </tbody>
+                                    </table>

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_CBM_Parameter_Category>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "CBMParameterCategory")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Category Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Image")
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var imgsrcing = "";
+                if (item.MM_CBM_Category_Image != null)
+                {
+                    if (item.MM_CBM_Category_Image.Image_Content != null)
+                    {
+                        var base64imag = Convert.ToBase64String(item.MM_CBM_Category_Image.Image_Content);
+
+                        if (item.MM_CBM_Category_Image.Content_Type == "image/jpeg" || item.MM_CBM_Category_Image.Content_Type == "image/png" || item.MM_CBM_Category_Image.Content_Type == "image/gif" || item.MM_CBM_Category_Image.Content_Type == "image/jpg")
+                        {
+                            imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+
+                        }
+                        else
+                        {
+                            imgsrcing = string.Format("data:application/pdf;base64,{0}", base64imag);
+
+                        }
+                    }
+                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_Parameter_Category.C_Name)
+                    </td>
+                    <td>
+                        
+                        @if (item.MM_CBM_Category_Image != null && item.MM_CBM_Category_Image.Image_Content != null)
+                        {
+                        <img id="ItemPreview" style="border:1px solid #000000;width:60px;height:70px" title="Image" src="@imgsrcing" frameborder="1">
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "CBMParameterCategory", new { id = item.Category_ID })"><i class="fa fa-edit" style="color:blue"></i></a> 
+                        <a href="@Url.Action("Details", "CBMParameterCategory", new { id = item.Category_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a> 
+                        <a href="@Url.Action("Delete", "CBMParameterCategory", new { id = item.Category_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function arrayBufferToBase64(buffer) {
+                var binary = '';
+                var bytes = new Uint8Array(buffer);
+                var len = bytes.byteLength;
+                for (var i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return window.btoa(binary);
+            }
+        });
+        
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}
+
+
+
+

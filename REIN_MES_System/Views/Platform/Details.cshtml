@@ -1,0 +1,39 @@
+﻿@model REIN_MES_System.Models.RS_OM_Platform
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Plat Form Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Platform_Name)
+        </dd>
+       
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+

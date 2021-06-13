@@ -1,0 +1,95 @@
+﻿@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Day Wise List";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<div>
+    @if (TempData["employeeNumber"] != null)
+    {
+        <input type="hidden" id="emp_Number" class="emp_Number" name="emp_Number" value="@TempData["employeeNumber"]" />
+        // TempData["employeeNumber"] = null;
+    }
+    else
+    {
+        <input type="hidden" id="emp_Number" class="emp_Number" name="emp_Number" value="0" />
+    }
+
+    @using (Ajax.BeginForm("EmployeeList", "EmployeeChangeRequest", new AjaxOptions() { HttpMethod = "POST", LoadingElementId = "loading_global_spinner_image", OnSuccess = "", UpdateTargetId = "Employee_List", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "frm_show_employee_list" }))
+    {
+        <input type="hidden" id="employeeNo" class="employee_No" name="employeeNumber" />
+    }
+</div>
+<div class="box">
+    <div class="box-body">
+        <div id="Employee_List"></div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+    @Scripts.Render("~/fdtheme/tinytoggel_js")
+
+    @Styles.Render("~/fdtheme/tinytoggel_css")
+    @Styles.Render("~/fdtheme/spinner_css")
+    @Scripts.Render("~/fdtheme/spinner_js")
+
+    @Styles.Render("~/Content/Select2styles")
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#serial_no').html("Token No.");
+        var empNo = $('#emp_Number').val();
+
+        if (empNo != 0) {
+            $(".srlno-input").val(empNo);
+            DisplayEmpList();
+        }
+        $(".srlno-input").keydown(function (event) {
+            if (event.keyCode == 13) {
+                DisplayEmpList();
+            }
+
+        });
+
+        function DisplayEmpList() {
+            $('#employeeNo').val($(".srlno-input").val());
+            var tokenno = $(".srlno-input").val();
+            var url = "/EmployeeChangeRequest/isValidToken";
+            ajaxpack.postAjaxRequest(url, "employeeNumber=" + tokenno, ChkValidToken, "json");
+        }
+
+        function ChkValidToken() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+
+                    if (jsonRes == true) {
+                        $("#srlmessage-block").html(null);
+                        $("#srlmessage-block").removeClass("bg-error");
+                        $('#frm_show_employee_list').submit();
+                    }
+                    else {
+
+                        $("#srlmessage-block").html("Invalid Token No.");
+                        $("#srlmessage-block").addClass("bg-error");
+                        $('#Employee_List').empty();
+
+                    }
+                }
+            }
+        }
+    })
+</script>

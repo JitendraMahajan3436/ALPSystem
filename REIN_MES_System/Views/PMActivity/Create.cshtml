@@ -1,0 +1,350 @@
+﻿@model REIN_MES_System.Models.RS_PM_Activity
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Html.BeginForm("Create", "PMActivity", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+    <div class="plant_line_configuration">
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+
+                <div class="col-md-4" style="display:none">
+                    @Html.LabelFor(model => model.Plant_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Shop_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, ResourceDisplayName.Select_Shop, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Line_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Line_ID, (SelectList)ViewBag.Line_ID, ResourceDisplayName.select_Line, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Station_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Station_ID, (SelectList)ViewBag.Station_ID, ResourceDisplayName.Select_Station, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+               
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Machine_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Machine_ID, (SelectList)ViewBag.Machine_ID, ResourceDisplayName.Select_Machine, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Activity_Name, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Activity_Name, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Activity_Name, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Activity_Description, htmlAttributes: new { @class = " " })
+                    @Html.TextBoxFor(model => model.Activity_Description, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Activity_Description, null, new { @class = "validation_error" })
+                </div>
+                
+            </div>
+            <br/>
+            <div class="row">
+              
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Frequency, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Frequency, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Frequency, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Start_Date, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Start_Date, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Start_Date, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-4">
+                    @Html.LabelFor(model => model.Last_Date, htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Last_Date, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Last_Date, null, new { @class = "validation_error" })
+                </div>*@
+            </div>
+            <br/>
+            <div class="row">
+               
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Activity_Owner_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Activity_Owner_ID, (SelectList)ViewBag.Activity_Owner_ID, "Select Activity Owner", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Activity_Owner_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.EQP_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.EQP_ID, (SelectList)ViewBag.EQP_ID, "Select Equipment", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EQP_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Maintenance_Part_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Maintenance_Part_ID, (IEnumerable<SelectListItem>)ViewBag.Maintenance_Part_ID, "Select Parts", new { @class = "form-control", multiple = "true" })
+                    @Html.ValidationMessageFor(model => model.Maintenance_Part_ID, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+               
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Is_Value_Based, new { @class = "" })
+
+                    @Html.DropDownListFor(model => model.Is_Value_Based, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid" })
+                    @Html.ValidationMessageFor(model => model.Is_Value_Based)
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-4 pm_activity_lower_upper_limit">
+                    @Html.Label("Lower Limit", new { @class = "" }) 
+                    @Html.TextBoxFor(model => model.Lower_Limit, htmlAttributes: new { @class = "form-control UpperLower" })
+                    @Html.ValidationMessageFor(model => model.Lower_Limit)<div id="lblLowerLimit" class="error"></div>
+                </div>
+                <div class="col-md-4 pm_activity_lower_upper_limit">
+                    @Html.Label("Upper Limit", new { @class = "" }) 
+                    @Html.TextBoxFor(model => model.Upper_Limit, htmlAttributes: new { @class = "form-control UpperLower" })
+                    @Html.ValidationMessageFor(model => model.Upper_Limit)<div id="lblUperLimit" class="error"></div>
+                </div>
+                <div class="col-md-4 pm_activity_lower_upper_limit">
+                    @Html.LabelFor(model => model.M_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.M_ID, null, "Select Measurement Type", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.M_ID, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-4" style="display:none;" >
+                    @Html.Label("Is User Value Based", new { @class = "" })
+                    @Html.DropDownListFor(model => model.Is_User_Value_Based, new SelectList(new List<object> { new { value = "false", text = "False" }, new { value = "true", text = "True" } }, "value", "text", 2), new { @class = "list-box tri-state valid" })
+                    @Html.ValidationMessageFor(model => model.Is_User_Value_Based)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+
+                    <input type="submit" value="Save" class="btn btn-primary" id="btnsave" /> 
+ @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+    }
+    @section Styles {
+        @Styles.Render("~/Content/Select2styles")
+        
+    }
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/plant_line_configuration")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/Calendar_file")*@
+    @*<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />*@
+    @*<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>*@
+    </div>
+        <script  type="text/javascript">
+            $(document).ready(function () {
+                
+               
+
+                $("#Shop_ID").on("change", function () {
+                    $("#Machine_ID").html("");
+                    var Shop_ID = $('#Shop_ID').val();
+                    if (Shop_ID.length > 0) {
+                        $.getJSON('/PMActivity/GetMachineByShopID', { shopid: Shop_ID }, function (data) {
+                            if (data.length > 0) {
+                                $('#Machine_ID option').remove();
+                                $('#Machine_ID').append('<option value="">Select Machine</option>');
+                                for (var i = 0; i < data.length; i++) {
+                                    $('#Machine_ID').append('<option value="' +
+                                               data[i].Id + '">' + data[i].Value + '</option>');
+                                }
+                            }
+
+                        },2000);
+                    }
+                });
+
+
+                //$("#Station_ID").on("change", function () {
+                //    var Station_ID = $(this).val();
+                //    if (Station_ID.length > 0) {
+                //        $.getJSON('/PMActivity/GetMachineByStationId', { Station_ID: Station_ID }, function (data) {
+                //            if (data.length > 0) {
+                //                $('#Machine_ID option').remove();
+                //                $('#Machine_ID').append('<option value="">Select Machine Name</option>');
+                //                for (var i = 0; i < data.length; i++) {
+                //                    $('#Machine_ID').append('<option value="' +
+                //                               data[i].Id + '">' + data[i].Value + '</option>');
+                //                }
+                //            }
+
+                //        });
+                //    }
+                //});
+
+
+               
+                $("#Machine_ID").on("change", function () {
+                    $("#Maintenance_Part_ID").html("");
+                    var Machine_ID = $('#Machine_ID').val();
+                    if (Machine_ID.length > 0) {
+                        $.getJSON('/PMActivity/GetMachinePartByMachineID', { machineid: Machine_ID }, function (data) {
+                            if (data.length > 0) {
+                                $('#Maintenance_Part_ID option').remove();
+                               
+                                for (var i = 0; i < data.length; i++) {
+                                    $('#Maintenance_Part_ID').append('<option value="' +
+                                               data[i].Maintenance_Part_ID + '">' + data[i].Part_Name + '</option>');
+                                }
+                            }
+                            
+                        }, 1000);
+                        $.getJSON('/PMActivity/GetEquipmentPartByMachineID', { machineid: Machine_ID }, function (data) {
+                            if (data.length > 0) {
+                                $('#EQP_ID option').remove();
+
+                                for (var i = 0; i < data.length; i++) {
+                                    $('#EQP_ID').append('<option value="' +
+                                               data[i].EQP_ID + '">' + data[i].Equipment_Name + '</option>');
+                                }
+                            }
+
+                        });
+                    }
+                });
+
+                $("#Machine_ID").on("change", function () {
+                    $("#EQP_ID").html("");
+                    var Machine_ID = $('#Machine_ID').val();
+                    if (Machine_ID.length > 0) {
+                        
+                    }
+                });
+                var isValuebase = $("#Is_Value_Based").val();
+                //alert(isOrderbase);
+                if (isValuebase == "true") {
+                    $(".pm_activity_lower_upper_limit").show("slow");
+                    $("#Lower_Limit").val("");
+                    $("#Upper_Limit").val("");
+                }
+                else {
+                    $(".pm_activity_lower_upper_limit").hide("slow");
+                }
+
+                $("#Is_Value_Based").change(function (e) {
+                    if ($(this).val() == "true") {
+
+                        // process to show the upper and lower fields
+                        $(".pm_activity_lower_upper_limit").show("slow");
+                        $("#Lower_Limit").val("");
+                        $("#Upper_Limit").val("");
+
+                        $("#Is_User_Value_Based").val("");
+                    }
+                    else {
+                        $(".pm_activity_lower_upper_limit").hide("slow");
+                    }
+
+
+
+                });
+
+                $("#Is_User_Value_Based").change(function (e) {
+                    if ($(this).val() == "true") {
+
+                        // process to show the upper and lower fields
+                        $(".pm_activity_lower_upper_limit").hide("slow");
+
+                        $("#Is_Value_Based").val("");
+                    }
+                    else {
+                    }
+
+                });
+                $("#Lower_Limit").change(function (e) {
+                    //alert("jhu");
+                    $("#lblLowerLimit").html("");
+                    var upperLimit = $("#Upper_Limit").val();
+                    var lowerLimit = $("#Lower_Limit").val();
+                    if (upperLimit != "") {
+                        //compatre that it is lower
+                        if (lowerLimit > upperLimit) {
+                            //error msg
+                            $("#lblLowerLimit").html("<b style='color:red'>LowerLimit can't be greater than Upper Limit.</b>");
+                            return false;
+                        }
+                        if (lowerLimit == "") {
+                            //error msg
+                            $("#lblLowerLimit").html("<b style='color:red'>LowerLimit can't be Empty.</b>");
+                            return false;
+                        }
+                    }
+
+                });
+                $("#Upper_Limit").change(function (e) {
+                    $("#lblUperLimit").html("");
+                    var lowerLimit = $("#Lower_Limit").val();
+                    var upperLimit = $("#Upper_Limit").val();
+                    if (lowerLimit != "") {
+                        //compatre that it is greater
+                        if (upperLimit < lowerLimit) {
+                            //error msg
+                            $("#lblUperLimit").html("<b style='color:red'>UpperLimit can't be less than Lower Limit.</b>");
+                            return false;
+                        }
+                        if (upperLimit == "") {
+                            //error msg
+                            $("#lblUperLimit").html("<b style='color:red'>UpperLimit can't be Empty.</b>");
+                            return false;
+                        }
+                    }
+
+                });
+
+                $("#Maintenance_Part_ID").select2({
+                    allowClear: true,
+                    multiple: 'multiple'
+                });
+
+            
+                $("#Start_Date").datepicker(
+                    {
+                        format: 'yyyy-mm-dd',
+                        startDate: new Date(),
+                    });
+                $("#Last_Date").datepicker(
+                   {
+                       format: 'yyyy-mm-dd',
+                       startDate: new Date(),
+                   });
+            });
+        </script>
+    }
+
+
+
+
+

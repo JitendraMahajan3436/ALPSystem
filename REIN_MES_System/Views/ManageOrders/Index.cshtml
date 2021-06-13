@@ -1,0 +1,214 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+
+
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div id="ppc_hold_orders">
+
+    <div class="row">
+        @using (Ajax.BeginForm("GetHoldData", "ManageOrders", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "divid", OnComplete = "manage_order_complete", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "ManageOrdersForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <div class="col-md-3" style="display:none;">
+            @Html.DisplayName("Plant Name *")
+            <div>
+                @Html.DropDownList("Plant_ID", (SelectList)ViewBag.Plant_ID, new { @readonly = "readonly", @class = "form-control" })
+                @Html.ValidationMessage("Plant_ID", null, new { @class = "validation_error" })
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            @Html.DisplayName("Shop Name")<i style="color:red">*</i>
+            <div>
+                @Html.DropDownList("Shop_ID", (SelectList)ViewBag.Shop_ID, ResourceModel_Master.Plant_Label_Shop_Select, new { @class = "form-control" })
+                @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            @Html.DisplayName("Platform")<i style="color:red">*</i>
+            <div>
+                @Html.DropDownList("Platform_ID", (SelectList)ViewBag.Platform_ID, "Select Platform", new { @class = "form-control" })
+                @Html.ValidationMessage("Platform_ID", null, new { @class = "validation_error" })
+            </div>
+        </div>
+        @*<div class="col-md-3">
+            @html.displayname("line name")
+
+            @html.dropdownlist("line_id", enumerable.empty<selectlistitem>(), null, new { onchange = "", @class = "form-control" })
+            @html.validationmessage("line_id", null, new { @class = "validation_error" })
+        </div>*@
+        @*<div class="form-group">
+            @Html.LabelFor(model => model..Line_ID, new { @class = "" }) *
+
+            @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.select_Line, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+
+        </div>*@
+        <div class="col-md-3 col-lg-offset-1">
+            @Html.DisplayName("Remarks")<i style="color:red">*</i>
+            @Html.TextBox("Remarks", null, new { onchange = "", @class = "form-control", maxlength = "200"})
+            @Html.ValidationMessage("Remarks", null, new { @class = "validation_error" })
+        </div>
+}
+    </div>
+        
+    <div class="row">
+       
+    </div>
+
+            <div class="row col-md-12">
+
+ <br />         <div id="divid">
+
+                </div>
+            </div>
+        @*}*@
+
+   
+
+</div>
+
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+    @Scripts.Render("~/bundles/Select2scripts")
+
+
+    <script type="text/javascript">
+        function manage_order_complete()
+        {
+            //$('#divid .datatable_completes').dataTable({
+            //    "bPaginate": true,
+            //    "bLengthChange": false,
+            //    "bFilter": true,
+            //    "bSort": true,
+            //    "bInfo": true,
+            //    "bAutoWidth": false,
+            //    "aoColumnDefs": [
+            //    { 'bSortable': false, 'aTargets': [-1] }
+            //    ]
+            //});
+        }
+
+        $(document).ready(function (e) {
+
+            $("#Shop_ID").on("change", function () {
+                debugger;                
+                var Plant = $("#Plant_ID").val();
+                var Shop = $("#Shop_ID").val();
+                $('#Platform_ID option').remove();
+                $("#Platform_ID").prepend("<option value='' selected='selected'>Select Platform</option>");
+                if (Plant.length > 0 && Shop.length > 0) {
+                    $('#Platform_ID option').remove();
+                    $.getJSON('/ManageOrders/GetPlatformID', { Shop_id: Shop }, function (data) {
+                        debugger;
+                        if (data.length > 0) {
+                            //$('#Platform_ID option').remove();
+
+                            if (data.length > 0) {
+                                $("#Platform_ID").prepend("<option value='' selected='selected'>Select Platform</option>");
+                                for (i = 0; i < data.length; i++) {
+                                    $('#Platform_ID').append('<option value="' +
+                                        data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                                }
+                            } else {
+                                for (i = 0; i < data.length; i++) {
+                                    $('#Platform_ID').append('<option value="' +
+                                        data[i].Platform_ID + '" selected>' + data[i].Platform_Name + '</option>');
+                                }
+                            }
+                         //   $("#Line_ID").change();
+                        }
+                        else {
+                            $('#Platform_ID option').remove();
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        //$('.content-wrapper div.myalert').remove();
+                        //alertHtml = '<div class="box-body myalert">' +
+                        //           '<div class="alert alert-warning alert-dismissable">' +
+                        //           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        //           '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                        //           '<p>Unable to populate Line Selection.Please ReTry!</p>' +
+                        //           '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                        //           '</div></div>';
+                        //$('.content-wrapper .content').before(alertHtml);
+                        //location.reload();
+                        $("#Shop_ID").change();
+                    });
+                }
+            }); // Shop Select Change Event End
+
+
+            $("#Platform_ID").on("change", function () {
+                debugger;
+                var Plant = $("#Plant_ID").val();
+                var Shop = $("#Shop_ID").val();
+                var PlatformId = $('#Platform_ID').val();
+
+                $("#ManageOrdersForm").submit();
+
+            });
+
+            $("#ManageOrdersForm").on('submit', function () {
+
+            });
+
+           
+
+            $("#ppc_hold_orders").on("click", ".hold_order", function () {
+                //alert($(this).attr("id"));
+                var orderNo = $(this).attr("id");                
+                var remark = $("#Remarks").val();
+                var Sid = $('#Shop_ID').val();
+              
+                var url = "/ManageOrders/changeOrderState";
+                ajaxpack.getAjaxRequest(url, "status=Hold&orderNo=" + orderNo + "&remark=" + remark + "&shopId="+ Sid, showHoldOrderDetail, "json");
+            });
+
+
+            function showHoldOrderDetail()
+            {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4)
+                {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        if (jsonRes == true)
+                        {
+                            $("#ManageOrdersForm").submit();
+                            $("#Remarks").val("");
+                        }
+                    }
+                }
+            }
+
+            $("#ppc_hold_orders").on("click", ".resume_order", function ()
+            {
+                //alert($(this).attr("id"));
+                var orderNo = $(this).attr("id");
+              
+                orderNo = orderNo.split("_");
+                var rowId = orderNo[1];
+                orderNo = orderNo[0];
+                var Sid = $('#Shop_ID').val();
+               
+                var remark = $("#Remarks").val();
+                var url = "/ManageOrders/changeOrderState";
+                ajaxpack.getAjaxRequest(url, "status=Release&orderNo=" + orderNo + "&remark=" + remark + "&shopId=" + Sid + "&rowId=" + rowId, showHoldOrderDetail, "json");
+            });
+        });
+    </script>
+}

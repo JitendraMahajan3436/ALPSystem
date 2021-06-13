@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Statuswisedata";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="col-md-4">
+            @Html.Label("Shop Name", new { @class = "" })<i style="color:red">*</i>
+
+            @Html.DropDownList("Shop_ID", null, "Select Shop", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.Label("Line Name", new { @class = "" })<i style="color:red">*</i>
+
+            @Html.DropDownList("Line_ID", null, "Select Line", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessage("Line_ID", null, new { @class = "validation_error" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.Label("Select Date", new { @class = "" })<i style="color:red">*</i>
+
+            @Html.TextBox("Date", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessage("Date", null, new { @class = "validation_error" })
+
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" style="margin-left: 1%;">
+        <br />
+        <div id="topics"></div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+    @*<br />*@
+    <div class="form-horizontal" style="height:70%;" id="div2">
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class=" col-md-12">
+                @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                    height="1000" frameborder="0"></iframe>*@
+                <iframe name="ContentFrame_ShopProduction" id="ContentFrame_ShopProduction" width="100%" height="900px"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function (e) {
+
+        $("#Shop_ID").change(function (e) {
+            debugger
+            var shopId = $("#Shop_ID").val();
+            if (shopId) {
+                var url = "/Setup/GetLineByShopID";
+                ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showLineShopID, "json");
+
+            }
+            else {
+                clearSelectBox("Line_ID");
+            }
+        });
+
+
+        function showLineShopID() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    SelectOptionHTML(jsonRes, "Line_ID");
+                }
+            }
+        }
+
+        function SelectOptionHTML(jsonRes, targetId) {
+            //var jsonRes = $.parseJSON(myajax.responseText);
+            var res = "";
+            for (var i = 0; i < jsonRes.length; i++) {
+                res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+            }
+
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+            $("#" + targetId).html(res);
+        }
+
+        function clearSelectBox(targetId) {
+            var res = "";
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+
+            $("#" + targetId).html(res);
+        }
+
+        $("#Date").datepicker(
+            {
+                format: 'yyyy-mm-dd',
+                endDate: new Date(),
+                autoclose: true
+            });
+
+        $("#Date").change(function () {
+            debugger
+            var shopId = $("#Shop_ID").val();
+            var LineId = $("#Line_ID").val();
+            var Date = $("#Date").val();
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/ProductionReports/GetStatusListByLinewise',
+                data: JSON.stringify({ 'shopId': shopId, 'LineId': LineId, 'Date': Date }),
+                dataType: "json",
+                traditional: true,
+                contentType: "application/json; charset=utf-8",
+
+                success: function (data) {
+                    debugger
+                    //$('#result').html('"PassThings()" successfully called.');
+                    var row = $('#topics').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        var buttons = $('<input type="button" class="but" Style="margin: 0px 0px;;color: white;background - image: linear - gradient(0deg, #EE82DA 0 %, #FEFAFD 100 %);-webkit - background - clip: text;background - clip: text;filter: drop - shadow(0 2px 2px hsla(290, 100 %, 20 %, 1));"  value=' + data[i].Order_Status + ":" + data[i].ProductionCount + ' Id=' + data[i].Order_Status + ' onclick="getstatus(' + data[i].Order_Status + ')"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' );
+
+                        buttons.appendTo('#topics');
+                    }
+                },
+
+
+                failure: function (response) {
+                    $('#result').html(response);
+                }
+            })
+        })
+
+
+
+    })
+    function getstatus(e) {
+
+        debugger
+        //var button = $(".but:visible").attr('id').addClass('#11C3EE');
+        //(e.id).addClass('#11C3EE');
+        var Iframe = $('#ContentFrame_ShopProduction').attr('src', '');
+        var Shop_Id = $("#Shop_ID").val();
+        var LineId = $("#Line_ID").val();
+        var Date = $("#Date").val();
+        var Status = e.id;
+
+
+
+        if (Shop_Id > 0 && LineId > 0 && Date != "" && Status != "") {
+            $('#ContentFrame_ShopProduction').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fDrona%2fWIP_Report_NEW_ZHB&Shop_ID=' + Shop_Id + '&Date=' + Date + '&Line=' + LineId  + '&OStatus=' + Status);
+        }
+        else {
+            alert("Please Select List");
+        }
+
+
+    }
+
+</script>
+<style type="text/css">
+        /*
+    * 	BIG Jelly Button
+    *		Original source from Mathias Adam:
+    *				- https://dribbble.com/shots/6209185-BIG-Jelly-Button
+    *
+    *		I tried to stay as true to the original source as possible.
+    *		Unforutunately there were a few effects I couldn't make
+    *		happen with CSS. Primarily the suble noise texture. I
+    *		considered using a base64 encoded noise pattern overlay but
+    *		I felt like that was cheating. I also couldn't do the
+    *		true bevel effect on the label since CSS doesn't have an
+    *		inset text shadow option.
+    */
+
+
+
+        .but {
+            cursor: pointer;
+            position: relative;
+            padding: 0.5rem 2.5rem;
+            border-radius: 3.75rem;
+            /*line-height: 2.5rem;*/
+            font-size: 2rem;
+            font-weight: 600;
+            border: 1px solid #012880;
+            background-image: linear-gradient(-180deg, #FF89D6 0%, #C01F9E 100%);
+            box-shadow: 0 1rem 1.25rem 0 rgba(22,75,195,0.50), 0 -0.25rem 1.5rem rgba(110, 15, 155, 1) inset, 0 0.75rem 0.5rem rgba(255,255,255, 0.4) inset, 0 0.25rem 0.5rem 0 rgba(180, 70, 207, 1) inset;
+        }
+
+
+
+            .but::before {
+                content: "";
+                display: block;
+                /*height: 0.25rem;*/
+                position: absolute;
+                top: 0.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 7.5rem);
+                background: #fff;
+                border-radius: 100%;
+                opacity: 0.7;
+                background-image: linear-gradient(-270deg, rgba(255,255,255,0.00) 0%, #FFFFFF 20%, #FFFFFF 80%, rgba(255,255,255,0.00) 100%);
+            }
+
+            .but::after {
+                content: "";
+                display: block;
+                /*height: 0.25rem;*/
+                position: absolute;
+                bottom: 0.75rem;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 7.5rem);
+                background: #fff;
+                border-radius: 100%;
+                filter: blur(1px);
+                opacity: 0.05;
+            }
+</style>
+
+

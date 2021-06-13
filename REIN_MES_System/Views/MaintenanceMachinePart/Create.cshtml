@@ -1,0 +1,154 @@
+﻿@model REIN_MES_System.Models.RS_Maintenance_Machine_Part
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="manager_Line">
+    
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="plant_line_configuration">
+                <div class="form-horizontal">
+                    <div id="testy"></div>
+                    @Html.ValidationSummary(true)
+                    <div class="row">
+
+                        <div class="col-md-3" style="display:none">
+                            @Html.LabelFor(model => model.Plant_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, new { @class = "form-control" })
+                            <span class="validation_error" id="lblPlant_ID"></span>
+
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Shop_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, "Shop", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error shop" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Line_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Line_ID, (SelectList)ViewBag.Line_ID, "Line", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error line" })
+                        </div>
+                        <div class="col-md-3">
+                                @Html.LabelFor(model => model.Station_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                                @Html.DropDownListFor(model => model.Station_ID, (SelectList)ViewBag.Station_ID, ResourceDisplayName.Select_Station, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error station" })
+                            </div>
+                        <div class="col-sm-3">
+                            @Html.LabelFor(model => model.Machine_ID, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Machine_ID, (SelectList)ViewBag.Machine_ID, ResourceDisplayName.Select_Machine, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error machine" })
+                        </div>
+                        <div class="col-md-1">
+                            <br />
+                            <a href="@Url.Action("ExcelUpload", "MaintenanceMachinePart")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> Upload</a>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                    </div>
+                    <br /><br />
+
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <label class="" for="divListofPart">Part List</label>
+                                    <div id="divListofPart" style="height: 400px; overflow: auto;border: 1px solid #cccccc; padding: 10px;">
+                                    </div>
+                                    <label class="" for="divselectedParts">Search:</label>
+                                    @Html.TextBoxFor(model => model.Maintenance_Part_ID, htmlAttributes: new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="box box-primary">
+                                <form role="form">
+                                    <div class="box-body" style="text-align: center;">
+                                        <br /><br /><br /><br /><br /><br />
+                                        <div class="btn-group-vertical">
+                                            <button class="swapbtn btn btn-info" id="clickleft" type="button" onclick="swapItemLeftAll();" style="font-size: 20px;font-weight: bold;">>></button><br />
+                                            <button class="swapbtn btn btn-info" type="button" onclick="swapItemLeft();" style="font-size: 20px;font-weight: bold;">></button><br />
+                                            <button class="swapbtn btn btn-info" type="button" onclick="swapItemRight();" style="font-size: 20px;font-weight: bold;"><</button><br />
+                                            <button class="swapbtn btn btn-info" type="button" onclick="swapItemRightAll();" style="font-size: 20px;font-weight: bold;"><<</button>
+                                        </div>
+                                        <br /><br /><br /><br /><br />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <div class="box box-primary">
+                                <div class="box-body">
+                                    <label class="" for="divselectedParts">Assigned Part List</label>
+                                    <div id="divselectedParts" style="height: 400px; overflow: auto;border: 1px solid #cccccc; padding: 10px;">
+                                    </div>
+                                    <label class="" for="divselectedOperators">Search:</label>
+                                    @Html.TextBoxFor(model => model.selectedParts, htmlAttributes: new { @class = "form-control" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <input type="button" value="Save" onclick="save();" class="btn btn-primary select_manager" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+<style>
+    #testy {
+        z-index: 99999;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Scripts.Render("~/bundles/PartToMachineManagement_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    
+    <script>
+        $(document).ready(function () {
+           // $("#Machine_ID").select2();
+
+            $("#Shop_ID").on("change", function () {
+                var Shop_ID = $(this).val();
+                $('#Machine_ID option').remove();
+                $('#Machine_ID').append('<option value="">Select Machine Name</option>');
+                if (Shop_ID.length > 0) {
+                    $.getJSON('/MaintenanceMachinePart/GetMachineByShopId', { Shop_ID: Shop_ID }, function (data) {
+                        if (data.length > 0) {
+                            $('#Machine_ID option').remove();
+                            $('#Machine_ID').append('<option value="">Select Machine Name</option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Machine_ID').append('<option value="' +
+                                           data[i].Id + '">' + data[i].Value + '</option>');
+                            }
+                        }
+
+                    },2000);
+                }
+            });
+
+        });
+    </script>
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")   
+    @Styles.Render("~/fdtheme/notification_css")
+}
+

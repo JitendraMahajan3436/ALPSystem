@@ -1,0 +1,244 @@
+﻿@model REIN_MES_System.Models.RS_Serial_Number_Data
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Part No")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_No)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Plant Code")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_Code)
+        </dd>
+        @if (Model.Year_Code != null && Model.Year_Code != "")
+        {
+            <dt>
+                @Html.DisplayName("Year Code")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Year_Code)
+            </dd>
+        }
+        @if (Model.Month_Code != null && Model.Month_Code != "")
+        {
+            <dt>
+                @Html.DisplayName("Month Code")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Month_Code)
+            </dd>
+        }
+        @if (Model.Model != null && Model.Model != "")
+        {
+            <dt>
+                @Html.DisplayName("Model")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Model)
+            </dd>
+        } @if (Model.Varient_Group != null && Model.Varient_Group != "")
+        {
+            <dt>
+                @Html.DisplayName("Varient Group")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Varient_Group)
+            </dd>
+        } @if (Model.Common != null && Model.Common != "")
+        {
+            <dt>
+                @Html.DisplayName("Common")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Common)
+            </dd>
+        } @if (Model.Tractor_Family != null && Model.Tractor_Family != "")
+        {
+            <dt>
+                @Html.DisplayName("Tractor Family")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tractor_Family)
+            </dd>
+        } @if (Model.Brand != null && Model.Brand != "")
+        {
+            <dt>
+                @Html.DisplayName("Brand")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Brand)
+            </dd>
+        } @if (Model.Engine_Family != null && Model.Engine_Family != "")
+        {
+            <dt>
+                @Html.DisplayName("Engine Family")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Engine_Family)
+            </dd>
+        } @if (Model.Tractor_Model != null && Model.Tractor_Model != "")
+        {
+            <dt>
+                @Html.DisplayName("Tractor Model")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tractor_Model)
+            </dd>
+        } @if (Model.Tractor_Feture_A != null && Model.Tractor_Feture_A != "")
+        {
+            <dt>
+                @Html.DisplayName("Tractor Feture A")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tractor_Feture_A)
+            </dd>
+        } @if (Model.Tractor_Feture_B != null && Model.Tractor_Feture_B != "")
+        {
+            <dt>
+                @Html.DisplayName("Tractor Feture B")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tractor_Feture_B)
+            </dd>
+        } @if (Model.Model_Year != null && Model.Model_Year != "")
+        {
+            <dt>
+                @Html.DisplayName("Model Year")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Model_Year)
+            </dd>
+        } @if (Model.Assembly_Plant != null && Model.Assembly_Plant != "")
+        {
+            <dt>
+                @Html.DisplayName("Assembly Plant")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Assembly_Plant)
+            </dd>
+        }@if (Model.Model_Month != null && Model.Model_Month != "")
+        {
+            <dt>
+                @Html.DisplayName("Model Month")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Model_Month)
+            </dd>
+        } @if (Model.Trans_Series != null && Model.Trans_Series != "")
+        {
+            <dt>
+                @Html.DisplayName("Trans Series")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Trans_Series)
+            </dd>
+        } @if (Model.Trans_Year != "" && Model.Trans_Year != null)
+        {
+            <dt>
+                @Html.DisplayName("Trans Year")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Trans_Year)
+            </dd>
+        } @if (Model.Trans_Month != null && Model.Trans_Month != "")
+        {
+            <dt>
+                @Html.DisplayName("Trans Month")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Trans_Month)
+            </dd>
+        } @if (Model.Hyd_series != null && Model.Hyd_series != "")
+        {
+            <dt>
+                @Html.DisplayName("Hyd series")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Hyd_series)
+            </dd>
+        } @if (Model.Hyd_year != null && Model.Hyd_year != "")
+        {
+            <dt>
+                @Html.DisplayName("Hyd year")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Hyd_year)
+            </dd>
+        } @if (Model.Hyd_month != null && Model.Hyd_month != "")
+        {
+            <dt>
+                @Html.DisplayName("Hyd month")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Hyd_month)
+            </dd>
+        } @if (Model.Prefix != null && Model.Prefix != "")
+        {
+            <dt>
+                @Html.DisplayName("Prefix")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Prefix)
+            </dd>
+        } @if (Model.Suffix != null && Model.Suffix != "")
+        {
+            <dt>
+                @Html.DisplayName("Suffix")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Suffix)
+            </dd>
+        } @if (Model.Running_Serial != null)
+        {
+            <dt>
+                @Html.DisplayName("Running Serial")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Running_Serial)
+            </dd>
+        }
+    </dl>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Row_ID },new { @class="btn btn-primary"}) |
+    @Html.ActionLink("Show All", "Index",null, new { @class = "btn btn-primary" })
+</p>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<REIN_MES_System.Models.BulkOrderList>
+
+<table class="table table-bordered table-striped order-start-tbl  ">
+    <tr>
+        <th>
+            Part No
+        </th>
+        <th>
+            Part Description
+        </th>
+        <th>
+            Planned Qty
+        </th>
+        <th>
+            Started Qty
+        </th>
+        <th>
+            Remaining Qty
+        </th>
+        <th>
+            Qty
+        </th>
+        <th>
+            Action
+        </th>
+
+    </tr>
+    @{
+        if (Model != null)
+        {
+            foreach (var data in Model.GroupBy(c => c.part_no))
+            {
+                foreach (var item in data)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.part_no)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.part_description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.planned_qty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.started_qty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.pending_qty)
+                        </td>
+                        <td>
+                            <input id="@item.row_id" class="total_order_@item.row_id" data-max-order="@item.pending_qty" type="text" max="@item.pending_qty" />
+                        </td>
+                        <td>
+                            <a class="start_orders btn btn-primary" id="@item.row_id" data-order-rowid="@item.row_id" data-orderno="@item.row_id">Order Start</a>
+                        </td>
+
+                    </tr>
+                    break;
+                }
+            }
+        }
+    }
+
+
+</table>
+
+

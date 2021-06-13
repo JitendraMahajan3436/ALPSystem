@@ -1,0 +1,223 @@
+﻿@*@using REIN_MES_System.App_LocalResources
+@using REIN_MES_System;
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+}
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!-- <a href="../../index2.html" class="navbar-brand"><b>Admin</b>LTE</a> -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                 
+            <ul class="nav navbar-nav">
+                    <li>
+                        <!-- Logo -->
+                        <a href="" class="logo">
+                            <img width="200" src="~/Content/images/.png">
+                        </a>   
+                    </li>
+                </ul>
+            
+                <ul class="nav navbar-nav">
+                    @if (userSession.menuObj != null)
+                    {
+                        foreach (var menu in userSession.menuObj)
+                        {
+                            <li><a href="@Url.Action(menu.ActionName, menu.ControllerName)"> @menu.LinkName </a></li>
+                        }
+                    }
+                   
+                </ul>
+            </div><!-- /.navbar-collapse -->
+            <div class="nav navbar-nav">
+                <ul class="nav navbar-nav">
+                    <h3 class="text-center" style="font-size: 15px;margin-left:15px; text-align:center; font-weight: bold;font-family: sans-serif;margin-top:16px;color:white">
+                        @if (globalData != null)
+                        {
+                            @globalData.plantName
+                        }
+                    </h3>
+                </ul>
+            </div>
+            <label class="Header-Pname">
+                Machine Management System
+            </label>
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                
+                <ul class="nav navbar-nav">
+                    <li class="text-center" style="font-size: 15px;margin-left:15px; text-align:center; font-weight: bold;font-family: sans-serif;color:white"><a href="javascript:history.back()" class="btnback">BACK</a></li>
+
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu" style="font-size: 15px;margin-left:15px; text-align:center; font-weight: bold;font-family: sans-serif;color:white">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="~/Content/theme/dist/img/user3-160x160_blank.jpg" class="user-image" alt="User Image" />
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+
+                            <span class="hidden-xs">@userSession.userName.ToUpperInvariant()</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header" style="font-size: 15px;margin-left:15px; text-align:center; font-weight: bold;font-family: sans-serif;color:white">
+                                <img src="~/Content/theme/dist/img/user3-160x160_blank.jpg" class="img-circle" alt="User Image" />
+                                <p>
+                                    @userSession.userName
+
+                                   
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="@Url.Action("Logout", "User")" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <a href="/" class="logo">
+                    <img width="180" src="~/Content/images/.jpg" />
+                </a>
+            </div><!-- /.navbar-custom-menu -->
+        </div><!-- /.container-fluid -->
+        <div class="container-fluid shop-details-bar">
+            <div class="row container top-bar top-bar1">
+               
+                <div class="col-md-12 text-center"> <span style="text-align:center" id="shop-shift">@if (globalData != null)
+                {<h3 class="pagetitleClass" style="font-size: 15px;font-weight: bold;font-family: sans-serif;margin-top:4px;color:white">@globalData.pageTitle</h3>}</span></div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+<style type="text/css">
+        
+    .container-fluid {
+     padding-right: 0px; 
+     padding-left: 0px; 
+    
+}
+
+</style>*@
+
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+}
+
+@{
+
+    <header class="main-header" style="width:100%;position:fixed">
+        <!-- Logo -->
+       
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation" >
+
+            <a href="/" class="logo ">
+                <img width="200" src="~/Content/images/ReinSolutionsLogo.jpeg" />
+            </a>
+            <!-- Sidebar toggle button-->
+            @*<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>*@
+
+            @*<label class="Header-Pname" style="margin-left:1%">
+            @userSession.plantName
+        </label>*@
+
+
+
+
+            <div class="navbar-custom-menu">
+                @* <label class="text-center Backclass"><a href="javascript:history.back()">BACK</a></label>*@
+                @*<script>
+                    document.write('<a style="font-size:151%;" href="' + document.referrer + '"><b><u>BACK</u></b></a>');
+                </script>*@
+
+                <ul class="nav navbar-nav us-only">
+
+                    <li class="dropdown user user-menu" style="font-size: 15px;margin-left:15px;margin-right:45px; text-align:center; font-weight: bold;font-family: sans-serif;color:white">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="~/Content/theme/dist/img/user2-160x160_blank.jpg" class="user-image" alt="User Image" />
+                            <span class="hidden-xs username">@userSession.userName.ToUpperInvariant()</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="~/Content/theme/dist/img/user2-160x160_blank.jpg" class="img-circle" alt="User Image" />
+                                <label>
+                                    @userSession.userName
+
+                                </label>
+                            </li>
+
+
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+
+                                <div class="pull-right">
+                                    <a class="btn btn-default btn-flat" href="@Url.Action("Logout", "User")">
+                                        @*<i class="fa fa-th"></i> <span style="color:black">Sign out</span>*@
+                                        Sign Out
+                                    </a>
+
+                                </div>
+                            </li>
+                        </ul>
+
+                    </li>
+
+                </ul>
+                @*<a href="/" class="logo1">
+                    <img width="180" src="~/Content/images/.jpg" />
+                </a>*@
+            </div>
+
+            @*<div class="pgcolor">
+            <div class="col-sm-12 col-md-12 col-lg-12 page-title">
+                <span style="text-align:center" id="shop-shift">
+                    @if (globalData != null)
+                    {<label class="pagetitleClass">@globalData.pageTitle</label>}
+                </span>
+            </div>
+        </div>*@
+            
+        </nav>
+    </header>
+
+
+}
+
+   
+<script type="text/javascript">
+   function OnBack()
+   {
+       debugger;
+       window.history.go(-2);
+    }
+
+   
+
+
+
+   
+    </script>

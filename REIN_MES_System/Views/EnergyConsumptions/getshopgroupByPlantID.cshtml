@@ -1,0 +1,124 @@
+﻿@model IEnumerable<REIN_MES_System.Models.ShopWiseConsumption>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<br />
+
+<div class="row" id="strips">
+    <div class="col-md-12">
+        <div class="col-md-4 col-md-offset-4" >
+
+            <div class="panel">
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                    <h style="color:white;font-size:15px"><b>Yesterday's Data For Plant-: @ViewBag.Plants</b> </h>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-md-offset-2" style=" margin-top: 1%;" id="showbuttons">
+             @*<button class="btn btn-primary" id="backtoplant" click="backtoplant()">Back To Plant</button>*@
+            <a class="btn shopchartbtn" href="/EnergyConsumptions/Index" style="background-color: #007bb6;"><b style="color:  white;">Back To Plant </b></a>
+        </div>
+    </div>
+</div>
+<div id="show-plantgroupbybutton">
+
+</div>
+<div id="show-shopgroup">
+
+</div>
+<div class="row" id="show-shopgroups">
+    <div class="col-md-10 col-md-offset-1" style=" margin-top: 2%;">
+        @foreach (var item in Model.GroupBy(c => c.ShopsCat_ID))
+        {
+            foreach (var data in item.Distinct())
+            {
+
+
+                <div class="col-md-3">
+                    <div class="panel" style="border:solid;color:lightseagreen">
+                        <!-- small box -->
+                        <div class="panel-heading" style="background-color:SKYBLUE; text-align:center">
+
+                            @*<p style="color:white"><b>PRESS SHOP</b></p>*@
+                         @*   <button type="button" class="btn shopchartbtn" onclick="getShopsByshopGroupID(@data.ShopsCat_ID)"><b>@data.ShopsCategory_Name</b> </button>*@
+                            <a class="btn shopchartbtn" href="/EnergyConsumptions/GetShopByShopGroup?shopid=@data.ShopsCat_ID"><b style="color:  black;">@data.ShopsCategory_Name </b></a>
+
+                        </div>
+                        <div id="image_show" style="text-align:center">
+                            <img class="center-image-wrapper text-center" style="width:37%" src="~/Content/images/SOPImages/meter1.png" />
+                        </div>
+                        <div style="/* MARGIN-TOP: 0%; */font-size:large;text-align:center;font-family:'Times New Roman';color:white;FONT-WEIGHT: BOLD;BORDER: 1PX SOLID black;BACKGROUND-COLOR:  #20b2aa;">
+                            @data.totalconsumption <label>kWh</label>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            }
+
+        }
+    </div>
+</div>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#backtoplant").click(function () {
+          //  var plantid = $("#plant").val();
+           // alert(plantid);
+            debugger
+            $.ajax({
+                url: '/EnergyConsumptions/Show_plants',
+                type: 'GET',
+                data: "",
+                contentType: 'application/json;charset-utf-8',
+                success: function (data) {
+                   // alert(data);
+                    if (data != "") {
+                        $("#show-shops").html('');
+                        $("#strips").html('');
+                        $("#showbuttons").html('');
+                        // $("#backtoplant").html('');
+                        $("#show-shopgroups").html('');
+
+                        $("#show-plantgroupbybutton").html(data);
+
+                    }
+                }
+            });
+            // var plant_id = $("#plant").val();
+
+            //window.location.href = "/EnergyConsumptions/getShopGroupFromPlantId?plantid=" + plantid;
+        });
+
+    });
+
+    function getShopsByshopGroupID(shopgroupid) {
+
+        debugger;
+      //  $("#show-shopgroup-by-plantid").html('');
+        // $("#chart").load("/ShopwiseChart?shopgroupid=" + shopgroupid);     
+        // window.location.href = "/EnergyConsumptions/GetShopByShopGroup?shopid=" + shopgroupid;
+        $.ajax({
+            url: '/EnergyConsumptions/GetShopByShopGroup?shopid=' + shopgroupid,
+            type: 'GET',
+            data: "",
+            contentType: 'application/json;charset-utf-8',
+            success: function (data) {
+                alert(data);
+                if (data != "") {
+                    $$("#show-shops").html('');
+                    $("#strips").html('');
+                    $("#showbuttons").html('');
+                    // $("#backtoplant").html('');
+                  //  $("#show-shopgroups").html('');
+                    $("#show-plantgroupbybutton").html('');
+                    $("#show-shopgroup").html(data);
+
+                }
+            }
+        });
+
+</script>*@

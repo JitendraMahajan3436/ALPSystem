@@ -1,0 +1,209 @@
+﻿@model REIN_MES_System.Models.RS_MT_Maintenance_Manual_Data
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    @using (Html.BeginForm("Edit", "MaintenanceManualData", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @*<div class="form-horizontal">*@
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Row_ID)
+        <div class="row">
+            @*<div class="form-group col-md-4">
+                    @Html.LabelFor(model => model.Plant_ID, "Plant_ID", htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownList("Plant_ID", null, String.Empty, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                </div>*@
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name ", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.Shop_ID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Line_ID, "Line Name ", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.Line_ID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Station_ID, "Station Name ", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownListFor(model => model.Station_ID, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Station_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Machine_No, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Machine_No, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Machine_No, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.BreakDown_Date, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.BreakDown_Date, "{0:yyyy/MM/dd}", new { onchange = "", @class = "form-control"})
+                @Html.ValidationMessageFor(model => model.BreakDown_Date, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.DownTime, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.DownTime, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DownTime, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.RepairTime, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.RepairTime, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RepairTime, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Problem, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Problem, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Problem, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Root_Cause, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Root_Cause, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Root_Cause, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Correction, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Correction, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Correction, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Corrective_Action, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Corrective_Action, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Corrective_Action, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Preventive_Action, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Preventive_Action, new { onchange = "", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Preventive_Action, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Repaired_Date, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Repaired_Date, "{0:yyyy/MM/dd}", new { onchange = "", @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Repaired_Date, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Owner, new { onchange = "", @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Owner, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = " " })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Remark, new { onchange = "", @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Remark, null, new { @class = "validation_error" })
+            </div>
+        </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+
+                    <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+                </div>
+            </div>
+        
+        @*</div>*@
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    @Scripts.Render("~/bundles/Select2scripts")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //$("#Line_ID").select2();
+            //$("#Station_ID").select2();
+            $('#BreakDown_Date').datepicker({
+                format: 'yyyy/mm/dd',
+
+            });
+            $('#Repaired_Date').datepicker({
+                format: 'yyyy/mm/dd',
+            });
+            $("#DownTime").datetimepicker(
+                  {
+                      format: "HH:mm:ss",
+                      allowInputToggle: true,
+                      //  minDate: new Date(),
+                      //maxDate: '0',
+                      collapse: true,
+                  });
+            $("#RepairTime").datetimepicker(
+                  {
+                      format: "HH:mm:ss",
+                      allowInputToggle: true,
+                      //  minDate: new Date(),
+                      //maxDate: '0',
+                      collapse: true
+                  });
+
+            $("#Shop_ID").on("change", function () {
+                $("#Line_ID").html("");
+                var Shop_ID = $('#Shop_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Machines/GetLineByShopID', { shopid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Line_ID option').remove();
+                            $('#Line_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Line_ID').append('<option value="' +
+                                           data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                            }
+                        }
+
+                    });
+                }
+            });
+
+            $("#Line_ID").on("change", function () {
+                $("#Station_ID").html("");
+                var Shop_ID = $('#Line_ID').val();
+                if (Shop_ID.length > 0) {
+                    //alert(Shop_ID);
+                    $.getJSON('/Machines/GetStationsByLineID', { lineid: Shop_ID }, function (data) {
+                        //  alert(data);
+                        if (data.length > 0) {
+                            $('#Station_ID option').remove();
+                            $('#Station_ID').append('<option value=""></option>');
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Station_ID').append('<option value="' +
+                                           data[i].Station_ID + '">' + data[i].Station_Name + '</option>');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+@section Styles {
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}

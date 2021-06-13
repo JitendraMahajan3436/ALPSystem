@@ -1,0 +1,63 @@
+﻿@model REIN_MES_System.Models.RS_No_Working_Day
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+    @{
+        var date1 = Model.Day_Date.ToShortDateString();
+
+    }
+
+
+    <hr />
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Day_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => date1)
+          
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Reason")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_Holiday_Reason.Reason_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+
+
+
+
+    </dl>
+    <p>
+        @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Day_ID }, new { @class = "btn btn-primary" })
+        @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+    </p>
+</div>

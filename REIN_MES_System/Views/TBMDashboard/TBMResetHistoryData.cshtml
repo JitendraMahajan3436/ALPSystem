@@ -1,0 +1,101 @@
+﻿@model IEnumerable<REIN_MES_System.Models.TBMResetHistoryData>
+<div class="modal-body no-padding table-responsive" id="MinorStoppagesModal">
+    <div class="header" style="background-color:cadetblue">
+        @*<marquee direction="right">*@
+        <p style="text-align:center;color: white; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Replacement History</p>
+        @*</marquee>*@
+    </div>
+    <div class="table-responsive">
+        @if (Model.Count() > 0)
+        {
+            <table class="table table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Date
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;text-align:center ">
+                            Designated Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Consumed Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;text-align:center ">
+                            Balance Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;text-align:center ">
+                            Remarks
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;text-align:center ">
+                            Replaced By
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var Obj in Model)
+                    {
+                        var BalanceLife = Obj.Designated_Life - Obj.Consumed_Life;
+                        <tr>
+                            <td style="text-align:center">
+                                @Obj.Date
+                            </td>
+                            <td style="text-align:center">
+                                @Obj.Designated_Life
+                            </td>
+                            <td style="text-align:center">
+                                @Obj.Consumed_Life
+                            </td>
+                            <td style="text-align:center">
+                                @BalanceLife
+                            </td>
+                            <td style="text-align:center">
+                                @Obj.Remarks
+                            </td>
+                            <td style="text-align:center">
+                                @Obj.ReplacedBy
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Date
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center ">
+                            Designated Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Consumed Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Balance Life
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align:center">
+                            Remark
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align:center">
+                            Replaced By
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center" colspan="5">
+                            No Data Available
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+

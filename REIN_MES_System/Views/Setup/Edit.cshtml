@@ -1,0 +1,128 @@
+﻿@model REIN_MES_System.Models.RS_Setup
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<br />
+<div class="col-md-12">
+    @using (@Html.BeginForm("Edit", "Setup", FormMethod.Post, new { id = "Edit_Setup" }))
+    {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+         @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Setup_ID)
+        <div class="row">
+            <div class="col-md-4" style="display:none">
+                @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                @Html.DropDownList("Plant_ID", null, "Select Plant", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownList("Shop_ID", null, "Select Shop", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Line_ID, "Line Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.DropDownList("Line_ID", null, "Select Line", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.Label("Setup Name", new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Setup_Name, htmlAttributes: new { @class = "form-control",@autocomplete="off" })
+                @Html.ValidationMessageFor(model => model.Setup_Name, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Setup Description", new { @class = "" })
+                @Html.TextBoxFor(model => model.Setup_Description, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Setup_Description, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="">
+
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    </div>
+    }
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    
+</div>
+<script>
+    $(document).ready(function () {
+
+        $("#Edit_Setup").validate({
+            //ignore: [],
+            rules: {
+                Plant_ID: "required",
+                Shop_ID: "required",
+                Line_ID: "required",
+                Setup_Name: "required",
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+            $("#Shop_ID").change(function (e) {
+
+                var shopId = $("#Shop_ID").val();
+                if (shopId) {
+                    var url = "/Setup/GetLineByShopID";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showLineShopID, "json");
+
+                }
+                else {
+                    clearSelectBox("Line_ID");
+                }
+            });
+
+
+            function showLineShopID() {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Line_ID");
+                    }
+                }
+            }
+
+            function SelectOptionHTML(jsonRes, targetId) {
+                //var jsonRes = $.parseJSON(myajax.responseText);        
+                var res = "";
+                for (var i = 0; i < jsonRes.length; i++) {
+                    res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+                }
+
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+                $("#" + targetId).html(res);
+            }
+
+            function clearSelectBox(targetId) {
+                var res = "";
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+
+                $("#" + targetId).html(res);
+            }
+        });
+</script>
+

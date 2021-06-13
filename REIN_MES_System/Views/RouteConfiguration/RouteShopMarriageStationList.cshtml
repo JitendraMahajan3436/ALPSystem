@@ -1,0 +1,135 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Route_Marriage_Shop>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "RouteShopMarriageStationList";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@*@Html.ActionLink("Create New", "RouteShopMarriageStation", "RouteConfiguration", null, htmlAttributes: new { @class = "btn btn-primary" })*@
+    <p class="position_absolute">
+    @* @Html.ActionLink("Create New", "Create")*@
+        <a href="@Url.Action("RouteShopMarriageStation", "RouteConfiguration")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Inserted_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+                </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+            </th>*@            
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Shops1.Shop_Name)*@
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Sub_Shop)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Lines1.Line_Name)*@
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Sub_Line)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Stations1.Station_Name)*@
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Sub_Line_Station)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)*@
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Marriage_Shop)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Lines.Line_Name)*@
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Marriage_Line)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RS_Stations.Station_Name)*@
+
+                @Html.DisplayName(ResourceDisplayName.Route_Marriage_Configuration_Label_Marriage_Line_Station)
+            </th>
+
+            
+            
+            
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Inserted_Host)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inserted_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated_Host)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+                </td>*@
+            
+            @*<td>
+                @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+            </td>*@            
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Shops1.Shop_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Lines1.Line_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Stations1.Station_Name)
+            </td>
+            
+            
+            
+            <td>
+                @*<a href="@Url.Action("Edit", "Shop", new { id = item.Shop_ID })"><i class="fa fa-edit"></i>Edit</a> &nbsp;&nbsp;
+                <a href="@Url.Action("Details", "Shop", new { id = item.Shop_ID })"><i class="fa fa-fw fa-laptop"></i>Details</a> &nbsp;&nbsp;*@
+                <a href="@Url.Action("DeleteShopRouteConfiguration", "RouteConfiguration", new { id = item.Route_Marriage_Shop_Station })"><i class="fa fa-trash" style="color:red" title="Delete"></i></a>
+
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Route_Marriage_Shop_Station }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Route_Marriage_Shop_Station }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Route_Marriage_Shop_Station })*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

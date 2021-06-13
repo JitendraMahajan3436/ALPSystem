@@ -1,0 +1,180 @@
+﻿@model  REIN_MES_System.Models.ShopwiseManualProduction
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shop Name *</label>
+                            @Html.DropDownList("Shop_ID", null, "Select Shop ", new { @class = "form-control", @style = "max-width:100%" })
+
+                            @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            @Html.DropDownListFor(model => model.Category, new SelectList(new List<object> { new { value = true, text = "Day Production" }, new { value = false, text = "Month Production" } }, "value", "text", true), new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" id="Monthwise" style="display:none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Month *</label>
+                            @Html.DropDownList("Month", null,  new { @class = "form-control", @style = "max-width:100%" })
+
+                            @Html.ValidationMessageFor(model => model.Month, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Year *</label>
+                            @Html.TextBox("Year", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+
+                            @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6" id="Daywise">
+                        <div class="form-group">
+
+                            <label> Date *</label>
+                            @Html.TextBox("Pro_Datetime", null, new { @class = "form-control", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Pro_Datetime, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Production Type *</label>
+                            @*@Html.EditorFor(model => model.Consider, new { htmlAttributes = new { @class = "form-control select2", @style = "max-width:100%" } })*@
+                            @Html.DropDownListFor(model => model.ProductionType, new SelectList(new List<object> { new { value = "True", text = "Absolute" }, new { value = "False", text = "Equivalent" } }, "value", "text", 2), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProductionType, null, new { @class = "validation_error" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label> Production *</label>
+                            @Html.EditorFor(@model => model.Production, new { htmlAttributes = new { @class = "form-control", @style = "max-width:100%" } })
+                            @Html.ValidationMessageFor(model => model.Production, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-linkedin" />
+                        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts{
+   
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+}
+    <script type="text/javascript">
+         $(document).ready(function () {
+             $(".select2").select2();
+
+             $("#Year").datepicker({ viewMode: "years", minViewMode: "years", format: 'yyyy' });
+             $("#Category").change(function () {
+                 var CategoryType = $('#Category').val();
+                 debugger;
+                 if (CategoryType == 'False') {
+                     $("#Monthwise").show();
+                     $("#Daywise").hide();
+                 }
+                 else {
+                     $("#Daywise").show();
+                     $("#Monthwise").hide();
+                 }
+
+
+             })
+             //$("#Month").datepicker({ viewMode: "months", minViewMode: "months", format: 'MMM' });
+        });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Pro_Datetime").datepicker(
+
+         { format: 'dd/MM/yyyy' }
+
+         );
+
+        $("#Plant_ID").change(function () {
+
+            var Plant_ID = $("#Plant_ID").val();
+
+            var options = {};
+            options.url = "/CommanMethod/PlantwiseShopconfig";
+            options.type = "POST";
+            options.data = JSON.stringify({ Plant_ID: Plant_ID });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (id) {
+
+                $("#Shop_ID").html(""); // clear before appending new list
+                $("#Shop_ID").html();
+                $.each(id, function (i, test) {
+                    $("#Shop_ID").append(
+
+
+                        $('<option></option>').val(test.Shop_ID).html(test.Shop_Name).prop('selected', true));
+                });
+
+                var elements = [];
+                elements = document.getElementsByClassName("mdl");
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].value = "";
+                }
+            };
+
+            options.error = function () {
+                alert("Invalid Shop ");
+            };
+            $.ajax(options);
+
+            //Category();
+            //ParameterConfig();
+        });
+    });
+</script>
+
+   
+
+

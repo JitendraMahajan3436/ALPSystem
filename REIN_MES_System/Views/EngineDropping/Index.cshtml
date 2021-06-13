@@ -1,0 +1,120 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+<style>
+    .table-responsive {
+        margin: 1%;
+        border-spacing: 0;
+    }
+
+        .table-responsive td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            border: 1px solid #808080;
+            font-size: x-large;
+            /*color: aqua;*/
+            padding: 2px;
+        }
+</style>
+
+
+<div class="col-md-12">
+    <div class="panel" style="border:1px solid darkcyan;margin-top:2%">
+        <div class="panel-body">
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                @Html.Hidden("Plant_ID")
+                <div class="col-md-6 col-lg-6 col-sm-6" style="font-size:21px">
+                    @Html.Label("Station Name", new { @class = " " })
+                    <label> : @ViewBag.Station </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <label> Scan Value : </label>
+                    &nbsp;
+                    <input type="text" id="ScanValue" class="text-uppercase" autocomplete="off" style="width:50%;height:45px;font-size:26px;font-weight:bold " />
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    @Html.Label("Serial Number Scanned : ", new { @class = " " })
+                    @*<label id="lblSerial"></label>*@
+                    <label id="lblLastSerial"> </label>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    @Html.Label("TOTAL ENGINE DROPPED COUNT : ", new { @class = " " })
+                    @*<label id="lbltotalcount"></label>*@
+                    <label id="lbllasttotalcount"></label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="tableScanData">
+
+    </div>
+
+
+    @*<div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="col-md-6">
+                    <div id="tableScanData">
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="tableScanData1">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>*@
+
+
+
+
+    <div class="panel" style="border:1px solid darkcyan; display:none" id="EngineDetail">
+        <div class="panel-heading" id="EngineId">
+            @*<div id="EngineId"></div>*@
+        </div>
+
+    </div>
+
+    <div id="testy" style="margin-top:4%"></div>
+
+    <br />
+</div>
+
+
+<script src="~/Scripts/EngineDropping.js"></script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css");
+}
+
+
+@*<style>
+        .table-responsive td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            border: 1px solid #130f0f;
+            font-size: initial;
+            /* color: aqua; */
+            padding: 2px;
+            .;
+        }
+    </style>*@
+

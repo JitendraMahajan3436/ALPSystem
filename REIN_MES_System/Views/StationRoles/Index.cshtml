@@ -1,0 +1,61 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Station_Roles>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "StationRoles")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Stations.Station_IP_Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Roles.Role_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Roles.Role_Description)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Stations.Station_IP_Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Roles.Role_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Roles.Role_Description)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "StationRoles", new { id = item.Station_Role_Key })" class="col-md-1"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action("Details", "StationRoles", new { id = item.Station_Role_Key })" class="col-md-1"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action("Delete", "StationRoles", new { id = item.Station_Role_Key })" class="col-md-1"><i class="fa fa-trash" style="color:red"></i></a>
+                    </td>
+                </tr>
+            }
+        </table>
+</div>
+        @section scripts{
+            @Scripts.Render("~/Content/theme/plugins/datatables/js")
+            @Scripts.Render("~/Scripts/user_datatable")
+        }
+        @section Styles{
+            @Styles.Render("~/Content/theme/plugins/datatables/css")
+        }

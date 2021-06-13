@@ -1,0 +1,319 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+<div class="row">
+  
+        <div class="col-md-12">
+
+
+
+         
+                <div class="box-header">
+
+                </div>
+              
+                <div class="box-body">
+                    <div class="row">
+                       
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Shop Name</label>
+                                @Html.DropDownList("ShopName", null, "Select Shop", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                                <span class="error" id="ShopID" style="color:red;display:none">Shop Name field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Date Range</label>
+                                @Html.DropDownList("ddlDateRange", null, "Select Date Range", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%", })
+                                <span class="error" id="ddlDateRangeId" style="color:red;display:none">Date Range field is required</span>
+                            </div>
+                        </div>
+                        @*<div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Shift</label>
+                                @Html.DropDownList("Shift", null, "ALL", htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                                <span class="error" id="ShiftId" style="color:red;display:none">Shift field is required</span>
+                            </div>
+                        </div>*@
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label> From Date</label>
+                                @Html.TextBox("StartDate", null, new { @class = "startdate form-control example1", @style = "max-width:100%", ReadOnly = "true" })
+                                <span class="error" id="StartDateId" style="color:red;display:none">From Date field is required</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>To Date</label>
+                                @Html.TextBox("EndDate", null, new { @class = "enddate form-control example1", @style = "max-width:100%", ReadOnly = "true" })
+                                <span class="error" id="EndDateId" style="color:red;display:none">To Date field is required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <br />
+                               
+                                    <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary  generate" style="margin-top: 7px" />
+
+                              
+                                <br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="box-footer">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <input type="submit" value="Generate Report" id="btnSubmit" class="btn btn-primary  generate" />
+
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>*@
+         
+
+
+
+        </div>
+   
+
+   
+
+
+</div>
+
+
+
+<script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+  
+        $("#StartDate").datepicker({ format: 'dd/mm/yyyy' });
+        $("#EndDate").datepicker({ format: 'dd/mm/yyyy' });
+        //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' });
+
+        $.fn.datepicker.defaults.format = "mm/dd/yyyy";
+        var start = new Date();
+        // set end date to max one year period:
+        var end = new Date(new Date().setYear(start.getFullYear() + 1));
+       
+        $('#StartDate').datepicker({
+            format: 'dd/mm/yyyy',
+            startDate: start,
+            endDate: end
+            // update "toDate" defaults whenever "fromDate" changes
+        }).on('changeDate', function () {
+            // set the "toDate" start to not be later than "fromDate" ends:
+            $('#EndDate').datepicker('setStartDate', new Date($(this).val()));
+        });
+
+        $('#EndDate').datepicker({
+            format: 'dd/mm/yyyy',
+            startDate: start,
+            endDate: end
+            // update "fromDate" defaults whenever "toDate" changes
+        }).on('changeDate', function () {
+            debugger
+            // set the "fromDate" end to not be later than "toDate" starts:
+            $('#StartDate').datepicker('setEndDate', new Date($(this).val()));
+        });
+
+    });
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".select2").select2();
+        $("#ddlDateRange").change(function () {
+          
+            if ($("#ddlDateRange").val() == "1") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate());
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+                //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+                //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+
+            }
+            else if ($("#ddlDateRange").val() == "2") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+
+            else if ($("#ddlDateRange").val() == "3") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                //$startDate.setDate($today.getDate() - $today.getDay());
+                $endDate = new Date($today);
+                //$endDate.setDate($startDate.getDate() + 7);
+
+
+                var $mm = $startDate.getMonth() + 1;
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 }
+                $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+            
+                $("#EndDate").val($endDate);
+            }
+
+            else if ($("#ddlDateRange").val() == "4") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+                $("#StartDate").val($startDate);
+
+                var $yyyy = $endDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+                $("#EndDate").val($endDate);
+
+            }
+
+            else if ($("#ddlDateRange").val() == "5") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+                var $mm = $startDate.getMonth();
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + $mm + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth(), 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $dd1 + '/' + $mm1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+            else if ($("#ddlDateRange").val() == "6") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+
+                var $yyyy = $startDate.getFullYear() - 1;
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = '01' + '/' + '01' + '/' + $yyyy;
+                $("#StartDate").val($startDate);
+
+                var $yyyy = $endDate.getFullYear() - 1;
+                if ($mm < 10) { $mm = '0' + $mm } $endDate = '31' + '/' + '12' + '/' + $yyyy;
+                $("#EndDate").val($endDate);
+            }
+            else {
+                $("#StartDate").prop('readonly', false);
+                $("#EndDate").prop('readonly', false);
+                $("#StartDate").val('');
+                $("#EndDate").val('');
+
+
+
+
+            }
+
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+  
+    $("#btnSubmit").click(function () {
+
+     
+
+
+        var isValid = true
+        $("#ShopID").hide();
+        $("#ddlDateRangeId").hide();
+        $("#StartDateId").hide();
+        $("#EndDateId").hide();
+            if (!$("#ShopName").val() != "") {
+                isvalid = false;
+                $("#ShopID").show();
+            }  else if (!$("#ddlDateRange").val() != "") {
+                isvalid = false;
+                $("#ddlDateRangeId").show();
+            }
+            else if (!$("#StartDate").val() != "") {
+                isvalid = false;
+                $("#StartDateId").show();
+            }
+            else if (!$("#EndDate").val() != "") {
+                isvalid = false;
+                $("#EndDateId").show();
+            }
+            else if (isValid == true) {
+          
+                //$("input[name='GridHtml']").val($("#Grid").html());
+                var StartDate = $("#StartDate").val();
+                var EndDate = $("#EndDate").val();
+                var Shop = $("#ShopName").val();
+                //var Shift = $("#Shift").val();
+                var Shift = "";
+                var Plant = $("#Plant_ID").val();
+
+                var path = "/ShiftWiseReports/ExportData?StartDate=" + StartDate + "&EndDate=" + EndDate + "&Shop=" + Shop + "&Shift=" + Shift;
+               
+                //window.open(path, '_blank');
+                window.open(path);
+
+            }
+          
+        });
+   
+</script>
+
+

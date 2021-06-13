@@ -1,0 +1,70 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+
+@{
+    ViewBag.Title = "PlanProductionDashboard";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+
+            <div class="form-horizontal" style="height:70%;" id="div2">
+                @Html.ValidationSummary(true)
+                @*<div class="row">
+                        <div class="col-sm-12">
+                            <br />
+                            <input id="PlanProductionDashboard" type="button" onclick="return PlanProductionDashboard();" value="Generate Report" class="btn btn-primary" /> @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+        @*<center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>*@
+        <div class=" col-sm-12">
+            <iframe width="100%" height="900" src="http://MMZAHMESPDSDB1/ReportServer/Pages/ReportViewer.aspx?%2fFDReports%2fPLANT_PRODUCTION_SAMPLE_REPORT" id="ContentFrame" frameborder="0"></iframe>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#siderbarmenu").click();
+    })
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/ReportManagement_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+
+}
+
+
+

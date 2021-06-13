@@ -1,0 +1,92 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_Plant_Production>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<div class="box">
+    <div class="box-header">
+        <p class="position_absolute">
+            @*@Html.ActionLink("Create New", "Create")*@
+
+            <a href="@Url.Action("Create", "Plant_Production")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> Create New</a>
+        </p>
+    </div>
+    <div class="box-body">
+        <table class="table table-bordered table-striped datatable_completes">
+            <thead>
+
+
+                <tr>
+                    @*<th>
+                            Plant Name
+                        </th>*@
+                    <th>
+                        Shop Name
+                       
+                    </th>
+                   
+
+
+
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MTTUW_Shops.Shop_Name)
+                    </td>
+                  
+
+
+
+
+                    <td>
+                        <a style="color:dodgerblue" href="@Url.Action("Edit", "Plant_Production", new { id = item.Plant_Pro_Id})"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;|
+                        @*@Html.ActionLink("Details", "Details", new { id = item.Category_Id }) |*@
+                        <a style="color:dodgerblue" data-target="#@item.Plant_Pro_Id" data-toggle="modal" data-id="@item.Plant_Pro_Id" onclick="deleteStart(this)"><i class="fa fa-trash-o" title="Delete"></i></a>
+                        @using (Html.BeginForm("DeleteConfirmed", "Plant_Production", new { id = item.Plant_Pro_Id }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="modal fade" id="@item.Plant_Pro_Id" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title">Delete Confirmation</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this item?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                                            <input type="submit" value="Delete" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+
+
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @*@Styles.Render("~/Scripts/user_datatable")*@
+    <script src="~/Scripts/user_datatable.js"></script>
+
+
+}

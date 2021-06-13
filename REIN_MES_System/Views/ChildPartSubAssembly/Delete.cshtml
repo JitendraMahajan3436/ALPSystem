@@ -1,0 +1,30 @@
+﻿@model REIN_MES_System.Models.RS_Major_Sub_Assembly
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName(ResourceDisplayName.Sub_Assembly_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sub_Assembly_Name)
+        </dd>
+
+        
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

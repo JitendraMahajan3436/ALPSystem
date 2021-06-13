@@ -1,0 +1,227 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Clita>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+<div class="row" id="ClitaDailyCheckContainer">
+    <div class="col-md-10 col-md-offset-1">
+        @{ if (globalData != null)
+         {
+             if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+             {
+                <div class="box-body">
+                    @{
+                 if (globalData != null)
+                 {
+                    <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>                                } else { <text> style="display:none;" </text>                               } }>
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4>
+                            <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+                 }
+                    }
+                </div>
+             }
+         }
+        }
+
+        <div class="row plant_line_configuration">
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Line Name")
+                    @Html.DropDownList("Line_ID", null, "Select Line", new { onchange = "", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.Label("Station Name")
+                    @Html.DropDownList("Station_ID", null, "Select Station", new { onchange = "", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-toggle="tab" data-machineid="@machineObj.Machine_ID">@machineObj.Machine_Name</a></li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="tab-content no-padding">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative;">
+                            <div>
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No.</th>
+                                            <th>
+                                                CLITA Parameter
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Clita_Standard_ID)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Clita_Tool_ID)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Cycle)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Maintenance_Time_TACT)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ int j = 0; }
+                                        @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                        {
+                                            j++;
+
+                                            <tr class='@((item.isClitaChecked(item.Clita_ID)) ? (item.getClitaStatus(item.Clita_ID) == true) ? "bg-success" : "bg-danger" : "")' data-clitaid="">
+                                                <td>@j</td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Clita_Item)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Standard.Standard)
+                                                </td>
+                                                <td class="clita-images">
+                                                    @if (item.RS_MT_ClitaItems_Tools_Relation != null)
+                                                    {
+                                                        foreach (string tool in item.RS_MT_ClitaItems_Tools_Relation.Select(a => a.RS_MT_Clita_Tool.Tool_Name))
+                                                        {
+                                                            string toolImage = tool + ".png";
+                                                           <img src="~/Content/images/CLITAImages/@toolImage" />
+                                                        }
+                                                        //@String.Join(",", item.RS_MT_ClitaItems_Tools_Relation.Select(a => a.RS_MT_Clita_Tool.Tool_Name))
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Cycle)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Maintenance_Time_TACT)
+                                                </td>
+                                                <td>
+                                                    @if (item.Is_Value_Based == true)
+                                                    {
+                                                        <input type="text" name="ClitaValue" value="@(item.getClitaValue(item.Clita_ID))" data-clitaid="@item.Clita_ID" class="log-clita-input" />
+                                                    }
+                                                    else
+                                                    {
+                                                        Boolean? clitaStatus = item.getClitaStatus(item.Clita_ID);
+                                                        if (clitaStatus != null)
+                                                        {
+                                                            if (clitaStatus == true)
+                                                            {
+                                                                <span>OK</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>NOK</span>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class="btn btn-success btn-flat btn-sm log-clita-btn" data-status="true" data-clitaid="@item.Clita_ID"> OK </button>
+                                                            <button class="btn btn-danger btn-flat btn-sm log-clita-btn" data-status="false" data-clitaid="@item.Clita_ID"> NOK </button>
+                                                        }
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+</div>
+@section Scripts {
+@Scripts.Render("~/bundles/plant_line_configuration")
+    <script type="text/javascript">
+        function logClitaRecord(clitaIDval, valueval, parentRowObj, clitaStatus) {
+            $.getJSON("/CLITADailyCheck/logCLITAData", { clitaID: clitaIDval, value: valueval, status: clitaStatus }, function (data) {
+                if (data == "true") {
+                    if (clitaStatus == true) {
+                        parentRowObj.addClass('bg-success').removeClass('bg-danger');
+                    } else {
+                        parentRowObj.removeClass('bg-success').addClass('bg-danger');
+                    }
+                } else {
+                    parentRowObj.removeClass('bg-success').removeClass('bg-danger');
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Please Reload the Page !');
+            });
+        }
+        $(document).ready(function () {
+            $('#ClitaDailyCheckContainer').on('keyup', '.log-clita-input', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) { //Enter keycode
+
+                    var clitaIDval = $(this).data('clitaid');
+                    var valueval = $(this).val();
+                    if (valueval.length > 0) {
+                        var parentRowObj = $(this).parent().parent();
+                        var clitaStatus = logClitaRecord(clitaIDval, valueval, parentRowObj, true);
+                        //$(this).hide();
+                    }
+                }
+            });
+            $('#ClitaDailyCheckContainer').on('click', '.log-clita-btn', function (e) {
+                var clitaIDval = $(this).data('clitaid');
+                var clitaValue = $(this).data('status');
+
+                parentRowObj = $(this).parent().parent();
+                var clitaStatus = logClitaRecord(clitaIDval, null, parentRowObj, clitaValue);
+                $(this).hide();
+                $(this).siblings().hide();
+            });
+
+            $("#Station_ID").change(function (e) {
+                var lineID = $("#Line_ID").val();
+                var stationID = $(this).val();
+                if (stationID) {
+                    window.location.href = "/CLITADailyCheck?lineID="+lineID+"&stationID="+stationID;
+                }
+            });
+
+        });
+    </script>
+}

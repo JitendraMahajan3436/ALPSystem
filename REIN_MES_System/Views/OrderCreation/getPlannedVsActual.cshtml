@@ -1,0 +1,52 @@
+﻿@model IEnumerable<REIN_MES_System.Models.PlannedVsActualModel>
+@{
+    ViewBag.Title = "PlannedVsActualSumarry";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<div class="table-responsive order_release">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Planned Quantity")
+                </th>
+                <th>
+                    @Html.DisplayName("Actual Quantity")
+                </th>
+
+                <th>
+                    @Html.DisplayName("Hold Quantity")
+                </th>
+
+                @*<th></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (REIN_MES_System.Models.PlannedVsActualModel item in ViewBag.PlannedData)
+            {
+                <tr>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Main_Order_Serial_No)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Main_Model_Code)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Planned_Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Actual_Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hold_Qty)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

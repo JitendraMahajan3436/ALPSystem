@@ -1,0 +1,89 @@
+﻿@model REIN_MES_System.Models.MM_MT_Conditional_Based_Maintenance
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@{var MName = Model.MM_MT_MTTUW_Machines.Machine_Name + "(" + Model.MM_MT_MTTUW_Machines.Machine_Number + ")";}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Machine ID")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Machine_ID)
+        </dd>
+        <dt>
+            @Html.DisplayName("Machine Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MM_MT_MTTUW_Machines.Machine_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Machine Parameter")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Machine_Parameter)
+        </dd>
+        
+        <dt>
+            @Html.DisplayName("Minimum Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Min_Val)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Maximum Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Max_Val)
+        </dd>
+        <dt>
+            @Html.DisplayName("Green Min Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Green_Min_Val)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Green Max Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Green_Max_Val)
+        </dd>
+        <dt>
+            @Html.DisplayName("Warning Min Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Warning_Min_Val)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Warning Max Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Warning_Max_Val)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> 
+            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

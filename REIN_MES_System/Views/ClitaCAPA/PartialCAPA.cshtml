@@ -1,0 +1,109 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Ctrl_Equipment_Status_History>
+@{ string status = string.Empty;}
+<div class="box-body">
+    <div>
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Plant</th>
+                    <th>Shop</th>
+                    <th>Line</th>
+                    <th>Machine</th>
+                    <th>DownTime</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var items in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => items.RS_Plants.Plant_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => items.RS_Shops.Shop_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => items.RS_Lines.Line_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => items.RS_MT_Machines.Machine_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => items.Down_Time)
+                        </td>
+                        <td>
+                            @if (items.isFaulty == true) { status = "Faulty"; }else if (items.isHealthy == true) { status = "Healthy"; }else { status = "Idle"; }
+                            @status
+
+                        </td>
+                        <td>
+                            <a href="#" onclick="EnterClitaData('@items.ESH_ID')"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal" id="ConfirmDoneClita" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="closeModel()" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Confirm</h4>
+            </div>
+            <div class="modal-body">
+                <p>Please insert appropriate value to clear CAPA.&hellip;</p>
+                @Html.Hidden("hdnESHID")
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("DoneBy", "Done By", new { @class = "" })
+                                @Html.DropDownList("Done_By_User_ID", null, "Select User", htmlAttributes: new { @class = "form-control Validate", @id = "Done_By_User_ID" })
+                                <div id="lblDoneBy" style="color:red;" class="error"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("CorrectiveAction", "Corrective Action", new { @class = "" })
+                                @Html.TextBox("CorrectiveAction", "", htmlAttributes: new { @class = "form-control", maxlength = 50 })
+                                <div id="lblCorrectiveAction" style="color:red;" class="error"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("PreventiveAction", "Preventive Action", new { @class = "" })
+                                @Html.TextBox("PreventiveAction", "", htmlAttributes: new { @class = "form-control", maxlength = 50 })
+                                <div id="lblPreventiveAction" style="color:red;" class="error"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("Remark", "Remark", new { @class = "" })
+                                @Html.TextArea("RemarkClita", "", htmlAttributes: new { @class = "form-control", maxlength = 200 })
+                                <div id="lblRemark" style="color:red;" class="error"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveClitaInformation()">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" style="display:none;">close</button>
+                <button type="button" class="close btn btn-primary" data-dismiss="modal" aria-label="Close" />
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-4" id="LineIDBox">
+        @Html.Label("Line_ID", "Line Name *", htmlAttributes: new { @class = "control-label" })
+        @Html.DropDownList("Line_ID", null, String.Empty, new { @class = "form-control" })
+        @Html.ValidationMessage("Line_ID")
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-default" id="divpartialview">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Line_ID").change(function (event) {
+            var lineID = $(this).val();
+            console.log(lineID);
+            if (lineID.length > 0) {
+                $(".loading_global_spinner_image").show();
+                $("#divpartialview").load("/HistoryLineStop/getdata?lineid=" + lineID);
+            }
+        });
+
+
+    })
+</script>

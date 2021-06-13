@@ -1,0 +1,100 @@
+﻿@model IEnumerable<REIN_MES_System.Models.BulkOrderList>
+
+                      <table class="table table-bordered table-striped order-start-tbl  ">
+                          <tr>
+                              <th>
+                                  Part No
+                              </th>
+                              <th>
+                                  Part Description
+                              </th>
+                              <th>
+                                  Color
+                              </th>
+                              <th>
+                                  Planned Qty
+                              </th>
+                              <th>
+                                  Started Qty
+                              </th>
+                              <th>
+                                  Remaining Qty
+                              </th>
+                              <th>
+                                  Action
+                              </th>
+
+                          </tr>
+                          @{
+                          if (Model != null)
+                          {
+                          foreach (var data in Model.GroupBy(c => c.part_no))
+                          {
+                          foreach (var item in data)
+                          {
+                          ///for color differntiation between order start in bulk
+                          var colorname = "";
+                          if(item.part_no == "006025389B91")
+                          {
+                          colorname = "#antiquewhite";
+                          }
+                          else if(item.part_no == "006024014B91")
+                          {
+                          colorname = "#a1cad2";
+
+                          }
+                          else if (item.part_no == "006024013B91")
+                          {
+                          colorname = "#b8b6e6";
+
+                          }
+                          else if (item.part_no == "006005973B91")
+                          {
+                          colorname = "#d09fb2";
+
+                          }
+                          else if (item.part_no == "006017544B92")
+                          {
+                          colorname = "#d09f9f";
+
+                          }
+                          else if (item.part_no == "006017543B92")
+                          {
+                          colorname = "#b7caaf";
+
+                          }
+                          <tr style="background-color:@colorname">
+                              <td class="partno">
+                                  @Html.DisplayFor(modelItem => item.part_no)
+                              </td>
+                              <td>
+                                  @Html.DisplayFor(modelItem => item.part_description)
+                              </td>
+                              <td>
+                                  @Html.DisplayFor(modelItem => item.Color)
+                              </td>
+                              <td>
+                                  @Html.DisplayFor(modelItem => item.planned_qty)
+                              </td>
+                              <td>
+                                  @Html.DisplayFor(modelItem => item.started_qty)
+                              </td>
+                              <td>
+                                  @Html.DisplayFor(modelItem => item.pending_qty)
+                              </td>
+                              <td>
+                                  <a class="start_orders btn btn-primary" id="@item.row_id" data-order-rowid="@item.row_id" data-orderno="@item.row_id">Order Start</a>
+                              </td>
+
+                          </tr>
+
+                          <tr style="height: 40px;"><td colspan="6"></td></tr>
+                          break;
+                          }
+                          }
+                          }
+                          }
+
+
+                      </table>
+

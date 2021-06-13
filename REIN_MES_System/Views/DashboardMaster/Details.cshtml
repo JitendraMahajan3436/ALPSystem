@@ -1,0 +1,51 @@
+﻿@model REIN_MES_System.Models.RS_Dashboard_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<br />
+<div>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Dashboard Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Dashboard_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Shift Name")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shift.Shift_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("IP Address")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Host_Name)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Dash_ID }, new { @class = "btn btn-primary" }) @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+    @*@Html.ActionLink("Back to List", "Index")*@
+</p>
+

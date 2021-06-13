@@ -1,0 +1,150 @@
+﻿@model REIN_MES_System.Models.RS_Model_Attribute_Master
+@using REIN_MES_System.App_LocalResources
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-4" style="display:none">
+                @Html.LabelFor(model => model.Plant_ID, "Plant_ID", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.DropDownList("Plant_ID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, "", new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_ID, htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Shop_ID, null, "Select Shop", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Line_ID, htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Line_ID, null, "Select Line", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, "", new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Platform_ID,ResourceDisplayName.Platform_ID, htmlAttributes: new { @class = "" })
+
+                @Html.DropDownListFor(model => model.Platform_ID, null,"Select Platform", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Platform_ID, "", new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Sub_Assembly_ID, ResourceDisplayName.Sub_Assembly_ID, htmlAttributes: new { @class = "" })
+
+                @Html.DropDownList("Sub_Assembly_ID", null, "Select Sub Assembly", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Sub_Assembly_ID, "", new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Attribution, ResourceDisplayName.Attribution, htmlAttributes: new { @class = "" })
+
+                @Html.EditorFor(model => model.Attribution, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Attribution, "", new { @class = "validation_error" })
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Shop_ID").change(function () {
+            var shopId = $("#Shop_ID").val();
+            if (shopId != "") {
+                $.ajax({
+                    type: "POST",
+                    url: '/ModelAttributeMaster/GetLineByShopID',
+                    data: JSON.stringify({ Shop_ID: shopId }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        debugger;
+                        $("#Line_ID").empty();
+                        $("#Line_ID").append('<option value="0">Select Line</option>');
+                        $.each(data, function (i, data) {
+                            $("#Line_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                        });
+                    }
+                });
+
+                setTimeout(
+                    $.ajax({
+                        type: "POST",
+                        url: '/BIWPartNoMaster/GetChildPartMasterData',
+                        data: JSON.stringify({ Shop_ID: shopId }),
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#Sub_Assembly_ID").empty();
+                            $("#Sub_Assembly_ID").append('<option value="">Select Sub Assembly</option>');
+                            $.each(data, function (i, data) {
+                                $("#Sub_Assembly_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                            });
+                        }
+                    }), 1000
+                    )
+            }
+            else {
+                $("#Line_ID").empty();
+                $("#Line_ID option").remove();
+                $("#Line_ID").append('<option value="">Select Line</option>');
+
+                $('#Platform_ID option').remove();
+                $('#Platform_ID').append('<option value="">Select Platform</option>');
+
+                $('#Sub_Assembly_ID option').remove();
+                $("#Sub_Assembly_ID").append('<option value="">Select Sub Assembly</option>');
+            }
+        });
+
+        $('#Line_ID').change(function () {
+            var LineID = $("#Line_ID").val();
+            $('#Platform_ID').html("");
+            if (LineID.length > 0) {
+                $.getJSON('/ModelAttributeMaster/GetPlatformByLine', { LineID: LineID }, function (data) {
+                    if (data.length > 0) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Platform_ID option').remove();
+                        $('#Platform_ID').append('<option value="">Select Platform</option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Platform_ID').append('<option value="' + data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                        }
+                    } else {
+                        $('#Platform_ID option').remove();
+                        $('#Platform_ID').append('<option value="">Select Platform</option>');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    $('#Platform_ID option').remove();
+                    $('#Platform_ID').append('<option value="">Select Platform</option>');
+                    alert('Error getting platform Selection !');
+                });
+            }
+            else {
+                $('#Platform_ID option').remove();
+                $('#Platform_ID').append('<option value="">Select Platform</option>');
+            }
+        });
+
+    });
+</script>

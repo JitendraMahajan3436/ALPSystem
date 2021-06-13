@@ -1,0 +1,91 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+    var plantid = ViewBag.PlantIDByGroupID;
+}
+
+<script>
+
+    window.onload = function () {
+        debugger
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	theme: "light2", // "light1", "light2", "dark1", "dark2"
+	title: {
+		text: "Shop Consumption"
+	},
+	axisY: {
+	    title: "KWh per Vehicle"
+	},
+
+axisX: {
+    title: " Shop Name"
+	},
+	data: [{
+		type: "column",
+		dataPoints: @Html.Raw(ViewBag.DataPoints)
+	}]
+});
+chart.render();
+
+}
+
+</script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-4 col-md-offset-4">
+
+            <div class="panel">
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+                    <h style="color:white;font-size:15px"><b>Yesterday's Data For @ViewBag.ShopGroupName</b> </h>
+                </div>
+            </div>         
+        </div>
+
+        <div class="col-md-2 col-md-offset-2" style=" margin-top: 2%;">
+            <button class="btn btn-primary" id="backto" click="backtohome()">Back To Home</button>
+        </div>
+    </div>
+    <input type="hidden" value="@plantid" id="plant"/>
+
+
+  
+
+    <div class="col-md-offset-3 col-md-6">
+        <div id="chartContainer"></div>
+    </div>
+        @*<div id="chartContainer">
+
+        </div>
+    </div>*@
+
+</div>
+       <script type="text/javascript">
+           $(document).ready(function () {
+
+               $("#backto").click(function () {
+
+                   debugger
+                  // var plant_id = $("#plant").val();
+                   window.location.href = "/EnergyHome/Index";
+               });
+           });
+           //function backtohome() {
+           //    debugger
+           //    var plantid = ViewBag.PlantIDByGroupID;
+           //    window.location.href = "/EnergyHome/getshopgroup?plantid=" + plantid ;
+
+           //}
+        </script>
+
+@*<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>*@
+<script src="~/Content/Barchart/barchart.min.js"></script>
+
+
+
+   
+
+
+
+

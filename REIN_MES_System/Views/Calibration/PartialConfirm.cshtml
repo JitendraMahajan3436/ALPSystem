@@ -1,0 +1,53 @@
+﻿@model REIN_MES_System.Models.RS_MT_Calibration_Log
+
+
+<script type="text/javascript">
+    var form = $("#create-modal-body").closest("form");
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse($("form"));
+</script>
+
+<div class="row">
+    <div class="col-md-9 col-md-offset-1">
+        @using (Html.BeginForm("complete", "Calibration"))
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.C_Tool_Log_ID);
+
+            <div class="row">
+                <div class="col-md-6 ">
+                    @Html.LabelFor(model => model.Calibration_Tool, "Calibration Tool")
+                    @Html.TextBoxFor(model => model.Calibration_Tool, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                </div>
+             
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.Calibration_Description, "Calibration Description")
+                    @Html.TextBoxFor(model => model.Calibration_Description, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Remark, "Remark")
+                    @Html.TextBoxFor(model => model.Remark, htmlAttributes: new { @class = "form-control" })
+                </div>
+               
+            </div>
+            <div class="row">
+              
+                <div class="col-md-12">
+                    @Html.LabelFor(model => model.Special_Observation, "Special Observation")
+                    @Html.TextBoxFor(model => model.Special_Observation, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+
+        }
+    </div>
+</div>

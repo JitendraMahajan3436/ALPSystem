@@ -1,0 +1,42 @@
+﻿<table class="table table-bordered table-striped table-condensed datatable_completes" id="feederPerformanceIndices" style="max-width:100%">
+    <thead>
+        <tr>
+            <th>
+                FeederNanme
+            </th>
+            <th>
+                Parameter 
+            </th>
+            <th>
+                Tag Index
+            </th>
+            <th>
+                Datetime
+            </th>
+            <th>
+                Value (Reading)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody style="height:300px">
+        @if (ViewData["FeederwiseData"] as IList<REIN_MES_System.Models.Sp_Feederwise_allParameter_Reading_Result> != null)
+        {
+            foreach (var item in ViewData["FeederwiseData"] as IList<REIN_MES_System.Models.Sp_Feederwise_allParameter_Reading_Result>)
+            {
+                <tr>
+                    <td>
+                        @item.FeederName
+
+                    </td>
+                    <td>@item.Prameter_Name</td>
+                    <td>@item.TagIndex</td>
+                    <td>@item.DateAndTime</td>
+                    <td>@item.Val</td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>

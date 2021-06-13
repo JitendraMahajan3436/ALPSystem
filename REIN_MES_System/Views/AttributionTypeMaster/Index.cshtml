@@ -1,0 +1,59 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_AttributionType_Master>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "AttributionTypeMaster")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+
+
+<br />
+<br />
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Plant_ID)
+        </th>
+        <th>
+            @Html.DisplayName("Attribution")
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Plant_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attribution_Type)
+            </td>
+
+            <td>
+                <a href="@Url.Action("Edit", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                <a href="@Url.Action("Details", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a> 
+                <a href="@Url.Action("Delete", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+
+
+}

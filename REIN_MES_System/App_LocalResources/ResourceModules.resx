@@ -1,0 +1,822 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Andon_Shop_Access" xml:space="preserve">
+    <value>Andon Shop Access</value>
+  </data>
+  <data name="Assign_Grade" xml:space="preserve">
+    <value>Assign Grade </value>
+  </data>
+  <data name="Attendance" xml:space="preserve">
+    <value>User Attendance</value>
+  </data>
+  <data name="Attribution_Parameter" xml:space="preserve">
+    <value>Attribution Parameter</value>
+  </data>
+  <data name="BOM" xml:space="preserve">
+    <value>BOM</value>
+  </data>
+  <data name="Callibration" xml:space="preserve">
+    <value>Callibration</value>
+  </data>
+  <data name="CBM" xml:space="preserve">
+    <value>Condition Based Maintanance</value>
+  </data>
+  <data name="CBM_Dashboard" xml:space="preserve">
+    <value>CBM Dashboard</value>
+  </data>
+  <data name="CLITA" xml:space="preserve">
+    <value>CLITA</value>
+  </data>
+  <data name="CLITA_Daily_Check" xml:space="preserve">
+    <value>Clita Daily Check</value>
+  </data>
+  <data name="Clita_Station_Machine" xml:space="preserve">
+    <value>CLITA Station Machine</value>
+  </data>
+  <data name="Colour" xml:space="preserve">
+    <value>Colour</value>
+  </data>
+  <data name="Critical_Station" xml:space="preserve">
+    <value>Critical Station</value>
+  </data>
+  <data name="Daily_MIS" xml:space="preserve">
+    <value>Daily MIS</value>
+  </data>
+  <data name="Daily_Report_For_Supervisor" xml:space="preserve">
+    <value>Daily Report for Supervisor</value>
+  </data>
+  <data name="Deviation_Parameter" xml:space="preserve">
+    <value>Deviation Parameter</value>
+  </data>
+  <data name="Dispatch" xml:space="preserve">
+    <value>Dispatch Details</value>
+  </data>
+  <data name="Dock_Order_Start" xml:space="preserve">
+    <value>Dock Order Start</value>
+  </data>
+  <data name="Email_TIme" xml:space="preserve">
+    <value>Email Time</value>
+  </data>
+  <data name="Employee_Session" xml:space="preserve">
+    <value>Employee  Session</value>
+  </data>
+  <data name="Employee_Skill_Set" xml:space="preserve">
+    <value>Employee Skill Set</value>
+  </data>
+  <data name="Equipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="Error_Proofing" xml:space="preserve">
+    <value>Error Proofing</value>
+  </data>
+  <data name="Help_Category" xml:space="preserve">
+    <value>Help Category</value>
+  </data>
+  <data name="Help_Desk" xml:space="preserve">
+    <value>Help Desk</value>
+  </data>
+  <data name="IOT_Tags" xml:space="preserve">
+    <value>IOT Tags</value>
+  </data>
+  <data name="Kepware_Testing" xml:space="preserve">
+    <value>Kepware Testing</value>
+  </data>
+  <data name="Leave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="Line_Supervisor_Configuration" xml:space="preserve">
+    <value>Line Supervisor Configuration</value>
+  </data>
+  <data name="Line_Type" xml:space="preserve">
+    <value>Line Type</value>
+  </data>
+  <data name="Machines" xml:space="preserve">
+    <value>Machiens</value>
+  </data>
+  <data name="Machine_Alarm" xml:space="preserve">
+    <value>Machine Alarm</value>
+  </data>
+  <data name="Machine_Alarm_Dashboard" xml:space="preserve">
+    <value>Machine Alarm Dashboard</value>
+  </data>
+  <data name="Machine_Alarm_Master" xml:space="preserve">
+    <value>Machine Alarm Master</value>
+  </data>
+  <data name="Machine_Alarm_Type" xml:space="preserve">
+    <value>Machine Alarm Type</value>
+  </data>
+  <data name="Machine_Dashboard" xml:space="preserve">
+    <value>Machine Dashboard</value>
+  </data>
+  <data name="Machine_Status" xml:space="preserve">
+    <value>Machine Status</value>
+  </data>
+  <data name="Manage_Order" xml:space="preserve">
+    <value>Manage Order</value>
+  </data>
+  <data name="Manifest" xml:space="preserve">
+    <value>Manifest</value>
+  </data>
+  <data name="Mannual_Data_Collection" xml:space="preserve">
+    <value>Mannual Data Collection</value>
+  </data>
+  <data name="Minor_Stoppages" xml:space="preserve">
+    <value>Minor Stoppages</value>
+  </data>
+  <data name="Minor_Stoppages_Cycle" xml:space="preserve">
+    <value>Minor Stoppages Cycle</value>
+  </data>
+  <data name="Model_Master" xml:space="preserve">
+    <value>Model Master</value>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="OM_Configuration" xml:space="preserve">
+    <value>Order Management Configuration</value>
+  </data>
+  <data name="OM_Creation" xml:space="preserve">
+    <value>Order Creation</value>
+  </data>
+  <data name="OM_Planning" xml:space="preserve">
+    <value>TACT Sheet Preparation</value>
+  </data>
+  <data name="OM_Release" xml:space="preserve">
+    <value>Order Realease</value>
+  </data>
+  <data name="Operator_Allocation" xml:space="preserve">
+    <value>Operator Allocation</value>
+  </data>
+  <data name="Order_Retrival" xml:space="preserve">
+    <value>Order Retrival</value>
+  </data>
+  <data name="Order_Start" xml:space="preserve">
+    <value>Order Start</value>
+  </data>
+  <data name="Paint_Cleaning_Schedule" xml:space="preserve">
+    <value>Paint Cleaning Schedule</value>
+  </data>
+  <data name="Paint_CS" xml:space="preserve">
+    <value>Paint CS</value>
+  </data>
+  <data name="Paint_DFT" xml:space="preserve">
+    <value>Paint DFT</value>
+  </data>
+  <data name="Paint_MEP" xml:space="preserve">
+    <value>Paint MEP</value>
+  </data>
+  <data name="Paint_Promix_Caliberation_Report" xml:space="preserve">
+    <value>Paint Promix Caliberation Report</value>
+  </data>
+  <data name="Paint_Ratio_Monitoring" xml:space="preserve">
+    <value>Paint Ratio Monitoring</value>
+  </data>
+  <data name="Paint_Robot_Calibration_Report" xml:space="preserve">
+    <value>Paint Robot Calibration Report</value>
+  </data>
+  <data name="Paint_Shop_Order" xml:space="preserve">
+    <value>Paint Shop Order</value>
+  </data>
+  <data name="Parameter" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="PartGroup" xml:space="preserve">
+    <value>Part Group</value>
+  </data>
+  <data name="PartGroup_Item" xml:space="preserve">
+    <value>Part Group Item</value>
+  </data>
+  <data name="Part_Master" xml:space="preserve">
+    <value>Part Master</value>
+  </data>
+  <data name="Plant" xml:space="preserve">
+    <value>Plant</value>
+  </data>
+  <data name="Plant_Prodction" xml:space="preserve">
+    <value>Plant Production</value>
+  </data>
+  <data name="PPC_Dashboard" xml:space="preserve">
+    <value>PPC Dashboard</value>
+  </data>
+  <data name="Preventive_Equipment" xml:space="preserve">
+    <value>Preventive Equipment</value>
+  </data>
+  <data name="Preventive_Maintanance" xml:space="preserve">
+    <value>Precentive Maintanance</value>
+  </data>
+  <data name="PRN_FIle" xml:space="preserve">
+    <value>PRN File</value>
+  </data>
+  <data name="PRN_Station" xml:space="preserve">
+    <value>PRN Station</value>
+  </data>
+  <data name="PTO_Plan" xml:space="preserve">
+    <value>PTO Plan</value>
+  </data>
+  <data name="Purge_Master" xml:space="preserve">
+    <value>Purge Master</value>
+  </data>
+  <data name="Purge_Module_Wise_Duration" xml:space="preserve">
+    <value>Purge Module Wise Duration</value>
+  </data>
+  <data name="Quality_Capture" xml:space="preserve">
+    <value>Quality Capture</value>
+  </data>
+  <data name="Quality_Checklist" xml:space="preserve">
+    <value>Quality Checklist</value>
+  </data>
+  <data name="Quality_Checklist_Checkpoint" xml:space="preserve">
+    <value>Checklist to Checkpoint</value>
+  </data>
+  <data name="Quality_Checkpoint" xml:space="preserve">
+    <value>Quality Checkpoint</value>
+  </data>
+  <data name="Quality_Checkpoint_Defect" xml:space="preserve">
+    <value>Quality Checkpoint Defect</value>
+  </data>
+  <data name="Quality_Config" xml:space="preserve">
+    <value>Quality Configuration</value>
+  </data>
+  <data name="Quality_Corrective_Action" xml:space="preserve">
+    <value>Quality Corrective Action</value>
+  </data>
+  <data name="Quality_Daviation" xml:space="preserve">
+    <value>Quality Deviation</value>
+  </data>
+  <data name="Quality_Defect" xml:space="preserve">
+    <value>Quality Defect</value>
+  </data>
+  <data name="Quality_Defect_Corrective_Action" xml:space="preserve">
+    <value>Quality Defect Corrective Action</value>
+  </data>
+  <data name="Quality_Image" xml:space="preserve">
+    <value>Quality Image</value>
+  </data>
+  <data name="Quality_Image_Group" xml:space="preserve">
+    <value>Quality Image Group</value>
+  </data>
+  <data name="Quality_Image_Group_Station" xml:space="preserve">
+    <value>Quality Image Group Station</value>
+  </data>
+  <data name="Quality_Image_part" xml:space="preserve">
+    <value>Quality  Image Part</value>
+  </data>
+  <data name="Quality_Part" xml:space="preserve">
+    <value>Quality Part</value>
+  </data>
+  <data name="Quality_Part_Defect" xml:space="preserve">
+    <value>Quality Part Defect</value>
+  </data>
+  <data name="Quality_Station_Checklist" xml:space="preserve">
+    <value>Quality Station Checklist</value>
+  </data>
+  <data name="Quality_Takeout_reson" xml:space="preserve">
+    <value>Quality Take Out Resion</value>
+  </data>
+  <data name="Quality_Tracking" xml:space="preserve">
+    <value>Quality Tracking</value>
+  </data>
+  <data name="RFD_Buffer" xml:space="preserve">
+    <value>RFD Buffer</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Route" xml:space="preserve">
+    <value>Route</value>
+  </data>
+  <data name="Route_Configuration" xml:space="preserve">
+    <value>Route Configuration</value>
+  </data>
+  <data name="Route_Marriage_Station" xml:space="preserve">
+    <value>Route Marriage Station</value>
+  </data>
+  <data name="Route_Shop_Marriage" xml:space="preserve">
+    <value>Route Shop Marriage</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="Series_Number_Data" xml:space="preserve">
+    <value>Series Number Data</value>
+  </data>
+  <data name="Shift" xml:space="preserve">
+    <value>Shift</value>
+  </data>
+  <data name="Shop" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="Shop_Manager_COnfiguration" xml:space="preserve">
+    <value>Shop manager configuration</value>
+  </data>
+  <data name="Shop_Production" xml:space="preserve">
+    <value>Shop Productin</value>
+  </data>
+  <data name="Slide_Screen" xml:space="preserve">
+    <value>Slide screen</value>
+  </data>
+  <data name="SOP" xml:space="preserve">
+    <value>SOP</value>
+  </data>
+  <data name="Station" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="Station_Based_CLITA" xml:space="preserve">
+    <value>Station Based CLITA</value>
+  </data>
+  <data name="Station_Role" xml:space="preserve">
+    <value>Station Role</value>
+  </data>
+  <data name="Station_Tracking" xml:space="preserve">
+    <value>Station Tracking</value>
+  </data>
+  <data name="Supervisor_Allocation" xml:space="preserve">
+    <value>Supervisor Allocation</value>
+  </data>
+  <data name="TakeIn_TakeOut" xml:space="preserve">
+    <value>Take In Take Out</value>
+  </data>
+  <data name="TBM_Dashboard" xml:space="preserve">
+    <value>TBM Dashboard</value>
+  </data>
+  <data name="Test_Bed" xml:space="preserve">
+    <value>Test Bed</value>
+  </data>
+  <data name="Ticket" xml:space="preserve">
+    <value>Ticket</value>
+  </data>
+  <data name="Tracebility" xml:space="preserve">
+    <value>Tracebility</value>
+  </data>
+  <data name="Tracking" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
+  <data name="Tracking_Screen_Slider" xml:space="preserve">
+    <value>Tracking Screen Slider</value>
+  </data>
+  <data name="Tranning" xml:space="preserve">
+    <value>Tranning</value>
+  </data>
+  <data name="Tranning_Configuration" xml:space="preserve">
+    <value>Tranning Configuration</value>
+  </data>
+  <data name="Tranning_Session" xml:space="preserve">
+    <value>Tranning Session</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="User_Role" xml:space="preserve">
+    <value>User Role</value>
+  </data>
+  <data name="Hold_Order" xml:space="preserve">
+    <value>Hold Order</value>
+  </data>
+  <data name="CBM_Config" xml:space="preserve">
+    <value>CBM Configuration</value>
+  </data>
+  <data name="CLITA_Item" xml:space="preserve">
+    <value>CLITA Item</value>
+  </data>
+  <data name="Error_Log" xml:space="preserve">
+    <value>Error Log</value>
+  </data>
+  <data name="Add_Session" xml:space="preserve">
+    <value>Add Session</value>
+  </data>
+  <data name="Add_User" xml:space="preserve">
+    <value>Add User</value>
+  </data>
+  <data name="Andon_Shop_Screen" xml:space="preserve">
+    <value>Andon Shop Screen</value>
+  </data>
+  <data name="Cell_Member_Allocation" xml:space="preserve">
+    <value>Cell Member Allocation</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Officer" xml:space="preserve">
+    <value>Officer</value>
+  </data>
+  <data name="Officer_To_Manager" xml:space="preserve">
+    <value>Officer To Manager</value>
+  </data>
+  <data name="Operator_To_Supervisor" xml:space="preserve">
+    <value>Cell Member To Officer</value>
+  </data>
+  <data name="Skill_Set_Allocation" xml:space="preserve">
+    <value>Skill Set Allocation</value>
+  </data>
+  <data name="Route_Marriage" xml:space="preserve">
+    <value>Route Marriage</value>
+  </data>
+  <data name="History_Card_CheckPoint" xml:space="preserve">
+    <value>History Card CheckPoint</value>
+  </data>
+  <data name="HC_CheckPoint" xml:space="preserve">
+    <value>History Card Checkpoint</value>
+  </data>
+  <data name="Ekanban" xml:space="preserve">
+    <value>Ekanban</value>
+  </data>
+  <data name="Operation_Master" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="Station_Operation" xml:space="preserve">
+    <value>Station Operation</value>
+  </data>
+  <data name="EmployeeConfiguration" xml:space="preserve">
+    <value>Employee Configuration</value>
+  </data>
+  <data name="escalationConfiguration" xml:space="preserve">
+    <value>Escalation Configuration</value>
+  </data>
+  <data name="Kitting_Zone" xml:space="preserve">
+    <value>Kitting Zone</value>
+  </data>
+  <data name="Rack" xml:space="preserve">
+    <value>Rack</value>
+  </data>
+  <data name="Kitting_Part_Zone" xml:space="preserve">
+    <value>Kitting Part Zone</value>
+  </data>
+  <data name="Kitt_Barcode_Config" xml:space="preserve">
+    <value>Kitting Barcode Config</value>
+  </data>
+  <data name="Rack_Area" xml:space="preserve">
+    <value>Rack Area</value>
+  </data>
+  <data name="Rack_Cells" xml:space="preserve">
+    <value>Rack Cells</value>
+  </data>
+  <data name="Quality_Station_ List" xml:space="preserve">
+    <value>Quality Station List</value>
+  </data>
+  <data name="Severity" xml:space="preserve">
+    <value>Severity</value>
+  </data>
+  <data name="Quality_DefectLocation" xml:space="preserve">
+    <value>Quality DefectLocation</value>
+  </data>
+  <data name="QualityDefectSorce" xml:space="preserve">
+    <value>Quality Defect Source</value>
+  </data>
+  <data name="QualityBuyoffStage" xml:space="preserve">
+    <value>Quality Buyoff Stage</value>
+  </data>
+  <data name="BuyoffIndicatorRelation" xml:space="preserve">
+    <value>Buyoff Indicator Relation</value>
+  </data>
+  <data name="PartwiseDefect" xml:space="preserve">
+    <value>Partwise Defect</value>
+  </data>
+  <data name="Attribution_Type" xml:space="preserve">
+    <value>Attribution Type</value>
+  </data>
+  <data name="BIW_Part_Master_Config" xml:space="preserve">
+    <value>Aggregate Part Configuration</value>
+  </data>
+  <data name="BWT" xml:space="preserve">
+    <value>BWT Config</value>
+  </data>
+  <data name="BWT_Assign_Stations" xml:space="preserve">
+    <value>BWT Assign Stations</value>
+  </data>
+  <data name="Color_Config" xml:space="preserve">
+    <value>Colour Configuration</value>
+  </data>
+  <data name="Order_Type" xml:space="preserve">
+    <value>Order Type</value>
+  </data>
+  <data name="Platform" xml:space="preserve">
+    <value> Platform</value>
+  </data>
+  <data name="Set_Up_time_config" xml:space="preserve">
+    <value>Set Up Time Config</value>
+  </data>
+  <data name="Style_Code" xml:space="preserve">
+    <value>Style Code Config</value>
+  </data>
+  <data name="Style_Code_CheckPoint" xml:space="preserve">
+    <value>Style Code CheckPoint</value>
+  </data>
+  <data name="Style_Code_CheckSheet" xml:space="preserve">
+    <value>Style Code CheckSheet Config</value>
+  </data>
+  <data name="ResourceQualityStationlist" xml:space="preserve">
+    <value>Quality StationList</value>
+  </data>
+  <data name="CMM_Request" xml:space="preserve">
+    <value>CMM Request</value>
+  </data>
+  <data name="CMM_Request_Closure" xml:space="preserve">
+    <value>CMM Request Closure</value>
+  </data>
+  <data name="UB10SequenceDisplayMenuConfig" xml:space="preserve">
+    <value>UB10 Sequence Display Menu Config</value>
+  </data>
+  <data name="StyleCodeMasterConfig" xml:space="preserve">
+    <value>Style Code Master Configuration</value>
+  </data>
+  <data name="Door_Part_Master_Config" xml:space="preserve">
+    <value>Door Part Master Config</value>
+  </data>
+  <data name="VehicleSeriesConfig" xml:space="preserve">
+    <value>Vehicle Series Configuration</value>
+  </data>
+  <data name="AttributionType_Master" xml:space="preserve">
+    <value>Attribution Type Master</value>
+  </data>
+  <data name="OM_PPC_Planning" xml:space="preserve">
+    <value>PPC Planning</value>
+  </data>
+  <data name="AndonConfiguration" xml:space="preserve">
+    <value>Andon Configuration</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="StationRoles" xml:space="preserve">
+    <value>Station Role</value>
+  </data>
+  <data name="Menus" xml:space="preserve">
+    <value>Menus Configuration</value>
+  </data>
+  <data name="MenusTitle" xml:space="preserve">
+    <value>Menus</value>
+  </data>
+  <data name="UserRoles" xml:space="preserve">
+    <value>User Role</value>
+  </data>
+  <data name="BreakDownTarget" xml:space="preserve">
+    <value>BreakDownTarget Configuration</value>
+  </data>
+  <data name="CBMPC" xml:space="preserve">
+    <value>CBM Parameter Category</value>
+  </data>
+  <data name="CBMPC_Config" xml:space="preserve">
+    <value>CBM Parameter Category Configuration</value>
+  </data>
+  <data name="MaintenanceMachinePart" xml:space="preserve">
+    <value>PM Part To Machine Configuration</value>
+  </data>
+  <data name="BreakDown_Data" xml:space="preserve">
+    <value>Break Down Data</value>
+  </data>
+  <data name="MaintenancePart" xml:space="preserve">
+    <value>Maintenance Part Configuration</value>
+  </data>
+  <data name="Open_Activity" xml:space="preserve">
+    <value>Open Activity</value>
+  </data>
+  <data name="PMActivity" xml:space="preserve">
+    <value>Preventive Maintenance Activity Configuration</value>
+  </data>
+  <data name="PMShopUser" xml:space="preserve">
+    <value>PMShopUser Configuration</value>
+  </data>
+  <data name="PMSoftUser" xml:space="preserve">
+    <value>PMSoftUser Configuration</value>
+  </data>
+  <data name="UOM_Config" xml:space="preserve">
+    <value>Unit Of Measurement</value>
+  </data>
+  <data name="Part_To_Machine" xml:space="preserve">
+    <value>PM Part To Machine Configuration</value>
+  </data>
+  <data name="Station_Allocation" xml:space="preserve">
+    <value>Station Allocation</value>
+  </data>
+  <data name="Conveyor_Status" xml:space="preserve">
+    <value>Conveyor Status</value>
+  </data>
+  <data name="Line_Config" xml:space="preserve">
+    <value>Line Configuration</value>
+  </data>
+  <data name="Order_Type_Config" xml:space="preserve">
+    <value>Order Type Configuration</value>
+  </data>
+  <data name="PartGroup_Config" xml:space="preserve">
+    <value>Partgroup Configuration</value>
+  </data>
+  <data name="Plant_Config" xml:space="preserve">
+    <value>Plant Configuration</value>
+  </data>
+  <data name="Platform_Config" xml:space="preserve">
+    <value>Platform Configuration</value>
+  </data>
+  <data name="Shift_Config" xml:space="preserve">
+    <value>Shift Configuration</value>
+  </data>
+  <data name="Shop_Config" xml:space="preserve">
+    <value>Shop Configuration</value>
+  </data>
+  <data name="Station_Config" xml:space="preserve">
+    <value>Station Configuration</value>
+  </data>
+  <data name="Style_Code_Config" xml:space="preserve">
+    <value>Style Code Configuration</value>
+  </data>
+  <data name="Clita_Config" xml:space="preserve">
+    <value>CLITA Configuration</value>
+  </data>
+  <data name="Dashboard_Config" xml:space="preserve">
+    <value>Dashboard Configuration</value>
+  </data>
+  <data name="TBM_Config" xml:space="preserve">
+    <value>TBM Configuration</value>
+  </data>
+  <data name="User_Config" xml:space="preserve">
+    <value>Add Users</value>
+  </data>
+  <data name="Major_Sub_Assembly" xml:space="preserve">
+    <value>Child Part Sub Assembly</value>
+  </data>
+  <data name="Traceability" xml:space="preserve">
+    <value>Part Traceability</value>
+  </data>
+  <data name="Part_ID" xml:space="preserve">
+    <value>PartID</value>
+  </data>
+  <data name="PartIDStationConfig" xml:space="preserve">
+    <value>PartID To Station Configuration</value>
+  </data>
+  <data name="Model_Attribute" xml:space="preserve">
+    <value>Model Attribute Master</value>
+  </data>
+  <data name="Tracking_MachineShop" xml:space="preserve">
+    <value>Machine Shop</value>
+  </data>
+  <data name="Tracking_EngineShop" xml:space="preserve">
+    <value>Engine Shop</value>
+  </data>
+  <data name="EngineDropping" xml:space="preserve">
+    <value>Engine Dropping Screen</value>
+  </data>
+  <data name="RFD" xml:space="preserve">
+    <value>Dispatch</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="Area_Config" xml:space="preserve">
+    <value>Area Configuration</value>
+  </data>
+  <data name="Business" xml:space="preserve">
+    <value>Business</value>
+  </data>
+  <data name="Business_Config" xml:space="preserve">
+    <value>Business Configuration</value>
+  </data>
+  <data name="Feeder" xml:space="preserve">
+    <value>Feeder</value>
+  </data>
+  <data name="Feeder_Config" xml:space="preserve">
+    <value>Feeder_Config</value>
+  </data>
+  <data name="No_Working_Day" xml:space="preserve">
+    <value>No Working Day</value>
+  </data>
+  <data name="No_Working_Day_Config" xml:space="preserve">
+    <value>No Working Day Configuration</value>
+  </data>
+  <data name="PlantTarget" xml:space="preserve">
+    <value>PlantTarget</value>
+  </data>
+  <data name="Plant_Consume" xml:space="preserve">
+    <value>Plant Comsumption Configuration</value>
+  </data>
+  <data name="Plant_Consumption" xml:space="preserve">
+    <value>Plant_Consumption</value>
+  </data>
+  <data name="Plant_Production" xml:space="preserve">
+    <value>Plant Production Configuration</value>
+  </data>
+  <data name="Email_alert" xml:space="preserve">
+    <value>Alert Configuration</value>
+  </data>
+  <data name="BOM Item" xml:space="preserve">
+    <value>BOM Item</value>
+  </data>
+</root>

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+@using REIN_MES_System.Helper;
+@using REIN_MES_System.Models
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    var orderCount = 0;
+    var cnt = 0;
+
+    RS_Partgroup partGroup = ViewBag.PartGroup;
+
+    int plantId = ((FDSession)this.Session["FDSession"]).plantId;
+    int shopId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).shopId);
+}
+
+<table class="table table-bordered table-striped order-start-tbl">
+
+    <tbody>
+        @if (Model != null)
+        {
+            string partno = "";
+            int r = 180;
+            int g = 190;
+            int b = 255;
+            Random rnd = new Random();
+
+            foreach (var item in Model)
+            {
+                if (!partno.Equals(item.Model_Code, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    r = rnd.Next(40, 225);
+                    g = rnd.Next(40, 225);
+                    b = rnd.Next(40, 225);
+                }
+                partno = item.Model_Code;
+
+                <tr style="background:rgba(@r,@g,@b,0.5)">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Order_No)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Model_Code)
+                    </td*@>
+                    @{
+                        var biwPartNo = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.BIW_Part_No).FirstOrDefault();
+                        if (biwPartNo != null)
+                        {
+                            //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                            <td>
+                                @biwPartNo
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
+                    
+                    @*<td>@{ @item.oldSeriesCode}</td>*@
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @{
+                            if (cnt == 0)
+                            {
+                                <input type="hidden" id="hdnIsKitting" name="IsKitting" value="@TempData["Is_Kitting"]" />
+                                <a class="start_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No">Order Start</a>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (cnt == 0)
+                            {
+                                if (partGroup.Order_Create == true)
+                                {
+                                    <a class="hold_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Order_No">Hold Order</a>
+                                }
+                                cnt = cnt + 1;
+                            }
+                        }
+                    </td>
+
+                </tr>
+            }
+     }
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Release Order</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal" id="releasedOrdersBody">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

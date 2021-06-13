@@ -1,0 +1,60 @@
+﻿@model REIN_MES_System.Models.RS_Shops
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-6">
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Shop_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Shop_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Shop Category")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Major_Sub_Assembly.Sub_Assembly_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayName(ResourceGlobal.Inserted_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Inserted_Date)
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="@ResourceGlobal.Delete" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        }
+    </div>
+</div>
+

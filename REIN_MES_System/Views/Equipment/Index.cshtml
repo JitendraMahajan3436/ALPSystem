@@ -1,0 +1,72 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Preventive_Equipment>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Equipment")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    <a href="@Url.Action("Upload", "Equipment")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>
+</p>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-primary" }) @Html.ActionLink("Upload File", "Upload", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>*@
+
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Machine Part Name")
+            </th>
+            <th>
+                @Html.DisplayName("Machine Number")
+            </th>
+            <th>
+                @Html.DisplayName("Machine Name")
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Equipment_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Number)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Date)
+                    </td>*@
+                @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EQP_ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.EQP_ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.EQP_ID })*@
+
+
+                <td>
+                    <a href="@Url.Action("Edit", "Equipment", new { id = item.EQP_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "Equipment", new { id = item.EQP_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "Equipment", new { id = item.EQP_ID })"><i class="fa fa-trash"></i></a>
+                </td>
+                @*</td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

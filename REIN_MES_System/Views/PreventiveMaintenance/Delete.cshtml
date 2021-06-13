@@ -1,0 +1,153 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Maintenance
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+ 
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Machine Number")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Machine Part")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Preventive_Equipment.Equipment_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Scheduled Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Scheduled_Date, "{0:dd-MM-yyyy}")
+        </dd>
+
+        @*<dt>
+            @Html.DisplayName("Last Maintenance Date")
+        </dt>*@
+
+        @*<dd>
+            @Html.DisplayFor(model => model.Last_Maintenance_Date)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayName("Maintenance User")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayName("Cycle(Months)")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cycle_Period)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayName("Recipient Email")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Receipent_Email)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayName("Is Deleted")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Is Transfered")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Is Purgeable")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted Host")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted User")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Inserted Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Updated Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Updated Host")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Host)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Updated User")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>*@
+
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

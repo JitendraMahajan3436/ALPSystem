@@ -1,0 +1,74 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_ManPower_Required>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<br />
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "RequireManPowerConfiguration")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Plant Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Shop Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Line Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Setup Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Require Direct ManPower")
+                </th>
+                <th>
+                    @Html.DisplayName("Require InDirect ManPower")
+                </th>
+                <th>@ResourceGlobal.Action</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Setup.Setup_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direct_MP_Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Indirect_MP_Quantity)
+                </td>
+                <td>
+                    <a href="@Url.Action(ResourceGlobal.Edit, "RequireManPowerConfiguration", new { id = item.MPR_ID })"><i class="fa fa-edit" style="color:blue" title="Edit"></i></a>
+                    <a href="@Url.Action(ResourceGlobal.Details, "RequireManPowerConfiguration", new { id = item.MPR_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet" title="Details"></i></a>
+                    @*<a href="@Url.Action(ResourceGlobal.Delete, "RequireManPowerConfiguration", new { id = item.MPR_ID })"><i class="fa fa-trash" title="Delete"></i></a>*@
+
+                </td>
+            </tr>
+    }
+
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

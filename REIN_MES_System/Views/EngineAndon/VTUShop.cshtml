@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "VTUShop";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<style>
+    .station-box {
+        width: 120px;
+        height: 120px;
+        border: 3px solid red;
+        background-color: coral;
+        text-align: center;
+        font: 100px bold;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        margin: 5px;
+        padding: 0px;
+        font-weight: bold;
+        color: blue;
+        align-content: center;
+    }
+
+    .station-box1 {
+        width: 150px;
+        height: 150px;
+        border: 3px solid red;
+        background-color: coral;
+        text-align: center;
+        font: 120px bold;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        margin: 5px;
+        padding: 0px;
+        font-weight: bold;
+        color: blue;
+        align-content: center;
+    }
+
+    .times {
+        font: 100px bold;
+    }
+
+    .tr-column {
+        font: 50px bold;
+        font-weight: bold;
+        align-content: center;
+    }
+            .preppy {
+  color: #FFFFFF;
+  font-weight: 900;
+}
+
+
+    #marquee {
+   background:#eee;
+   overflow:hidden;
+   white-space: nowrap;
+ }
+</style>
+
+@*<div class="row">*@
+
+<div style="background-color:white; padding:1%" class="container-fluid">
+    <div style="margin-left: 1px;" class="col-md-12">
+        <table border="1" align="center" class="col-md-12">
+            <tr align="center">
+                @*<td><h3><b><img src="~/Content/images/.jpg" height="100px" width="130px" /></b></h3></td>*@
+                <td colspan="15" class="bg-aqua-active color-palette tr-column"><b>VTU ASSEMBLY ANDON DISPLAY</b></td>
+
+            </tr>
+
+            <tr align="center" class="tr-column bg-teal-active color-palette">
+                <td colspan="4" rowspan="2" class="col-md-3 times" style="margin-top:2px;padding-top:5px; align-content:center;" id="hTime" align="center"></td>
+                <td colspan="4" class="col-md-3">Plan</td>
+                <td colspan="4" class="col-md-3">Actual</td>
+                <td colspan="4" class="col-md-3">Current</td>
+            </tr>
+            <tr align="center" class="tr-column  bg-light-blue-active color-palette">
+                @*<td colspan="4" id="hTime"></td>*@
+                <td colspan="4">@ViewBag.plan</td>
+                <td colspan="4" id="Actualpro"></td>
+                <td colspan="4" id="AskingRate">00</td>
+            </tr>
+            <tr align="center" class="tr-column bg-maroon-active color-palette">
+                <td colspan="4">VTU Line</td>
+                <td colspan="12">Line Pause</td>
+                @*<td colspan="4">Main Line 2</td>*@
+            </tr>
+            <tr align="center" class="bg-gray-active color-palette">
+                <td colspan="4" class="lines">
+
+                    <img src="~/Content/images/green.png" id="10020" height="200px" width="200px" data-line-id="10020" />
+
+                </td>
+                <td colspan="12" class="line-pause"> </td>
+
+                @*<td colspan="4" class="lines">
+                        <img src="~/Content/images/green.png" id="4" height="200px" width="200px" data-line-id="4" />
+
+                    </td>*@
+            </tr>
+            <tr align="center" class="tr-column bg-maroon-active color-palette">
+                <td colspan="4">Material Call</td>
+                <td colspan="4">Maint. Call</td>
+                <td colspan="4">Sup. Call</td>
+                <td colspan="4">MES Call</td>
+            </tr>
+            <tr align="center" height="300px" style="background-color: #abb1d2">
+                <td colspan="4" class="m-call"></td>
+                <td colspan="4" class="maintanance-call"></td>
+                <td colspan="4" class="supervisor-call"></td>
+                <td colspan="4" class="mes-call"></td>
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="row">
+
+    </div>
+    <div>
+        <b>
+            <marquee style="background-color:black;font-size:250%" class="preppy">Today Shift Timings <span id='shift'></span></marquee>
+        </b>
+    </div>
+
+    @*<div id="marquee" style="background-color:black;font-size:250%" class="preppy" >
+            Today Shift Timings <span id='shift'></span>
+        </div>*@
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+    function Loadingajax() {
+        $("#loader").show();
+        $('#myModal2').modal();
+        $("#buffermodal").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+    }
+
+    function resetAllLines() {
+        $(".lines").find("img").attr('src', '/Content/images/green.png');
+
+    }
+
+    function checkTracking() {
+        $.getJSON('/Tracking/checkIfLineStop', { shopid: 3 }, function (data) {
+            resetAllLines();
+            if (data.length > 0) {
+                //PARSING THE TRACKING DATA RECIEVED FOR VTU SHOP
+                $.each(data, function (idx, lineStop) {
+
+                    var lineid = lineStop.Line_ID;
+                    var stationid = lineStop.LineStopStation_ID;
+                    $('*[data-line-id="' + lineid + '"]').attr('src', '/Content/images/red.png');
+
+                });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Line Stop Data !');
+        });
+
+        $.getJSON('/Tracking/getStationCalls', { shopid: 3 }, function (data) {
+           // resetAllMaterialCalls();
+            if (data.length > 0) {
+                var supervisorcall = "";
+                var materialscall = "";
+                var maintanancescall = "";
+                var linestopscall = "";
+                $.each(data, function (idx, stationCalls) {
+
+                    var stationid = stationCalls.Station_ID;
+                    if (stationid == 177) {
+                        stationid = 1;
+                    }
+                    else if (stationid == 178) {
+                        stationid = 2;
+                    }
+                    else {
+                        stationid = stationid - 176;
+                    }
+
+                    if (stationCalls.Material_Call) {
+                        materialscall += "<div class='station-box bg-maroon-active color-palette'>" + stationid + "</div>";
+                    }
+                    if (stationCalls.Supervisor_Call) {
+
+                        supervisorcall += "<div class='station-box bg-light-blue-active color-palette'>" + stationid + "</div>";
+                    }
+                    if (stationCalls.Maintenance_Call) {//maintanance-call
+                        maintanancescall += "<div class='station-box'>" + stationid + "</div>";
+                    }
+                    if (stationCalls.Line_Stop || stationCalls.Emergency_Call) {
+                        linestopscall += "<div class='station-box1 bg-red-active color-palette'>" + stationid + "</div>";
+                    }
+                    $(".supervisor-call").html(supervisorcall);
+                    $(".m-call").html(materialscall);
+                    $(".maintanance-call").html(maintanancescall);
+                    $(".line-pause").html(linestopscall);
+                });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Station Calls !');
+        });
+        $.getJSON('/EngineAndon/ActualProduction', { shopid: 3, stationId: 165 }, function (data) {
+            $("#Actualpro").html("");
+            $("#Actualpro").html(data);
+        });
+        $.getJSON('/EngineAndon/askingRate', { shopid: 3 }, function (data) {
+            $("#AskingRate").html("");
+            $("#AskingRate").html(data);
+        });
+        $.getJSON('/Tracking/getMESLineStopStation', { shopid: 3 }, function (data) {
+            //resetAllMESLineStop();
+            $(".mes-call").html("");
+
+            if (data.length > 0) {
+                var Mescall = "";
+
+                $.each(data, function (idx, resultDataObj) {
+                    var stationid = resultDataObj.Station_ID;
+                    if (stationid == 177) {
+                        stationid = 1;
+                    }
+                    else if (stationid == 178) {
+                        stationid = 2;
+                    }
+                    else {
+                        stationid = stationid - 176;
+                    }
+                    Mescall += "<div class='station-box bg-purple-active color-palette'>" + stationid + "</div>";
+                   });
+                $(".mes-call").html(Mescall);
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Machine Status !');
+        });
+    }// Check Tracking function END
+
+    $(document).ready(function () {
+        setInterval(function () {
+            GetShift()
+        }, 1000);
+       // GetShift();
+        function GetShift() {
+            url = "/EngineAndon/getshift";
+            ajaxpack.getAjaxRequest(url, "shopid=" + 1, RefreshDiv, "json");
+        }
+        function RefreshDiv() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+
+                var jsonRes = $.parseJSON(myajax.responseText);
+
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+
+
+
+                    $("#shift").html(jsonRes.ShiftStart.Hours + ":" + jsonRes.ShiftStart.Minutes  + " " + "To" + " " + jsonRes.ShiftEnd.Hours + ":" + jsonRes.ShiftEnd.Minutes );
+
+
+                }
+            }
+        }
+
+        $(".main-header").css('display', 'none');
+        setInterval(function () {
+            getTime()
+        }, 1000);
+
+        function getTime() {
+            var dt = new Date();
+            var time = dt.getHours() + ":" + dt.getMinutes();
+
+            $('#hTime').html("<b>" + time + "<b>");
+        }
+        checkTracking();
+        window.setInterval('checkTracking()', 1001);
+
+    });
+</script>

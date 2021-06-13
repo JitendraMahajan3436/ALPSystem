@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Add_Success" xml:space="preserve">
+    <value>is added successfully</value>
+  </data>
+  <data name="allready_closed" xml:space="preserve">
+    <value>is allready close by another user</value>
+  </data>
+  <data name="Allready_Exit" xml:space="preserve">
+    <value>is Allready Exist</value>
+  </data>
+  <data name="close_Ticket" xml:space="preserve">
+    <value>is closed successfully</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Create_Success" xml:space="preserve">
+    <value>is created successfully</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Delete_Success" xml:space="preserve">
+    <value>is deleted successfuliy</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Disabled_Success" xml:space="preserve">
+    <value>is disabled successfully</value>
+  </data>
+  <data name="Download_Success" xml:space="preserve">
+    <value>download successfully(BOM)</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Edit_Success" xml:space="preserve">
+    <value>is Edited Succesfully</value>
+  </data>
+  <data name="Enabled_Success" xml:space="preserve">
+    <value>is enabled successfully</value>
+  </data>
+  <data name="Is_BOM_Partno_Exist" xml:space="preserve">
+    <value>Part Number not Available in Model Master or Part Master</value>
+  </data>
+  <data name="Is_Error" xml:space="preserve">
+    <value>Error Occured in </value>
+  </data>
+  <data name="List" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Machine_Not_Healthy" xml:space="preserve">
+    <value>Machine is not Healthy .</value>
+  </data>
+  <data name="Override_Success" xml:space="preserve">
+    <value>is Override Successfully</value>
+  </data>
+  <data name="Release_Successfully" xml:space="preserve">
+    <value>is released successfully</value>
+  </data>
+  <data name="Save_Success" xml:space="preserve">
+    <value>is saved successfully</value>
+  </data>
+  <data name="TakeIn_Success" xml:space="preserve">
+    <value>is take in successfully</value>
+  </data>
+  <data name="TakeOut_Success" xml:space="preserve">
+    <value>is take out successfully</value>
+  </data>
+  <data name="Update_Success" xml:space="preserve">
+    <value>is updated successfully</value>
+  </data>
+  <data name="Upload_Success" xml:space="preserve">
+    <value>is uploaded successfully</value>
+  </data>
+  <data name="ExceptionMessage" xml:space="preserve">
+    <value>having some exceptions</value>
+  </data>
+  <data name="CanNotDelete" xml:space="preserve">
+    <value>Can Not delete</value>
+  </data>
+  <data name="Can_not_delete_record" xml:space="preserve">
+    <value>Record can not be deleted because its reference used in another table</value>
+  </data>
+  <data name="CheckAllValue" xml:space="preserve">
+    <value>Check All Fields Values.</value>
+  </data>
+  <data name="SomethingWrong" xml:space="preserve">
+    <value>Something Went Wrong !</value>
+  </data>
+  <data name="ModelCodeNotExist" xml:space="preserve">
+    <value>First Configure Model Code in model master</value>
+  </data>
+  <data name="DownloadFail" xml:space="preserve">
+    <value>Download is Failed.</value>
+  </data>
+  <data name="Data_Success_Add_Success" xml:space="preserve">
+    <value>User Added Successfully</value>
+  </data>
+  <data name="Data_Success_Delete_Success" xml:space="preserve">
+    <value>User Deleted Successfully</value>
+  </data>
+  <data name="Data_Success_Edit_Success" xml:space="preserve">
+    <value>User Edited Successfully</value>
+  </data>
+  <data name="Duplicate_Found" xml:space="preserve">
+    <value>This Configuration already found</value>
+  </data>
+  <data name="Attribute_Type_Already_Exist" xml:space="preserve">
+    <value>Attribute Type is Already Exist</value>
+  </data>
+  <data name="Roles_Error_Role_Name_Exists" xml:space="preserve">
+    <value>Role is already exists for this plant. Please try with other name.</value>
+  </data>
+  <data name="Roles_Success_User_Role_Add_Success" xml:space="preserve">
+    <value>Role is added successfully</value>
+  </data>
+  <data name="Roles_Success_User_Role_Delete_Success" xml:space="preserve">
+    <value>Role is deleted successfully</value>
+  </data>
+  <data name="Roles_Success_User_Role_Edit_Success" xml:space="preserve">
+    <value>Role is edited successfully</value>
+  </data>
+  <data name="StationRolesTitle" xml:space="preserve">
+    <value>Station Role</value>
+  </data>
+  <data name="StationRoles_Add_Success" xml:space="preserve">
+    <value>Successfully Added Station Role</value>
+  </data>
+  <data name="StationRoles_Delete_Dependency_Failure" xml:space="preserve">
+    <value>Cannot Delete the Station Role record because it is has dependency in other modules</value>
+  </data>
+  <data name="StationRoles_Delete_Failure" xml:space="preserve">
+    <value>Deleting the Station Roles record failed.Please Try Again</value>
+  </data>
+  <data name="StationRoles_Delete_Success" xml:space="preserve">
+    <value>Successfully Deleted the Station Role Record</value>
+  </data>
+  <data name="StationRoles_Edit_Falure" xml:space="preserve">
+    <value>Editing the SOP record failed.Please Try Again</value>
+  </data>
+  <data name="StationRoles_Edit_Success" xml:space="preserve">
+    <value>Successfully Modified Station Role</value>
+  </data>
+  <data name="UserRoles_Add_Success" xml:space="preserve">
+    <value>User Role is  Added Successfully</value>
+  </data>
+  <data name="UserRoles_Create_Exception" xml:space="preserve">
+    <value>Exception Occurred while Creating User Role</value>
+  </data>
+  <data name="UserRoles_Delete_Dependency_Failure" xml:space="preserve">
+    <value>Cannot Delete the User Role record because it is has dependency in other modules</value>
+  </data>
+  <data name="UserRoles_Delete_Failure" xml:space="preserve">
+    <value>Deleting the User Roles record failed.Please Try Again</value>
+  </data>
+  <data name="UserRoles_Delete_Success" xml:space="preserve">
+    <value>Successfully Deleted the User Roles Record</value>
+  </data>
+  <data name="UserRoles_Edit_Falure" xml:space="preserve">
+    <value>Editing the userrole record failed.Please Try Again</value>
+  </data>
+  <data name="UserRoles_Edit_Success" xml:space="preserve">
+    <value> User Roles  Edited Successfully</value>
+  </data>
+</root>

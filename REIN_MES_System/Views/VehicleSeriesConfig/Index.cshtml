@@ -1,0 +1,69 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Vehicle_Series>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <a href="@Url.Action("Create", "VehicleSeriesConfig")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Vehicle Series")
+            </th>
+
+         
+            <th>
+                @Html.DisplayName("BOT")
+            </th>
+           
+            <th>
+                @Html.DisplayName("Blackout")
+            </th>
+
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+    </thead>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Attribute_Name)
+        </td>
+
+
+        <td>
+            @Html.DisplayFor(modelItem => item.BOT)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Blackout)
+        </td>
+
+
+        <td>
+            <a href="@Url.Action(ResourceGlobal.Edit, "VehicleSeriesConfig", new { id = item.Row_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a> 
+            <a href="@Url.Action(ResourceGlobal.Details, "VehicleSeriesConfig", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a> 
+            <a href="@Url.Action(ResourceGlobal.Delete, "VehicleSeriesConfig", new { id = item.Row_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+        </td>
+    </tr>
+        }
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

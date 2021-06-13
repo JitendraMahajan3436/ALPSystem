@@ -1,0 +1,159 @@
+﻿@model REIN_MES_System.Models.RS_AttributionType_Master
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    <div class="form-horizontal">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                <div class="row">
+                    <div class="alert  alert-info alert-dismissable" style="display:none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa  fa-check"></i></h4>
+
+                    </div>
+                    <div class="col-md-3" style="display:none">
+                        @Html.LabelFor(model => model.Plant_ID, "Plant Name *", htmlAttributes: new { @class = "" })
+
+                        @Html.DropDownList("Plant_ID", (SelectList)ViewBag.Plant_ID, null, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.Label("Child Part", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Sub_Assembly_ID, (SelectList)ViewBag.Sub_Assembly_ID, "Select Child Part", new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Sub_Assembly_ID, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.Label("Attribution Type", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Attribution_Type, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Attribution_Type, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.Label("Tool Box Used", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+
+                        @*  @Html.DropDownList("ToolBox", new SelectList(new List<object> {  new { value = "Text", text = "Text" }, new { value = "Button", text = "Button" }, new { value = "Radio", text = "Radio" }, new { value = "checkbox", text = "checkbox" }, new { value = "DropDownList", text = "DropDownList" }, new { value = "Label", text = "Label" } }, "value", "text", "0"), null, new { onchange = "", @class = "form-control" })*@
+                        @Html.DropDownListFor(model => model.ToolBox, (SelectList)ViewBag.ToolBox, null, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ToolBox, null, new { @class = "validation_error" })
+                    </div>
+                    </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.ToolBox_Post, "Tool Box Position", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.ToolBox_Post, new { @class = "form-control", @maxlength = "4" , @onkeypress = "return isNumberKey(event)" })
+                        @Html.ValidationMessageFor(model => model.ToolBox_Post, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.CheckBox("IsActive")
+                        @Html.Label("Active", new { @class = "" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="submit" value="Save" class="btn btn-primary" id="btn_save" />
+                    </div>
+                </div>
+                <br />
+                <div class="box-header with-border">
+                    <div class="col-md-8">
+                        <div id="order-message-block" class="shop-notify order-start-notify"></div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div id="div2">
+                        @Html.Action("LoadPartial", "AttributionTypeMaster")
+
+                    </div>
+                </div>
+
+            </div>
+
+        }
+    </div>
+</div>
+
+
+@*@using (Ajax.BeginForm("LoadPartial", "AttributionTypeMaster", new AjaxOptions()
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "div2",
+        InsertionMode = InsertionMode.Replace,
+        //OnBegin = "AttributetypeLoadBegin",
+        //OnComplete = "AttributeTypeLoadComplete",
+    }, new { @class = "", id = "frm_attribute" }))
+    {
+
+    }*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+    @Styles.Render("~/fdtheme/spinner_css")
+    @Scripts.Render("~/fdtheme/spinner_js")
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#frm_attribute').submit();
+        });
+
+
+    </script>
+
+    <script type="text/javascript">
+
+        function StartedOrdersLoadBegin() {
+            $("#showStartedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+        function StartedOrdersLoadComplete() {
+        }
+        function AttributetypeLoadBegin() {
+            $("#showReleasedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+        function AttributeTypeLoadComplete() {
+        }
+        function Loadingajax() {
+            $('#myModal').modal();
+            $("#releasedOrdersBody").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+
+        setTimeout(function (e) {
+            loadAttributeTypeList();
+        }, 500);
+        function isNumberKey(evt) {
+            // alert(evt.which);
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+                return false;
+            return true;
+        }
+
+        function loadAttributeTypeList() {
+            $("#showAttributeTypeList").submit();
+        }
+
+    </script>
+}

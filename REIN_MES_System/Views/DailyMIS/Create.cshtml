@@ -1,0 +1,186 @@
+﻿@model REIN_MES_System.Models.RS_Daily_MIS
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<h2>Create</h2>
+<div class="col-md-6 plant-stations">
+    <div class="plant-stations">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal" id="foo">
+
+                <hr />
+                @Html.ValidationSummary(true)
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.From_Time, new { @class = "" }) *
+                            @Html.TextBoxFor(model => model.From_Time, htmlAttributes: new { @class = "form-control myDatepicker" })
+                            @Html.ValidationMessageFor(model => model.From_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.To_Time, new { @class = "" }) *
+
+                            @Html.TextBoxFor(model => model.To_Time, htmlAttributes: new { @class = "form-control myDatepicker" })
+                            @Html.ValidationMessageFor(model => model.To_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Total_Time, new { @class = "" }) *
+
+                            @Html.TextBoxFor(model => model.Total_Time, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.Total_Time, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="">
+                            @Html.LabelFor(model => model.Owner, new { @class = "" }) *
+
+                            @Html.TextBoxFor(model => model.Owner, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Owner, null, new { @class = "validation_error" })
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="">
+                    @Html.LabelFor(model => model.Reason, new { @class = "" }) *
+
+                    @Html.TextBoxFor(model => model.Reason, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Reason, null, new { @class = "validation_error" })
+
+                </div>
+                <br />
+                <div class="">
+                    @Html.LabelFor(model => model.Remark, new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Remark, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Remark, null, new { @class = "validation_error" })
+
+                </div>
+
+                <br />
+                <div class="">
+
+
+                    <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+
+
+                </div>
+
+            </div>
+
+
+        }
+
+
+    </div>
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/theme/plugins/DateTimePicker/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        function initializeRemotelyValidatingElementsWithAdditionalFields($form) {
+            var remotelyValidatingElements = $form.find("[data-val-remote]");
+
+            $.each(remotelyValidatingElements, function (i, element) {
+                var $element = $(element);
+
+                var additionalFields = $element.attr("data-val-remote-additionalfields");
+
+                if (additionalFields.length == 0) return;
+
+                var rawFieldNames = additionalFields.split(",");
+
+                var fieldNames = $.map(rawFieldNames, function (fieldName) { return fieldName.replace("*.", ""); });
+
+                $.each(fieldNames, function (i, fieldName) {
+                    $form.find("#" + fieldName).change(function () {
+                        // force re-validation to occur
+                        $element.removeData("previousValue");
+                        $element.valid();
+                    });
+                });
+            });
+        }
+        $(document).ready(function (e) {
+
+            $(".myDatepicker").on('change', function () {
+
+            });
+            $("#From_Time").datetimepicker(
+                  {
+                      format: "HH:mm",
+                      allowInputToggle: true,
+                      //  minDate: new Date(),
+                      //maxDate: '0',
+                      collapse: true,
+                  });
+            $("#To_Time").datetimepicker(
+                  {
+                      format: "HH:mm",
+                      allowInputToggle: true,
+                      //  minDate: new Date(),
+                      //maxDate: '0',
+                      collapse: true
+                  });
+            $("#From_Time").on("dp.change", function (e) {
+                //initializeRemotelyValidatingElementsWithAdditionalFields($("form"));
+                var $toTime = $("#To_Time");
+
+                $toTime.removeData("previousValue");
+                $toTime.valid();
+                if ($toTime.val().length > 0) {
+                    var diff = new Date("1/1/2000 " + $toTime.val()) - new Date("1/1/2000 " + $(this).val());
+                    //$("#Total_Time").val(diff.toISOString().substr(11, 8));
+                    if (diff > 0) {
+                        $("#Total_Time").val(diff / 60000);
+                    } else {
+                        $("#Total_Time").val(0);
+                    }
+                }
+            });
+            $("#To_Time").on("dp.change", function (e) {
+                // initializeRemotelyValidatingElementsWithAdditionalFields($("form"));
+                var $fromTime = $("#From_Time");
+                $fromTime.removeData("previousValue");
+                $fromTime.valid();
+                if ($fromTime.val().length > 0) {
+                    var time1 = "1/1/2000 " + $(this).val();
+                    var time2 = "1/1/2000 " + $fromTime.val();
+                    var diff = new Date(time1) - new Date(time2);
+                    //$("#Total_Time").val(diff.toISOString().substr(11, 8));
+                    if (diff > 0) {
+                        $("#Total_Time").val(diff / 60000);
+                    } else {
+                        $("#Total_Time").val(0);
+                    }
+
+                }
+            });
+        })
+    </script>
+}
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />

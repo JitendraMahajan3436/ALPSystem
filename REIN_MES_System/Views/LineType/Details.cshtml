@@ -1,0 +1,92 @@
+﻿@model REIN_MES_System.Models.RS_Line_Types
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div class="col-md-6">
+    <div>
+        
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Type_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Type_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayName("Description")
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Type_Description)
+            </dd>
+
+            @*<dt>
+                @Html.DisplayNameFor(model => model.Is_Transfered)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Is_Transfered)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Is_Purgeable)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Is_Purgeable)
+            </dd>*@
+
+            <dt>
+                @Html.DisplayName(ResourceGlobal.Inserted_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Inserted_Date)
+            </dd>
+
+            @*<dt>
+                @Html.DisplayNameFor(model => model.Updated_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Updated_Date)
+            </dd>*@
+
+            <dt>
+                @Html.DisplayName(ResourcePlant.Plant_Label_Plant_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+            </dd>
+
+            @*<dt>
+                @Html.DisplayNameFor(model => model.MM_Users.User_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MM_Users.User_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MM_Users1.User_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MM_Users1.User_Name)
+            </dd>*@
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Line_Type_ID }, new { @class = "btn btn-primary" }) @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+    </p>
+</div>

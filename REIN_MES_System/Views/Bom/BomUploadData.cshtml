@@ -1,0 +1,179 @@
+﻿@model REIN_MES_System.Models.OJTUpload
+@using REIN_MES_System.Models;
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "BOM Upload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Ajax.BeginForm("BomUploadData", "Bom", new AjaxOptions
+    {//GetPatients is name of method in PatientController
+        InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+
+        UpdateTargetId = "QualityChecklist",
+        LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
+    }, new { @class = "", id = "upload_bom_form", enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            Select File
+            @Html.TextBoxFor(m => m.Excel_File, new { type = "file", @onchange = "checkfile(this);", @id = "file" })
+            @*<input type="file" id="file" class="form-control" />*@
+            @Html.ValidationMessage("Excel_File", null, new { @class = "validation_error", @id = "excelReq" })
+            <span id="lblExcelmsg" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <br />
+            @*<div class="row">
+                <div class="col-md-12">*@
+            <div class="col-md-2">
+                <input type="submit" value="Save" id="btnSubmit" class="btn btn-primary" />
+                @*@Html.ActionLink("Download Sample Template", "Download", new { ImageName = "RS_All_Configuration.xlsx", @class = "btn btn-primary" })*@
+
+            </div>
+            <div class="col-md-2">
+                <div class="">
+                    <a href="/Bom/DownloadBomExcel" download class="btn btn-primary">
+                        Sample Template
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="">
+                    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+            @*</div>
+                </div>*@
+            <br />
+        </div>
+    }
+</div>
+<br />
+<br />
+<div class="clearfix"></div>
+<div style="overflow-y:scroll;overflow-y:auto;height:350px">
+    @{
+        RS_BOM_Item[] ojtupload1 = (RS_BOM_Item[])ViewBag.OrderUploadRecords;
+
+        if (ViewBag.OrderUploadRecords != null)
+        {
+            <table class="table table-bordered table-striped datatable_completes">
+                <thead>
+                    <tr style="background-color:aqua;color:white;font-weight:bold">
+                        <th>FG Model Code</th>
+                        <th>FG Model Desc</th>
+                        <th>FG Effective Date From</th>
+                        <th>FG Effective Date To</th>
+                        <th>Part Number</th>
+                        <th>Part Desc</th>
+                        <th>Effective Date From</th>
+                        <th>Effective Date To</th>
+                        <th>Error/Success</th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in (IEnumerable<REIN_MES_System.Models.RS_BOM_Item>)ViewBag.OrderUploadRecords)
+                {
+                    if (item != null)
+                    {
+                        if (item.SS_Error_Sucess != null)
+                        {
+                            if (item.SS_Error_Sucess != "Record add successfully")
+                            {
+                                <tr style="background-color:red;color:white;font-weight:bold;font-size:18px">
+                                    <td>@Html.DisplayFor(modelItem => item.Model_Code)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Model_Desc)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FGEffective_Date_From)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FGEffective_Date_To)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Part_No)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Part_Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Effective_Date_From)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Effective_Date_To)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr style="font-weight:bold;font-size:18px">
+                                    <td>@Html.DisplayFor(modelItem => item.Model_Code)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Model_Desc)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FGEffective_Date_From)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FGEffective_Date_To)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Part_No)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Part_Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Effective_Date_From))</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Effective_Date_To)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                                </tr>
+                            }
+                        }
+                    }
+
+                }
+            </table>
+        }
+    }
+</div>
+
+
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+    @*@Scripts.Render("~/Scripts/user_datatable")*@
+}
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript">
+    function checkfile(sender) {
+        debugger;
+        var validExts = new Array(".xlsx", ".xls");
+        var fileExt = sender.value;
+        fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+        if (validExts.indexOf(fileExt) < 0) {
+            //alert("Invalid file selected, valid files are of " +
+            //         validExts.toString() + " types.");
+            $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                validExts.toString() + " types.");
+            $('#excelReq').hide();
+            $('#file').val('');
+            return false;
+        }
+        else {
+            $('#lblExcelmsg').html('');
+            return true;
+        }
+    }
+
+</script>
+<script type="text/javascript">
+
+
+
+        //$(document).ready(function () {
+        //    $("#btnSubmit").click(function () {
+        //        debugger
+        //        var excel = $("#file").val("");
+        //        if (excel == null) {
+
+        //            $('#lblExcelmsg').html('Please select file');
+        //        }
+        //    })
+        //});
+</script>
+<style type="text/css">
+    .btn-primary {
+        background-color: #3c8dbc;
+        border-color: #367fa9;
+        margin-right: 3%;
+    }
+</style>

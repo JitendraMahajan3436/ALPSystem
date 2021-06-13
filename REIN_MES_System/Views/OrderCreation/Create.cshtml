@@ -1,0 +1,695 @@
+﻿@model REIN_MES_System.Models.RS_OM_Creation
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12">
+    <div class="box-header with-border">
+        <div class="col-md-8">
+            <div id="order-message-block" class="shop-notify order-start-notify"></div>
+        </div>
+        <div class="box-tools pull-right">
+            @*<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>*@
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnShopId" value="@ViewBag.shopId" />
+    <input type="hidden" id="hdnSeries" value="@ViewBag.series" />
+    <input type="hidden" id="hdnModelCode" value="@ViewBag.modelCode" />
+    @Html.Hidden("Select_Color", ResourceDisplayName.Select_Color)
+    @Html.Hidden("Select_Country", ResourceDisplayName.Select_Country)
+    <div class="form-horizontal">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("Select_Platform", ResourceDisplayName.Select_Platform)
+            @Html.Hidden("StyleCodeErrMsg", ResourceValidation.Style_Code_Required)
+            @Html.Hidden("Select_Model", ResourceDisplayName.Select_Model)
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="col-md-3" style="display:none;">
+                    <div class="">
+                        @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownList("Plant_ID", (SelectList)ViewBag.Plant_ID, null, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+
+
+
+
+                <div class="col-md-3">
+                    <div class="">
+                        @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, ResourceDisplayName.Select_Shop, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Line_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Line_ID, Enumerable.Empty<SelectListItem>(), ResourceDisplayName.select_Line, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    @Html.Label(ResourceDisplayName.Platform_Name, ResourceDisplayName.Platform_Name, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Platform_Id", Enumerable.Empty<SelectListItem>(), ResourceDisplayName.Select_Platform, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                    @Html.ValidationMessage("Platform_Id", null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="">
+                        @Html.LabelFor(model => model.Order_Type, ResourceDisplayName.Order_Type, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Order_Type, (SelectList)ViewBag.Order_Type, ResourceDisplayName.Select_OrderType, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Order_Type, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+
+                    <div class="">
+                        @Html.LabelFor(model => model.Model_Code, ResourceDisplayName.Model_Code, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @*@Html.DropDownList("Model_Code", Enumerable.Empty<SelectListItem>(), string.Empty, new { onchange = "", @class = "form-control" })*@
+                        @Html.DropDownListFor(model => model.Model_Code, Enumerable.Empty<SelectListItem>(), ResourceDisplayName.Model_Code, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Model_Code, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+
+                <div class="col-md-3" id="divColour" style="display:none">
+                    <div class="">
+                        @Html.LabelFor(model => model.Colour_ID, ResourceDisplayName.Color, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @*@Html.DropDownList("Series_Code", Enumerable.Empty<SelectListItem>(), string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })*@
+                        @Html.DropDownListFor(model => model.Colour_ID, (SelectList)ViewBag.Colour_ID, ResourceDisplayName.Select_Color, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Colour_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <div class="col-md-3" id="divCountry" style="display:none">
+                    <div class="">
+                        @Html.LabelFor(model => model.Country_ID, "Country Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Country_ID, (SelectList)ViewBag.Country_ID, ResourceDisplayName.Select_Country, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Country_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+
+
+                <div class="col-md-3 ">
+                    <div class="">
+                        @Html.LabelFor(model => model.Qty, "Qty", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Qty, new { onchange = "", @class = "form-control", @maxlength = "20", @numeric = true, @onkeypress = "return isNumberKey(event)" })
+                        @Html.ValidationMessageFor(model => model.Qty, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        @Html.LabelFor(model => model.Planned_Date, "Planned Date", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Planned_Date, new { onchange = "", @class = "form-control", @readonly = true })
+                        @Html.ValidationMessageFor(model => model.Planned_Date, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <label for="Country_ID" class="control-label"></label>
+
+                <input type="submit" value="Save" class="btn btn-primary add_orders" />
+                @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+
+        }
+    </div>
+
+    <div class="col-md-4">
+        @*<h4>Excel Upload Data :-</h4>*@
+        <div class="row" id="div-id">
+
+        </div>
+    </div>
+
+    <input type="hidden" id="hdnIsSeriesChange" name="" value="0" />
+    <input type="hidden" id="hdnIsModelCodeChange" name="" value="0" />
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/master_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @*@Scripts.Render("~/Scripts/user_datatable")*@
+    @Styles.Render("~/fdtheme/spinner_css")
+    @Scripts.Render("~/fdtheme/spinner_js")
+
+    <script>
+        $(document).ready(function () {
+
+            $("#Series_Code").select2({
+                allowClear: true
+            });
+        });
+        $("#Qty").on("keypress", function (evt) {
+            var keycode = evt.charCode || evt.keyCode;
+            if (keycode == 46 || keycode == 45) {
+                return false;
+            }
+        });
+        function isNumberKey(evt) {
+            // alert(evt.which);
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+                return false;
+            return true;
+        }
+
+    </script>
+}
+
+<script type="text/javascript">
+    //Order_Type
+    $(document).ready(function () {
+        //$("#Order_Type").on("change", function ()
+        debugger;
+        $("#Planned_Date").datepicker(
+          {
+              format: 'yyyy-mm-dd',
+              startDate: '+0d',
+              autoclose: true
+          });
+        $("#Planned_Date").datepicker().datepicker('setDate', 'today');
+        var Order_type = $("#Order_Type").val();
+
+        // Added by Ajay 12032019
+        if (Order_type != "")
+        {
+            var url = "/OrderCreation/GetShopMode";
+            ajaxpack.getAjaxRequest(url, "order_type=" + Order_type + "", showShopName, "json");
+        }
+       //End
+
+
+        $("#Series_Code").select2({
+            allowClear: true
+        }
+        );
+
+
+        $("#Model_Code").select2({
+            allowClear: true
+        }
+        );
+
+    });
+
+    //$(document).ready(function () {
+    $("#Order_Type").on("change", function () {
+     
+         //var Order_type = $("#Order_Type").val();
+        //var url = "/OrderCreation/GetShopMode";
+        //ajaxpack.getAjaxRequest(url, "order_type=" + Order_type + "", showShopName, "json");
+
+
+    });
+    //});
+
+
+    function showShopName() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                SelectOptionHTML(jsonRes, "Shop_ID");
+
+                var shopId = $("#hdnShopId").val();
+                if (shopId) {
+                    $("#Shop_ID").val(shopId);
+                    $("#hdnShopId").val("");
+                }
+
+                //$("#Shop_ID").trigger("change");
+                // loadModelCode();
+            }
+        }
+    }
+
+    //Common Function For All JSON Script
+    function SelectOptionHTML(jsonRes, targetId) {
+        //var jsonRes = $.parseJSON(myajax.responseText);
+        var res = "";
+        for (var i = 0; i < jsonRes.length; i++) {
+            res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+        }
+
+        //res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+        //alert(res);
+        $("#" + targetId).html(res);
+    }
+
+    function clearSelectBox(targetId) {
+        var res = "";
+        res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+        $("#" + targetId).html(res);
+    }
+
+    function loadModelCode() {
+        var plantId = $("#Plant_ID").val();
+        var shopId = $("#Shop_ID").val();
+        var seriesCode = $("#Series_Code").val();
+        if (seriesCode == undefined) {
+            seriesCode = "";
+        }
+
+        var modelCode = $("#hdnModelCode").val();
+        if (modelCode == "" || modelCode == null) { }
+        else
+        {
+            seriesCode = "";
+        }
+        if (shopId) {
+            var url = "/OrderCreation/GetPartNumber";
+            ajaxpack.getAjaxRequest(url, "Shop_Id=" + shopId + "&series_code=" + seriesCode, showModelCodeDetails, "json");
+        }
+    }
+
+    function showModelCodeDetails() {
+        debugger;
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                 debugger;
+                if (jsonRes.length > 0) {
+                    //SelectOptionHTML(jsonRes, "Model_Code");
+
+                    $('#Model_Code option').remove();
+                    $('#Model_Code').append('<option value="">Select Model Code</option>');
+
+                    for (i = 0; i < jsonRes.length; i++) {
+                        $('#Model_Code').append('<option value="' +
+                                     jsonRes[i].Id + '">' + jsonRes[i].Value + '</option>');
+                    }
+
+
+                    var modelCode = $("#hdnModelCode").val();
+                    if (modelCode) {
+                        //$('#Model_Code').val(modelCode);
+
+                        $("#hdnModelCode").val("");
+                        $("#Model_Code").select2().select2('val', modelCode);
+                    }
+
+                    $("#Model_Code").select2({
+                        allowClear: true
+                    });
+                }
+                else {
+                    $("#Model_Code").select2({
+                        allowClear: true
+                    });
+                    $('#Model_Code option').remove();
+                    alert("No model code Available for this line!");
+                }
+
+            }
+        }
+    }
+
+    //Part Number find using series
+    //$("#Series_Code").on("change", function () {
+    //    var Shop = $("#Shop_ID").val();
+    //    var seriescode = $("#Series_Code").val();
+
+    //    //$('Model_Code').html("");
+    //    if (seriescode.length > 0 && Shop.length > 0) {
+    //        // Populate categories when the page is loaded.
+    //        $.getJSON('/OrderCreation/GetPartNumber', { Shop_Id: Shop, series_code: seriescode }, function (data) {
+    //            if (data.length > 0) {
+    //                // Ajax success callback function.
+    //                //$('#Model_Code option').remove();
+    //                //$('#Model_Code').append('<option value=""></option>');
+
+    //                //for (i = 0; i < data.length; i++)
+    //                //{
+    //                //    $('#Model_Code').append('<option value="' +
+    //                //                 data[i].Id + '">' + data[i].Value + '</option>');
+    //                //}
+
+    //                //$('#Model_Code').val(data[0].Value);
+    //                $("#hdnIsSeriesChange").val("1");
+    //                $("#Model_Code").select2().select2('val', data[0].Value);
+    //            }
+    //            else {
+    //                //$('#Model_Code option').remove();
+    //                $("#Model_Code").select2().select2('val', '');
+    //                alert("No part Number Available for this Part Series!");
+    //                $("#hdnIsSeriesChange").val("0");
+    //                //$('#order-message-block').html("No part Number Available for this Part Series.....!");
+    //                //$('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+    //                //$("html, body").animate({ scrollTop: 0 }, "slow");
+    //            }
+    //        }).fail(function (jqXHR, textStatus, errorThrown) {
+    //            // Ajax fail callback function.
+    //            alert('Error getting Part number on order creation !');
+    //        });
+    //    }
+
+    //}); // Shop Select Change Event End
+
+
+
+    //PartSeries JavaScript
+    $("#Shop_ID").on("change", function () {
+
+        var Plant = $("#Plant_ID").val();
+        var Shop = $("#Shop_ID").val();
+        //$('#Series_Code option').remove();
+        //$('#Series_Code').append('<option value="">Select Series</option>');
+        $('#Model_Code option').remove();
+        $('#Model_Code').append('<option value="">Select Model Code</option>');
+        //$('Series_Code').html("");
+        if (Shop.length > 0) {
+
+            // Populate categories when the page is loaded.
+            //$.getJSON('/ModelMaster/GetSeriesCode', { Plant_Id: Plant, Shop_id: Shop }, function (data) {
+            $.getJSON('/OrderCreation/GetLineName', { Shop_id: Shop }, function (data) {
+                if (data.length > 0) {
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Line_ID option').remove();
+                    $('#Line_ID').append('<option value="">Select Line</option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Line_ID').append('<option value="' +
+                                     data[i].Line_ID + '">' + data[i].Line_Name + '</option>');
+                    }
+
+                    var series = $("#hdnSeries").val();
+                    if (series) {
+                        //$('#Series_Code').val(series);
+                        $("#Line_ID").val("");
+
+                       // $("#Line_ID").select2().select2('val', series);
+                    }
+                    //else
+                    //    $("#Line_ID").select2().select2('val', '');
+
+                    //loadModelCode();
+                } else {
+                    $('#Line_ID option').remove();
+                    //$('#order-message-block').html("No Series Available for this Plant or Shop.....!");
+                    //$('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                    //$("html, body").animate({ scrollTop: 0 }, "slow");
+
+                    alert("No Line Available for this Plant or Shop!");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting PartGroups !');
+            });
+
+            setTimeout(
+                 $.getJSON('/OrderCreation/GetOrderType', { Shop_id: Shop }, function (data) {
+                     if (data.length > 0) {
+                         // Ajax success callback function.
+                         // Populate dropdown from Json data returned from server.
+                         $('#Order_Type option').remove();
+                         $('#Order_Type').append('<option value="">Select Order Type</option>');
+
+                         for (i = 0; i < data.length; i++) {
+                             $('#Order_Type').append('<option value="' +
+                                          data[i].Order_Type_Name + '">' + data[i].Order_Type_Name + '</option>');
+                         }
+                     } else {
+                         $('#Order_Type option').remove();
+                     }
+                 }).fail(function (jqXHR, textStatus, errorThrown) {
+                     // Ajax fail callback function.
+                     alert('Error getting Order Type !');
+                 }),1000)
+        }
+
+        else {
+            $('#Line_ID option').remove();
+            $('#Line_ID').append('<option value="">Select Line</option>');
+
+            $("#divColour").css("display", "none");
+            $('#Colour_ID option').remove();
+            $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+
+            $('#Platform_Id option').remove();
+            $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+            $('#Order_Type option').remove();
+            $('#Order_Type').append('<option value="">Select Order Type</option>');
+
+            $('#select2-Model_Code-container').empty();
+            $('#select2-Model_Code-container option').remove();
+            $('#select2-Model_Code-container').append('<option value="">' + $('#Select_Model').val() + '</option>');
+        }
+
+
+
+    }); // Shop Select Change Event End
+
+    $("#Model_Code").change(function (e) {
+        if ($("#hdnIsSeriesChange").val() == "1") {
+            $("#hdnIsSeriesChange").val("0");
+            //alert("ok");
+        }
+        else {
+           var StyleCodeErrMsg = $('#StyleCodeErrMsg').val();
+            var modelCode = $(this).val();
+            var OrderType = $('#Order_Type').val();
+           // $.getJSON('/OrderCreation/ModelCodeValidForStyleCode', { modelCode: modelCode }, function (data) {
+                $.getJSON('/OrderCreation/GetCountryByModelCode', { modelCode: modelCode }, function (data) {
+                    if (data.result == true) {
+                    debugger;
+                    //clear error message.
+                    $('#Model_Code').next().next().text('');
+
+                    $("#divCountry").css("display", "none");
+                        if (data.Data.length > 0) {
+                            if (data.Data.length == 1) {
+                            $('#Country_ID option').remove();
+                            $('#Country_ID').append('<option value="' +
+                                data.Data[0].Id + '">' + data.Data[0].Value + '</option>');
+                        }
+                        else {
+                            $('#Country_ID option').remove();
+                            $('#Country_ID').append('<option value="">' + $('#Select_Country').val() + '</option>');
+
+                                for (i = 0; i < data.Data.length; i++) {
+                                $('#Country_ID').append('<option value="' +
+                                    data.Data[0].Id + '">' + data.Data[0].Value + '</option>');
+                            }
+                        }
+                            $("#divCountry").css("display", "block");
+                    }
+                    else {
+                            $('#Country_ID option').remove();
+                            $('#Country_ID').append('<option value="">' + $('#Select_Country').val() + '</option>');
+                        //alert("Color Code does not exist..");
+                    }
+
+                    $.getJSON('/OrderCreation/ModelCodeValidForOrderType', { modelCode: modelCode }, function (data) {
+                        if (data) {
+                            debugger;
+                            if (OrderType == "Spare") {
+                                $('#Model_Code').next().next().text('');
+                                var url = "/OrderCreation/GetColorCodeByModelCode";
+                                ajaxpack.getAjaxRequest(url, "modelCode=" + modelCode + "", showColorCodeDetails, "json");
+                            }
+                            else {
+                                $('#Model_Code').next().next().text('Model is Configured as Spare Model... Order can not be create as normal order! ');
+                            }
+                        }
+                        else {
+                            var url = "/OrderCreation/GetColorCodeByModelCode";
+                            ajaxpack.getAjaxRequest(url, "modelCode=" + modelCode + "", showColorCodeDetails, "json");
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+
+                        alert('Error getting platform Selection !');
+                    });
+                    //$('input[type="submit"]').attr('disabled', false)
+                    
+
+                } else {
+                    //$("#Model_Code").addClass('form-control input-validation-error');
+                    //$('#Model_Code').next().next().text(StyleCodeErrMsg);
+                    //$('input[type="submit"]').attr('disabled', true)
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+
+                alert('Error getting platform Selection !');
+            });
+            // process to change the Color code
+
+
+        }
+    });
+
+    function showColorCodeDetails() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                debugger;
+                var jsonRes = $.parseJSON(myajax.responseText);
+                $("#divColour").css("display", "none");
+                if (jsonRes.length > 0) {
+                    if (jsonRes.length == 1) {
+                        $('#Colour_ID option').remove();
+                        $('#Colour_ID').append('<option value="' +
+                                   jsonRes[0].Colour_ID + '">' + jsonRes[0].Colour_Desc + '</option>');
+                    }
+                    else {
+                        $('#Colour_ID option').remove();
+                        $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+
+                        for (i = 0; i < jsonRes.length; i++) {
+                            $('#Colour_ID').append('<option value="' +
+                                        jsonRes[i].Colour_ID + '">' + jsonRes[i].Colour_Desc + '</option>');
+                        }
+                    }
+                    $("#divColour").css("display", "block");
+                }
+                else {
+                    $('#Colour_ID option').remove();
+                    $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+                    //alert("Color Code does not exist..");
+                }
+            }
+        }
+    }
+    //added by ketan Date 31/08/2017 platform change in order creation.
+    $('#Line_ID').change(function () {
+        debugger;
+        var LineID = $("#Line_ID").val();
+        $('Platform_Id').html("");
+        if (LineID.length > 0) {
+            $('#Line_ID').next().next().text('');
+            // Populate categories when the page is loaded.
+            $.getJSON('/NewModelMaster/GetPlatformByLine', { LineID: LineID }, function (data) {
+                if (data.length > 0) {
+
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Platform_Id option').remove();
+                    $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Platform_Id').append('<option value="' + data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                        debugger;
+                        //if (data) {
+                        //    var url = "/OrderCreation/GetModelCodeByLineAndPlatform";
+                        //    ajaxpack.getAjaxRequest(url, "LineID=" + LineID + "&PlatformID=" + data[i].Platform_ID, showModelCodeDetails, "json");
+                        //}
+                    }
+                } else {
+                    $('#Platform_Id option').remove();
+                    $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#Platform_Id option').remove();
+                $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                alert('Error getting platform Selection !');
+            });
+        }
+        else {
+            $('#Platform_Id option').remove();
+            $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+        }
+    });
+
+
+    //Added by Ajay on 29-03-2019
+    $('#Order_Type').change(function () {
+        debugger;
+        var PlatformID = $("#Platform_Id").val();
+        var OrderType = $("#Order_Type").val();
+        $('#Model_Code option').remove();
+        $('#select2-Model_Code-container').empty();
+        $('#select2-Model_Code-container').append('<option value="">' + $('#Select_Model').val() + '</option>');
+        if (PlatformID.length > 0 && OrderType != "") {
+            //$('#Line_ID').next().next().text('');
+            // Populate categories when the page is loaded.
+            $.getJSON('/OrderCreation/GetModelCodeByLineAndPlatform', { PlatformID: PlatformID, OrderType: OrderType }, function (data) {
+                if (data.length > 0) {
+                    debugger;
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Model_Code option').remove();
+                    $('#Model_Code').append('<option value="">Select Model Code</option>');
+                    for (i = 0; i < data.length; i++) {
+                        $('#Model_Code').append('<option value="' +
+                            data[i].Id + '">' + data[i].Value + '</option>');
+                    }
+                } else {
+                    $("#divColour").css("display", "none");
+                    $('#Colour_ID option').remove();
+                    $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+
+                    $('#Model_Code option').remove();
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $("#divColour").css("display", "none");
+                $('#Colour_ID option').remove();
+                $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+
+                $('#Model_Code option').remove();
+                alert('Error getting Model Selection !');
+            });
+        }
+        else {
+            $('#Model_Code option').remove();
+            $('#select2-Model_Code-container').empty();
+            $('#select2-Model_Code-container option').remove();
+            $('#select2-Model_Code-container').append('<option value="">' + $('#Select_Model').val() + '</option>');
+
+            $("#divColour").css("display", "none");
+            $('#Colour_ID option').remove();
+            $('#Colour_ID').append('<option value="">' + $('#Select_Color').val() + '</option>');
+        }
+    });
+
+</script>
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+}
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+

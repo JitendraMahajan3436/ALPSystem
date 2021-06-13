@@ -1,0 +1,170 @@
+﻿@model REIN_MES_System.Models.TransmissionFactor
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <label>Operation </label>
+
+                            @Html.DropDownListFor(model => model.Opertion, new List<SelectListItem>() {
+       new SelectListItem() { Text ="Transmission Factor", Value = "1",},
+       new SelectListItem() { Text ="Feeder Consumption", Value = "0",}
+    }, "Select Opertion", new { @class = "form-control select2" }
+
+      )
+     <span class="error" id="OperationID" style="color:red;display:none">Operation field is required</span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="Transmission" style="display:none">
+                        <div class="form-group">
+                            <label>Transmisstion Factor *</label>
+                            @*@Html.LabelFor(model => model.Category_Name, htmlAttributes: new { @class = "control-label " })*@
+
+                            @Html.EditorFor(model => model.Factor, new { htmlAttributes = new { @class = "form-control" } })
+                            @*@Html.ValidationMessageFor(model => model.Factor, "", new { @class = "text-danger" })*@
+                            <span class="error" id="FactorID" style="color:red;display:none">Transmisstion field  Factor is required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="ManualFedder" style="display:none">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shop Name *</label>                        
+                            @Html.DropDownListFor(model => model.Shop_ID, null, "select Shop", htmlAttributes: new { @class = "form-control" })
+                            @*@Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })*@
+                            <span class="error" id="ShopID" style="color:red;display:none"> Shop Name must be selected </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Feeder Name *</label>
+                            @Html.DropDownListFor(model => model.TagIndex, (Enumerable.Empty<SelectListItem>()), htmlAttributes: new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+                            <span class="error" id="FeederID" style="color:red;display:none"> Feeder Name must be selected </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Consumption*</label>
+                            @Html.EditorFor(model => model.Consumption, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Consumption, "", new { @class = "text-danger" })
+                            <span class="error" id="FeederID" style="color:red;display:none">Consumption field is Required </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label> Operation(Addition & Subraction) *</label>
+                            @Html.DropDownListFor(model => model.Action, new SelectList(new List<object> { new { value = "", text = "Select" }, new { value = "True", text = "Addition to Main Meter" }, new { value = "False", text = "Subtraction from Main Meter" } }, "value", "text", 2), new { @class = "form-control", })
+                            @Html.ValidationMessageFor(model => model.Action, "", new { @class = "text-danger" })
+                            <span class="error" id="Operationadd" style="color:red;display:none">Operation must be selected  </span>
+                            @Html.Hidden("Plant_ID")
+                        </div>
+                    </div>
+                </div>
+
+                @*@Html.Hidden("Plant_ID")*@
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function () {
+          $(".select2").select2();
+          $("#Opertion").change(function () {
+
+                                    if ($("#Opertion").val() == 1) {
+                                        $("#Transmission").show();
+                                        $("#ManualFedder").hide();
+                                    }
+                                    else
+                                    {
+                                        $("#ManualFedder").show();
+                                        $("#Transmission").hide();
+                                    }
+                                } )
+          $("#Shop_ID").change(function () {
+
+              
+              var Shop_Id = $("#Shop_ID").val();
+
+              var options = {};
+              options.url = "/CommanMethod/Feederwiseconfig";
+              options.type = "POST";
+              options.data = JSON.stringify({ Shop_Id: Shop_Id });
+              options.contentType = "application/json";
+
+              options.success = function (id) {
+
+                  $('#TagIndex option').remove();
+
+                  $("#TagIndex").html(""); // clear before appending new list
+                  $("#TagIndex").append(
+                  $('<option></option>').val(0).html("Select Feeder"));
+                  $.each(id, function (i, test) {
+                      $("#TagIndex").append(
+                          $('<option></option>').val(test.TagIndex).html(test.FeederName).select('selected Feeder'));
+
+
+
+
+                      //prop('selected Feeder', false));
+                  });
+
+                  var elements = [];
+                  elements = document.getElementsByClassName("mdl");
+                  for (var i = 0; i < elements.length; i++) {
+                      elements[i].value = "";
+                  }
+
+              };
+              //$("#Feeder").select2({
+              //    allowClear: true,
+              //    placeholder: 'Assign Feeder',
+              //    multiple: 'multiple'
+              //});
+              options.error = function () {
+                  alert("Invalid Feeder ");
+              };
+              $.ajax(options);
+
+
+          })
+       
+
+     });
+    </script>
+
+}
+
+

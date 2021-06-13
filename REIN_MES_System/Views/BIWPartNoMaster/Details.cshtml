@@ -1,0 +1,44 @@
+﻿@model REIN_MES_System.Models.RS_BIW_Part_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div>
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Variant_Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Variant_Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VARIANT_DESC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VARIANT_DESC)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LONG_DESC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LONG_DESC)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

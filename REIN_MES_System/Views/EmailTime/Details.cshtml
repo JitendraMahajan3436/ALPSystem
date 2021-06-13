@@ -1,0 +1,35 @@
+﻿@model REIN_MES_System.Models.MM_MT_Email_Time_Configuration
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Maintenance Type")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MT_Maintenance_Type.Maintenance_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Day")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Day_Frequency)
+        </dd>
+
+      
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ET_ID }, new { @class = "btn btn-primary" }) |@Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+</p>

@@ -1,0 +1,10 @@
+2019-04-25 01:05:48 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-25 12:51:54 PM  [ Info] Successfully Scanned SrNo: UBK3D00148 ! 
+2019-04-25 12:51:53 PM  [ Info] Main Order Serial No:UBK3D00148
+2019-04-25 12:51:37 PM  [ Info] Serial No.-UBK3D00150 is invalid !
+2019-04-25 12:51:37 PM  [ Info] Main Order Serial No:UBK3D00150
+2019-04-25 12:51:16 PM  [ Info] Successfully Scanned SrNo: UBK3D00149 ! 
+2019-04-25 12:51:14 PM  [ Info] Main Order Serial No:UBK3D00149
+2019-04-25 12:47:47 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-25 12:34:35 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 
+2019-04-25 12:31:30 PM  [ Info] Inside Shop Screen Employee Name:[Ajay Wagh] 

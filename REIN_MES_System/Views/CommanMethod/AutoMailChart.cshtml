@@ -1,0 +1,292 @@
+﻿
+@{
+    //Layout = null;
+    Layout = "~/Views/Shared/dashboard/_Layout.cshtml";
+}
+
+<br />
+<br />
+
+    <div class="row">
+
+        @*<div class="col-md-offset-2 col-md-3">
+                @Html.Label("Plant Name", htmlAttributes: new { @class = "" })  *
+
+                @Html.DropDownList("Plant_ID", null,  new { @class = "form-control select2", @onchange = "getshopgroup()" })
+
+            </div>*@
+        <div class="col-md-4  col-md-offset-4">
+            <div class="panel">
+                <div class="panel-heading" style="background-color:lightseagreen; text-align:center">
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-condensed datatable_completes" style="max-width:100%">
+                        <thead>
+                            <tr style="background-color:red">
+                                <th style="width:50%">
+                                    Yesterday  Date
+                                </th>
+                                <th style="width:50%">
+                                    @{
+
+                                        DateTime Todays = System.DateTime.Now;
+
+
+                                        string Today = Convert.ToDateTime(Todays).ToString("dd/MMMM/yyyy");
+
+                                        Todays = Todays.AddDays(-1);
+                                        string yesterday = Convert.ToDateTime(Todays).ToString("dd/MMMM/yyyy");
+                                
+
+                                        @yesterday
+                               
+
+                          
+                                    }
+                                    </th>
+                              
+                                </thead>
+                       
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div id="chartContainer">
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/highchart")
+}
+<script>
+
+    window.onload = function () {
+        
+        yesterday = new Array();
+        Target = new Array();
+        Shop = new Array();
+        yesterday = JSON.parse('@Html.Raw(Json.Encode(ViewData["yesturdaydata"]))');
+        Target = JSON.parse('@Html.Raw(Json.Encode(ViewData["Target"]))');
+        Shop = JSON.parse('@Html.Raw(Json.Encode(ViewData["shopName"]))');
+        $("#bodyid").addClass('sidebar-collapse');
+        $("#userDeatail").addClass('user-name-collapse');
+        Highcharts.chart('chartContainer', {
+            credits: {
+                enabled: false
+            },
+
+            chart: {
+                zoomType: 'x',
+
+            },
+            title: {
+                text: 'Power Consumption per Vehicle',
+
+            },
+            subtitle: {
+                text: '',
+                style: { right: '80px' }
+
+            },
+
+            //labels:
+            //    {
+            //        items: [{
+            //            html: 'Center Me!',
+            //            style: {
+            //                pullleft: '80px',
+            //                top: '-30px',
+            //                fontSize: '20px'
+            //            }
+            //        }]
+            //    },
+
+            xAxis: {
+                categories: Shop,
+                // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+                //'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                // crosshair: true
+            },
+            yAxis: [
+                { // Primary yAxis
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        enabled: true
+                    }
+
+                },
+                { // Secondary yAxis
+                    title: {
+                        text: "Kwh/Vehicle"
+                    },
+                    labels: {
+                        enabled: true
+                    }
+                },
+                {
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        enabled: true
+                    }
+
+                    // Tertiary yAxis
+                    // gridLineWidth: 0,
+                    //labels: {
+                    //    format: '{value}',
+                    //    style: {
+                    //        color: '#3AA527',
+                    //    }
+                    //},
+                    //title: {
+                    //    text: 'Kwh per vechicle',
+                    //    style: {
+                    //        color: '#3AA527',
+                    //    }
+                    //},
+                    // opposite: true
+                }
+                //{ // Fourth yAxis
+                //    gridLineWidth: 0,
+                //    title: {
+                //        text: 'Instant Power ( MWh )',
+                //        style: {
+                //            color: 'Orange',
+                //            //color: Highcharts.getOptions().colors[3]
+                //        }
+                //    },
+                //    labels: {
+                //        format: '{value}\MWh ',
+                //        style: {
+                //            color: 'Orange',
+                //            //color: Highcharts.getOptions().colors[3]
+                //        }
+                //    },
+                //    //opposite: true
+
+                //}
+
+            ],
+            tooltip: {
+
+                shared: true,
+
+
+            },
+           
+            //legend : {
+            //    layout: 'Horizontal',
+            //    align: 'bottom',
+            //    x: 120,
+            //    verticalAlign: 'bottom',
+            //    y: 100,
+            //    floating: true,
+
+            //    backgroundColor: (
+            //       Highcharts.theme && Highcharts.theme.legendBackgroundColor)
+            //       || '#FFFFFF'
+            //},
+            series: [
+                {
+                    name: 'Yesterday ',
+                    type: 'column',
+                    animation:false,
+                    //color: '#339CFF',
+                    yAxis: 1,
+                    data: yesterday,
+                    dataLabels: {
+                        enabled: true
+                    },
+                    //data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4,
+                    //      194.1, 95.6, 54.4],
+                    marker: {
+                        fillcolor: 'white',
+                        lineWidth: 1,
+                        lineColor: Highcharts.getOptions().colors[1]
+
+                    },
+                    //tooltip: {
+                    //    valueSuffix: '\V'
+                    //}
+                },
+
+                //{
+                //    name: 'Todays ',
+                //    type: 'column',
+                //    //color: '#339CF1',
+                //    //tag
+                //    //FF5733
+                //    yAxis: 1,
+                //    dataLabels: {
+                //        enabled: true
+                //    },
+                //    data: today,
+                //    //data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2,
+                //    //   1013.1, 1016.9, 1018.2, 1016.7],xB0C
+                //    marker: {
+                //        fillcolor: 'white',
+                //        lineWidth: 1,
+                //        lineColor: Highcharts.getOptions().colors[1]
+                //    },
+                //    //dashStyle: 'shortdot',
+                //    //tooltip: {
+                //    //    valueSuffix: ''
+                //    //}
+                //},
+                {
+                    name: 'Target',
+                    type: 'line',
+                    yAxis: 1,
+                    animation: false,
+                    //color: 'red',
+                    data: Target,
+                    dataLabels: {
+                        enabled: true
+                        
+                    },
+                    //data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3,
+                    //   18.3, 13.9, 9.6],
+                    marker: {
+                        fillcolor: 'white',
+                        lineWidth: 1,
+                        lineColor: Highcharts.getOptions().colors[1]
+                    },
+                    //tooltip: {
+                    //    valueSuffix: '\A'1
+                    //}
+                },
+
+
+            ],
+            center: [150, 120],
+            size: 350,
+            showInLegend: false,
+            dataLabels: {
+                enabled: true
+
+            }
+
+        });
+
+    }
+</script>

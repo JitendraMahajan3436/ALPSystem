@@ -1,0 +1,54 @@
+﻿@model REIN_MES_System.Models.MM_CBM_Parameter_Category
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "CBMParameterCategory", FormMethod.Post, new { id = "add_Category", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.C_ID, "Category Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.C_ID,null,"Select Category", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.C_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Image_Content, "Image Name *", htmlAttributes: new { @class = "" })
+            <input type="file" name="file"/>
+            @Html.ValidationMessageFor(model => model.Image_Content, null, new { @class = "validation_error" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <input type="submit" value="Save" class="btn btn-success" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+        </div>
+    </div>
+}
+<div id="dialog" title="Error"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    
+    <script>
+        $(document).ready(function () {
+            $("#add_Category").validate({
+                ignore: [],
+                rules: {
+                    Image_Content: "required"
+                }
+            });
+        });
+    </script>
+}
+@section Styles {
+    
+}
+

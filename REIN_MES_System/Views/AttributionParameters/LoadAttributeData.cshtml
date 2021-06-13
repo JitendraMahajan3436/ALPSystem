@@ -1,0 +1,81 @@
+﻿
+@model IEnumerable<REIN_MES_System.Models.RS_Attribution_Parameters>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper;
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+
+
+<table class="table table-bordered table-striped datatable_completes ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            @*<th>
+                    @Html.DisplayName("Attribute ID")
+                </th>*@
+            <th>
+                @Html.DisplayName("Attribute Type")
+            </th>
+            <th>@Html.DisplayName("Attribute Discription")</th>
+            
+            <th>@Html.DisplayName("Action")</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+
+            foreach (var item in Model)
+            {
+
+                <tr>
+                    @{
+                        string shop_name = db.RS_Shops.Where(a => a.Shop_ID == item.Shop_ID).Select(a => a.Shop_Name).FirstOrDefault();
+                        <td>
+                            @shop_name
+                            @*@Html.Label(shop_name)*@
+                        </td>
+
+                        @*decimal AttributeId = item.Attribution_ID;
+                            <td>
+                                @Html.Label(Convert.ToString (AttributeId))
+                            </td>*@
+                    string type = item.Attribute_Type;
+                    <td>
+                        @*@Html.Label(type)*@
+                        @type
+                    </td>
+                        string desc = item.Attribute_Desc;
+                        <td>
+                            @if (desc != null)
+                            {
+                                @desc
+                                @*@Html.Label(desc)*@ }
+
+                        </td>
+                        <td>
+                            @*<a href="@Url.Action("Edit", "AttributionParameters", new { id = item.Attribute_ID })"><i class="fa fa-edit"></i></a>*@
+                            <a href="@Url.Action("Details", "AttributionParameters", new { id = item.Attribute_ID })"><i style="color:blueviolet" class="fa fa-fw fa-laptop"></i></a> 
+                            <a href="@Url.Action("Delete", "AttributionParameters", new { id = item.Attribute_ID })"><i style="color:red" class="fa fa-trash"></i></a>
+
+                        </td>
+                    }
+                </tr>
+
+                            }
+
+                        }
+    </tbody>
+</table>
+
+
+
+
+
+

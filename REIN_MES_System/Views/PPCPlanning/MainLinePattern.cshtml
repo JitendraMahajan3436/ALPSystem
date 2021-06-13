@@ -1,0 +1,486 @@
+﻿@model REIN_MES_System.Models.RS_OM_OrderRelease
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.Models
+@using REIN_MES_System.Controllers.OrderManagement;
+@{
+    ViewBag.Title = "MainLinePattern";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Main Line Pattern</h2>
+
+<div class="row">
+    <div class="form-horizontal">
+        <div class="col-md-12">
+            <div id="OrderPattern" class="box" style="display:block">
+                <table class="table table-striped table-responsive">
+                    <tr>
+                        <th>Platform</th>
+                        <th>Ratio</th>
+                        <th>Order of Platform</th>
+                    </tr>
+                    @{
+                        foreach (OrderPattern item in ViewBag.Platform)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Platform_Name
+                                </td>
+                                <td>
+                                    <label class="showOrderPattern" id="@item.Platform_ID">@item.Ratio</label>
+                                </td>
+                                <td>
+                                    <label class="priority" id="priority_@item.Platform_ID">@item.Priority</label>
+                                    @*<label class="priority" id="priority_@item.Platform_ID">@item.Priority</label>*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary order_pattern" data-toggle="modal" data-target="#myModal_Pattern">Change Maine Line Pattern</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <br />
+
+</div>
+<div class="row">
+    <div class="col-lg-10">
+        <div class="modal fade" id="myModal_Pattern" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Pattern</h4>
+                    </div>
+                    <p id="error_msgPriority" style="color:red;font-size:15px;"></p>
+                    <br />
+                    <p id="error_msgRatio" style="color:red;font-size:15px;"></p>
+                    <div class="modal-body">
+                        @*changes*@
+
+                        <div class="form-horizontal">
+
+                            <div id="showTimeSlot" class="box" style="display:block">
+                                <table class="table table-striped table-responsive">
+                                    <tr>
+                                        <th>Platform</th>
+                                        <th>Ratio</th>
+                                        <th>Order of Platform</th>
+                                    </tr>
+                                    @{
+                                        foreach (OrderPattern item in ViewBag.Platform)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Platform_Name
+                                                </td>
+                                                <td>
+                                                    @*@Html.TextBox(" ", "", new { @id = item.Platform_ID, @class = "form-control", @maxlength = "3", @onkeypress = "return isNumberKey(event)" })*@
+                                                    <input type="number" maxlength="3" min="0" class="form-control mandatoryfields ratioModal" id=@item.Platform_ID aria-describedby="sizing-addon1" onkeypress="return isNumberKey(event)" oninput="javascript: if (this.value.length > this.maxLength ){ this.value = this.value.slice(0, this.maxLength);} " />
+                                                    <span id="spanRatioValidation_@item.Platform_ID" style="color:red;"></span>
+
+
+                                                </td>
+                                                <td>
+                                                    @*@Html.TextBox(" ", "", new { @id = item.Platform_ID, @class = "form-control", @maxlength = "3", @onkeypress = "return isNumberKey(event)" })*@
+                                                    <input type="number" maxlength="3" min="0" class="form-control mandatoryfields priority_Modal" id="priorityModal_@item.Platform_ID" aria-describedby="sizing-addon1" onkeypress="return isNumberKey(event, 'priorityModal_@item.Platform_ID')" oninput="javascript: if (this.value.length> this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                                    <span id="spanPriorityValidation_@item.Platform_ID" style="color:red;"></span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <input type="submit" value="Save" id="SaveOrderPattern" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="loading_global_spinner_image" style="display:none;">
+        @*<img src="~/Content/images/loader2.GIF" />*@
+        <img src="~/Content/images/gears.gif" />
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Styles.Render("~/Content/Select2styles")
+}
+<script type="text/javascript">
+    //added by ketan Date 26-09-2017
+
+
+
+    $('.order_pattern').click(function () {
+        debugger;
+        //$('#showTimeSlot').attr('style', 'Display:block');
+        //$(".order_pattern").trigger("click");
+
+        var id = "";
+        $('.mandatoryfields').each(function () {
+
+
+            if($(this).hasClass("ratioModal")){
+                id =$(this).attr('id');
+                $(this).val( $('#'+id).html());
+                $(this).removeClass(" input-validation-error");
+               
+                $("#spanRatioValidation_" + id).html("")
+                //alert('#'+id);
+
+            }
+
+            if($(this).hasClass("priority_Modal")){
+
+                //alert('#'+id);
+                priority = $(this).val();
+                $(this).val($('#priority_'+id).html());
+                $("#spanPriorityValidation_" +id).html("")
+                $(this).removeClass(" input-validation-error");
+                
+            }
+        });
+
+    });
+
+
+    $(document).keyup(function (e) {
+        if (e.keyCode == 27) {
+            $("#myModal_Pattern .close").trigger("click");
+        }
+    });
+    function isNumberKey(evt, id) {
+        debugger;
+        // alert(evt.which);
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode>47 && charCode<58){
+            //validatePriority(id);
+            return true;
+        }
+        return false;
+    }
+    function validatePriority(){
+        var allPriority = $('.priority_Modal');
+        var priorityArray = [];
+        var res = true;
+        for(var i = 0; i<allPriority.length;i++){
+            var id = $(allPriority[i]).attr("id");
+            var pr = id.split('_');
+            $("#spanPriorityValidation_" + pr[1]).html("");
+            var priorityVal = $(allPriority[i]).val();
+            if (priorityVal != "" && priorityVal >"0") {
+                if (priorityArray.indexOf(priorityVal) == -1) {
+                    priorityArray[i] = priorityVal;
+
+                }
+                else {
+                    $("#spanPriorityValidation_" + pr[1]).html("Same priority not allowed");
+                    res= false;
+
+                }
+            }
+            else{
+                $("#spanPriorityValidation_" + pr[1]).html("Priority Required");
+                res= false;
+            }
+        }
+        var priorityArray = [];
+        var j = 0;
+        for(var i = allPriority.length-1; i>=0;i--){
+            var id = $(allPriority[i]).attr("id");
+            var pr = id.split('_');
+
+            var priorityVal = $(allPriority[i]).val();
+            if (priorityVal != "" && priorityVal >"0") {
+                if (priorityArray.indexOf(priorityVal) == -1) {
+                    priorityArray[j] = priorityVal;
+
+                }
+                else {
+                    $("#spanPriorityValidation_" + pr[1]).html("Same priority not allowed");
+                    res= false;
+
+                }
+                j++;
+            }
+            else if(priorityVal =="0"){
+                $("#spanPriorityValidation_" + pr[1]).html("Priority must be greater than 0");
+                res= false;
+            }
+            else{
+                $("#spanPriorityValidation_" + pr[1]).html("Priority Required");
+                res= false;
+            }
+        }
+        return res;
+    }
+    function validateRatio(){
+        var allRatio = $('.ratioModal');
+        var RatioArray = [];
+        var res = true;
+        for(var i = 0; i<allRatio.length;i++){
+            var pr = $(allRatio[i]).attr("id");
+            //var pr = id.split('_');
+            $("#spanRatioValidation_" + pr).html("")
+            var RatioVal = $(allRatio[i]).val();
+            if (RatioVal != "" ) {
+                //if (RatioArray.indexOf(RatioVal) == -1) {
+                //    RatioArray[i] = RatioVal;
+
+                //}
+                //else {
+                //    $("#spanRatioValidation_" + pr[1]).html("Same Ratio not allowed");
+                //    res= false;
+
+                //}
+            }
+            else{
+                $("#spanRatioValidation_" + pr).html("Ratio Required");
+                res= false;
+            }
+        }
+        var RatioArray = [];
+        var j = 0;
+        for(var i = allRatio.length-1; i>=0;i--){
+            var pr = $(allRatio[i]).attr("id");
+            //var pr = id.split('_');
+
+            var RatioVal = $(allRatio[i]).val();
+            if (RatioVal != "" ) {
+                //if (RatioArray.indexOf(RatioVal) == -1) {
+                //    RatioArray[j] = RatioVal;
+
+                //}
+                //else {
+                //    $("#spanRatioValidation_" + pr[1]).html("Same Ratio not allowed");
+                //    res= false;
+
+                //}
+                j++;
+            }
+            else{
+                $("#spanRatioValidation_" + pr).html("Ratio Required");
+                res= false;
+            }
+        }
+        return res;
+    }
+    //function isNumberKey(evt) {
+    //    debugger;
+    //    // alert(evt.which);
+
+    //    var charCode = (evt.which) ? evt.which : event.keyCode
+    //    if (charCode > 31 && (charCode < 48 || charCode > 57) &&( charCode == 46 || charCode == 45))
+    //        return false;
+    //    return true;
+    //}
+    $(document).on('click', '#SaveOrderPattern', function () {
+        debugger;
+        
+        $('#error_msgPriority').html("");
+        $('#error_msgRatio').html("");
+        var isValid = true;
+        var isValidpriority =  validatePriority();
+        var isValidRatio = validateRatio();
+        isValid = isValidpriority && isValidRatio;
+        $('.mandatoryfields').each(function () {
+            //alert();
+            $(this).removeClass('input-validation-error');
+            if($(this).hasClass("priority_Modal")){
+                var p = $(this).val();
+                if(p.length==0 || p.length>4){
+                    $(this).addClass('input-validation-error');
+                    //$('#error_msgPriority').html(" Priority value required");
+                    isValid = false;
+                }
+                else if(!(0<parseInt(p))){
+                    //alert(3);
+                    $(this).addClass('input-validation-error');
+                    //$('#error_msgPriority').html("  Priority value must be between 1 to 9999");
+                    isValid = false;
+                }
+            }else if($(this).hasClass("ratioModal")){
+                var r = $(this).val();
+                if((r.length==0 || r.length>4)){
+                    //alert(1);
+                    $(this).addClass('input-validation-error');
+                    //$('#error_msgRatio').html("  Ratio value required");
+                    isValid = false;
+                }
+                else if(!(-1<parseInt(r))){
+                    //alert(2);
+                    $(this).addClass('input-validation-error');
+                    //$('#error_msgRatio').html("  Ratio value must be between 0 to 9999");
+                    isValid = false;
+                }
+            }
+
+            //var value = $(this).val();
+            //if (value.length == 0) {
+
+            //    $(this).addClass('form-control input-validation-error');
+            //    // $('#' + $(this).attr('id')).next().text(ErrMsg);
+            //    isValid = false;
+            //}
+            //if (value.length>4) {
+
+            //    $(this).addClass('form-control input-validation-error');
+            //    // $('#' + $(this).attr('id')).next().text(ErrMsg);
+            //    isValid = false;
+            //    }
+            ////else {
+
+            ////    //$('#' + $(this).attr('id')).next().text('');
+            ////}
+        });
+
+        if (isValid) {
+
+            debugger;
+            //debugger;
+            var dataModal = [];
+            var priorityDataModal = [];
+            var priority = -1;
+            var ratio = -1;
+            var platformId = 0 ;
+            $('.mandatoryfields').each(function () {
+
+                //alert("priority:"+priority);
+                //alert("ratio:"+ratio);
+                //alert("platformId:"+platformId);
+                //alert("priority::"+$(this).hasClass("priority_Modal"));
+                //alert("ratio::"+$(this).hasClass("ratio"));
+
+
+                if($(this).hasClass("priority_Modal")){
+                    priority = $(this).val();
+                }else if($(this).hasClass("ratioModal")){
+                    platformId =$(this).attr('id');
+                    ratio = $(this).val();
+                }
+                if(priority>-1 && ratio>-1){
+                    dataModal.push({
+                        platform_ID: platformId,
+                        Ratio: ratio,
+                        Priority: priority,
+                        Planned_Date: $('#Planned_Date').val()
+                    });
+                    priority = -1;
+                    ratio = -1;
+
+                }
+
+                //dataModal.push({
+                //    platform_ID: $(this).attr('id'),
+                //    Ratio: $(this).val(),
+                //    //Priority: $(this).val(),
+                //    Planned_Date: $('#Planned_Date').val()
+                //});
+            });
+
+            //$('.priority_Modal').each(function () {
+
+            //    priorityDataModal.push({
+            //        Priority: $(this).val(),
+
+            //    });
+            //});
+            $(".loading_global_spinner_image").show();
+            $.ajax({
+                type: "POST",
+                url: '/PPCPlanning/SaveOrderpattern',
+                //data: JSON.stringify({ dataModal: JSON.stringify(dataModal) , priorityDataModal: JSON.stringify(priorityDataModal) }),
+                data: JSON.stringify({ dataModal: JSON.stringify(dataModal) }),
+                contentType: 'application/json',
+                processData: false,
+                success: function (response) {
+                    if (response.status == true) {
+                        $('#myModal_Pattern').modal("hide");
+                        //alert(response.message);
+                        //window.location.href = "/NewModelMaster/index";
+                        closepopup();
+                        if (response.dataModal != null) {
+                            var ModelData = [];
+                            ModelData = JSON.parse(response.dataModal);
+                            $('.showOrderPattern').each(function () {
+                                var value = $(this).attr('id');
+                                for (var i = 0; i < ModelData.length; i++) {
+                                    if (ModelData[i].platform_ID == value) {
+
+                                        $('#' + $(this).attr('id')).text(ModelData[i].Ratio);
+                                        $('#priority_' + $(this).attr('id')).text(ModelData[i].Priority);
+                                    }
+                                    else {
+                                        //$('#' + $(this).attr('id')).val('');
+                                    }
+                                }
+
+                            });
+                            $(".loading_global_spinner_image").hide();
+                            successMessage(response.message, response.type)
+                        }
+                    }
+                    else {
+                        $('#myModal_Pattern').modal("hide");
+                        $(".loading_global_spinner_image").hide();
+                        errorMessage(response.message, response.type);
+                    }
+                },
+                error: function (error) {
+
+
+                }
+            });
+        }
+    });
+
+    function closepopup() {
+        $("#myModal_Pattern .close").trigger("click");
+    }
+    function successMessage(msg, headermsg = "Success") {
+        $('.content-wrapper div.myalert').remove();
+
+        alertHtml = '<div class="box-body myalert">' +
+            '<div class="alert alert-success alert-dismissable">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-check"></i>' + headermsg + '</h4>' +
+            msg +
+            '</div></div>';
+        $('.content-wrapper .content').before(alertHtml);
+    }
+        function errorMessage(msg, headermsg = "Error") {
+            $('.content-wrapper div.myalert').remove();
+            alertHtml = '<div class="box-body myalert">' +
+                '<div class="alert  alert-danger alert-dismissable">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-ban"></i>' + headermsg + '</h4>' +
+                '<p>' + msg + '</p>' +
+                '</div></div>';
+            $('.content-wrapper .content').before(alertHtml);
+        }
+            function infoMessage(msg, headermsg = "Info") {
+                $('.content-wrapper div.myalert').remove();
+                alertHtml = '<div class="box-body myalert">' +
+                    '<div class="alert alert-warning alert-dismissable">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-ban"></i>' + headermsg + '</h4>' +
+                    '<p>' + msg + '</p>' +
+                    '</div></div>';
+                $('.content-wrapper .content').before(alertHtml);
+            }
+</script>

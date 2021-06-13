@@ -1,0 +1,92 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Preventive_Maintenance_Log_New>
+<div class="box-header with-border">
+    <h3 class="box-title">Preventive Maintenance </h3>
+    <div class="box-tools pull-right">
+        @*<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>*@
+    </div><!-- /.box-tools -->
+</div><!-- /.box-header -->
+<div class="box-body table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_MT_Machines.Machine_Name)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Scheduled_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Acknowledge)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Acknowledge_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Acknowledge_Date)
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                    </td>
+                    <td>
+                        @String.Format("{0:d}", item.Scheduled_Date)
+                        @*@Html.DisplayFor(modelItem => item.Scheduled_Date)*@
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(modelItem => item.Is_Acknowledge)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Acknowledge_User_ID)
+                    </td>
+                    <td>
+                        @String.Format("{0:d}", item.Acknowledge_Date)
+                        @*@Html.DisplayFor(modelItem => item.Confirmed_Date)*@
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PM_Log_ID })
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div><!-- /.box-body -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+
+
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}
+
+

@@ -1,0 +1,85 @@
+﻿@model REIN_MES_System.Models.RS_Manual_Data_Collection
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+   
+    <dl class="dl-horizontal">
+
+       
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+       
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Station Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Shift Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shift.Shift_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Parameter Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MT_Parameter.Parameter_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Minimum Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Minimum_Value)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Maximum Value")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Maximum_Value)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Frequency")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Frequency)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

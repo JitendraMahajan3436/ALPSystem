@@ -1,0 +1,156 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Station_Based_Clita_Log>
+
+@{
+    ViewBag.Title = "Confirm";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+
+
+<table class="table table-bordered table-striped datatable_completes">
+    <tr>
+
+        <th>
+            @Html.DisplayName("Shop Name")
+        </th>
+        <th>
+            @Html.DisplayName("Station Name")
+        </th>
+
+        <th>
+            @Html.DisplayName("Line Name")
+        </th>
+
+        <th>
+            @Html.DisplayName("Machine Number")
+        </th>
+        @*<th>
+                @Html.DisplayName("Tool Name")
+            </th>*@
+
+        <th>
+            @Html.DisplayName("CLITA Item")
+        </th>
+        <th>
+            @Html.DisplayName("Classification")
+        </th>
+        <th>
+            @Html.DisplayName("Standards")
+        </th>
+        <th>
+            @Html.DisplayName("Method")
+        </th>
+        <th>
+            @Html.DisplayName("Frequency")
+        </th>
+
+
+        <th></th>
+    </tr>
+    @if (Model != null && Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Clita_Tool.Tool_Name)
+                    </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clita_Item)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Classification.Classification)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Standard.Standard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Clita_Method.Method)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cycle)
+                </td>
+
+                <td>
+                    @if (item != null)
+                    {
+                        if (item.Is_Maintenance_Done == true)
+                        {
+                            <i class="fa fa-check"></i>
+                        }
+                        else
+                        {
+                            @Ajax.ActionLink("Confirm", "SaveRemark", "StationBasedClita", new { id = item.Station_Clita_Log_ID }, new AjaxOptions()
+                                         {
+                                             HttpMethod = "Get",
+                                             UpdateTargetId = "create-modal-body",
+                                             InsertionMode = InsertionMode.Replace,
+                                             OnBegin = "Loadingajax",
+                                             OnComplete = "showCreateModal"
+                                         },
+                                    new { @class = "btn btn-primary", id = "confirm-btn" })
+                        }
+                    }
+                    @*@Html.ActionLink("Confirm", "Complete", new { id = item.Station_Clita_Log_ID })*@
+
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="9"><h3>There is no CLITA Item Configured For this Station.</h3></td>
+        </tr>
+    }
+
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Station Clita </h4>
+            </div>
+            <div class="modal-body">
+                <div id="create-modal-body"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script type="text/javascript">
+        $(function () {
+
+        });
+
+        function Loadingajax() {
+            //   $("#loader").show();
+        }
+        function showCreateModal() {
+            // $("#loader").hide();
+            $('#myModal').modal();
+        }
+    </script>
+}

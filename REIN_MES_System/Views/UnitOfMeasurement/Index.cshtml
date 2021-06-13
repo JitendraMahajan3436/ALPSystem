@@ -1,0 +1,52 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Unit_Of_Measurement>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "UnitOfMeasurement")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Plant_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Measurement_Name)
+                </th>
+                <th>
+                    @ResourceGlobal.Action
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Measurement_Name)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "UnitOfMeasurement", new { id = item.M_ID })"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;&nbsp;
+                        <a href="@Url.Action("Details", "UnitOfMeasurement", new { id = item.M_ID })"><i class="fa fa-fw fa-laptop" title="Details"></i></a> &nbsp;&nbsp;
+                        <a href="@Url.Action("Delete", "UnitOfMeasurement", new { id = item.M_ID })"><i class="fa fa-trash" title="Delete"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        @section scripts {
+            @Scripts.Render("~/Content/theme/plugins/datatables/js")
+            @Styles.Render("~/Content/theme/plugins/datatables/css")
+            @Scripts.Render("~/Scripts/user_datatable")
+        }
+    </table>
+</div>
+

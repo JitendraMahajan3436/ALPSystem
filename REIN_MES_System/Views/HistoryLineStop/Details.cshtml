@@ -1,0 +1,155 @@
+﻿@model REIN_MES_System.Models.RS_History_LineStop
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RS_History_LineStop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Stop_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stop_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Stop_Reason)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Stop_Reason)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Resume_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Resume_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isLineStop)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isLineStop)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isEmergencyCall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isEmergencyCall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isHeartBit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isHeartBit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PLC_Ack)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PLC_Ack)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Row_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

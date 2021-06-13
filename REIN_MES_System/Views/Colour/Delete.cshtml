@@ -1,0 +1,65 @@
+﻿@model REIN_MES_System.Models.RS_Colour
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Plant")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Colour Desc")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Colour Batch")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Batch)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Export Colour")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Export_Colour)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Active")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> |
+            @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

@@ -1,0 +1,476 @@
+﻿@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+
+<div class="row">
+    @Html.Hidden("Select_Color", ResourceDisplayName.Select_Color)
+    <div class="col-md-12">
+        <div class="col-md-1">
+            @Html.Label("Body Sr No")
+        </div>
+        <div class="col-md-2" style="margin-left: -2%;">
+            <input type="text" name="BodySrNo" id="BodySrNo" class="form-control" placeholder="Enter Body Sr No" />   &nbsp;
+        </div>
+
+        <div class="col-md-1">
+            <input type="button" name="Ok" class="btn btn-primary" value="OK" id="bodyOK" />
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="col-md-12">
+    <div class="col-md-6">
+        <div class="row" style="background-color:#384c70;    color: white;
+    background-color: #384c70;
+    font-family: Cambria;">
+            <div class="col-md-3" style="margin-left: 10%;
+    text-align: center;">
+                <label class="label">Current</label>
+            </div>
+            <div class="col-md-3" style="    text-align: center;
+    margin-left: 29%;">
+                <label class="label">Convert To</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cont">
+                <div class="col1 div1 box">
+                    @Html.Label("Model Code")
+                    <input type="text" name="C_Model_Code" id="C_Model_Code" class="form-control" readonly />
+                    @Html.Hidden("Paintout")
+                </div>
+                <div class="col2 div2 box">
+                    @Html.Label("Model Code")
+                    @Html.DropDownList("Model_Code", null, "Select Model", new { @class = "form-control" })
+                    @Html.ValidationMessage("Model_Code", null, new { @class = "validation_error Model_Code" })
+                </div>
+                <div class="col1 div3 box" id="color_code2">
+                    @Html.Label("Color Code")
+                    <input type="text" name="C_Color_Code" id="C_Color_Code" class="form-control" readonly />
+                </div>
+                <div class="col2 div4 box" id="color_code1">
+                    @Html.Label("Color Code")
+                    @Html.DropDownList("Color_Code", null, "Select Color", new { @class = "form-control" })
+                    @Html.ValidationMessage("Color_Code", null, new { @class = "validation_error Color_Code" })
+                </div>
+                <div class="col1 div5 box">
+                    @Html.Label("Remarks")
+                    <input type="text" name="C_Remarks" id="C_Remarks" class="form-control" readonly />
+                    @Html.ValidationMessage("C_Remarks", null, new { @class = "validation_error" })
+                </div>
+                <div class="col2 div6 box">
+                    @Html.Label("Remarks")
+                    <input type="text" name="Remarks" id="Remarks" class="form-control" placeholder="Please Enter Remark" />
+                    @Html.ValidationMessage("Remarks", null, new { @class = "validation_error Remarks" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" style="border: 1px solid;width:100%;">
+                @Html.Label("Reason For Change")
+                <input type="text" name="Reason_Change" id="Reason_Change" class="form-control" placeholder="Please Enter Reason Here " />
+                @Html.ValidationMessage("Reason_Change", null, new { @class = "validation_error reason" })
+
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <input type="button" name="Save" id="SaveModel" value="Save" class="btn btn-primary" /> &nbsp;&nbsp;<input type="button" name="Refresh" id="RefreshModel" value="Refresh" class="btn btn-primary" />
+        </div>
+    </div>
+    <div class="col-md-6" style="    width: 47%;
+    margin-left: 2%;">
+        <div class="row" style="background-color:#384c70;    color: white;
+    background-color: #384c70;
+    font-family: Cambria;">
+            <div class="col-md-3" style="margin-left: 10%;
+    text-align: center;">
+                <label class="label">Current</label>
+            </div>
+            <div class="col-md-3" style="    text-align: center;
+    margin-left: 29%;">
+                <label class="label">Convert To</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cont">
+                <div class="col1 div1 box">
+                    @Html.Label("Varient Code")
+                    <input type="text" name="C_Varient_Code" id="C_Varient_Code" class="form-control" readonly />
+
+                </div>
+                <div class="col2 div2 box">
+                    @Html.Label("Varient Code")
+                    @Html.DropDownList("Varient_Code", null, "Select Varient", new { @class = "form-control" })
+                    @Html.ValidationMessage("Varient_Code", null, new { @class = "validation_error Varient_Code" })
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" style="border: 1px solid;width:100%;">
+                @Html.Label("Reason For Change")
+                <input type="text" name="Reason_Change1" id="Reason_Change1" class="form-control" placeholder="Please Enter Reason Here " />
+                @Html.ValidationMessage("Reason_Change1", null, new { @class = "validation_error Reason_Change1" })
+
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%;">
+            <input type="button" name="Save" id="SaveVarient" value="Save" class="btn btn-primary" /> &nbsp;&nbsp;<input type="button" name="Refresh" id="RefreshVarient" value="Refresh" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+<div id="testy" style="margin-top:7%"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery_ui")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+    @Styles.Render("~/fdtheme/notification_css");
+}
+
+
+<style type="text/css">
+    .box {
+        position: relative;
+        border-radius: 3px;
+        background: #ffffff;
+        border-top: 3px solid #d2d6de;
+        margin-bottom: -2px;
+        width: 100%;
+        box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
+    }
+
+    .content-wrapper {
+        background: white !important;
+    }
+
+    .cont {
+        display: flex;
+        flex-flow: wrap;
+    }
+
+    .box {
+        box-sizing: border-box;
+        padding: 3em;
+    }
+
+    .col1 {
+        width: 50%
+    }
+
+    .col2 {
+        width: 50%
+    }
+
+    .div1, .div2, .div3, .div4, .div5, .div6 {
+        width: 50%;
+        height: 100px;
+        padding: 17px;
+        border: 1px solid;
+    }
+
+    .label {
+        font-size: 152%;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#bodyOK").click(function () {
+            debugger
+            $("#color_code1").css("display", "block");
+            $("#color_code2").css("display", "block");
+
+            var bodyserilal = $("#BodySrNo").val();
+            if (bodyserilal != "") {
+                var options = {};
+                options.url = "/BodyConversion/getinfo";
+                options.type = "POST";
+                options.data = JSON.stringify({ BodySrNo: bodyserilal });
+                options.dataType = "json";
+                options.contentType = "application/json";
+                options.success = function (data) {
+                    debugger
+                    $("#C_Model_Code").val(data.St.ModelCode);
+                    $("#C_Color_Code").val(data.St.Color_Code);
+                    $("#C_Remarks").val(data.St.Remarks);
+                    $("#C_Varient_Code").val(data.St.Varient);
+
+                    if (data.ispaint == true) {
+                        debugger
+                        $("#color_code1").css("display", "none");
+                        $("#color_code2").css("display", "none");
+                        $("#Paintout").val(data.ispaint);
+                    }
+                    else {
+                        $("#Paintout").val(false);
+                    }
+
+                    $("#Model_Code").empty();
+
+                    $("#Model_Code").append($('<option>', { value: 0, text: 'Select' }));
+                    $.each(data.ModelS, function (i, data) {
+                        debugger
+                        $("#Model_Code").append(
+                            $('<option></option>').val(data.Value).html(data.Value));
+                    });
+                    $("#Model_Code").prop("disabled", false);
+
+                    $("#Varient_Code").empty();
+
+                    $("#Varient_Code").append($('<option>', { value: 0, text: 'Select' }));
+                    $.each(data.Varient, function (i, data) {
+                        $("#Varient_Code").append(
+                            $('<option></option>').val(data.Value).html(data.Value));
+                    });
+                    $("#Varient_Code").prop("disabled", false);
+                };
+
+                options.error = function () { };
+                $.ajax(options);
+            } else {
+                alert('Please Enter Body Sr No')
+            }
+
+
+
+        })
+        $("#SaveModel").click(function () {
+            debugger
+            var bodyno = $("#BodySrNo").val();
+            var O_Model_Code = $("#C_Model_Code").val();
+            var N_Model_Code1 = $('#Model_Code').val();
+            var N_Model_Code = $('#Model_Code :selected').text();
+            var O_Color_Code = $("#C_Color_Code").val();
+            var N_Color_Code = $('#Color_Code :selected').text();
+            var N_Color_Code1 = $('#Color_Code').val();
+            var O_Remark = $("#C_Remarks").val();
+            var N_Remarks = $("#Remarks").val();
+            var C_Varient_Code = $("#C_Varient_Code").val();
+            var Reason = $("#Reason_Change").val();
+            var paintout = $("#Paintout").val();
+
+            if (paintout == 'true') {
+                paintout = true;
+            }
+            else {
+                paintout = false;
+            }
+
+
+
+            var IsModel = true;
+            if (bodyno != "" && N_Model_Code1 != "" && N_Remarks != "" && Reason != "") {
+                $('.Model_Code').html(null);
+                $('.Color_Code').html(null);
+                $('.Remarks').html(null);
+                $('.Reason_Change').html(null);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/BodyConversion/SaveBodyConversionModelData',
+                    data: JSON.stringify({
+                        bodyno: bodyno, O_Model_Code: O_Model_Code, N_Model_Code: N_Model_Code, O_Color_Code: O_Color_Code, N_Color_Code: N_Color_Code, O_Remark: O_Remark, N_Remarks: N_Remarks, Reason: Reason, IsModel: IsModel, C_Varient_Code: C_Varient_Code, paintout: paintout
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#BodySrNo").focus();
+                        if (data.Success == true) {
+                            debugger
+
+                            $("#BodySrNo").val("");
+                            $("#C_Model_Code").val("");
+                            $("#Color_Code").empty();
+                            $("#Model_Code").empty();
+                            $("#C_Color_Code").val("");
+                            $("#color_code1").css("display", "block");
+                            $("#color_code2").css("display", "block");
+                            $("#C_Remarks").val("");
+                            $("#Remarks").val("");
+                            $("#Reason_Change").val("");
+                            $("#C_Varient_Code").val("");
+                            $("#Varient_Code").empty();
+                            $('#testy').toastee({
+                                type: 'success',
+                                width: '500px',
+                                height: '100px',
+                                message: data.Message,
+                            });
+                        }
+                        else {
+
+                            $('#testy').toastee({
+                                type: 'error',
+                                width: '500px',
+                                height: '100px',
+                                message: data.Message,
+                            });
+                        }
+                    }
+                })
+
+            } else {
+                if (N_Model_Code.length == 0) {
+                    $('.Model_Code').html("Please Select Model Code");
+                    $('#Model_Code').focus();
+                }
+
+                if (N_Remarks == "") {
+                    $('.Remarks').html("Please Enter Remarks");
+                    $('#Remarks').focus();
+                }
+                if (Reason == "") {
+                    $('.Reason_Change').html("Please Enter Reason");
+                    $('#Reason_Change').focus();
+                }
+            }
+
+
+
+        })
+        $("#SaveVarient").click(function () {
+            debugger
+            var bodyno = $("#BodySrNo").val();
+            var O_Model_Code = $("#C_Model_Code").val();
+            var N_Model_Code1 = $('#Model_Code').val();
+            //var N_Model_Code = $('#Model_Code :selected').text();
+            var O_Color_Code = $("#C_Color_Code").val();
+            //var N_Color_Code = $('#Color_Code :selected').text();
+            //var N_Color_Code1 = $('#Color_Code').val();
+            var O_Remark = $("#C_Remarks").val();
+            //var N_Remarks = $("#Remarks").val();
+            var C_Varient_Code = $("#C_Varient_Code").val();
+            var N_Varient_Code = $('#Varient_Code :selected').text();
+            var N_Varient_Code1 = $('#Varient_Code').val();
+            var Reason = $("#Reason_Change1").val();
+            var IsModel = false;
+            if (bodyno != "" && N_Varient_Code1 > 0 && Reason != "") {
+                $('.Varient_Code').html(null);
+
+                $('.Reason_Change1').html(null);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/BodyConversion/SaveBodyConversionVariantData',
+                    data: JSON.stringify({
+                        bodyno: bodyno, O_Model_Code: O_Model_Code, O_Color_Code: O_Color_Code, O_Remark: O_Remark, Reason: Reason, IsModel: IsModel, C_Varient_Code: C_Varient_Code, N_Varient_Code: N_Varient_Code
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#BodySrNo").focus();
+                        if (data.Success == true) {
+                            debugger
+
+                            $("#BodySrNo").val("");
+                            $("#C_Model_Code").val("");
+                            $("#Color_Code").empty();
+                            $("#Model_Code").empty();
+                            $("#C_Color_Code").val("");
+
+                            $("#C_Remarks").val("");
+                            $("#Remarks").val("");
+                            $("#Reason_Change1").val("");
+                            $("#C_Varient_Code").val("");
+                            $("#Varient_Code").empty();
+                            $('#testy').toastee({
+                                type: 'success',
+                                width: '500px',
+                                height: '100px',
+                                message: data.Message,
+                            });
+                        }
+                        else {
+
+                            $('#testy').toastee({
+                                type: 'error',
+                                width: '500px',
+                                height: '100px',
+                                message: data.Message,
+                            });
+                        }
+                    }
+                })
+            } else {
+                if (N_Varient_Code1.length == 0) {
+                    $('.Varient_Code').html("Please Select Varient Code ");
+                    $('#Varient_Code').focus();
+                }
+                if (Reason == "") {
+                    $('.Reason_Change1').html("Please Enter Reason");
+                    $('#Reason_Change1').focus();
+                }
+            }
+
+        })
+        $("#Model_Code").change(function (e) {
+            debugger;
+            var modelCode = $("#Model_Code").val();
+            if (modelCode != "") {
+                var url = "/BodyConversion/GetColorCodeByModelCode";
+                ajaxpack.getAjaxRequest(url, "modelCode=" + modelCode + "", showColorCodeDetails, "json");
+
+                setTimeout(function () {
+                    url = "/BodyConversion/GetAutoRemarkByModelCode";
+                    ajaxpack.getAjaxRequest(url, "modelCode=" + modelCode + "", showAutoRemarks, "json");
+                }, 1000);
+            }
+        });
+    })
+
+    function showColorCodeDetails() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                debugger;
+                var jsonRes = $.parseJSON(myajax.responseText);
+                //$("#divColour").css("display", "none");
+                if (jsonRes.length > 0) {
+                    if (jsonRes.length == 1) {
+                        $('#Color_Code option').remove();
+                        $('#Color_Code').append('<option value="' +
+                            jsonRes[0].Colour_ID + '">' + jsonRes[0].Colour_ID + '</option>');
+                    }
+                    else {
+                        $('#Color_Code option').remove();
+                        $('#Color_Code').append('<option value="">' + $('#Select_Color').val() + '</option>');
+
+                        for (i = 0; i < jsonRes.length; i++) {
+                            $('#Color_Code').append('<option value="' +
+                                jsonRes[i].Colour_ID + '">' + jsonRes[i].Colour_ID + '</option>');
+                        }
+                    }
+                   // $("#divColour").css("display", "block");
+                }
+                else {
+                    $('#Color_Code option').remove();
+                    $('#Color_Code').append('<option value="">' + $('#Select_Color').val() + '</option>');
+                    //alert("Color Code does not exist..");
+                }
+            }
+        }
+    }
+
+    function showAutoRemarks() {
+        var myajax = ajaxpack.ajaxobj
+       
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                debugger;
+                var jsonRes = $.parseJSON(myajax.responseText);
+                $("#Remarks").val(jsonRes);
+            }
+        }
+    }
+</script>

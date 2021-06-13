@@ -1,0 +1,49 @@
+﻿@model REIN_MES_System.Models.RS_Model_Attribute_Master
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Attribution)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Attribution)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sub_Assembly_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Major_Sub_Assembly.Sub_Assembly_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Platform_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_OM_Platform.Platform_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Model_Attribute_ID }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+</p>

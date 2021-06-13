@@ -1,0 +1,155 @@
+﻿@model REIN_MES_System.Models.RS_User_Attendance_Sheet
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<h2>Details</h2>*@
+
+<div>
+    @*<h4>RS_User_Attendance_Sheet</h4>*@
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Plant_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shop_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shop_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Line_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Line_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shift_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shift_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.In_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.In_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Out_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Out_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lunch_Time_Out)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lunch_Time_Out)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lunch_Time_In)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lunch_Time_In)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Attendance_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Attendance_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Employee.Employee_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Attendance_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,145 @@
+﻿@model REIN_MES_System.Models.RS_MT_Clita
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div>
+   
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayName("Plant Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>*@
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MTTUW_Lines.Line_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MTTUW_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Station Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MTTUW_Stations.Station_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Machine Number")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MM_MT_MTTUW_Machines.Machine_Number)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("CLITA Item")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clita_Item)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Classification")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Classification.Classification)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Standards")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Standard.Standard)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("CLITA Tools")
+        </dt>
+
+        <dd>
+            @if (Model.RS_MT_ClitaItems_Tools_Relation != null)
+            {
+                foreach (string tool in Model.RS_MT_ClitaItems_Tools_Relation.Select(a => a.RS_MT_Clita_Tool.Tool_Name))
+                {
+                    string toolImage = tool + ".png";
+                    <img src="~/Content/images/CLITAImages/@toolImage" />
+                }
+            }
+            @*@Html.DisplayFor(model => model.RS_MT_Clita_Tool.Tool_Name)*@
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Method")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Clita_Method.Method)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Frequency")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cycle)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Expected Duration")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Maintenance_Time_TACT)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayName("Recipient Email")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recipent_Email)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayName("Start Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Start_Date)
+        </dd>
+        @*<dt>
+            @Html.DisplayName("End Date")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.End_Date)
+        </dd>*@
+
+     
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Clita_ID }, htmlAttributes: new {@class="btn btn-success" }) |
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>

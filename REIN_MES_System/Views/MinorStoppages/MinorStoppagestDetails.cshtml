@@ -1,0 +1,74 @@
+﻿<div class="modal-body no-padding table-responsive" id="MinorStoppagesModal">
+    <div class="header" style="background-color:cadetblue">
+        @*<marquee direction="right">*@
+            <p style="text-align:center;color: white; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Minor Stoppage data from @ViewBag.fromDate To @ViewBag.toDate</p>
+        @*</marquee>*@
+    </div>
+    <div class="table-responsive">
+        @if (ViewBag.faultminorStoppageDetail != null)
+        {
+            <table class="table table-bordered table-striped table-condensed datatable_completes">
+                <thead>
+                    <tr>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Sr.No
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                            Machine Name
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;text-align:center">
+                            Quantity
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                        <tr>
+                            <td style="text-align:center">
+                               1 
+                            </td>
+                            <td>
+                                @ViewBag.MachineName        
+                            </td>
+                            <span>
+                                <td data-target="#Cycle_ID" data-toggle="modal" data-id="@ViewBag.Machine" onclick="MyFunction3(@ViewBag.Machine)" style="cursor:pointer;text-align:center">
+                                    @ViewBag.Quanity
+                                </td>
+                            </span>
+                            @*<td data-target="#Cycle_ID" data-toggle="modal" data-id="@ViewBag.Machine" onclick="MyFunction3(@ViewBag.Machine)" style="cursor:pointer">
+                                @ViewBag.Quanity
+                            </td>*@
+                        </tr>
+                 
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <table class="table table-bordered table-striped table-condensed datatable_completes">
+                <thead>
+                    <tr>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; text-align:center">
+                            Sr.No
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; ">
+                            Machine Name
+                        </th>
+                        <th style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;text-align:center">
+                            Quantity
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td style="text-align:center" colspan="3">
+                            No Data Available
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+

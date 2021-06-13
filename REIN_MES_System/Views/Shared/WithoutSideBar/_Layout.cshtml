@@ -1,0 +1,362 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{
+        var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+        var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+    }
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/fdtheme/bootstrap")
+    <!-- Font Awesome Icons -->
+    <link href="~/Content/theme/fonts/font-awesome.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link href="~/Content/theme/fonts/ionicons.min.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+    <!-- Ionicons -->
+    <!-- <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" /> -->
+    @Styles.Render("~/fdtheme/Font_Icons")
+
+    @Styles.Render("~/fdtheme/css")
+
+    @Styles.Render("~/Content/site")
+
+    @Styles.Render("~/Content/shopfloor")
+
+    @Scripts.Render("~/fdtheme/js")
+
+    @Scripts.Render("~/fdtheme/ajaxroutine")
+
+    <!-- Bootslidemenu -->
+    @Styles.Render("~/fdtheme/bootslidemenu_css")
+
+    @Scripts.Render("~/fdtheme/bootslidemenu_js")
+    @Scripts.Render("~/fdtheme/bootslidemenu_shop_js")
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="skin-yellow layout-top-nav ">
+    <div class="wrapper">
+        <!-- TOP NAVIGATIONS -->
+        @Html.Partial("WithoutSideBar/_Header")
+        @*@Html.Partial("WithoutSideBar/_Header")*@
+        <!-- =============================================== -->
+        <!-- Full Width Column -->
+        <div class="content-wrapper">
+            <div class="container-fluid">
+                <input type="hidden" name="modelCode" id="modelCode" value="@ViewBag.ModelCode" />
+                <input type="hidden" name="MainSerialNo" id="MainSerialNo" value="@ViewBag.SerialNo" />
+                <!-- Main content -->
+                <section class="content" id="shop-floor-content">
+                    @RenderBody()
+                </section><!-- /.content -->
+            </div><!-- /.container -->
+        </div><!-- /.content-wrapper -->
+    </div>
+
+
+    
+    <div id="shop_help_support">        
+        <div class="list-group">
+            <a href="#" class="list-group-item active"></a>
+            <a href="#" class="list-group-item"></a>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/CountDown")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        var lastSerialNo = "";
+        var newSerialNo = "";
+        function getShopDetails(){
+            lastSerialNo = $("input[name='MainSerialNo']").val();
+            $.getJSON('/Manifest/getCurrentShopDetails', { lineId: @userSession.lineId,stationId: @userSession.stationId,SerialNo: lastSerialNo}, function (data) {
+                //lastSerialNo = $("input[name='srlno']").val();
+                //$("input[name='MainSerialNo']").val(data.serialNo);
+                debugger;
+                if(data.modelSeries != null)
+                    $("#shop-series").text(data.modelSeries);
+
+                    $("#shop-family").text(data.modelFamily);
+                    $("#shop-nextseries1").text(data.nextSerial1);
+                    $("#shop-nextseries2").text(data.nextSerial2);
+                    $("#takein-takeout").text(data.TakeInTakeOut);
+
+                    if(data.TakeInTakeOut == "Take Out"){
+                        $("#takein-takeout").addClass('bg-danger');
+                        $("#takein-takeout").removeClass('bg-warning');
+                    }else if(data.TakeInTakeOut == "Take In"){
+                        $("#takein-takeout").addClass('bg-warning');
+                        $("#takein-takeout").removeClass('bg-danger');
+                    }else{
+                        $("#takein-takeout").removeClass('bg-warning');
+                        $("#takein-takeout").removeClass('bg-danger');
+                    }
+                    
+                    $("input[name='srlno']").focus().select();
+                    
+                    if ($('#shop-floor-content *[data-currid="2"]').length) {
+                        if($('#shop-floor-content *[data-currid="2"]').val().length == 0){
+                            $('#shop-floor-content *[data-currid="2"]').focus();
+                        }
+                    }
+                    if ($('#shop-floor-content *[data-currid="1"]').length) {
+                        if($('#shop-floor-content *[data-currid="1"]').val().length == 0){
+                            $('#shop-floor-content *[data-currid="1"]').focus();
+                        }
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    console.log(textStatus);
+                });
+        }
+        function timeisUp(){
+            serialChanged = false;
+            $("input[name='srlno']").val("");
+            //$("input[name='MainSerialNo']").val("");
+            //$("input[name='srlno']").prop('disabled', true);
+            $("#shop-series").text("");
+            $("#shop-family").text("");
+            $("#shop-nextseries1").text("");
+            $("#shop-nextseries2").text("");
+            $("#takein-takeout").text("");
+            $("#takein-takeout").removeClass('bg-warning');
+            $("#takein-takeout").removeClass('bg-danger');
+            //$('#shop-floor-content .sop-wrapper').html('');
+            $('#shop-floor-content .error-proofing-container').html('');
+
+        }
+        function updateTaktProgress(){
+            $.getJSON('/Manifest/getCurrentTactData', function (data) {
+                var mins = 0;
+                var secs = 0;
+                var tacttime = 0;
+                var tactprogress = 0;
+                var currsecs = 0;
+
+                if(data != null){
+                    mins = ("0"+data.minutes).slice(-2);
+                    secs = ("0"+data.seconds).slice(-2);
+                    tacttime = data.tactSeconds;
+                    tactprogress = data.currentProgress;
+                }
+
+                $("#tact-countdown").text(mins +":"+ secs);
+                $(".current-progress").css('width', (tactprogress) + "%");
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+               // alert('Something went wrong in calculating TAKT !'+ textStatus +' ');
+            });
+        }
+
+        function getCurrentShift(){
+            $.getJSON('/Shift/getRunningShift', function (data) {
+                if(data != null){
+                    $("#shop-shift").html(data);
+                }
+                else{
+                    $("#shop-shift").html("Genral");
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+               // alert('Faild to get shift details');
+            });
+        }
+        $(document).ready(function () {
+
+            window.setInterval(function () {
+                $.getJSON('/Base/IsSession', function (data) {
+                    
+                    if (data == false) {
+                        location.href = "/User/Index";
+                    }
+                });
+            },7000);
+
+
+
+            //get current shift
+            getCurrentShift();
+            //end
+            serialChanged = false;
+            //GET ALL STATION DETAILS AND DISPLAY ON SCREEN
+            getShopDetails();
+            //$("input[name='srlno']").val( $("input[name='MainSerialNo']").val());
+            var clock = $('#tact-countdown');
+            var bar = $(".current-progress");
+
+            var mins = 0;
+            var secs = 0;
+            var tacttime = 0;
+            var tactprogress = 0;
+            var currsecs = 0;
+            $.getJSON('/Manifest/getCurrentTactData', function (data) {
+
+                if(data != null){
+                    mins = ("0"+data.minutes).slice(-2);
+                    secs = ("0"+data.seconds).slice(-2);
+                    tacttime = data.tactSeconds;
+                    tactprogress = data.currentProgress;
+                }
+
+                clock.text(mins +":"+ secs);
+                bar.css('width', (tactprogress) + "%");
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+               // alert('Something went wrong in calculating TAKT !'+ textStatus +' ');
+            });
+
+            window.setInterval(function(){
+                ////IF Serial not changed then get all the station details
+                //if(serialChanged == false){
+                //    getShopDetails();
+                //}
+
+                //if($("input[name='MainSerialNo']").val().length > 0){
+                //    if ($('*[data-currid="1"]').length > 0) {
+                //        if($('*[data-currid="1"]').val() == null || $('*[data-currid="1"]').val() == ""){
+                //            $('*[data-currid="1"]').focus();
+                //        }else if($('*[data-currid="2"]').length > 0){
+                //            if($('*[data-currid="2"]').val() == null || $('*[data-currid="2"]').val() == ""){
+                //                $('*[data-currid="2"]').focus();
+                //            }
+                //        }
+                //    }
+                //}else{
+                //    $("input[name='srlno']").val(newSerialNo);
+                //}
+                $.getJSON('/Manifest/isLineStopByLine', { lineId: @userSession.lineId }, function (data) {
+                    if(data == true){
+
+                    }else{
+                        //updateTaktProgress();
+                        var timer = clock.html();
+                        timer = timer.split(':');
+
+                        if(timer.length == 3){
+                            var hours = timer[0];
+                            var minutes = timer[1];
+                            var seconds = timer[2];
+                        }
+                        else if(timer.length == 2){
+                            var hours = 0;
+                            var minutes = timer[0];
+                            var seconds = timer[1];
+                        }
+                        if(hours > 0 || minutes > 0 || seconds > 0){
+                            seconds -= 1;
+
+
+                            if (seconds < 0 && minutes > 0 && hours > 0) {
+                                minutes -= 1;
+                                seconds = 59;
+
+                            }
+
+                            else if (seconds < 0 && minutes == 0 && hours > 0) {
+                                hours -= 1;
+                                minutes = 59;
+                                seconds = 59;
+
+                            }
+
+                            else if (seconds < 0 && minutes > 0 && hours == 0) {
+                                hours = 0;
+                                minutes -= 1;
+                                seconds = 59;
+                            }
+
+                            if(hours > 0 && hours < 10 && ((hours+'').length != 2)) hours = '0' + hours;
+
+                            if ((minutes < 10) && ((minutes+'').length < 2)) minutes = '0' + minutes;
+
+                            if (seconds < 10 && length.seconds != 2) seconds = '0' + seconds;
+
+                            if(hours > 0){hoursN = hours + ':';}else{hoursN = '';}
+                            clock.html(hoursN + minutes + ':' + seconds);
+
+                            var currentTact = clock.text();
+
+                            var remaining_mins = parseFloat(minutes);
+                            var remaining_secs = parseFloat(seconds);
+                            currsecs = (remaining_mins + (remaining_secs / 60)) * 60 ;
+
+                            var progressbarValue = 100 - ((currsecs / tacttime) * 100);
+                            bar.css('width', (progressbarValue) + "%");
+                            if(progressbarValue > 95){
+                                $.getJSON('/Manifest/getCurrentTactData', function (data) {
+                                    if(data != null){
+                                        clock.html(("0"+data.minutes).slice(-2) +":"+ ("0"+data.seconds).slice(-2));
+                                        bar.css('width', (data.currentProgress) + "%");
+                                    }
+                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                    // Ajax fail callback function.
+                                   // alert('Something went wrong in calculating TAKT !'+ textStatus +' ');
+                                });
+                            }
+
+                        }else{
+                            //timeisUp();
+                            $.getJSON('/Manifest/getCurrentTactData', function (data) {
+                                if(data != null){
+                                    clock.html(("0"+data.minutes).slice(-2) +":"+ ("0"+data.seconds).slice(-2));
+                                    bar.css('width', (data.currentProgress) + "%");
+                                }
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+                                // Ajax fail callback function.
+                               // alert('Something went wrong in calculating TAKT !'+ textStatus +' ');
+                            });
+                        }
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    console.log(textStatus);
+                });
+            }, 5000);
+
+            @*$clock.countdown(startTact(), function (event) {
+
+            // $(this).html(event.strftime('%D days %H:%M:%S'));
+            $(this).html(event.strftime('%M:%S'));
+            currsecs = (parseFloat(event.strftime('%M')) + (parseFloat(event.strftime('%S')) / 60)) * 60 * 1000;
+            //alert((100 - ((currsecs / tacttime) * 100)));
+            var progressbarValue = 100 - ((currsecs / tacttime) * 100);
+            bar.css('width', (progressbarValue) + "%");
+            //if(progressbarValue == 100){
+            //    $clock.countdown(startTact());
+            //}
+
+        }).on('update.countdown', function(event) {
+            var $clock = $('#tact-countdown');
+            $.getJSON('/Manifest/isLineStopByLine', { lineId: @userSession.lineId }, function (data) {
+                if(data){
+                    $clock.countdown('pause');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log(textStatus);
+            });
+        }).on('finish.countdown', function(event) {
+            var $clock = $('#tact-countdown');
+            $clock.countdown(startTact());
+        });*@
+
+        });
+    </script>
+    @Html.Partial("WithoutSideBar/_Footer")
+    <div class="loading_global_spinner_image" style="display:none;">
+        <img src="~/Content/images/gears.gif" />
+    </div>
+</body>
+</html>

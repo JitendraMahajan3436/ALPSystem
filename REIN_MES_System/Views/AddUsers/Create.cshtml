@@ -1,0 +1,432 @@
+﻿@model REIN_MES_System.Models.RS_Employee
+
+@{
+    ViewBag.Title = "Add User";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+<div class="col-md-12 manager_Line">
+    @*@using (Html.BeginForm())*@
+    @using (Html.BeginForm("Create", "AddUsers", FormMethod.Post, new { id = "add_User",enctype="multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Employee_Name, "Employee Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Employee_Name, htmlAttributes: new { @class = "form-control", maxlength = 50 })
+                        @Html.ValidationMessageFor(model => model.Employee_Name, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Employee_No, "Employee Number", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.TextBoxFor(model => model.Employee_No, htmlAttributes: new { @class = "form-control", maxlength = 10 })
+                        @Html.ValidationMessageFor(model => model.Employee_No, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Gender, "Gender", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Gender, new SelectList(new List<object> { new { value = "", text = "Select Gender" }, new { value = "False", text = "Female" }, new { value = "True", text = "Male" } }, "value", "text", 2), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Email_Address, "Email Address", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Email_Address, htmlAttributes: new { @class = "form-control", maxlength = 90 })
+                        @Html.ValidationMessageFor(model => model.Email_Address, null, new { @class = "validation_error" })
+                        <span class="emailvalidation validation_error"></span>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Country_Code, "Country Code", htmlAttributes: new { @class = "" })
+                        @Html.DropDownListFor(model => model.Country_Code, new SelectList(new List<object> { new { value = "1", text = "91" }, new { value = "2", text = "1 011" }, new { value = "3", text = "238 00" }, new { value = "4", text = "1 011" }, new { value = "5", text = "236 00" } }, "value", "text", 0), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Country_Code, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Contact_No, "Mobile Number", htmlAttributes: new { @class = "" })
+
+                        @Html.TextBoxFor(model => model.Contact_No, htmlAttributes: new { @class = "form-control", maxlength = 10 })
+                        @Html.ValidationMessageFor(model => model.Contact_No, null, new { @class = "validation_error " })
+
+                    </div>
+                </div>
+                <br />
+                <div class=" row">
+                    @*<div class="col-md-4 manager_Line">
+                        @Html.LabelFor(model => model.Month, "Birth Month", htmlAttributes: new { @class = "" })
+                        @Html.DropDownListFor(model => model.Month, new SelectList(new List<object> { new { value = "0", text = "Select Month" }, new { value = "01", text = "JAN" }, new { value = "02", text = "FEB" }, new { value = "03", text = "MAR" }, new { value = "04", text = "APRIL" }, new { value = "05", text = "MAY" }, new { value = "06", text = "JUNE" }, new { value = "07", text = "JULY" }, new { value = "08", text = "AUG" }, new { value = "09", text = "SEP" }, new { value = "10", text = "OCT" }, new { value = "11", text = "NOV" }, new { value = "12", text = "DEC" } }, "value", "text", 0), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Month, null, new { @class = "validation_error" })
+                    </div>*@
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.DOB, "Birth Date", htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.DOB, null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DOB, null, new { @class = "validation_error" })
+                    </div>
+                    @*<div class="col-md-4">
+                        @Html.LabelFor(model => model.Age, "Age", htmlAttributes: new { @class = "" })
+                        @Html.TextBoxFor(model => model.Age, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Age, null, new { @class = "validation_error" })
+                    </div>*@
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Category_ID, "Category", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownList("Category_Id", null, "Select Category", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Category_ID, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Image_Content, "Photo", htmlAttributes: new { @class = "control-label" })
+                        <input type="file" id="Avatar" name="upload" />
+                        @Html.ValidationMessageFor(model => model.Image_Content, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br/>
+                <div class="row manager_Line">
+                    <div class="col-md-4">
+                        @*@Html.LabelFor(model => model.Plant_ID, "Plant Name *")
+                        @Html.DropDownListFor(model => model.Plant_ID, (IEnumerable<SelectListItem>)ViewBag.PlantName, htmlAttributes: new { @class = "form-control", multiple = "true" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error plantvalidation" })*@
+                        @Html.LabelFor(model => model.Plants_ID, "Plant Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownList("Plants_ID", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plants_ID, null, new { @class = "validation_error plantvalidation" })
+                    </div>
+                    <div class="col-md-4 ShopName">
+                        @Html.LabelFor(model => model.Shops_ID, "Shop Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownList("Shops_ID", null, "Select Shop", htmlAttributes: new { @class = "form-control", multiple = "true" })
+                        @Html.ValidationMessageFor(model => model.Shops_ID, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-4 LineName">
+                        @Html.LabelFor(model => model.Lines_ID, "Line Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownList("Lines_ID", null, "Select Line", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lines_ID, null, new { @class = "validation_error" })
+                        @*<span class="linevalidation validation_error"></span>*@
+                    </div>
+                    
+
+                </div>
+                <br/>
+            @*<div class="row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Join_Date, "Join Date", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Join_Date, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Join_Date, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Seperation_Date, "Seperation Date", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Seperation_Date, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Seperation_Date, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Actual_Seperation_Date, "Actual Seperation Date", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Actual_Seperation_Date, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Actual_Seperation_Date, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />*@
+        @*<div class=" row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Experiance, "Experience *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Experiance, null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Experiance, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Additional_Skills, "Additional Skills", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Additional_Skills, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Additional_Skills, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Qualification, "Qualification *", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Qualification, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Qualification, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />*@
+        @*<div class=" row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Trade, "Trade *", htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Trade, (IEnumerable<SelectListItem>)ViewBag.Trade_ID, "--Select Trade--", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Trade, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Locker_Number, "Locker Number", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Locker_Number, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Locker_Number, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Bus_Route, "Bus Route", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Bus_Route, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Bus_Route, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />*@
+                @*<div class="row">
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Org_Unit, "Org Unit", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Org_Unit, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Org_Unit, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.BWT_ID, "BWT *", htmlAttributes: new { @class = "" })
+                @Html.DropDownList("BWT_ID", null, "Select Line", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BWT_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4 ">
+                @Html.LabelFor(model => model.Stage_Allocation_ID, "Stage Allocation *", htmlAttributes: new { @class = "" })
+                @Html.DropDownList("Stage_Allocation_ID", null, "Select Stage Allocation", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Stage_Allocation_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />*@
+      
+                <div class="clearefix"></div>
+                <div class="">
+                    <div class="">
+
+                        <input type="submit" value="Save" class="btn btn-primary" id="btnSubmit" />
+                        @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+    @section Scripts {
+
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/AddUserManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+
+    }
+    @section Styles {
+        @Styles.Render("~/Content/Select2styles")
+    }
+</div>
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        //add_User
+        $("#Plants_ID").select2({
+            placeholder: 'Select Plant',
+            allowClear: true,
+            multiple: 'multiple',
+            tags: true,
+            tokenSeparators: [',', ';']
+        });
+
+        $("#add_User").validate({
+            ignore: [],
+            rules: {
+                Employee_Name: "required",
+                Employee_No: "required",
+                Gender: "required",
+                Category_Id: "required",
+                //Join_Date: "required",
+               // Seperation_Date: "required",
+                //Experiance: "required",
+                Qualification: "required",
+                Trade: "required",
+                //Org_Unit: "required",
+                BWT: "required",
+                Stage_Allocation: "required",
+                Shift: "required",
+                Dexterity_level: "required",
+                //upload: "required",
+                Plants_ID:"required",
+                Plant_ID:"required",
+                Email_Address: {
+                    required: function (element) {
+                        return $("#Category_Id").val() != 1 && $("#Category_Id").val() != "";
+                    }
+                }
+                ,
+                Contact_No: {
+                    required: function (element) {
+                        return $("#Category_Id").val() != 1 && $("#Category_Id").val() != "";
+                    }
+                },
+                Shops_ID: {
+                    required: function (element) {
+                        return $("#Category_Id").val() == 2 || $("#Category_Id").val() == 3;
+                    }
+                },
+                Lines_ID: {
+                    required: function (element) {
+                        return $("#Category_Id").val() == 2;
+                    }
+                },
+                Plants_ID: {
+                    required: function (element) {
+                        return $("#Category_Id").val() == 6;
+                    }
+                }
+            }
+        });
+
+
+        //End Validation
+        $("#Trade").select2({
+            tags: true
+        });
+
+        //$("#DOB").change(function () {
+        //    var date = $("#DOB").val();
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/AddUsers/GetAge",
+        //        data: '{date: "' + $("#DOB").val() + '" }',
+        //        contentType: "application/json; charset=utf-8",
+        //        dataType: "json",
+        //        success: function (response) {
+        //            if (response)
+        //                document.getElementById("Age").value = response.Age;
+        //            else
+        //                document.getElementById("Age").value = "";
+        //        }
+        //    });
+        //});
+
+        $("#Join_Date").change(function () {
+            var date = $("#Join_Date").val();
+            $.ajax({
+                type: "POST",
+                url: "/AddUsers/GetExperience",
+                data: '{date: "' + $("#Join_Date").val() + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response)
+                        document.getElementById("Experiance").value = response.Experiance;
+                    else
+                        document.getElementById("Experiance").value = "";
+                }
+            });
+        });
+
+        $("#BWT_ID").change(function (e) {
+
+            var lineId = $("#BWT_ID").val();
+            if (lineId) {
+
+                var url = "/AddUsers/GetStageByBWTID";
+                ajaxpack.getAjaxRequest(url, "lineId=" + $("#BWT_ID").val() + "", showLineStationID, "json");
+            }
+            else {
+                clearSelectBox("Stage_Allocation_ID");
+            }
+
+        });
+
+        function showLineStationID() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    SelectOptionHTML(jsonRes, "Stage_Allocation_ID");
+                }
+            }
+        }
+
+        function SelectOptionHTML(jsonRes, targetId) {
+            //var jsonRes = $.parseJSON(myajax.responseText);        
+            var res = "";
+            for (var i = 0; i < jsonRes.length; i++) {
+                res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+            }
+
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+            $("#" + targetId).html(res);
+        }
+
+        function clearSelectBox(targetId) {
+            var res = "";
+            res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+
+            $("#" + targetId).html(res);
+        }
+
+        //$("#Month").change(function (e) {
+        //    $("#Date option[value=30]").show();
+        //    $("#Date option[value=31]").show();
+        //    //$("#Date option[value=0]").show();
+        //    //$('select option[value="0"]').attr("selected", true);
+        //    $('#Date').val(0)
+        //    var month = $("#Month").val();
+        //    if (month == '02') {
+        //        $("#Date option[value=30]").hide();
+        //        $("#Date option[value=31]").hide();
+        //    }
+        //        //else if (month == '01' || month == '03' || month == '05' || month == '07' || month == '08' || month == '10' || month == '12')
+        //        //{
+
+        //        //}
+        //    else if (month == '04' || month == '06' || month == '09' || month == '11') {
+        //        $("#Date option[value=31]").hide();
+        //    }
+        //});
+
+
+        $("form").submit(function (e) {
+            //e.preventDefault();
+        });
+
+        //$('#btnSubmit').click(function () {
+        //    if ($('#Category_Id').val() == "7" || $('#Category_Id').val() == "6") {
+        //        //if ($('#Plants_ID').val().length > 0) {
+        //        //}
+        //        //else {
+        //        //    $('.plantvalidation').html('Please select plant');
+        //        //}
+        //        var email = $('#Email_Address').val().length;
+        //        if (email > 0) { }
+        //        else {
+        //            $('.emailvalidation').html('Please enter email address');
+        //        }
+
+        //        if ($('#Contact_No').val().length > 0) { }
+        //        else {
+        //            $('.mobilevalidation').html('Please enter contact number');
+        //        }
+        //    }
+        //})
+
+        //$('#Plants_ID').change(function () {
+        //    if ($('#Plants_ID').val().length > 0) {
+        //        $('.plantvalidation').html('');
+        //    }
+        //})
+        //$("#Join_Date").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy',
+        //        endDate: new Date()
+        //    });
+        //$("#Seperation_Date").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy'
+        //    });
+        //$("#Actual_Seperation_Date").datepicker(
+        //    {
+        //        format: 'dd/mm/yyyy'
+        //    });
+        $("#DOB").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                endDate: new Date()
+            });
+    });
+
+
+
+</script>

@@ -1,0 +1,144 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+@{
+    ViewBag.Title = "PaintShop_Summary";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+            <div class="row">
+
+                @*<div class="col-sm-3">
+                        @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })  *
+
+                        @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                    </div>*@
+
+                <div class="col-sm-3">
+                    @Html.LabelFor(model => model.From_Date, "From Date", htmlAttributes: new { @class = "" })  *
+
+                    @Html.TextBoxFor(model => model.From_Date, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.From_Date, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-sm-3">
+                    @Html.LabelFor(model => model.To_Date, "To Date", htmlAttributes: new { @class = "" })  *
+
+                    @Html.TextBoxFor(model => model.To_Date, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.To_Date, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-sm-3">
+                    <br />
+                    <input id="PaintShop_Summary" type="button" onclick="return PaintShop_Summary();" value="Generate Report" class="btn btn-primary" /> @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                </div>
+
+            </div>
+            <br />
+
+            <div class=" row">
+
+
+
+            </div>
+
+        </div>
+        <br />
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-sm-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame" id="ContentFrame" width="100%" height="800px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+</script>
+
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        $("#From_Date").datepicker(
+            {
+                format: 'yyyy-mm-dd',
+                endDate: '+0d',
+                autoclose: true
+            });
+        $("#To_Date").datepicker(
+            {
+                format: 'yyyy-mm-dd',
+                endDate: '+0d',
+                autoclose: true
+            }
+       );
+        $("#siderbarmenu").click();
+        getDateD();
+
+        $('#From_Date').on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+        $('#To_Date').on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+    });
+
+    function getDateD() {
+        var d = new Date();
+        var today = d.getDate();
+        var yestrday = today - 1;
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        $("#From_Date").datepicker("setDate", new Date(year, month, yestrday));
+        $("#To_Date").datepicker("setDate", new Date(year, month, yestrday));
+    }
+
+</script>

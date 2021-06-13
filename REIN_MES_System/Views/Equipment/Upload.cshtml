@@ -1,0 +1,91 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+    ViewBag.Title = "Upload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Html.BeginForm("Upload", "Equipment", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("Excel Upload *")
+                <input type="file" name="files" class="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    }
+</div>
+<div class="col-md-12">
+    <br />
+    <div class="col-md-12">
+        <div class="clearfix"></div>
+        @{
+            REIN_MES_System.Models.MachinePartRecords[] machineRecordsObj = (REIN_MES_System.Models.MachinePartRecords[])ViewBag.machinePartRecords;
+
+            if (ViewBag.machinePartRecords != null)
+            {
+                <table class="table table-bordered table-striped datatable_completes">
+                    <thead>
+                        <tr>
+                            <th>Machine Name</th>
+                            <th>Machine Number</th>
+                            <th>Machine Part</th>
+                            <th>Error/Success</th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in (IEnumerable<REIN_MES_System.Models.MachinePartRecords>)ViewBag.machinePartRecords)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.machineName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.machineNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => item.machinePart)</td>
+                            <td>@Html.DisplayFor(modelItem => item.MachineListError)</td>
+                        </tr>
+                    }
+                </table>
+            }
+        }
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/Content/theme/plugins/datatables/js")
+@Styles.Render("~/Content/theme/plugins/datatables/css")
+@Scripts.Render("~/Scripts/user_datatable")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    <script>
+
+
+        $(document).ready(function () {
+            $("#Machine_ID").on("change", function () {
+                $("#Machine_Name").html("");
+                // $("#Line_ID").html("");
+                var Plant_ID = $('#Machine_ID').val();
+                if (Plant_ID.length > 0) {
+                    //alert(Plant_ID);
+                    $.getJSON('/Equipment/GetMachineNameByMachineID', { machineid: Plant_ID }, function (data) {
+                        //alert(data);
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                $('#Machine_Name').val(data[i].Machine_Name);
+                            }
+
+                        }
+
+                    });
+                }
+            });
+        });
+    </script>
+}

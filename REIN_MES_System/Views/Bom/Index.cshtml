@@ -1,0 +1,73 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_BOM_Item>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+
+}
+
+<br />
+<p class="position_absolute">
+    <a href="@Url.Action("BomUploadData", "Bom")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> Upload Excel </a>
+    <a href="@Url.Action("Create", "Bom")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i>Create </a>
+
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("FG Model Code")
+                </th>
+                @*<th>
+                        @Html.DisplayName("FG Model Desc")
+                    </th>*@
+                <th>
+                    @Html.DisplayName("Child Part Number")
+                </th>
+                <th>
+                    @Html.DisplayName("Child Part Desc")
+                </th>
+                <th>
+                    @Html.DisplayName("BOM Version")
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model_Code)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Model_Desc)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Part_No)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Part_Description)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bom_Version)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Bom", new { id = item.Row_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                    <a href="@Url.Action("Details", "Bom", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                    <a href="@Url.Action("Delete", "Bom", new { id = item.Row_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

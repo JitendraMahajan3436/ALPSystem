@@ -1,0 +1,110 @@
+﻿@model REIN_MES_System.Models.RS_OM_OrderRelease
+
+<script type="text/javascript">
+    var form = $("#create-modal-body").closest("form");
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse($("form"));
+</script>
+
+@using (Ajax.BeginForm("SequenceEdit", "OrderCreation", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "create-modal-body", InsertionMode = InsertionMode.Replace }, new { autocomplete = "off" }))
+  {
+   
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true)
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.Label("Order No", htmlAttributes: new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Plant_OrderNo, new { onchange = "", @class = "form-control", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.Plant_OrderNo)
+                        </div>
+
+                        <div class="col-md-5">
+                            @Html.Label("Part No", htmlAttributes: new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Model_Code, new { onchange = "", @class = "form-control", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.Model_Code)
+                        </div>
+
+                        <div class="col-md-4" style="display:none">
+                            @Html.Label("Colour", htmlAttributes: new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Model_Color, new { onchange = "", @class = "form-control", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.Model_Color)
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.Label("Order Type", htmlAttributes: new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Order_Type, new { onchange = "", @class = "form-control popup_order_type", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.Order_Type)
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            @Html.Label("Series", htmlAttributes: new { @class = "" })
+
+                            @Html.TextBoxFor(model => model.Series_Code, new { onchange = "", @class = "form-control", disabled = "true" })
+
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.Label("Release Qty", htmlAttributes: new { @class = "" })
+                            @Html.TextBox("Rel_qty",null ,new { onchange = "", @class = "form-control", disabled = "true" })
+
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.Label("Quantity", htmlAttributes: new { @class = "" })
+
+                            <input type="text" id="Quantity" name="Quantity" class="form-control" />
+                            @Html.ValidationMessageFor(model => model.Remarks, "", new { @id = "errorQuantity" })
+                        </div>
+
+                        <div class="col-md-4" style="display:none">
+                            @Html.Label("Country", htmlAttributes: new { @class = "" })
+
+                            @*@@Html.DropDownList("Country", Enumerable.Empty<SelectListItem>(), ResourceOrder_Release.Plant_Label_Country_Select, new { onchange = "", @class = "form-control" })*@*
+                            @Html.TextBoxFor(model => model.Country_ID, new { onchange = "", @class = "form-control", disabled = "true" })
+                            @Html.ValidationMessageFor(model => model.Country_ID)
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4" style="display:none">
+                            @Html.Label("Priority", htmlAttributes: new { @class = "" })
+
+                            @Html.EditorFor(model => model.Priority, null, null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Priority, "", new { @id = "errorPriority" })
+                        </div>
+
+                        <div class="col-md-8">
+                            @Html.Label("Remarks", htmlAttributes: new { @class = "" })
+
+                            <input type="text" id="Remarks" name="Remarks" class="form-control" />
+                            @*@Html.EditorFor(model => model.Remarks, null, null, new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.Remarks, "", new { @id = "errorRemarks" })
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="">
+                        @using (Ajax.BeginForm("ShowOrderReadyToRelease", "OMOrderRelease", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "show_release_orders", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "release_image", enctype = "multipart/form-data" }))
+                                        {
+                            <input type="hidden" name="hdnQuantity" id="hdnQuantity" />
+                            <input type="hidden" name="hdnRemark" id="hdnRemark" />
+                            <input type="hidden" name="hdnPriority" id="hdnPriority" />
+                            <input type="hidden" name="hdnTotalQuantity" id="hdnTotalQuantity" />
+                            <input type="hidden" name="hdnRowId" id="hdnRowId" />
+                            <input type="button" id="show_order_ready_to_release" class="btn btn-primary" data-dismiss="modal" value="Release Order" />
+                            <button type="submit" id="releseID" class="btn btn-primary show_order_quantity" style="display:none;">Release Order</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+
+                                        }
+                    </div>
+                </div>
+  }

@@ -1,0 +1,58 @@
+﻿@model REIN_MES_System.Models.RS_Manifest
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Manifest Details</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part_No)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Part_No)
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part_Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Part_Description)
+        </dt>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image_Name)
+        </dt>
+        <dd>
+            <img src="~/Content/images/@Url.Content(Model.Image_Name)" alt="ManifestImage" />
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", null, new {@class="btn btn-sm btn-primary", id = Model.Manifest_ID }) 
+    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-sm btn-primary"})
+</p>

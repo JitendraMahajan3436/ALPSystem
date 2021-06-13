@@ -1,0 +1,44 @@
+﻿@model REIN_MES_System.Models.RS_Traceability
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row"> 
+                @Html.Hidden("Plant_ID")
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <input type="checkbox" id="IsLineMode" checked="checked" name="CheckboxGroup" class="CheckboxGroup" />
+                    @Html.Label("Line Mode", new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsLineMode)
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    <input type="checkbox" id="IsReworkMode" name="CheckboxGroup" class="CheckboxGroup" />
+                    @Html.Label("Rework Mode", new { @class = "" })
+                    @Html.ValidationMessageFor(model => model.IsReworkMode)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.ScanValue,"Scan Value", new { @class = "" }) *
+                    @Html.TextBoxFor(model => model.ScanValue, htmlAttributes: new { @class = "form-control text-uppercase", @maxlength = "2" })
+                    @Html.ValidationMessageFor(model => model.ScanValue, null, new { @class = "validation_error" })
+                </div>
+            </div>
+        </div>
+    }
+
+  
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</div>

@@ -1,0 +1,529 @@
+﻿@{
+    ViewBag.Title = "ManifestScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+<div class="row shopForm-wrapper" id="">
+    <div class="form-horizontal">
+        <div class="row error-proofing-container">
+            @if (ViewBag.EFGeneologyParts != null)
+            {
+                int i = 0;
+                foreach (var obj in @ViewBag.EFGeneologyParts)
+                {
+                    i++;
+                    <div id="block_@obj.Part_No" class="col-md-4">
+                        <label class="control-label col-md-5">@obj.Part_No.ToString()</label>
+                        <div class="col-md-7">
+                            <input type="text" name="@obj.Part_No" data-partno="@obj.Part_No" data-currid="@i" maxlength="19" class="form-control scanpart ef-part" />
+                            <div class="manual-ok-box"><input type="button" class="manual-ok-part btn btn-warning btn-flat" value="Manual Ok" data-partno="@obj.Part_No" /></div>
+                        </div>
+                    </div>
+                }
+                foreach (var obj in @ViewBag.EFpartGroups)
+                {
+                    for (int k = 0; k < obj.Qty; k++)
+                    {
+                        i++;
+                        <div id="block_@obj.Partgroup_ID" class="col-md-4">
+                            <label class="control-label col-md-5">@obj.Partgrup_Desc.ToString()</label>
+                            <div class="col-md-7">
+                                <input type="text" name="@obj.Partgroup_ID" data-partgroup="@obj.Partgroup_ID" data-currid="@i" id="@obj.Partgroup_ID@i" maxlength="19" class="form-control scan-nopart ef-part" />
+                                <div class="manual-ok-box"><input type="button" class="manual-ok-partgroup btn btn-warning btn-flat" value="Manual Ok" data-partgroup="@obj.Partgroup_ID" /></div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="row"><h4 class="text-center blinker" id="shop-common-notifier"><span></span></h4></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-12 text-center manifest-images" id="imageDiv">
+            @if (ViewBag.PartsImage != null)
+            {
+                int i = 0;
+                foreach (var item in ViewBag.PartsImage)
+                {
+                    if (item.Is_ParentModel_Manifest == true)
+                    {
+                        <div class="col-md-12">
+                            <h5>@item.Part_No</h5>
+                            <div class="">
+                                <img class="mainpart_zoom_img" src="/Content/images/@item.Image_Name" data-zoom-image="/Content/images/@item.Image_Name" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        i++;
+                        if (i % 3 == 0)
+                        {
+                            <div class="col-md-4">
+                                <h5>@item.Part_No</h5>
+                                <div class="center-image-wrapper">
+                                    <img class="third_zoom_img" src="/Content/images/@item.Image_Name" data-zoom-image="/Content/images/@item.Image_Name" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4">
+                                <h5>@item.Part_No</h5>
+                                <div class="center-image-wrapper">
+                                    <img class="zoom_img" src="/Content/images/@item.Image_Name" data-zoom-image="/Content/images/@item.Image_Name" />
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/Zooming")
+    <script type="text/javascript">
+        var serialChanged;
+        function refreshContent() {
+
+            var srno = $("input[name='MainSerialNo']").val();
+
+            $('#shop-floor-content').load('/Manifest/refreshManifest', { SerialNo: srno }, function (response, status, xhr) {
+                if (status == "success") {
+                    $("#shop-floor-content .mainpart_zoom_img").elevateZoom({
+                        //zoomType: "lens",
+                        //lensShape: "round",
+                        zoomType: "inner",
+                        lensSize: 250,
+                        //scrollZoom: true,
+                        easing: true,
+                        //zoomWindowWidth: 300,
+                        //zoomWindowHeight: 300
+
+                    });
+
+                    $("#shop-floor-content .zoom_img").elevateZoom({
+                        // zoomType : "lens",
+                        // lensShape : "round",
+                        // zoomType : "inner",
+                        // lensSize : 250,
+                        // easing : true,
+                        scrollZoom: true,
+                        easing: true,
+                        zoomWindowWidth: 300,
+                        zoomWindowHeight: 300
+                    });
+                    $("#shop-floor-content .third_zoom_img").elevateZoom({
+                        // zoomType : "lens",
+                        // lensShape : "round",
+                        // zoomType : "inner",
+                        // lensSize : 250,
+                        // easing : true,
+                        scrollZoom: true,
+                        easing: true,
+                        zoomWindowWidth: 300,
+                        zoomWindowHeight: 300,
+                        zoomWindowPosition: 11
+                    });
+                    var nextEfPart = $("#shop-floor-content .ef-part").not(":input[readonly]").first();
+                    if (nextEfPart.length) {
+                        nextEfPart.focus().select();
+                    }
+                }
+            });
+
+
+
+            //$.ajax({
+            //    url: "/Manifest/Calendar",
+            //    type: "GET",
+            //    data: { year: ((val * 1) + 1) }
+            //})
+            //.done(function (partialViewResult) {
+            //    $("#shop-floor-content").html(partialViewResult);
+            // });
+        }
+
+        //function move() {
+        //    var bar = $(".current-progress");
+        //    var width = 0;
+        //    var id = setInterval(frame, 500);
+        //    function frame() {
+        //        if (width >= 100) {
+        //            clearInterval(id);
+        //        } else {
+        //            width += 0.1;
+        //            bar.css('width', width + "%");
+        //        }
+        //    }
+        //}
+        $(document).ready(function () {
+            // move();
+            window.setInterval(function () {
+                $.getJSON('/Manifest/showMESLineStopNotification', function (data) {
+                    if (data != null) {
+                        if ((data.reasonIdentifier).length > 0) {
+
+                            $("#shop-floor-content #shop-common-notifier span").html('<i class="fa fa-exclamation-triangle"></i> ' + data.reasonText);
+                            $("#shop-floor-content #shop-common-notifier").show();
+                            if (data.reasonIdentifier == "Serial Not Scanned") {
+                                $("input[name=srlno]").focus().select();
+                            }
+
+                        } else {
+                            $("#shop-floor-content #shop-common-notifier span").html("");
+                            $("#shop-floor-content #shop-common-notifier").hide();
+                        }
+                    }
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $("#shop-floor-content #shop-common-notifier span").text("");
+                    $("#shop-floor-content #shop-common-notifier").hide();
+                });
+            }, 5000);
+            $("#shop-floor-content .mainpart_zoom_img").elevateZoom({
+                //zoomType: "lens",
+                //lensShape: "round",
+                zoomType: "inner",
+                //lensSize: 250,
+                //scrollZoom: true,
+                easing: true,
+                //zoomWindowWidth: 300,
+                //zoomWindowHeight: 300
+            });
+            $("#shop-floor-content .zoom_img").elevateZoom({
+                // zoomType : "lens",
+                // lensShape : "round",
+                // zoomType : "inner",
+                // lensSize : 250,
+                // easing : true,
+                scrollZoom: true,
+                responsive: true,
+                easing: true,
+                zoomWindowWidth: 300,
+                zoomWindowHeight: 300
+            });
+            $("#shop-floor-content .third_zoom_img").elevateZoom({
+                // zoomType : "lens",
+                //zoomType: "inner",
+                //cursor: "crosshair",
+                // lensShape : "round",
+                // zoomType : "inner",
+                // lensSize : 250,
+                // easing : true,
+                scrollZoom: true,
+                easing: true,
+                responsive: true,
+                zoomWindowWidth: 300,
+                zoomWindowHeight: 300,
+                zoomWindowPosition: 11
+            });
+
+            $("input[name='srlno']").bind('keyup', function (e) {
+                var srno = $(this).val();
+                if (srno.length > 9) {
+                    //alert("yes");
+                    var code = e.keyCode || e.which;
+                    if (code == 13) { //Enter keycode
+                        $(".error-proofing-container").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                        $("#srlmessage-block").html("");
+                        $("#srlmessage-block").removeClass('bg-correct');
+                        $("#srlmessage-block").removeClass('bg-error');
+                        
+                        $(this).parent().removeClass('scanWrong');
+                        $(this).parent().removeClass('scanCorrect');
+                        $.post("/Manifest/InsertSerialNo", { SerialNo: srno }, function (data) {
+
+                            $("#srlmessage-block").html(data.message);
+                            if (data.status == false && data.message.length > 0) {
+                                $(this).parent().addClass('scanWrong');
+                                $("#srlmessage-block").addClass('bg-error');
+                                timeisUp();
+                                refreshContent();
+                                $("input[name='srlno']").focus().select();
+                            } else {
+                                $("input[name='MainSerialNo']").val(srno);
+                                $(this).parent().removeClass('scanWrong');
+                                $(this).parent().addClass('scanCorrect');
+
+                                $("#srlmessage-block").removeClass('bg-error');
+
+                                refreshContent();
+                                getShopDetails();
+
+                                $('img.zoomed').removeData('elevateZoom');//remove zoom instance from image
+                                $('.zoomWrapper img.zoomed').unwrap();
+                                $('.zoomContainer').remove();
+
+                                serialChanged = true;
+
+                                $("input[name='srlno']").focus().select();
+                                if ($("#shop-floor-content .ef-part").not(":input[readonly]").first().length) {
+                                    ("#shop-floor-content .ef-part").not(":input[readonly]").first().focus().select();
+                                }
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            // Ajax fail callback function.
+                            alert('Please Reload the Page !');
+                            $(".error-proofing-container").html('');
+                        });
+                    }
+                }
+            });
+            $('#shop-floor-content').on('keyup', '.scanpart', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) { //Enter keycode
+                    var serialno = $(this).val();
+                    // added Jitendra Mahajan
+                
+                    $('.ef-part[data-currid=' + 1 + ']').prop('disabled', false);
+                    $('.ef-part[data-currid=' + 2 + ']').prop('disabled', false);
+                    if (serialno.length > 5) {
+                        var partno = $(this).data("partno");
+                        var mcode = $("#shop-floor-content #modelCode").val();
+                        var mainsrlno = $("input[name='MainSerialNo']").val();
+                        var currentID = $(this).data("currid");
+                        currentID++;
+                        var inputObj = $('*[data-partno="' + partno + '"]');
+
+                        $.getJSON('/Manifest/isErrorProofingOK', { mainserialNo: mainsrlno, childSerialNo: serialno, partNumb: partno }, function (data) {
+                            // Ajax success callback function.
+                            //alert(data);
+                            $(this).prop('readonly', true);
+                            if (data == "true") {
+                                inputObj.parent().addClass("EfCorrectPart");
+                                inputObj.parent().removeClass("EfWrongPart");
+                                inputObj.prop('readonly', true);
+
+                                var nextEfPart = $("#shop-floor-content .ef-part").not(":input[readonly]").first();
+                                //$("#block_" + partno).css('background', 'green');
+                                //if ($('*[data-currid="' + currentID + '"]').length) {
+                                //    $('*[data-currid="' + currentID + '"]').focus().select();
+                                //}
+                                //else
+                                if (nextEfPart.length) {
+                                    nextEfPart.focus().select();
+                                }
+                                else {
+                                    $("#srlmessage-block").html("Error Proofing Successfull for " + $("input[name='MainSerialNo']").val().toUpperCase() + " !");
+                                    //timeisUp();
+                                    $("#srlmessage-block").addClass('bg-correct');
+                                    timeisUp();
+                                    $("input[name='srlno']").focus();
+                                }
+                            } else {
+
+                                $(this).prop('readonly', false);
+                                inputObj.parent().addClass("EfWrongPart");
+                                inputObj.parent().removeClass("EfCorrectPart");
+                                inputObj.focus().select();
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            // Ajax fail callback function.
+                            alert('Please Reload the Page !');
+                        });
+                    }
+                }
+            });
+            $('#shop-floor-content').on('keyup', '.scan-nopart', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) { //Enter keycode
+                    var serialno = $(this).val();
+
+                    if (serialno.length > 5) {
+                        var partgroupid = $(this).data("partgroup");
+                        var mcode = $("#shop-floor-content #modelCode").val();
+                        var mainsrlno = $("input[name='MainSerialNo']").val();
+                        var currentID = $(this).data("currid");
+                        var inputObj = $(this);
+                        currentID++;
+
+                        // process to check if both serial numbers are scannned
+                        var is_all_part_scanned = true;
+                        $(".ef-part").each(function (e) {
+                            var scanned_value = $(this).val().trim();
+                            if (scanned_value == "" || scanned_value == null) {
+                                is_all_part_scanned = false;
+
+                            }
+                        });
+
+                        if (is_all_part_scanned == false) {
+                            //alert("please scan both part....");
+                            $("input:text.ef-part:empty").focus();
+                            return;
+                        } else {
+
+                            // process to check if tyre error proofing is OK or NOT
+                            var serialNo1 = $('.ef-part[data-currid=' + 1 + ']').val();
+                            var serialNo2 = $('.ef-part[data-currid=' + 2 + ']').val();
+                            if (serialNo1.trim()== serialNo2.trim()) {
+                                $(".ef-part:text").each(function (e) {
+                                    $(this).parent().addClass("EfWrongPart");
+                                    $(this).parent().removeClass("EfCorrectPart");
+                                });
+                                return;
+                            }
+                            else {
+                                $(".ef-part").each(function (e) {
+                                    $(this).parent().removeClass("EfWrongPart");
+                                });
+
+                            }
+                            //inputObj.parent().removeClass("EfCorrectPart");
+                            //inputObj.parent().removeClass("EfWrongPart");
+
+                            $.getJSON('/Manifest/TyreErrorProofing', { mainserialNo: mainsrlno, childSerialNo1: serialNo1, childSerialNo2: serialNo2, partgroupID: partgroupid }, function (data) {
+                                // Ajax success callback function.
+                                if (data.status == true) {
+                                    alert("inside");
+                                    // call with first child serial number
+                                    isErrorProofingOKNoPart(mainsrlno, serialNo1, partgroupid);
+
+                                    setTimeout(function () {
+                                        isErrorProofingOKNoPart(mainsrlno, serialNo2, partgroupid);
+                                    }, 500);
+                                    // show success message
+                                    $(".ef-part:text").each(function (e) {
+                                        $(this).parent().removeClass("EfWrongPart");
+                                        $(this).parent().addClass("EfCorrectPart");
+                                        $(this).prop('disabled', true);
+                                    });
+                                    $("#srlmessage-block").html("Error Proofing done for this serial no :" + $("input[name='srlno']").val());
+                                   
+                                } else {
+                                    alert("in else");
+                                    $(".ef-part:text").each(function (e) {
+                                        $(this).parent().removeClass("EfCorrectPart");
+                                        $(this).parent().addClass("EfWrongPart");
+                                        $(this).prop('disabled', false);
+                                    });
+
+                                    $("#srlmessage-block").html("Error Proofing ERROR for this serial no :" + $("input[name='srlno']").val());
+                                  
+                                }
+                            });
+
+                        }
+
+
+                    }
+                }
+            });
+
+            function isErrorProofingOKNoPart(mainsrlno, serialno, partgroupid) {
+
+                //var inputObj = $(this);
+                $.getJSON('/Manifest/isErrorProofingOKNoPartNo', { mainserialNo: mainsrlno, childSerialNo: serialno, partgroupID: partgroupid }, function (data) {
+                    // Ajax success callback function.
+                    alert(data);
+                    //$(this).prop('readonly', true);
+                    if (data == "true") {
+                        inputObj.parent().addClass("EfCorrectPart");
+                        inputObj.parent().removeClass("EfWrongPart");
+
+
+                        $("#srlmessage-block").html("Error Proofing Successfull for " + $("input[name='MainSerialNo']").val().toUpperCase() + " !");
+                        //timeisUp();
+                        $("#srlmessage-block").addClass('bg-correct');
+                        timeisUp();
+                        $("input[name='srlno']").focus();
+
+
+                    } else {
+                        $(this).prop('readonly', false);
+                        inputObj.parent().addClass("EfWrongPart");
+                        inputObj.parent().removeClass("EfCorrectPart");
+                        inputObj.focus().select();
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Please Reload the Page !');
+                });
+
+            }
+
+            $('#shop-floor-content').on('click', '.manual-ok-part', function (e) {
+
+                var partno = $(this).data("partno");
+                var mcode = $("#shop-floor-content #modelCode").val();
+                var mainsrlno = $("input[name='MainSerialNo']").val();
+                var inputObj = $('*[data-partno="' + partno + '"]');
+
+                $.getJSON('/Manifest/manualErrorProofingOKForPart', { mainserialNo: mainsrlno, childSerialNo: "MANUAL OK", partNumb: partno }, function (data) {
+                    // Ajax success callback function.
+                    //alert(data);
+                    $(this).prop('readonly', true);
+                    if (data == "true") {
+                        inputObj.parent().addClass("EfCorrectPart");
+                        inputObj.parent().removeClass("EfWrongPart");
+                        inputObj.prop('readonly', true);
+                        var nextEfPart = $("#shop-floor-content .ef-part").not(":input[readonly]").first();
+                        //$("#block_" + partno).css('background', 'green');
+                        if (nextEfPart.length) {
+                            nextEfPart.focus().select();
+                        } else {
+                            $("#srlmessage-block").html("Manual Error Proofing Successfull for PartNumber : " + partno + "!");
+                            //timeisUp();
+                            $("#srlmessage-block").addClass('bg-correct');
+                            timeisUp();
+                            $("input[name='srlno']").focus();
+                        }
+                    } else {
+
+                        //$(this).prop('readonly', false);
+                        //inputObj.parent().addClass("EfWrongPart");
+                        //inputObj.parent().removeClass("EfCorrectPart");
+                        //inputObj.focus().select();
+                        alert('Some Exception occurred .Please Retry!');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Please Reload the Page !');
+                });
+            });
+            $('#shop-floor-content').on('keyup', '.manual-ok-partgroup', function (e) {
+                var partgroupid = $(this).data("partgroup");
+                var mcode = $("#shop-floor-content #modelCode").val();
+                var mainsrlno = $("input[name='MainSerialNo']").val();
+                var inputObj = $('*[data-partno="' + partno + '"]');
+
+                $.getJSON('/Manifest/manualErrorProofingOKForPartGroup', { mainserialNo: mainsrlno, childSerialNo: "MANUAL OK", partgroupID: partgroupid }, function (data) {
+                    // Ajax success callback function.
+                    //alert(data);
+                    $(this).prop('readonly', true);
+                    if (data == "true") {
+                        inputObj.parent().addClass("EfCorrectPart");
+                        inputObj.parent().removeClass("EfWrongPart");
+                        inputObj.prop('readonly', true);
+                        var nextEfPart = $("#shop-floor-content .ef-part").not(":input[readonly]").first();
+                        //$("#block_" + partno).css('background', 'green');
+                        if (nextEfPart.length) {
+                            nextEfPart.focus().select();
+                        } else {
+                            $("#srlmessage-block").html("Manual Error Proofing Successfull for PartNumber : " + partno + "!");
+                            //timeisUp();
+                            $("#srlmessage-block").addClass('bg-correct');
+                            timeisUp();
+                            $("input[name='srlno']").focus();
+                        }
+                    } else {
+
+                        //$(this).prop('readonly', false);
+                        //inputObj.parent().addClass("EfWrongPart");
+                        //inputObj.parent().removeClass("EfCorrectPart");
+                        //inputObj.focus().select();
+                        alert('Some Exception occurred .Please Retry!');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Please Reload the Page !');
+                });
+            });
+            //refreshContent();
+        });
+    </script>
+}

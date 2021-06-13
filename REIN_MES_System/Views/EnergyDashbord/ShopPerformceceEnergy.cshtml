@@ -1,0 +1,167 @@
+﻿
+
+
+<table>
+
+</table>
+@*<table class="table table-bordered table-striped table-condensed datatable_completes" id="PerformanceIndices" style="max-width:100%">
+    <thead>
+        <tr>
+            <th>
+                Areas
+            </th>
+            <th>(Kwh)
+            </th>
+            <th>
+                Production               
+            </th>
+            <th>
+                Specific cons.
+                (Kwh/veh)
+            </th>
+            <th>
+                BOB 
+               (Kwh/veh)
+            </th>
+            <th>
+                Average 
+               (Kwh/veh)
+            </th>
+            <th>
+                Efficiency
+            </th>
+
+        </tr>
+    </thead>
+
+    
+        @if (ViewData["Performance_Indices"] as IList<EnergyManagementMD.Models.Performance_Indices> != null)
+        {
+            foreach (var item in ViewData["Performance_Indices"] as IList<EnergyManagementMD.Models.Performance_Indices>)
+            {
+                <tr>
+                    <td >
+                       @item.Shopname
+                        <button data-target="#feederwiseHistory" data-toggle="modal"  class="boxshadow" onclick="realtime(@item.ShopId)"* value="@item.Shopname">@item.Shopname</button>
+                    </td>
+                    <td>@item.TotalConsumtion</td>
+                    <td>@item.Production</td>
+                    <td>@item.ConsumptionperEngine</td>
+                    <td>@item.BestConsumption</td>
+                    <td>@item.AvgConsumption</td>
+                    <td>@item.Efficiency<b> %</b></td>
+                </tr>
+            }
+        }
+
+    
+   
+</table>*@
+
+
+<script>
+        var plantdata1 = JSON.parse('@Html.Raw(Json.Encode(ViewData["Plantwise_Data1"]))');
+        var Shopdata1 = JSON.parse('@Html.Raw(Json.Encode(ViewData["Performance_Shopwise1"]))');
+        var Targetdata1 = JSON.parse('@Html.Raw(Json.Encode(ViewData["Target"]))');
+        
+
+        Date1 = new Array();
+        plantkwh = new Array();
+        daywiseData = new Array();
+        Shop = new Array();
+        Shopkwh = new Array();
+        speeficedata = new Array();
+        kwhdata = new Array();
+        target = new Array();
+
+        $.each(plantdata1, function (index, item) {
+
+
+            m = item.DateandTime;
+            d1 = m.replace("/Date(", " ");
+            d2 = d1.replace(")/", " ");
+            d2 = d1.replace("", " ")
+            d3 = d2.trim();
+            d4 = parseInt(d3);
+
+            var d = new Date(d4);
+            //var plantdate = d.toLocaleDateString();
+
+            var plantdate = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+
+            //alert(d.toLocaleDateString())
+            Date1.push(plantdate);
+            daywiseData.push(item.Consumption);
+            plantkwh.push(item.TotalConsumption)
+        })
+
+        ShowPlantChart(daywiseData, Date1, plantkwh);
+
+          $.each(Targetdata1, function (index, item) {
+            target.push(item);
+        })
+
+         $.each(Shopdata1, function (index, item) {
+            kwhdata.push(item.TotalConsumtion);
+            Shop.push(item.Shopname);
+            speeficedata.push(item.ConsumptionperEngine);
+
+        })
+        ShowCellGraph(speeficedata, target, Shop)
+        ShowCraph(kwhdata, Shop)
+
+
+
+    
+        @*var Areawise1 = JSON.parse('@Html.Raw(Json.Encode(ViewData["Area_Wise1"]))');
+        var Busniesswise1= JSON.parse('@Html.Raw(Json.Encode(ViewData["Business_Wise1"]))');
+        var Processwise1 = JSON.parse('@Html.Raw(Json.Encode(ViewData["Processwise_Data1"]))');
+        // Business
+        busines_data = new Array();
+        busines = new Array();
+        $.each(Busniesswise1, function (index, item) {
+
+            busines.push(item.Business_Name);
+            busines_data.push(item.Consumption);
+        })
+
+        // Process wise
+        process_data = new Array();
+        Pro_Name = new Array();
+        $.each(Processwise1, function (index, item) {
+
+            Pro_Name.push(item.ShopsCategory_Name);
+            process_data.push(item.totalconsumption);
+        })
+
+     
+        BusniesswiseChart(busines_data, busines)
+        ProcesswiseChart(process_data, Pro_Name)
+
+
+        // Area wise
+        ddl = new Array();
+        for (var i = 0; i < Areawise1[0].length; i++) {
+            debugger;
+            ddl.push(Areawis1e[0][i].date);
+        }
+
+        var titleName = "";
+        var YAxistext = ""
+        ShowAreachart(ddl, titleName, YAxistext);
+        for (var j = 0; j < Areawise1.length; j++) {
+            debugger;
+            TotalConsumtion = new Array();
+            var Area = Areawise[j][0].AreaName;
+
+            //feeder = "KWH/Vehicle";
+
+            for (var i = 0; i < Areawise1[j].length; i++) {
+                debugger;
+                TotalConsumtion.push(Areawise1[j][i].TotalConsumtion);
+
+            }
+            ShowAreachartData(TotalConsumtion, Area);
+        }*@
+  
+</script>

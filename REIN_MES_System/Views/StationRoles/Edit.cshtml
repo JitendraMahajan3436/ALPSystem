@@ -1,0 +1,146 @@
+﻿@model REIN_MES_System.Models.RS_Station_Roles
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="form-group col-md-7">
+                            @Html.LabelFor(model => model.Station_ID, "Station Name", new { @class = "control-label" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Station_ID, null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Station_ID)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-7">
+                            @Html.LabelFor(model => model.Roles, "Role Name", new { @class = "control-label" })<i style="color:red">*</i>
+                            @Html.DropDownListFor(model => model.Roles, null, new { @class = "form-control", multiple = "true" })
+                            @Html.ValidationMessageFor(model => model.Roles)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <input type="submit" value="Edit" id="uploadUserRole" class="btn btn-primary" />
+                            @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" id="role-menu-lists">
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#User_ID").select2({
+                placeholder: 'Select Employee',
+                allowClear: true,
+            });
+
+            $("#Roles").select2({
+                allowClear: true,
+                placeholder: 'Assign Roles',
+                multiple: 'multiple',
+                tokenSeparators: [',', ' ', ';']
+            });
+
+            $('#User_ID').change(function () {
+                var stationid = $(this).val();
+                $('#Roles option').remove();
+                $('#role-menu-lists').html("");
+                if (stationid.length > 0) {
+                    $.getJSON('/StationRoles/fillRolesDropDown', { stationID: stationid }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+
+                        $('#Roles').append('<option value=""></option>');
+                        for (i = 0; i < data.length; i++) {
+                            $('#Roles').append('<option value="' +
+                            data[i].Role_ID + '">' + data[i].Role_Name + '</option>');
+                        }
+                        $("#Roles").select2({
+                            allowClear: true,
+                            placeholder: 'Assign Roles',
+                            multiple: 'multiple'
+                        });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Roles!');
+                    });
+                }
+            });
+
+            $('#Roles').change(function () {
+                var roleid = $(this).val();
+                $('#role-menu-lists').html("");
+                if (roleid.length > 0) {
+                    $.getJSON('/StationRoles/showRoleMenuList', $.param({ roleID: roleid }, true), function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        var roleName = '';
+                        var html = '';
+                        html += '<ul class="sidebar-menu">';
+                        $.each(data, function (idx, DataObj) {
+                            html += '<li class="treeview">';
+                            $.each(DataObj, function (idx, resultDataObj) {
+
+                                if (roleName.length == 0 || resultDataObj.Role_Name != roleName) {
+                                    roleName = resultDataObj.Role_Name;
+                                    //$('#role-menu-lists').append("<h3 class='dark-bg'>" + roleName + "</h3>");
+
+                                    html += '<a class="showrolemenu" href="#"><i class="fa fa-pie-chart"></i>' +
+                                                   '<span>' + roleName + '</span>' +
+                                                   '<i class="fa fa-angle-right pull-right"></i>' +
+                                             '</a>' +
+                                             '<ul class="treeview-menu">';
+                                } else {
+                                    //$('#role-menu-lists').append("<div class='bg-gray'><i class='fa fa-circle-o'></i> " + resultDataObj.Menu_Name + "</div>");
+                                    html += '<li><a href="#"><i class="fa fa-circle-o"></i> ' + resultDataObj.Menu_Name + '</a></li>';
+                                }
+                            });
+                            html += '</ul></li>';
+                        });
+                        html += '</ul>';
+
+                        $('#role-menu-lists').html(html);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Roles!');
+                    });
+                }
+            });
+
+        });
+    </script>
+}
+@section Styles {
+    <link href="~/Content/theme/RoleMgt.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}

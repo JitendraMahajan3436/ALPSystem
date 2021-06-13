@@ -1,0 +1,206 @@
+﻿@model REIN_MES_System.Models.RS_Assign_SupervisorToManager
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<style>
+    #testy {
+        z-index: 99999;
+    }
+</style>
+
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            @*<div class=" col-md-3 manager_Line">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+
+                        @Html.DropDownList("Plant_ID", null, "-Select Plant-", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                </div>*@
+            <div class="row">
+
+                <div class="col-sm-3">
+
+                    @Html.LabelFor(model => model.Type, "Relationship Assignment", htmlAttributes: new { @class = "" })
+                    @Html.DropDownListFor(model => model.Type, new SelectList(new List<object> { new { value = "0", text = "Officer to manager" }, new { value = "1", text = "Cell member to officer" } }, "value", "text", 2), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type, null, new { @class = "validation_error" })
+
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownList("Shop_ID", null, "Select Shop", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error shop" })
+
+
+                </div>
+
+                <div class="col-sm-3">
+
+                    @Html.LabelFor(model => model.Manager_ID, "Manager Name", htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownList("Manager_ID", null, "Select Manager", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Manager_ID, null, new { @class = "validation_error manager" })
+
+
+                </div>
+                <div id="testy"></div>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.AssignedSupervisor_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.AssignedSupervisor_ID)
+                            @Html.ValidationMessageFor(model => model.AssignedSupervisor_ID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Is_Deleted, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Is_Deleted)
+                            @Html.ValidationMessageFor(model => model.Is_Deleted)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Is_Transfered, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Is_Transfered)
+                            @Html.ValidationMessageFor(model => model.Is_Transfered)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Is_Purgeable, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Is_Purgeable)
+                            @Html.ValidationMessageFor(model => model.Is_Purgeable)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Inserted_User_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Inserted_User_ID)
+                            @Html.ValidationMessageFor(model => model.Inserted_User_ID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Inserted_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Inserted_Date)
+                            @Html.ValidationMessageFor(model => model.Inserted_Date)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Updated_User_ID, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Updated_User_ID)
+                            @Html.ValidationMessageFor(model => model.Updated_User_ID)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Updated_Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Updated_Date)
+                            @Html.ValidationMessageFor(model => model.Updated_Date)
+                        </div>
+                    </div>*@
+            </div>
+            <br /><br />
+
+            <div class=" row">
+                <div class=" col-sm-5">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <label class="" for="divListofSupervisor">Officer List</label>
+                            <div id="divListofSupervisor" style="height: 400px; overflow: auto;border: 1px solid #cccccc; padding: 10px;">
+                            </div>
+                            <label class="" for="divselectedOperators">Search:</label>
+                            @Html.TextBoxFor(model => model.AssignedSupervisor_ID, htmlAttributes: new { @class = "form-control" })
+                            @*@Html.LabelFor(model => model.AssignedSupervisor_ID, "Officer List", htmlAttributes: new { @class = "" })
+                                @Html.DropDownList("ListofSupervisor", Enumerable.Empty<SelectListItem>(), String.Empty, new { multiple = "multiple", @class = "form-control", @style = "min-height: 400px" })
+                                @Html.ValidationMessageFor(model => model.AssignedSupervisor_ID, null, new { @class = "validation_error" })*@
+
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-sm-2">
+                    <div class="box box-primary">
+                        <form role="form">
+                            <div class="box-body" style="text-align: center;">
+                                <br /><br /><br /><br /><br /><br />
+                                <div class="btn-group-vertical">
+                                    <button class="swapbtn btn btn-info" type="button" onclick="swapItemLeftAll();" style="font-size: 20px;font-weight: bold;">>></button><br />
+                                    <button class="swapbtn btn btn-info" type="button" onclick="swapItemLeft();" style="font-size: 20px;font-weight: bold;">></button><br />
+                                    <button class="swapbtn btn btn-info" type="button" onclick="swapItemRight();" style="font-size: 20px;font-weight: bold;"><</button><br />
+                                    @*<button class="btn btn-info" type="button" onclick="swapValue('ListofSupervisor', 'selectedSupervisors', '>');" style="font-size: 20px;font-weight: bold;">></button><br />
+                                        <button class="btn btn-info" type="button" onclick="swapValue('selectedSupervisors', 'ListofSupervisor', '>');" style="font-size: 20px;font-weight: bold;"><</button><br />*@
+                                    <button class="swapbtn btn btn-info" type="button" onclick="swapItemRightAll();" style="font-size: 20px;font-weight: bold;"><<</button>
+                                </div>
+                                <br /><br /><br /><br /><br />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class=" col-sm-5 ">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <label class="" for="divselectedSupervisors">Assigned Officer List</label>
+                            <div id="divselectedSupervisors" style="height: 400px; overflow: auto;border: 1px solid #cccccc; padding: 10px;">
+                            </div>
+                            <label class="" for="divselectedOperators">Search:</label>
+                            @Html.TextBoxFor(model => model.selectedSupervisors, htmlAttributes: new { @class = "form-control" })
+                            @*@Html.LabelFor(model => model.AssignedSupervisor_ID, "Assigned Officer List", htmlAttributes: new { @class = "" })
+                                @Html.DropDownList("selectedSupervisors", Enumerable.Empty<SelectListItem>(), String.Empty, new { multiple = "multiple", @class = "form-control", @style = "min-height: 400px" })
+                                @Html.ValidationMessageFor(model => model.AssignedSupervisor_ID, null, new { @class = "validation_error" })*@
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="button" value="Save" onclick="save();" class="btn btn-primary select_manager" /> @*@Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })*@
+                </div>
+            </div>
+        </div>
+    }
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/SupervisorToManagerManagement_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css");
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+}

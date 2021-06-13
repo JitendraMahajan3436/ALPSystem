@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="contact" xml:space="preserve">
+    <value>please Enter contact details</value>
+  </data>
+  <data name="Correct" xml:space="preserve">
+    <value>Please Correct </value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Please Enter Date</value>
+  </data>
+  <data name="Discription" xml:space="preserve">
+    <value>Please Enter Discription</value>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Please Enter Email Address</value>
+  </data>
+  <data name="Exist" xml:space="preserve">
+    <value>This Value Allready Exist.Please try with diffrent one</value>
+  </data>
+  <data name="File_Extension" xml:space="preserve">
+    <value>This File extension not valid</value>
+  </data>
+  <data name="Invalid_IP" xml:space="preserve">
+    <value>Invalid IP Address</value>
+  </data>
+  <data name="maximum" xml:space="preserve">
+    <value>Maximum value not valid</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value> Minimum value not valid</value>
+  </data>
+  <data name="Not_Valid" xml:space="preserve">
+    <value>This Field is Not Valid</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Please Enter only numeric value </value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Please Enter Reason</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>This Field Is Required</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>Please Enter Only characters</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Please enter correct time</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Please Upload Exce</value>
+  </data>
+  <data name="Valid" xml:space="preserve">
+    <value>This Field is not valid</value>
+  </data>
+  <data name="Error_In" xml:space="preserve">
+    <value>Error In</value>
+  </data>
+  <data name="Qty_Is_Greater" xml:space="preserve">
+    <value>Release Quantity greter than Actual Quantity</value>
+  </data>
+  <data name="Shift_Break_Time_Error" xml:space="preserve">
+    <value>Shift break time must between shift start and end time</value>
+  </data>
+  <data name="Shift_Lunch_Time_Error" xml:space="preserve">
+    <value>Shift lunch time must between shift start and end time</value>
+  </data>
+  <data name="Shift_Shop_Time_Error" xml:space="preserve">
+    <value>Shift is already added in this timing for this shop. Please try other timing.</value>
+  </data>
+  <data name="Can_Not_Delete_Order" xml:space="preserve">
+    <value>You cannot delete order, as order may started in shop</value>
+  </data>
+  <data name="Equipment_Error_Cycle_Limit" xml:space="preserve">
+    <value>Cycle should in the range of 0 to 365 days</value>
+  </data>
+  <data name="Error_TACT_Time" xml:space="preserve">
+    <value>Time Format Should be in HH:MM:SS</value>
+  </data>
+  <data name="Manifest_DBUpdate_Exception" xml:space="preserve">
+    <value>DbUpdateException Occurred while Creating Manifest</value>
+  </data>
+  <data name="Barcode_String" xml:space="preserve">
+    <value>Barcode Number Already in Use</value>
+  </data>
+  <data name="Duplicate_PartNo" xml:space="preserve">
+    <value>Part Number is Already Exist in other area in same shop</value>
+  </data>
+  <data name="Invalid_Capacity" xml:space="preserve">
+    <value>Warning Capacity should not be greter than Capacity</value>
+  </data>
+  <data name="Invalid_Column_Size" xml:space="preserve">
+    <value>Rack Column Size is too big.</value>
+  </data>
+  <data name="Invalid_Row_Size" xml:space="preserve">
+    <value>Rack Row Size is too big.</value>
+  </data>
+  <data name="Rack_Area_length" xml:space="preserve">
+    <value>Rack Area Name should not be greter than 200 Character.</value>
+  </data>
+  <data name="InvalidDate" xml:space="preserve">
+    <value>Date is invalid</value>
+  </data>
+  <data name="Spare_Order_Valid" xml:space="preserve">
+    <value>This Model Code Is Configured as Spare Order Type.</value>
+  </data>
+  <data name="Style_Code_Required" xml:space="preserve">
+    <value>Style Code is not configured against this model.</value>
+  </data>
+  <data name="Rework_Line_InValid" xml:space="preserve">
+    <value>Line is Invalid for type Offline (Rework)</value>
+  </data>
+  <data name="Can_Not_Delete_Hold_Order" xml:space="preserve">
+    <value>Order Not Deleted : Some Orders On Hold</value>
+  </data>
+  <data name="Shift_Break2_Time_Error" xml:space="preserve">
+    <value>Shift break time can not overlap with another break time</value>
+  </data>
+  <data name="Shift_Invalid_Time_Error" xml:space="preserve">
+    <value>End Time can not less than Start Time</value>
+  </data>
+  <data name="Shift_Lunch_Time_Overlap_Error" xml:space="preserve">
+    <value>Break time can not overlap lunch time</value>
+  </data>
+  <data name="Max_Length" xml:space="preserve">
+    <value>Maximum Length Exceeded.</value>
+  </data>
+  <data name="Alphabetic" xml:space="preserve">
+    <value>Only characters allowed</value>
+  </data>
+  <data name="AlphaNumeric" xml:space="preserve">
+    <value>Enter Only Alphanumeric Characters.</value>
+  </data>
+  <data name="Barcode_String1" xml:space="preserve">
+    <value>Barcode Number Already in Use</value>
+  </data>
+  <data name="Calibration_Frequency_Tool_Life" xml:space="preserve">
+    <value>Calibration frequency can not greater than tool life</value>
+  </data>
+  <data name="Can_Not_Delete_Order1" xml:space="preserve">
+    <value>You cannot delete order, as order may started in shop</value>
+  </data>
+  <data name="Chk_Date" xml:space="preserve">
+    <value>Please Check date you selected</value>
+  </data>
+  <data name="Chk_Last_date" xml:space="preserve">
+    <value>last date should not less tha start date</value>
+  </data>
+  <data name="contact1" xml:space="preserve">
+    <value>please Enter contact details</value>
+  </data>
+  <data name="Correct1" xml:space="preserve">
+    <value>Please Correct </value>
+  </data>
+  <data name="Date1" xml:space="preserve">
+    <value>Please Enter Date</value>
+  </data>
+  <data name="Date_diff" xml:space="preserve">
+    <value>Please Check date you selected</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Discription1" xml:space="preserve">
+    <value>Please Enter Discription</value>
+  </data>
+  <data name="Duplicate_PartNo1" xml:space="preserve">
+    <value>Part Number is Already Exist in other area in same shop</value>
+  </data>
+  <data name="EmailAddress1" xml:space="preserve">
+    <value>Please Enter Email Address</value>
+  </data>
+  <data name="Equipment_Error_Cycle_Limit1" xml:space="preserve">
+    <value>Cycle should in the range of 0 to 365 days</value>
+  </data>
+  <data name="Error_In1" xml:space="preserve">
+    <value>Error In</value>
+  </data>
+  <data name="Error_TACT_Time1" xml:space="preserve">
+    <value>Time Format Should be in HH:MM:SS</value>
+  </data>
+  <data name="Exist1" xml:space="preserve">
+    <value>This Value Already Exist.Please try with diffrent one</value>
+  </data>
+  <data name="File_Extension1" xml:space="preserve">
+    <value>This File extension not valid</value>
+  </data>
+  <data name="Invalid_Capacity1" xml:space="preserve">
+    <value>Warning Capacity should not be greter than Capacity</value>
+  </data>
+  <data name="Invalid_Column_Size1" xml:space="preserve">
+    <value>Rack Column Size is too big.</value>
+  </data>
+  <data name="Invalid_Email" xml:space="preserve">
+    <value>Please enter valid email</value>
+  </data>
+  <data name="Invalid_IP1" xml:space="preserve">
+    <value>Invalid IP Address</value>
+  </data>
+  <data name="Invalid_Row_Size1" xml:space="preserve">
+    <value>Rack Row Size is too big.</value>
+  </data>
+  <data name="Issue_Current_Inventory" xml:space="preserve">
+    <value>Issue can not be greater than Current Inventory</value>
+  </data>
+  <data name="Life_To_Reduce_Tool_Life" xml:space="preserve">
+    <value>Life to reduce can not greater than tool life</value>
+  </data>
+  <data name="LimitDiffrence" xml:space="preserve">
+    <value>Check Upper and lower Limit</value>
+  </data>
+  <data name="Lower_Limit" xml:space="preserve">
+    <value>Enter Lower Limit</value>
+  </data>
+  <data name="Manifest_DBUpdate_Exception1" xml:space="preserve">
+    <value>DbUpdateException Occurred while Creating Manifest</value>
+  </data>
+  <data name="maximum1" xml:space="preserve">
+    <value>Maximum value not valid</value>
+  </data>
+  <data name="Minimum1" xml:space="preserve">
+    <value> Minimum value not valid</value>
+  </data>
+  <data name="Min_Length" xml:space="preserve">
+    <value>Minium Length Exceeded.</value>
+  </data>
+  <data name="Not_Valid1" xml:space="preserve">
+    <value>This Field is Not Valid</value>
+  </data>
+  <data name="Number1" xml:space="preserve">
+    <value>Please Enter only numeric value </value>
+  </data>
+  <data name="Numeric" xml:space="preserve">
+    <value>Please Enter Numeric Value</value>
+  </data>
+  <data name="Qty_Is_Greater1" xml:space="preserve">
+    <value>Release Quantity greter than Actual Quantity</value>
+  </data>
+  <data name="Rack_Area_length1" xml:space="preserve">
+    <value>Rack Area Name should not be greter than 200 Character.</value>
+  </data>
+  <data name="Reason1" xml:space="preserve">
+    <value>Please Enter Reason</value>
+  </data>
+  <data name="Receive_Frm_rework" xml:space="preserve">
+    <value>Receive from rework can not greater than send for rework</value>
+  </data>
+  <data name="Receive_From_Rework_Current_Inventory" xml:space="preserve">
+    <value>Receive from rework can not be greater than current inventory</value>
+  </data>
+  <data name="Receive_From_Rework_Send_For_Rework" xml:space="preserve">
+    <value>Receive from rework can not be greater than send for rework</value>
+  </data>
+  <data name="Required1" xml:space="preserve">
+    <value>This Field Is Required</value>
+  </data>
+  <data name="Scrap_Current_Inventory" xml:space="preserve">
+    <value>Scrap can not be greater than current  inventory</value>
+  </data>
+  <data name="Scrap_Send_For_Rework" xml:space="preserve">
+    <value>Scrap can not be greater than send for rework</value>
+  </data>
+  <data name="Send_For_Rework_Current_Inventory" xml:space="preserve">
+    <value>Send for rework can not be greater than current inventory</value>
+  </data>
+  <data name="Shift_Break_Overlap" xml:space="preserve">
+    <value>Shift Break Overlap</value>
+  </data>
+  <data name="Shift_Break_Time_Error1" xml:space="preserve">
+    <value>Shift break time must between shift start and end time</value>
+  </data>
+  <data name="Shift_Lunch_Time_Error1" xml:space="preserve">
+    <value>Shift lunch time must between shift start and end time</value>
+  </data>
+  <data name="Shift_Shop_Time_Error1" xml:space="preserve">
+    <value>Shift is already added in this timing for this shop. Please try other timing.</value>
+  </data>
+  <data name="Short_Series" xml:space="preserve">
+    <value>Series length must be be between 1 to 6</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Please Enter Only characters</value>
+  </data>
+  <data name="Time1" xml:space="preserve">
+    <value>Please enter correct time</value>
+  </data>
+  <data name="Tool_Warning_Life_Tool_Life" xml:space="preserve">
+    <value>Tool warning life can not greater than tool life</value>
+  </data>
+  <data name="Upload1" xml:space="preserve">
+    <value>Please Upload Exce</value>
+  </data>
+  <data name="Upper_Limit" xml:space="preserve">
+    <value>Enter Upper Limit</value>
+  </data>
+  <data name="Valid1" xml:space="preserve">
+    <value>This Field is not valid</value>
+  </data>
+  <data name="Error_Cycle_Limit" xml:space="preserve">
+    <value>Cycle should in the range of 1 to 12 months</value>
+  </data>
+</root>

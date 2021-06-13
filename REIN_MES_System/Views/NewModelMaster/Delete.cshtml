@@ -1,0 +1,198 @@
+﻿@model REIN_MES_System.Models.RS_Model_Master
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<h2>Delete</h2>*@
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    @*<h4>RS_Model_Master</h4>*@
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Model_Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model_Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VIN_Code)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VIN_Code)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Auto_Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Auto_Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayName("Platform Name")
+        </dt>
+        <dd>
+
+               @{var platformName = (Convert.ToString(ViewBag.PlatformName));}
+            @platformName
+
+        </dd>
+        <dd>
+            @*@Html.YesNo(Convert.ToBoolean(model.Color_Code))*@
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Model_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Model_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OMconfig_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OMconfig_ID)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_Size_Front)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_Size_Front)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tyre_Make_Size_Rear)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tyre_Make_Size_Rear)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Is_Domestic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Domestic)
+        </dd>*@
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters.Attribute_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters1.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters1.Attribute_Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Attribution_Parameters2.Attribute_Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Attribution_Parameters2.Attribute_Type)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Colour.Colour_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Colour.Colour_Desc)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Platform.Platform_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Platform.Platform_Description)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Serial_Number_Configuration.Display_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Serial_Number_Configuration.Display_Name)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Series.Series_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Series.Series_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Series1.Series_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Series1.Series_Description)
+        </dd>*@
+
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> 
+            @Html.ActionLink("Show All", "Index", null, new { @class ="btn  btn-primary"})
+        </div>
+    }
+</div>

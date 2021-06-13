@@ -1,0 +1,145 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Clita>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Clita")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    @*<a href="@Url.Action("Upload", "Clita")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>*@
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-condensed datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("Shop Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Line Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Station Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Machine Name")
+                </th>
+                <th>
+                    @Html.DisplayName("CLITA Item")
+                </th>
+                <th>
+                    @Html.DisplayName("Classification")
+                </th>
+                <th>
+                    @Html.DisplayName("Standards")
+                </th>
+
+                <th>
+                    @Html.DisplayName("Method")
+                </th>
+                <th>
+                    @Html.DisplayName("Frequency")
+                </th>
+                <th>
+                    @Html.DisplayName("Expected Duration")
+                </th>
+
+                @*<th>
+                        @Html.DisplayName("Start Date")
+                    </th>*@
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MTTUW_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MTTUW_Lines.Line_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MTTUW_Stations.Station_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MT_MTTUW_Machines.Machine_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Clita_Item)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Clita_Classification.Classification)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Clita_Standard.Standard)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Clita_Method.Method)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cycle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Maintenance_Time_TACT)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Clita", new { id = item.Clita_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action("Details", "Clita", new { id = item.Clita_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action("Delete", "Clita", new { id = item.Clita_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.datatable_completes tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.datatable_completes').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

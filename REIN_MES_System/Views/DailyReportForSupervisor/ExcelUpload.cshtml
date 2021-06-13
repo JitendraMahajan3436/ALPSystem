@@ -1,0 +1,200 @@
+﻿@model REIN_MES_System.Models.ExcelStationAllocation
+@using REIN_MES_System.Models;
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "ExcelUpload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-6 ">
+    @using (Ajax.BeginForm("ExcelUpload", "DailyReportForSupervisor", new AjaxOptions
+    {//GetPatients is name of method in PatientController
+        InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+
+        UpdateTargetId = "QualityChecklist",
+        LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
+    }, new { @class = "", id = "upload_bom_form", enctype = "multipart/form-data" }))
+    {
+            <div class="form-group" style="display:none;">
+                @Html.LabelFor(model => model.Plant_ID, ResourceDisplayName.Plant_Name, new { @class = "" }) *
+                @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Plant_Name, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group route_configuration">
+                @Html.LabelFor(model => model.Shop_ID, "Shop", new { @class = "" }) *
+                @Html.DropDownList("Shop_ID", null, "Shop", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Line_ID, ResourceDisplayName.Line_Name, htmlAttributes: new { @class = "" })*
+                @Html.DropDownListFor(model => model.Line_ID, null, ResourceDisplayName.select_Line, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Shift_ID, ResourceDisplayName.Shift_Name, htmlAttributes: new { @class = "" })*
+                @Html.DropDownListFor(model => model.Shift_ID, null, ResourceDisplayName.Select_Shift, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Shift_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.From_Date, ResourceDisplayName.From_Date, htmlAttributes: new { @class = "" })*
+                @Html.TextBoxFor(model => model.From_Date, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.From_Date, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.To_Date, ResourceDisplayName.To_Date, htmlAttributes: new { @class = "" })*
+                @Html.TextBoxFor(model => model.To_Date, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.To_Date, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="form-group">
+                @Html.AntiForgeryToken()
+                @Html.TextBoxFor(m => m.Excel_File, new { type = "file", @onchange = "checkfile(this);", @id = "file" })@*<input type="file" name="Excel_File" />*@
+                @Html.ValidationMessage("Excel_File", null, new { @class = "validation_error", @id = "excelReq" })
+                <span id="lblExcelmsg" style="color:red;"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+            </div>
+    }
+
+    <div id="QualityChecklist"></div>
+</div>
+
+<div class="clearfix"></div>
+@{
+    StationAllocationUploadRecords[] orderUploadRecords = (StationAllocationUploadRecords[])ViewBag.OrderUploadRecords;
+
+    if (ViewBag.OrderUploadRecords != null)
+    {
+        <table class="table table-bordered table-striped datatable_completes">
+            <thead>
+                <tr>
+                    <th>Station Name</th>
+                    <th>Operator Token Number</th>
+                    <th>Error/Success</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in (IEnumerable<REIN_MES_System.Models.StationAllocationUploadRecords>)ViewBag.OrderUploadRecords)
+            {
+                if (item != null) {
+                    if (!string.IsNullOrEmpty(item.StationName) && !string.IsNullOrEmpty(item.OperatorTokenNumber) && !string.IsNullOrEmpty(item.SS_Error_Sucess))
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.StationName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.OperatorTokenNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+    }
+}
+
+
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+   @Scripts.Render("~/bundles/route_configuration")
+    @*<script src="~/Scripts/DailyReport.js"></script>*@
+}<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#From_Date").datepicker(
+                        {
+                            format: 'yyyy/mm/dd',
+                            startDate: new Date(),
+                        });
+        $("#To_Date").datepicker(
+                        {
+                            format: 'yyyy/mm/dd',
+                            startDate: new Date(),
+                        });
+
+
+        $("#Shop_ID").change(function (e) {
+            clearSelectBox("Line_ID");
+            clearSelectBox("Shift_ID");
+            var shopId = $("#Shop_ID").val();
+            if (shopId.length > 0) {
+                var url = "/MannualData/GetLineByShopID";
+                ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showLineByShopID, "json");
+                setTimeout(function (e) {
+                    var url = "/MannualData/GetShiftByShopID";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + shopId, showShiftByShop, "json");
+                }, 2000);
+            }
+            else {
+                clearSelectBox("Line_ID");
+                clearSelectBox("Shift_ID");
+            }
+        });
+    });
+    function SelectOptionHTML(jsonRes, targetId) {
+        var res = "";
+        for (var i = 0; i < jsonRes.length; i++) {
+            res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+        }
+        res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+        $("#" + targetId).html(res);
+    }
+
+    function clearSelectBox(targetId) {
+        var res = "";
+        res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+        $("#" + targetId).html(res);
+    }
+    function showLineByShopID() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                SelectOptionHTML(jsonRes, "Line_ID");
+            }
+        }
+    }
+    function showShiftByShop() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                SelectOptionHTML(jsonRes, "Shift_ID");
+            }
+        }
+    }
+    function checkfile(sender) {
+        var validExts = new Array(".xlsx", ".xls");
+        var fileExt = sender.value;
+        fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+        if (validExts.indexOf(fileExt) < 0) {
+            //alert("Invalid file selected, valid files are of " +
+            //         validExts.toString() + " types.");
+            $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                     validExts.toString() + " types.");
+            $('#excelReq').hide();
+            $('#file').val('');
+            return false;
+        }
+        else {
+            $('#lblExcelmsg').html('');
+            return true;
+        }
+    }
+</script>
+

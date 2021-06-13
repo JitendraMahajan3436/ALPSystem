@@ -1,0 +1,46 @@
+﻿@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "FirstStationShopScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<h2 class="text-center">SOP Screen</h2>
+<div class="row">
+    @using (Ajax.BeginForm("InsertSerialNo", "SOP", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "imageDiv", InsertionMode = InsertionMode.Replace, OnSuccess = "OnSuccess", OnFailure = "OnFailure" }, new {id="serialnoForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                @Html.Label("SerialNo",ResourceDisplayName.Scan_Serial_No, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.TextBox("SerialNo", null, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="row">
+    <h4 class="bg-dark text-center">ShopName : @ViewBag.ShopName | StationName : @ViewBag.StationName</h4>
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-12" id="imageDiv">
+            @if (ViewBag.ImageName != null)
+            {
+                <img src="~/Content/images/@ViewBag.ImageName" />
+            }
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(document).ready(function () {
+        $("#serialnoSubmit").keypress(function (e) {
+            if (e.which == 13) {
+                $("#serialnoForm").submit();
+            }
+        });
+    });
+</script>
+}

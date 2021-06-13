@@ -1,0 +1,137 @@
+﻿@model REIN_MES_System.Models.RS_Vehicle_Series
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12 plant-line plant-stations">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div style="display:none;">
+                    @Html.LabelFor(model => model.Plant_ID, new { @class = "" })<i style="color:red">*</i>
+
+                    @Html.DropDownList("Plant_ID", null, ResourceDisplayName.Select_Plant, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Shop_ID,ResourceDisplayName.Shop_Name, new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownListFor(model => model.Shop_ID, null, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-4">
+                    @Html.Label("Vehicle Series", new { @class = "" })<i style="color:red">*</i>
+                    @*@Html.LabelFor(model => model.Attribute_Name, new { @class = "" }) **@
+                    @Html.DropDownListFor(model => model.Attribute_Name, null, "Select Vehicle Series", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Attribute_Name, null, new { @class = "validation_error" })
+
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.BOT, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.BOT, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BOT, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Blackout, new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Blackout, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Blackout, null, new { @class = "validation_error" })
+
+                </div>
+
+
+            </div>
+            <br />
+
+
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+
+                    <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        refreshFields();
+        $("#Shop_ID").on("change", function () {
+            var Shop = $("#Shop_ID").val();
+            $('#Attribute_Name').html("");
+            refreshFields();
+            if (Shop.length > 0) {
+
+                // Populate categories when the page is loaded.
+                $.getJSON('/VehicleSeriesConfig/GetVehicleSeriesByShopID', { shopId: Shop }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+                        $('#Attribute_Name option').remove();
+                        $('#Attribute_Name').append('<option value="">Select Vehicle Series</option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Attribute_Name').append('<option value="' + data[i].Attribute_ID + '">' + data[i].Attribute_Desc + '</option>');
+                        }
+                    } else {
+                        $('#Attribute_Name option').remove();
+                        $('#Attribute_Name').append('<option value="">Select Vehicle Series</option>');
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Vehicle Series Selection !');
+                });
+            }
+            else {
+                $('#Attribute_Name option').remove();
+                $('#Attribute_Name').append('<option value="">Select Vehicle Series</option>');
+            }
+        });
+        function refreshFields() {
+
+            $('#Attribute_Name option').remove();
+            $('#Attribute_Name').append('<option value="">Select Vehicle Series</option>')
+            $('#Attribute_Name').removeClass('input-validation-error');
+            $('#Attribute_Name').next().text('');
+
+            //$('#Style_Code option').remove();
+            //$('#Style_Code').append('<option value="">Select Style Code</option>');
+            //$('#Style_Code').removeClass('input-validation-error');
+            //$('#Style_Code').next().text('');
+
+        }
+
+    });
+</script>

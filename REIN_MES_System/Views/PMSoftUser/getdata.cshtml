@@ -1,0 +1,103 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_PM_Activity_Log>
+@using REIN_MES_System.App_LocalResources;
+<div class="box-header with-border">
+    <h3 class="box-title">Preventive Maintenance Soft User</h3>
+    <div class="box-tools pull-right">
+        @*<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>*@
+    </div><!-- /.box-tools -->
+</div><!-- /.box-header -->
+<div class="box-body table-responsive">
+    <table class="table table-condensed table-bordered">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_MT_Machines.Machine_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_PM_Activity.Activity_Name)
+                </th>
+                <th>
+                    @Html.DisplayName("Equipment Name")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                    </td>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_PM_Activity.Activity_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_PM_Activity.RS_PM_Equipment.Equipment_Name)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PM_Activity_Log_ID })
+                    </td>
+                    <td>
+                        
+                        <a href="" class="btn btn-primary" data-target="#PMCloseModal" data-toggle="modal">PMClose</a>
+
+                        <div class="modal fade" id="PMCloseModal" tabindex="-1" aria-hidden="true" style="display:none">
+                            <div class="modal-dialog" style="width:500px">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">PM Close</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label>Do you want to close this PM?</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button onclick="ClosePMModal(@item.PM_Activity_Log_ID)" class="btn btn-primary">Yes</button>
+                                        <button id="btnModalClose" class="btn btn-primary">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div><!-- /.box-body -->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnModalClose").click(function () {
+                $("#PMCloseModal").modal('hide');
+            });
+           
+
+        });
+    </script>
+
+
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}
+
+
+
+

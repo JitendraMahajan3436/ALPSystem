@@ -1,0 +1,80 @@
+﻿@model REIN_MES_System.Models.RS_Shops
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@*<link href="~/Content/switch.css" rel="stylesheet" />*@
+<div class="col-md-6">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Shop_ID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Shop_Name, new { @class = "" }) <i style="color:red">*</i>
+
+            @Html.TextBoxFor(model => model.Shop_Name, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+            @Html.ValidationMessageFor(model => model.Shop_Name, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="form-group">
+            @Html.Label("Shop Category", new { @class = "" })
+            @Html.DropDownListFor(model => model.Sub_Assembly_ID, null, ResourceDisplayName.Select_Shop_Category, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Sub_Assembly_ID, null, new { @class = "validation_error" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Shop_SAP, new { @class = "" })
+
+            @Html.TextBoxFor(model => model.Shop_SAP, htmlAttributes: new { @class = "form-control", @maxlength = "16" })
+            @Html.ValidationMessageFor(model => model.Shop_SAP, null, new { @class = "validation_error" })
+
+        </div>
+    
+        <div class="form-group">
+            @*<input id="someSwitchOptionSuccess" name="someSwitchOption001" type="checkbox" />
+            <label for="someSwitchOptionSuccess" class="label-success"></label>*@
+            @Html.CheckBoxFor(m => m.Is_Main, new { })
+            @Html.LabelFor(model => model.Is_Main, new { @class = "" })
+
+        </div>
+        <div class="form-group">
+            @Html.CheckBoxFor(m => m.Is_Parallel_Order, new { @class = "" })
+            @Html.LabelFor(model => model.Is_Parallel_Order, new { @class = "" })
+        </div>
+        <div class="form-group" style="display:none;">
+            @Html.LabelFor(model => model.Plant_ID, new { @class = "" }) *
+
+            @Html.DropDownList("Plant_ID", null, String.Empty, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+        </div>
+        <div class="form-group">
+            @Html.CheckBox("Energy")
+            @Html.LabelFor(model => model.Energy, new { @class = "" })
+        </div>
+
+        <div class="form-group">
+
+            <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+            @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
+        </div>
+    </div>
+    }
+
+    @*<div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>*@
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+</div>

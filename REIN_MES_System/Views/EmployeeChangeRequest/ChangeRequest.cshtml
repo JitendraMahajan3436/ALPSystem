@@ -1,0 +1,131 @@
+﻿@model REIN_MES_System.Models.RS_AM_Operator_Station_Allocation_History
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "ChangeRequest";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<style>
+    .demo {
+        max-height: 500px;
+        overflow: auto;
+    }
+
+    .messageflow_msg {
+        padding: .5em .5em .5em .5em;
+        height: 3em;
+        width: 300px !important;
+    }
+
+    #testy {
+        z-index: 99999;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal route_configuration">
+        <div class="box">
+            <div class="box-body">
+
+                <div id="testy"></div>
+
+                <div class="row">
+                    <div class="col-sm-4">                      
+                        @Html.HiddenFor(m => m.Row_ID, new { @id = "Row_ID" })
+                        @Html.HiddenFor(m => m.Shift_ID, new { @id = "Shift_ID" })
+                        @Html.HiddenFor(m => m.Employee_ID, new { @id = "Employee_ID" })
+                        @Html.HiddenFor(m => m.Allocation_Date, new { @id = "Allocation_Date" })
+                        @Html.LabelFor(model => model.Shop_ID, ResourceShop.Shop_Label_Shop_Select, new { @class = "" })
+                        @Html.DropDownList("Shop_ID", null, "Shop", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID)
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error oShopID" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.Line_ID, ResourceLine.Line_Label_Line_Select, new { @class = "" })
+                        @Html.DropDownList("Line_ID", null, ResourceLine.Line_Label_Name, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.LabelFor(model => model.Line_ID, "Select Station", new { @class = "" })
+                        @Html.DropDownList("Station_ID", null, "Select Station", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error olineID" })
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        @Html.Label("Select Shift", new { @class = "" })
+                        @Html.DropDownList("Shift", null, ResourceDisplayName.Shift, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-8">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4" style="margin-top:1%;">
+                        <input type="button" value="Change Shift" class="btn btn-primary" id="btnChange" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jquery_ui")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css");
+  
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnChange').click(function () {
+            var url = "/EmployeeChangeRequest/SaveChangeRequest";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + $('#Row_ID').val() + "&Shift_ID=" + $('#Shift_ID').val() + "&Shop_ID=" + $('#Shop_ID').val() + "&Line_ID=" + $('#Line_ID').val() + "&Station_ID=" + $('#Station_ID').val() + "&Shift=" + $('#Shift').val() + "&Employee_ID=" + $('#Employee_ID').val() + "&Allocation_Date=" + $('#Allocation_Date').val(), SaveChangeRequestDetails, "json");
+        });
+    })
+    function SaveChangeRequestDetails() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                var jsonRes = $.parseJSON(myajax.responseText);
+
+                if (jsonRes.msg == "Success") {
+
+                    $("#srlmessage-block").removeClass("bg-error");
+                    $("#srlmessage-block").addClass("bg-success");
+                    $("#srlmessage-block").html("Change request send successfully");                   
+                    setTimeout(function () {                     
+                        window.location.href = "/EmployeeChangeRequest/Index";
+                    }, 3000);                    
+                }
+                else if (jsonRes.msg == "Update") {
+                    $("#srlmessage-block").removeClass("bg-error");
+                    $("#srlmessage-block").addClass("bg-success");
+                    $("#srlmessage-block").html("Change request update successfully");
+                  
+                    setTimeout(function () {                      
+                        window.location.href = "/EmployeeChangeRequest/Index";
+                    }, 3000);
+
+                }
+                else if (jsonRes.msg == "ChangeShift") {
+                    $("#srlmessage-block").html("Current shift and changed shift both are same");
+                    $("#srlmessage-block").addClass("bg-error");
+                }
+                else {
+                    $("#srlmessage-block").html("Error.");
+                    $("#srlmessage-block").addClass("bg-error");
+
+                }
+            }
+        }
+    }
+</script>

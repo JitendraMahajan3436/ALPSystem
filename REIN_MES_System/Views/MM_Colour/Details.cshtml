@@ -1,0 +1,124 @@
+﻿@model REIN_MES_System.Models.RS_Colour
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Plant Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Color Code")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Color Description")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Color Batch")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colour_Batch)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Export Color")
+        </dt>
+
+        <dd>
+            @Html.DisplayTextFor(model => model.Export_Colour)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Active")
+        </dt>
+
+        <dd>
+            @Html.DisplayTextFor(model => model.Active)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Is_Transfered)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Transfered)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Purgeable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Purgeable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Edited)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Edited)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Inserted_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Inserted_Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_User_ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_User_ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Updated_Date)
+        </dd>*@
+
+        
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+

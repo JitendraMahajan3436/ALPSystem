@@ -1,0 +1,85 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Preventive_Maintenance>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "PreventiveMaintenance")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    <a href="@Url.Action("Upload", "PreventiveMaintenance")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>
+</p>
+
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Machine Number")
+            </th>
+            <th>
+                @Html.DisplayName("Machine Name")
+            </th>
+            <th>
+                @Html.DisplayName("Machine Part")
+            </th>
+            <th>
+                @Html.DisplayName("Scheduled Date")
+            </th>
+            <th>
+                @Html.DisplayName("Last Maintenance Date")
+            </th>
+          
+            <th>
+                @Html.DisplayName("Cycle(Months)")
+            </th>
+          
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                   @Html.DisplayFor(modelItem => item.RS_MT_Machines.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Number)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Preventive_Equipment.Equipment_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Scheduled_Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Last_Maintenance_Date)
+                </td>
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cycle_Period)
+                </td>
+             
+
+                <td>
+                    <a href="@Url.Action("Edit", "PreventiveMaintenance", new { id = item.PM_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "PreventiveMaintenance", new { id = item.PM_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "PreventiveMaintenance", new { id = item.PM_ID })"><i class="fa fa-trash"></i></a>
+
+                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

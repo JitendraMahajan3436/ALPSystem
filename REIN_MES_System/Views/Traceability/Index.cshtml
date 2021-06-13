@@ -1,0 +1,174 @@
+﻿@model IEnumerable<REIN_MES_System.Models.Tracebilityview>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="col-md-12">
+    <div class="panel" style="border:1px solid darkcyan;margin-top:2%">
+        
+        <div class="panel-body">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                @Html.Hidden("Plant_ID")
+                <div class="col-md-3 col-lg-3 col-sm-3">
+
+                    @Html.Label("Station Name", new { @class = "" })
+                    <label> : @ViewBag.Station</label>
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.CheckBox("Linemode", new { @class = "modelist" })
+                    @Html.Label("Line Mode")
+
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @Html.CheckBox("ReworkMode", new { @class = "modelist" })
+                    @Html.Label("Rework Mode", new { @class = "" })
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                @Html.Label("Scan Value:", new { @class = "col-md-3 col-lg-3 col-sm-3" })
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    @Html.TextBox("ScanValue", null, htmlAttributes: new { @class = "form-control text-uppercase" })
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3">
+                    @*<button class="btn btn-primary" id="Validated" onclick="Validate();  hidden ="hidden">Validate</button>*@
+                    <input type="button" value="Validate" onclick="Validate();" class="btn btn-primary" id="Validated" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" style="border:1px solid darkcyan; display:none" id="EngineDetail">
+        <div class="panel-heading" id="EngineId">
+            @*<div id="EngineId"></div>*@
+        </div>
+    </div>
+    <div id="testy" style="margin-top:7%"></div>
+
+    <br />
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="panel" style="border:1px solid darkcyan">
+                <div class="panel-heading">
+                    <button class="btn btn-primary" onclick="Save();" id="Savedata"><span class="glyphicon glyphicon-arrow-up"></span> Save</button>
+                    <button class="btn btn-success" onclick="Refresh();" id="Refresh"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+                   
+                    <button class="btn btn-danger" onclick="Exit();" id="Exit"><span class="glyphicon glyphicon-remove-circle"></span> Exit</button>
+
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+
+                        <table class="table table-responsive table-bordered table-striped table-condensed" id="Tracebilitydata">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Part_Id
+                                    </th>
+                                    <th>
+                                        Part ID Desc.
+                                    </th>
+                                    <th>
+                                        BOM Part No
+                                    </th>
+                                    <th>
+                                        Scan Value
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        VCode
+                                    </th>
+                                    <th>
+                                        MFGDATE
+                                    </th>
+                                    <th>MFGSHIFT</th>
+                                    <th>MFGSRNO</th>
+                                    <th>PartNo</th>
+                                    <th>Zpart</th>
+                                    <th>Eroor Prof.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Part_Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Part_Desc)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Part_NO_BOM)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Scan_Value)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+
+                                        <td>
+                                            @item.VCode
+                                        </td>
+                                        <td>
+                                            @item.MFGDATE
+                                        </td>
+                                        <td>
+                                            @item.MFGSHIFT
+                                        </td>
+                                        <td>
+                                            @item.MFGSRNO
+                                        </td>
+                                       
+                                        <td>
+                                            @item.PartNo
+
+                                        </td>
+                                        <td>
+                                            @item.Zpart
+                                        </td>
+                                        <td>
+                                            @item.Error
+                                        </td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+}
+
+
+<script src="~/Scripts/ajaxroutine.js"></script>
+<script src="~/Scripts/Traceability.js"></script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/fdtheme/notification_js")
+
+    @Styles.Render("~/fdtheme/notification_css");
+}
+
+
+

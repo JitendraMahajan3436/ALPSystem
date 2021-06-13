@@ -1,0 +1,44 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_Documents>
+@{
+
+
+    ViewBag.Title = "Show Documents";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="table-responsive">
+
+
+    <table class="table table-responsive table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    Document Name
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="/AddDocument/getview2/?id=@item.Doc_ID" id="fileName" name="fileName" , new { surveyId=ViewBag.@item.Doc_Name }>@item.Doc_Name</a>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="logon">
+
+</div>
+
+
+<script type="text/javascript">
+   
+</script>
+
+

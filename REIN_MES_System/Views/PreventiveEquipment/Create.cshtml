@@ -1,0 +1,181 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Equipment
+
+@{
+                /**/
+
+                ViewBag.Title = "Create";
+                Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Create", "PreventiveEquipment", FormMethod.Post, new { @class = "col-md-12", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="row">
+        <div class="col-md-6">
+            @Html.LabelFor(model => model.Equipment_Name, "Part / Tool Description", htmlAttributes: new { @class = "" })*
+            @Html.TextBoxFor(model => model.Equipment_Name, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Equipment_Name)
+        </div>
+        <div class="col-md-6">
+            @Html.LabelFor(model => model.Machine_ID, "Machine Name *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.Machine_ID, null, "Select Machine", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Machine_ID)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Designated_Life, "Designated Life *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Designated_Life, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Designated_Life)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Life_Per_Cycle, "Life Per Cycle *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Life_Per_Cycle, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Life_Per_Cycle)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Warning_At, "Warning At *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Warning_At, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Warning_At)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Stop_At, "Stop At *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Stop_At, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Stop_At)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Reset_Consumelife, "Reset At", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Reset_Consumelife, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Reset_Consumelife)
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Action_taken, "Action Taken *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Action_taken, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Action_taken)
+        </div>
+        <div class="col-md-3">
+            @Html.CheckBoxFor(model => model.Is_PM_Equipment)
+            @Html.LabelFor(model => model.Is_PM_Equipment, "PM Equipment", htmlAttributes: new { @class = "" })
+            @Html.ValidationMessageFor(model => model.Is_PM_Equipment)
+        </div>
+        <div class="col-md-3">
+            @Html.CheckBoxFor(model => model.IsActive)
+            @Html.LabelFor(model => model.IsActive, "Active", htmlAttributes: new { @class = "" })
+            @Html.ValidationMessageFor(model => model.IsActive)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Sequence_No, "Sequence No *", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Sequence_No, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Sequence_No)
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.SAP_Part_No, "SAP Part No", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.SAP_Part_No, htmlAttributes: new { @class = "form-control", @maxlength = "18" })
+            @Html.ValidationMessageFor(model => model.SAP_Part_No)
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Data_Retention_Period, "Data Retention Period (In Months)", htmlAttributes: new { @class = "" })
+            @Html.TextBoxFor(model => model.Data_Retention_Period, htmlAttributes: new { @class = "form-control", @maxlength = "18" })
+            @Html.ValidationMessageFor(model => model.Data_Retention_Period)
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.Label("Image_Content", "TBM Part Image", htmlAttributes: new { @class = "control-label" })
+            <input type="file" id="Image_Content" name="upload" onchange="checkfile(this)" />
+            @Html.ValidationMessage("Image_Content", null, new { @class = "validation_error", @id = "excelReq" })
+            <span id="lblExcelmsg" style="color:red;"></span>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+}
+
+
+@*<div class="col-md-6">
+
+    </div>*@
+@*<div>
+        @Html.ActionLink("Show All", "Index",null,new { @class = "btn btn-primary" })
+    </div>*@
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Scripts.Render("~/bundles/PartToMachineManagement_file")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+
+    <script>
+        function initializeRemotelyValidatingElementsWithAdditionalFields($form) {
+            var remotelyValidatingElements = $form.find("[data-val-remote]");
+
+            $.each(remotelyValidatingElements, function (i, element) {
+                var $element = $(element);
+
+                var additionalFields = $element.attr("data-val-remote-additionalfields");
+
+                if (additionalFields.length == 0) return;
+
+                var rawFieldNames = additionalFields.split(",");
+
+                var fieldNames = $.map(rawFieldNames, function (fieldName) { return fieldName.replace("*.", ""); });
+
+                $.each(fieldNames, function (i, fieldName) {
+                    $form.find("#" + fieldName).change(function () {
+                        // force re-validation to occur
+                        $element.removeData("previousValue");
+                        $element.valid();
+                    });
+                });
+            });
+        }
+        $(document).ready(function () {
+            $("#Machine_ID").select2();
+            initializeRemotelyValidatingElementsWithAdditionalFields($("form"));
+
+        });
+
+
+        function checkfile(sender) {
+            var validExts = new Array(".png", ".jpg", ".jpeg");
+            var fileExt = sender.value;
+            fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+            if (validExts.indexOf(fileExt) < 0) {
+                //alert("Invalid file selected, valid files are of " +
+                //         validExts.toString() + " types.");
+                $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                    validExts.toString() + " types.");
+                $('#excelReq').hide();
+                $('#Image_Content').val('');
+                return false;
+            }
+            else {
+                $('#lblExcelmsg').html('');
+                return true;
+            }
+        }
+    </script>
+}
+@section Styles {
+
+    @Styles.Render("~/Content/Select2styles")
+    @Styles.Render("~/fdtheme/notification_css")
+}
+

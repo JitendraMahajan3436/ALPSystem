@@ -1,0 +1,146 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+
+
+
+<div class="row machine_alarm_status">
+    <ul id="slider2">
+        @{ int count = 1; string machinename = ""; bool isStartTag = false; }
+        @foreach (var item in Model)
+        {
+            if (count == 1 || ((count-1) % 18 == 0))
+            {isStartTag=true;
+                @:<li>
+                }
+
+
+                <div class="col-lg-2">
+                    <!-- small box -->
+                    <div id="@item.Machine_ID" class="small-box machine_box bg-green-gradient">
+                        <div class="inner">
+                            @{if (item.Machine_Name.ToString().Length > 45)
+                              {
+                                  machinename = item.Machine_Name.ToString().Substring(0, 45);
+                              }
+                              else
+                              {
+                                  machinename = item.Machine_Name.ToString();
+                              }
+        }
+                            <p class="machine_name">@machinename</p>
+                            <div class="machine_inner_box">
+                                <div class="working_time col-lg-12 time_box"><h4>00:00:00</h4></div>
+
+                                <div class="starved_time col-lg-12 time_box"><h4>00:00:00</h4></div>
+                                <div class="downtime col-lg-12 time_box"><h4>00:00:00</h4></div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        @*<div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>*@
+                        <a class="small-box-footer show_alarm_details" id="machine_@item.Machine_ID" href="javascript:void(0);">
+                            More info <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            
+            if ((count) % 18 == 0 && (isStartTag==false))
+            {
+                @:</li>
+            }
+            count++;
+            isStartTag = false;
+
+
+
+            
+
+        }
+    </ul>
+</div>
+
+<style type="text/css">
+    .machine_alarm_status .machine_name {
+        font-size: 14px;
+        margin-bottom: 0px;
+        clear: both;
+        min-height: 45px;
+        color: black;
+        font-weight: bold;
+    }
+
+    .mt-red {
+        background: #ff0000;
+        color: white;
+        /* fallback */
+        /*background-color:  #ff0000;
+        background: url(images/linear_bg_2.png);
+        background-repeat: repeat-x;*/
+        /* Safari 4-5, Chrome 1-9 */
+        /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from( #ff0000), to(#2F2727));*/
+        /* Safari 5.1, Chrome 10+ */
+        /*background: -webkit-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* Firefox 3.6+ */
+        /*background: -moz-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* IE 10 */
+        /*background: -ms-linear-gradient(top, #2F2727,  #ff0000);*/
+        /* Opera 11.10+ */
+        /*background: -o-linear-gradient(top, #2F2727,  #ff0000);*/
+    }
+
+    .machine_box .downtime, .machine_box .working_time, .machine_box .starved_time {
+        border: 1px solid black;
+        margin-left: 0;
+        padding: 0 7px;
+    }
+
+    .machine_box .machine_inner_box .working_time {
+        margin: 0 !important;
+    }
+
+    .machine_box .machine_inner_box .time_box {
+        background: rgb(0, 0, 0) none repeat scroll 0 0;
+    }
+
+    .machine_box .machine_inner_box {
+        /*border: 1px solid yellow;
+        padding: 10px;*/
+    }
+
+
+
+
+        .machine_box .machine_inner_box .time_box {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .machine_box .machine_inner_box h4 {
+            margin: 0;
+        }
+
+        .machine_box .machine_inner_box .working_time {
+            margin: 0 !important;
+        }
+
+            .machine_box .machine_inner_box .working_time h4 {
+                color: rgb(1, 225, 0);
+            }
+
+        .machine_box .machine_inner_box .starved_time h4 {
+            color: yellow;
+        }
+
+        .machine_box .machine_inner_box .downtime h4 {
+            color: #ff0000;
+        }
+
+    .mt-yellow {
+        background-color: yellow;
+    }
+
+    .small-box-footer.show_alarm_details {
+        color: black;
+        font-weight: bold;
+    }
+</style>

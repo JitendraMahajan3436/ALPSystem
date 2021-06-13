@@ -1,0 +1,77 @@
+﻿@model REIN_MES_System.Models.RS_Stations
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.custom_Helper;
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station_Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Is_Buffer)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Convert.ToBoolean(Model.Is_Buffer))
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Station_IP_Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_IP_Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Station_Host_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station_Host_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model=>model.Is_Critical_Station)
+        </dt>
+
+        <dd>
+            @Html.YesNo(Model.Is_Critical_Station)
+        </dd>
+
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+    </dl>
+</div>
+<p>
+    
+    
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.Station_ID }, new { @class = "btn btn-primary" })
+     @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>

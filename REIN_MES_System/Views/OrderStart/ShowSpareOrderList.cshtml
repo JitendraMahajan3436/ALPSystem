@@ -1,0 +1,172 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Creation>
+@using REIN_MES_System.Helper;
+@using REIN_MES_System.Models
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+
+    int plantId = ((FDSession)this.Session["FDSession"]).plantId;
+    int shopId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).shopId);
+    var orderCount = 0;
+    var cnt = 0;
+
+    RS_Partgroup partGroup = ViewBag.PartGroup;
+
+    if (ViewBag.Spare_Count > 0)
+    {
+
+        <div id="showSpareCount" hidden>
+            <b>/Spare Count<br />&nbsp;@ViewBag.Spare_Count</b>
+        </div>
+    }
+
+}
+<input type="hidden" id="spareCountTemp" value=@ViewBag.Spare_Count />
+@if (ViewBag.Spare_Count > 0)
+{
+    <h4>
+        <b>Spare Order List</b>
+    </h4>
+
+    <table class="table table-bordered table-striped order-start-tbl">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("BIW Part Number")
+                </th>
+                <th>
+                    @Html.DisplayName("Order type")
+                </th>
+                <th>
+                    @Html.DisplayName("Auto Remark")
+                </th>
+                <th>
+                    @Html.DisplayName("Release Quantity")
+                </th>
+                <th>
+                    @Html.DisplayName("Remaining Quantity")
+                </th>
+                <th>
+                    @*@Html.DisplayName("Serial Number")*@
+                </th>
+                <th>
+                    @*@Html.DisplayName("Start Date")*@
+                </th>
+                <th>
+                    @*@Html.DisplayName("Start Time")*@
+                </th>
+                <th>
+                    @*@Html.DisplayName("Status")*@
+                </th>
+                <th>
+                    @*@Html.DisplayName("Hold Order")*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @if (Model != null)
+            {
+                string partno = "";
+                int r = 180;
+                int g = 190;
+                int b = 255;
+                Random rnd = new Random();
+
+                foreach (var item in Model)
+                {
+                    if (!partno.Equals(item.Model_Code, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        r = rnd.Next(40, 225);
+                        g = rnd.Next(40, 225);
+                        b = rnd.Next(40, 225);
+                    }
+                    partno = item.Model_Code;
+
+
+                    var remainingQty = db.RS_OM_OrderRelease.Where(m => m.Model_Code == item.Model_Code && m.Plant_OrderNo == item.Plant_OrderNo && m.Order_Status == "Release").Count();
+                    if (remainingQty > 0)
+                    {
+                        <tr style="background:rgba(@r,@g,@b,0.5)">
+
+                            @{
+                                var biwPartNo = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.BIW_Part_No).FirstOrDefault();
+                                if (biwPartNo != null)
+                                {
+                                    //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                                    <td>
+                                        @biwPartNo
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.Model_Code)
+                            </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Order_Type)
+                            </td>
+                            @{
+                                var autoRemark = db.RS_Model_Master.Where(m => m.Model_Code == item.Model_Code && m.Plant_ID == plantId && m.Shop_ID == shopId).Select(m => m.Auto_Remarks).FirstOrDefault();
+                                if (autoRemark != null)
+                                {
+                                    //var colorName = db.MM_Color.Where(m => m.COLOUR_ID == colorCode).Select(m => m.COLOUR_DESC).FirstOrDefault();
+                                    <td>
+                                        @autoRemark
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                            @*<td>@{ @item.oldSeriesCode}</td>*@
+                            <td>@Html.DisplayFor(modelItem => item.Release_Qty)</td>
+                            <td>@remainingQty</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                @{
+                                    if (cnt == 0)
+                                    {
+                                        <a class="start_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Plant_OrderNo" data-order-type="@item.Order_Type">Spare Order Start</a>
+                                    }
+                                }
+                                @*@{
+                                        if (cnt == 0)
+                                        {
+                                            if (partGroup.Order_Create == true)
+                                            {
+                                                <a class="hold_orders btn btn-primary" id="@item.Row_ID" data-order-rowid="@item.Row_ID" data-orderno="@item.Plant_OrderNo"  data-order-type="@item.Order_Type">Spare Hold Order</a>
+                                            }
+                                            cnt = cnt + 1;
+                                        }
+                                    }*@
+                            </td>
+                        </tr>
+                    }
+
+                }
+            }
+        </tbody>
+    </table>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        var spareCount = document.getElementById("spareCountTemp").value;
+        if (spareCount > 0) {
+            document.getElementById("spareCount").innerHTML = document.getElementById("showSpareCount").innerHTML
+        }
+        else {
+            document.getElementById("spareCount").innerHTML = "<input type='hidden' id='spareCount' />";
+        }
+    })
+</script>

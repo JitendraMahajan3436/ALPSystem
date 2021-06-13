@@ -1,0 +1,2600 @@
+﻿@model REIN_MES_System.Models.RS_Model_Master
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.Helper;
+@using REIN_MES_System.Models;
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+<style>
+    .ImageBorder
+    {
+        border:1px solid black;
+    }
+</style>
+<br />
+<div class="col-md-12">
+    <div class="box-header with-border">
+        <div class="col-md-8">
+            <div id="order-message-block" class="shop-notify order-start-notify"></div>
+        </div>
+        <div class="box-tools pull-right">
+            @*<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>*@
+        </div>
+    </div>
+    <div class="form-horizontal">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Model_ID)
+                @Html.Hidden("ErrMsg", ResourceValidation.Required)
+                @Html.Hidden("Select_Platform", ResourceDisplayName.Select_Platform)
+                <input id='plantID' name='plantID' value='@ViewBag.plantID' type="hidden" />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Shop_ID, ResourceDisplayName.Shop_Name, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Shop_ID, (SelectList)ViewBag.Shop_ID, ResourceDisplayName.Select_Shop, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Sub_Assembly_ID, "Aggregate Part", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Sub_Assembly_ID, null, "Select Sub Assembly", htmlAttributes: new { @class = "form-control mandatoryfields", @readonly="readonly"})
+                        @Html.ValidationMessageFor(model => model.Sub_Assembly_ID, null, new { @class = "validation_error SubAssy" })
+                    </div>
+                    <div class="col-md-3" id="divCountry" style="display:none">
+                        @Html.LabelFor(model => model.Countries, "Country Name", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Countries, null, htmlAttributes: new { @class = "form-control mandatoryfields", multiple = "true" })
+                        @Html.ValidationMessageFor(model => model.Countries, null, new { @class = "validation_error country" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Model_Code, ResourceDisplayName.Model_Code, new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Model_Code, htmlAttributes: new { @class = "form-control mandatoryfields", @style = "text-transform:uppercase", @maxlength = "50", @readonly = "true", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.Model_Code, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Model_Description, "Model Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Model_Description, htmlAttributes: new { @class = "form-control mandatoryfields", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.Model_Description, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.VIN_Code, ResourceDisplayName.Vin_Code, new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.VIN_Code, htmlAttributes: new { @class = "form-control mandatoryfields", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.VIN_Code, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Body_Line, ResourceDisplayName.Line_Name, new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Body_Line, (SelectList)ViewBag.Body_Line, ResourceDisplayName.Select_Body_Line, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                        @Html.ValidationMessageFor(model => model.Body_Line, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Platform_Id, ResourceDisplayName.Platform_Name, new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Platform_Id, Enumerable.Empty<SelectListItem>(), ResourceDisplayName.Select_Platform, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                        @Html.ValidationMessageFor(model => model.Platform_Id, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Auto_Remarks, "Auto Remarks", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Auto_Remarks, htmlAttributes: new { @class = "form-control mandatoryfields", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.Auto_Remarks, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.OMconfig_ID, ResourceDisplayName.Order_Config, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.OMconfig_ID, (SelectList)ViewBag.OMConfigID, ResourceDisplayName.Select_Config, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                        @Html.ValidationMessageFor(model => model.OMconfig_ID, null, new { @class = "validation_error" })
+
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Config_ID, ResourceDisplayName.Select_Serial_Config, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Config_ID, (SelectList)ViewBag.Config_ID, ResourceDisplayName.Select_Serial_Config, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Config_ID, null, new { @class = "validation_error" })
+                    </div>
+                    
+                    <div class="col-md-3" hidden>
+                        @Html.LabelFor(model => model.Paint_Line, ResourceDisplayName.Paint, new { @class = "" })
+
+                        @Html.DropDownListFor(model => model.Paint_Line, (SelectList)ViewBag.Paint_Line, ResourceDisplayName.Select_Paint, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Paint_Line, null, new { @class = "validation_error " })
+
+                    </div>
+                    @*//FOR Uploading Image against model*@
+                    <div class="col-md-3">
+                        @Html.Label("Model Image", new { @class = "" })<i style="color:red">*</i>
+                        <input name="Image_Name" type="file" id="FileUpload1" accept="image/x-png,image/jpeg,image/jpg" class="form-control" />
+                        <span class="field-validation-valid validation_error" data-valmsg-for="Image_Name" data-valmsg-replace="true"></span>
+                    </div>
+                    @*//*@
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Model_Attribute_ID, ResourceDisplayName.Attribution, new { @class = "" })<i style="color:red">*</i>
+
+                        @Html.DropDownListFor(model => model.Model_Attribute_ID, (SelectList)ViewBag.Model_Attribute_ID, ResourceDisplayName.Select_Model_Attribute, htmlAttributes: new { @class = "form-control mandatoryfields" })
+                        @Html.ValidationMessageFor(model => model.Model_Attribute_ID, null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                   
+                    <div class="col-md-3" id="divBIW_Part_No" style="display:none">
+                        @Html.LabelFor(model => model.BIW_Part_No, ResourceDisplayName.BIw_Part_No, new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.BIW_Part_No, (SelectList)ViewBag.BIW_Part_No, ResourceDisplayName.BIw_Part_No, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BIW_Part_No, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divBIW_Description" style="display:none">
+                        @Html.LabelFor(model => model.BIW_Description, "BIW Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.BIW_Description, htmlAttributes: new { @class = "form-control ", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.BIW_Description, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3" id="divEngine_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.Engine_PartNo, "Engine Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Engine_PartNo, (SelectList)ViewBag.Engine_PartNo, ResourceDisplayName.Engine_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Engine_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divEngine_Part_Desc" style="display:none">
+                        @Html.LabelFor(model => model.Engine_Part_Desc, "Engine Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Engine_Part_Desc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.Engine_Part_Desc, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3" id="divTA_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.TA_PartNo, "Trans Axle Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.TA_PartNo, (SelectList)ViewBag.TA_PartNo, ResourceDisplayName.TA_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TA_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divTA_Part_Desc" style="display:none">
+                        @Html.LabelFor(model => model.TA_Part_Desc, "Trans Axle Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.TA_Part_Desc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.TA_Part_Desc, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3" id="divFA_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.FA_PartNo, "Front Axle Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.FA_PartNo, (SelectList)ViewBag.FA_PartNo, ResourceDisplayName.FA_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.FA_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divFA_Part_Desc" style="display:none">
+                        @Html.LabelFor(model => model.FA_Part_Desc, "Front Axle Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.FA_Part_Desc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.FA_Part_Desc, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3" id="divRA_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.RA_PartNo, "Rear Axle Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.RA_PartNo, (SelectList)ViewBag.RA_PartNo, ResourceDisplayName.RA_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.RA_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divRA_PartDesc" style="display:none">
+                        @Html.LabelFor(model => model.RA_PartDesc, "Rear Axle Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.RA_PartDesc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.RA_PartDesc, null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-3" id="divChasis_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.Chasis_PartNo, "Chasis Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Chasis_PartNo, (SelectList)ViewBag.Chasis_PartNo, ResourceDisplayName.Chasis_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Chasis_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divChasis_PartDesc" style="display:none">
+                        @Html.LabelFor(model => model.Chasis_PartDesc, "Chasis Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Chasis_PartDesc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.Chasis_PartDesc, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divMachine_PartNo" style="display:none">
+                        @Html.LabelFor(model => model.Machine_PartNo, "Machine Part No", new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.Machine_PartNo, (SelectList)ViewBag.Machine_PartNo, ResourceDisplayName.Machine_PartNo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Machine_PartNo, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="divMachine_PartDesc" style="display:none">
+                        @Html.LabelFor(model => model.Machine_PartDesc, "Machine Description", new { @class = "" })<i style="color:red">*</i>
+                        @Html.TextBoxFor(model => model.Machine_PartDesc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        @Html.ValidationMessageFor(model => model.Machine_PartDesc, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" style="display:none">
+                        @Html.LabelFor(model => model.Assembly_Line, ResourceDisplayName.Assembly_Line, new { @class = "" })
+
+                        @Html.DropDownListFor(model => model.Assembly_Line, (SelectList)ViewBag.Assembly_Line, ResourceDisplayName.Select_Assembly, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Assembly_Line, null, new { @class = "validation_error" })
+                    </div>
+                   
+
+                </div>
+                <br />
+                <div class="row">
+                    @*<div class="col-md-3">
+            @Html.LabelFor(model => model.Style_Code, ResourceDisplayName.Style_Code, new { @class = "" }) *
+
+            @Html.DropDownListFor(model => model.Style_Code, (SelectList)ViewBag.Style_Code, ResourceDisplayName.Select_Style_Code, htmlAttributes: new { @class = "form-control mandatoryfields" })
+            @Html.ValidationMessageFor(model => model.Style_Code, null, new { @class = "validation_error" })
+
+        </div>*@
+                    <div class="col-md-3" style="">
+
+                        @Html.LabelFor(model => model.In_Use, ResourceDisplayName.In_Use, new { @class = "" })<i style="color:red">*</i>
+                        @Html.DropDownListFor(model => model.In_Use, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+                        @*@Html.EditorFor(model => model.In_Use, new { onchange = "", @class = "form-control mandatoryfields" })*@
+                        @Html.ValidationMessageFor(model => model.In_Use, null, new { @class = "validation_error" })
+
+                    </div>
+                    <div class="col-md-3" style="">
+
+                        @Html.LabelFor(model => model.Is_Spare, "Is Spare", new { @class = "" })
+                        @Html.DropDownListFor(model => model.Is_Spare, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+                        @*@Html.CheckBox("Is_Spare", new { onchange = "", @class = "form-control mandatoryfields" })*@
+                        @Html.ValidationMessageFor(model => model.Is_Spare, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" style="">
+
+                        @Html.LabelFor(model => model.Is_Colour_Applicable, "Colour Applicable", new { @class = "" })
+                        @Html.DropDownListFor(model => model.Is_Colour_Applicable, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+                        @*@Html.EditorFor(model => model.Is_Colour_Applicable, new { onchange = "", @class = "form-control mandatoryfields" })*@
+                        @Html.ValidationMessageFor(model => model.Is_Colour_Applicable, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-3" id="IsColourCheck" style="display:none">
+                        @Html.LabelFor(model => model.Color_Code, ResourceDisplayName.Color_Check, new { @class = "" })
+                        @Html.DropDownListFor(model => model.Color_Code, new SelectList(new List<object> { new { value = "False", text = "False" }, new { value = "True", text = "True" } }, "value", "text", 2), new { @class = "form-control mandatoryfields" })
+                        @*@Html.EditorFor(model => model.Color_Code, new { onchange = "", @class = "form-control mandatoryfields" })*@
+                        @Html.ValidationMessageFor(model => model.Color_Code, null, new { @class = "validation_error" })
+                    </div>
+                    <div class="col-md-2" id="IsColourCheck1" style="display:none">
+
+                        @Html.Label("Color_Code1", "Color Code", new { @class = "" })
+                        @Html.DropDownList("Color_Code1", null, "Select Code", htmlAttributes: new { @class = "form-control" })
+
+                        @Html.ValidationMessage("Color_Code1", null, new { @class = "validation_error" })
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+
+                    </div>
+                </div>
+                <br />
+                <div id="TextBoxContainer" class="">
+
+                </div>
+                <div id="TextBoxContainerBIW" class="">
+
+                </div>
+                <div id="TextBoxContainerEngine" class="">
+
+                </div>
+                <div id="TextBoxContainerTA" class="">
+
+                </div>
+                <div id="TextBoxContainerFA" class="">
+
+                </div>
+                <div id="TextBoxContainerRA" class="">
+
+
+                </div>
+                <div id="TextBoxContainerCH" class="">
+
+                </div>
+                <div id="TextBoxContainerMachine" class="">
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @*@if(@ViewBag.Image_Name != null)
+                        {
+                            <label>Model Image</label>
+                        }
+                        <img src="@ViewBag.Image_Name" class="form-control" style="height: 100%;width: 100%;" />*@
+
+                        @{
+                            var ImageContent = ViewBag.ImageContent;
+                            var ContentType = db.RS_Model_Master_Image.Where(m => m.Model_ID == Model.Model_ID).Select(m => m.Content_Type).FirstOrDefault();
+                        }
+                        @if (ImageContent != null)
+                        {
+                            <label>Model Image</label>
+                            var base64imag = Convert.ToBase64String(ImageContent);
+                            var imgsrcing = "";
+                            if (ContentType == "image/jpeg" || ContentType == "image/png" || ContentType == "image/jpg")
+                            {
+                                imgsrcing = string.Format("data:image/gif;base64,{0}", base64imag);
+                                <img src="@imgsrcing" class="form-control" style="height: 100%;width: 100%;" />
+                            }
+                        }
+                    </div>
+                </div>
+                <br />
+                <div id="ImageContainer" class="">
+
+                </div>
+                <div id="BIWImageContainer" style="display:none">
+
+                </div>
+                <div id="EngineImageContainer" style="display:none">
+
+                </div>
+                <div id="TAImageContainer" style="display:none">
+
+                </div>
+                <div id="FAImageContainer" style="display:none">
+
+                </div>
+                <div id="RAImageContainer" style="display:none">
+
+                </div>
+                <div id="CHImageContainer" style="display:none">
+
+                </div>
+
+                <div id="MachineImageContainer" style="display:none">
+
+                </div>
+                <br /><br />
+                <div class="col-md-12">
+                    <input type="button" value="Save" id="SaveModelMaster" class="btn btn-primary select_defect" />
+                    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+    @section Scripts
+{
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+@Scripts.Render("~/bundles/Select2scripts")
+@Styles.Render("~/Content/Select2styles")
+    }
+    @*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var colorcheck = $("#Color_Code").val();
+        if (colorcheck == "True") {
+            $("#IsColourCheck1").css("display", "none");
+        }
+        else {
+            $("#IsColourCheck1").css("display", "block");
+        }
+        $("#Color_Code").change(function () {
+            colorcheck = $("#Color_Code").val();
+            if (colorcheck == "True") {
+                $("#IsColourCheck1").css("display", "none");
+            }
+            else {
+                $("#IsColourCheck1").css("display", "block");
+            }
+        });
+        //var Colour_ID = $("#Color_Code1").val();
+
+        var isApplicable = $("#Is_Colour_Applicable").val();
+
+        if (isApplicable == "True") {
+            $("#IsColourCheck").css("display", "block");
+        }
+        else {
+            $("#IsColourCheck").css("display", "none");
+        }
+        $("#Is_Colour_Applicable").change(function () {
+            isApplicable = $("#Is_Colour_Applicable").val();
+            debugger
+            if (isApplicable == "True") {
+                colorcheck = $("#Color_Code").val();
+                if (colorcheck == "False") {
+                    $("#IsColourCheck1").css("display", "block");
+                }
+                $("#IsColourCheck").css("display", "block");
+            }
+            else {
+                $("#IsColourCheck").css("display", "none");
+                $("#IsColourCheck1").css("display", "none");
+            }
+        });
+
+
+        //$("#Sub_Assembly_ID").select2({
+        //    multiple: 'multiple',
+        //    placeholder: 'Select Aggregate Part Sub Assembly',
+        //    maximumSelectionLength: 50
+        //});
+
+        $("#Countries").select2({
+            allowClear: true,
+            placeholder: 'Assign Countries',
+            multiple: 'multiple',
+            tokenSeparators: [',', ' ', ';']
+        });
+
+        $('#divCountry').css('display', 'none');
+        var assyIds = $("#Sub_Assembly_ID").val();
+        var testID = assyIds;
+        var BIWFlag = 0, EnFlag = 0, TAFlag = 0, FAFlag = 0, RAFlag = 0, CHFlag = 0, MFlag = 0;
+        if (assyIds != null && assyIds.length > 0){
+         
+            for(var i= 0;i<assyIds.length;i++)
+            {
+                if(assyIds[i] == 1)
+                {
+                    debugger
+                    $('#divCountry').css('display', 'block');
+                    $('#divBIW_Part_No').css('display', 'block');
+                    $('#divBIW_Description').css('display', 'block');
+                    BIWFlag = 1;
+
+                    var ModelID = $('#Model_ID').val();
+                    $.getJSON('/NewModelMaster/fillCountriesDropdown', { ModelID: ModelID }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+
+                       // $('#Countries option').remove();
+                        for (i = 0; i < data.length; i++) {
+                           
+                                $('#Countries').append('<option value="' +
+                                    data[i].Country_ID + '">' + data[i].Country_Name + '</option>');
+                         
+                        }
+                        $("#Countries").select2({
+                            allowClear: true,
+                            placeholder: 'Assign Countries',
+                            multiple: 'multiple'
+                        });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Countries!');
+                    });
+                }
+                if (assyIds[i] == 2) {
+                    $('#divEngine_PartNo').css('display', 'block');
+                    $('#divEngine_Part_Desc').css('display', 'block');
+                    EnFlag = 1;
+                }
+                if (assyIds[i] == 3) {
+                    $('#divTA_PartNo').css('display', 'block');
+                    $('#divTA_Part_Desc').css('display', 'block');
+                    TAFlag = 1;
+                }
+                if (assyIds[i] == 4) {
+                    $('#divFA_PartNo').css('display', 'block');
+                    $('#divFA_Part_Desc').css('display', 'block');
+                    FAFlag = 1;
+                }
+                if (assyIds[i] == 5) {
+                    $('#divRA_PartNo').css('display', 'block');
+                    $('#divRA_PartDesc').css('display', 'block');
+                    RAFlag = 1;
+                }
+                if (assyIds[i] == 6) {
+                    $('#divChasis_PartNo').css('display', 'block');
+                    $('#divChasis_PartDesc').css('display', 'block');
+                    CHFlag = 1;
+                }
+                if (assyIds[i] == 7) {
+                    $('#divMachine_PartNo').css('display', 'block');
+                    $('#divMachine_PartDesc').css('display', 'block');
+                    MFlag = 1;
+                }
+            }
+            if (BIWFlag == 0) {
+                $('#divBIW_Part_No').css('display', 'none');
+                $('#divBIW_Description').css('display', 'none');
+            }
+            if (EnFlag == 0) {
+                $('#divEngine_PartNo').css('display', 'none');
+                $('#divEngine_Part_Desc').css('display', 'none');
+            }
+            if (TAFlag == 0) {
+                $('#divTA_PartNo').css('display', 'none');
+                $('#divTA_Part_Desc').css('display', 'none');
+            }
+            if (FAFlag == 0) {
+                $('#divFA_PartNo').css('display', 'none');
+                $('#divFA_Part_Desc').css('display', 'none');
+            }
+            if (RAFlag == 0) {
+                $('#divRA_PartNo').css('display', 'none');
+                $('#divRA_PartDesc').css('display', 'none');
+            }
+            if (CHFlag == 0) {
+                $('#divChasis_PartNo').css('display', 'none');
+                $('#divChasis_PartDesc').css('display', 'none');
+            }
+            if (MFlag == 0) {
+                $('#divMachine_PartNo').css('display', 'none');
+                $('#divMachine_PartDesc').css('display', 'none');
+            }
+        }
+        if (assyIds == "") {
+            $('#divBIW_Part_No').css('display', 'none');
+            $('#divBIW_Description').css('display', 'none');
+            $('#divEngine_PartNo').css('display', 'none');
+            $('#divEngine_Part_Desc').css('display', 'none');
+            $('#divTA_PartNo').css('display', 'none');
+            $('#divTA_Part_Desc').css('display', 'none');
+            $('#divFA_PartNo').css('display', 'none');
+            $('#divFA_Part_Desc').css('display', 'none');
+            $('#divRA_PartNo').css('display', 'none');
+            $('#divRA_PartDesc').css('display', 'none');
+            $('#divChasis_PartNo').css('display', 'none');
+            $('#divChasis_PartDesc').css('display', 'none');
+            $('#divMachine_PartNo').css('display', 'none');
+            $('#divMachine_PartDesc').css('display', 'none');
+        }
+
+        
+        //by default in use Model is true
+        document.getElementById($($('#In_Use')).attr('id')).checked = true;
+        
+        var plantID = $('#plantID').val();
+
+
+        
+       
+
+        var Model_Code = $('#Model_Code').val();
+        if (Model_Code.length > 0) {
+            ShowModelSaveData(Model_Code);
+        }
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "plantID=" + plantID + "", showPrescentfields, "json");
+        //if (true) {
+        //    var Model_Code = $('#Model_Code').val();
+        //    if (Model_Code.length > 0) {
+        //      
+        //        ShowModelSaveData(Model_Code);
+
+        //    }
+        //}
+        //setTimeout(function () {
+        //    ShowModelSaveData($('#Model_Code').val());
+        //}, 6000);
+
+        //Added by Ajay on 09-03-2019
+      
+            var BIWPartNo = $("#BIW_Part_No").val();
+            var EnginePartNo = $("#Engine_PartNo").val();
+            var TAPartNo = $("#TA_PartNo").val();
+            var FAPartNo = $("#FA_PartNo").val();
+            var RAPartNo = $("#RA_PartNo").val();
+            var ChasisPartNo = $("#Chasis_PartNo").val();
+            var MachinePartNo = $("#Machine_PartNo").val();
+            var ModelID = $("#Model_ID").val();
+            var AssyID = $("#Sub_Assembly_ID").val();
+            var temp = new Array();
+          
+            ////var Tabledata = {};
+            //for (var i = 0; i < AssyID.length; i++)
+            //{
+            //    //Tabledata.Assembly_ID[i] = AssyID[i];
+            //    temp.push(AssyID[i]);
+            //}
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: '/NewModelMaster/GetImageData',
+            //    data: JSON.stringify({ AssembyID: temp, ModelID: ModelID }),
+            //    contentType: "application/json;",
+            //    dataType: "json",
+            //    success: function (data) {
+            //        if (data.length > 0)
+            //        {
+            //            debugger;
+            //            //$("#ImageContainer").html("");
+            //            //var res = '<div class="row">';
+            //            //var count = 0;
+            //            document.getElementById("BIWImageContainer").style.display = "none";
+            //            document.getElementById("EngineImageContainer").style.display = "none";
+            //            document.getElementById("TAImageContainer").style.display = "none";
+            //            document.getElementById("FAImageContainer").style.display = "none";
+            //            document.getElementById("RAImageContainer").style.display = "none";
+            //            document.getElementById("CHImageContainer").style.display = "none";
+            //            document.getElementById("MachineImageContainer").style.display = "none";
+            //            for (var i = 0; i < data.length;i++)
+            //            {
+            //                if (data[i].Assembly_ID == 1) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var BIW = "BIWImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + BIW + '"]>' + "BIW Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + BIW + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + BIW + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var BIW = "BIWImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + BIW + '"]>' + "BIW Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + BIW + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + BIW + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("BIWImageContainer").style.display = "block";
+            //                    $("#BIWImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+            //                    var BIW = "BIWImage1";
+            //                    res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                    res += '<Label for["' + BIW + '"]>' + "BIW Part Image" + '</Label>';
+            //                    if (data[i].Image_Content != null)
+            //                        res += '<img id="' + BIW + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    else if (data[i].Path != null)
+            //                        res += '<img id="' + BIW + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    res += '</div>';
+
+            //                    res += '</div>';
+            //                    $("#BIWImageContainer").append(res);
+            //                }
+
+            //                if (data[i].Assembly_ID == 2) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var Engine = "EngineImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + Engine + '"]>' + "Engine Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + Engine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + Engine + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var Engine = "EngineImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + Engine + '"]>' + "Engine Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + Engine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + Engine + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("EngineImageContainer").style.display = "block";
+            //                    $("#EngineImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var Engine = "EngineImage";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + Engine + '"]>' + "Engine Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + Engine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + Engine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                 
+            //                    res += '</div>';
+            //                    $("#EngineImageContainer").append(res);
+            //                }
+
+            //                debugger;
+            //                if (data[i].Assembly_ID == 3) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var TA = "TAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + TA + '"]>' + "Trans Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + TA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + TA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var TA = "TAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + TA + '"]>' + "Trans Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + TA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + TA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("TAImageContainer").style.display = "block";
+            //                    $("#TAImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var TA = "TAImage1";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + TA + '"]>' + "Trans Axle Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + TA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + TA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                  
+            //                    res += '</div>';
+            //                    $("#TAImageContainer").append(res);
+
+            //                }
+
+            //                if (data[i].Assembly_ID == 4) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var FA = "FAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + FA + '"]>' + "Front Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + FA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + FA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var FA = "FAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + FA + '"]>' + "Front Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + FA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + FA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("FAImageContainer").style.display = "block";
+            //                    $("#FAImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var FA = "FAImage1";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + FA + '"]>' + "Front Axle Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + FA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + FA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                   
+            //                    res += '</div>';
+            //                    $("#FAImageContainer").append(res);
+
+            //                }
+
+            //                if (data[i].Assembly_ID == 5) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var RA = "RAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + RA + '"]>' + "Rear Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + RA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + RA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var RA = "RAImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + RA + '"]>' + "Rear Axle Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + RA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + RA + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("RAImageContainer").style.display = "block";
+            //                    $("#RAImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var RA = "RAImage1";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + RA + '"]>' + "Rear Axle Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + RA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + RA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                    
+            //                    res += '</div>';
+            //                    $("#RAImageContainer").append(res);
+            //                }
+
+            //                if (data[i].Assembly_ID == 6) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var CH = "CHImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + CH + '"]>' + "Chasis Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + CH + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + CH + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var CH = "CHImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + CH + '"]>' + "Chasis Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + CH + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + CH + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("CHImageContainer").style.display = "block";
+            //                    $("#CHImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var CH = "CHImage1";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + CH + '"]>' + "Chasis Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + CH + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + CH + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                  
+            //                    res += '</div>';
+            //                    $("#CHImageContainer").append(res);
+            //                }
+                           
+
+            //                if (data[i].Assembly_ID == 7) {
+            //                    //if (count > 0 && count % 2 == 0) {
+            //                    //    res += '</div><br/>';
+            //                    //    res += '<div class="row">';
+
+            //                    //    var Machine = "MachineImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + Machine + '"]>' + "Machine Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + Machine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + Machine + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    //else {
+            //                    //    var Machine = "MachineImage";
+            //                    //    res += '<div class="col-md-6">';
+            //                    //    res += '<Label for["' + Machine + '"]>' + "Machine Part Image" + '</Label>';
+            //                    //    if (data[i].Image_Content != null)
+            //                    //        res += '<img id="' + Machine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                    //    else if (data[i].Path != null)
+            //                    //        res += '<img id="' + Machine + '" alt="user image" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                    //    res += '</div>';
+            //                    //    count++;
+            //                    //}
+            //                    document.getElementById("MachineImageContainer").style.display = "block";
+            //                    $("#MachineImageContainer").html("");
+            //                    var res = '<div class="col-md-6">';
+                               
+            //                        var Machine = "MachineImage1";
+            //                        res += '<div class="" id="' + data[i].Image_ID + '">';
+            //                        res += '<Label for["' + Machine + '"]>' + "Machine Part Image" + '</Label>';
+            //                        if (data[i].Image_Content != null)
+            //                            res += '<img id="' + Machine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+            //                        else if (data[i].Path != null)
+            //                            res += '<img id="' + Machine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+            //                        res += '</div>';
+                                  
+            //                    res += '</div>';
+            //                    $("#MachineImageContainer").append(res);
+
+            //                }
+            //            }
+            //           // res += '</div>';
+            //           // $("#ImageContainer").append(res);
+
+            //        }
+            //    },
+            //    //error: function(){
+            //    //    
+            //    //},
+            //    //fail: function () {
+            //    //    
+            //    //}
+             
+            //});
+     
+
+        //End
+
+    });
+
+    function showImages() {
+        debugger;
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                var count = 0;
+                var res = '<div class="row">';   
+               
+                if (jsonRes.BIWContent != null)
+                {
+                    if (count > 0 && count % 2 == 0)
+                    {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var BIW = "BIWImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + BIW + '"]>' + "BIW Part Image" + '</Label>';
+                        res += '<img id="' + BIW + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.BIWContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.EngineContent != null)
+                {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else
+                    {
+                        var Engine = "EngineImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + Engine + '"]>' + "Engine Part Image" + '</Label>';
+                        res += '<img id="' + Engine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.EngineContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.TAContent != null) {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var TA = "TAImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + TA + '"]>' + "Trans Axle Part Image" + '</Label>';
+                        res += '<img id="' + TA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.TAContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.FAContent != null) {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var FA = "FAImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + FA + '"]>' + "Front Axle Part Image" + '</Label>';
+                        res += '<img id="' + FA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.FAContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.RAContent != null) {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var RA = "RAImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + RA + '"]>' + "Rear Axle Part Image" + '</Label>';
+                        res += '<img id="' + RA + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.RAContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.CHContent != null) {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var CH = "CHImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + CH + '"]>' + "Chasis Part Image" + '</Label>';
+                        res += '<img id="' + CH + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.CHContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+
+                if (jsonRes.MachineContent != null) {
+                    if (count > 0 && count % 2 == 0) {
+                        res += '</div><br/>';
+                        res += '<div class="row">';
+                    }
+                    else {
+                        var Machine = "MachineImage";
+                        res += '<div class="col-md-6">';
+                        res += '<Label for["' + Machine + '"]>' + "Machine Part Image" + '</Label>';
+                        res += '<img id="' + Machine + '" alt="user image" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(jsonRes.MachineContent) + '">';
+                        res += '</div>';
+                        count++;
+                    }
+                }
+                res += '</div>';
+                $("#ImageContainer").append(res);
+            }
+        }
+    }
+
+    function arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    function showPrescentfields() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        debugger;
+        var cnt_test = 0;
+        if (myajax.readyState == 4) {
+            // alert("Start Hiiii");
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                var Name = jsonRes.length > 0 ? jsonRes[0].DisplayName : "";
+                var res = '<div style="border:1px solid grey">';
+                res += '<label style="margin-left:1%">' + Name + '</label><br/>';
+                res += '<div class="row" style="margin-left: 2%">';    // </div></div>
+                debugger;
+                for (var i = 0; i < jsonRes.length; i++) {
+                    cnt_test = cnt_test + 1;
+
+                    var ID = jsonRes[i].ID;
+                    var type = jsonRes[i].ToolBox;
+                    var ToolBoxPost = jsonRes[i].ToolBoxPost;
+                    var Attribution_Type = jsonRes[i].Attribution_Type;
+                    var split_Attribution_Type = Attribution_Type.split(' ').join('_');
+
+                    if (cnt_test == 4) {
+                        cnt_test = 1;
+                        res += '</div>';
+                        res += '<div class="row">';
+                    }
+
+                    var class_data = "";
+                    if (cnt_test <= 3) {
+                        class_data = "col-md-3";
+                    }
+
+
+                    res += '<div id="' + Attribution_Type + '" class=' + class_data + '>';  //</div>
+                    if (type == "DropDownList") {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label>'
+                        res += '<select name="select" type="' + type + '" id=ddl_' + split_Attribution_Type + ' value="' + i + '" class="getdropdownVal form-control" /> </br>'
+                    }
+                    else if (type == "checkbox") {
+                        res += '<input  type="' + type + '" id=chk_' + split_Attribution_Type + ' value="' + type + '" class= "getCheckboxVal" />'
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label></br>'
+                        
+                    }
+                    else if (type == "Radio") {
+                        res += '<input  type="' + type + '" id=rbt_' + split_Attribution_Type + ' class ="getRadioButtonVal" />'
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label></br>'
+                        
+                    }
+                    else {
+                        res += '<Label for["' + type + '"]>' + Attribution_Type + '</Label>'
+                        res += '<input  type="' + type + '" id=txt_' + split_Attribution_Type + ' value="' + type + '"  class=" getTextboxVal form-control" /></br>'
+                    }
+                    res += '</div>';
+
+                }
+            }
+
+            res += '</div></div></div><br/>';
+          
+            if (ID == 1) {
+                $("#TextBoxContainerBIW").html("");
+                $("#TextBoxContainerBIW").append(res);
+            }
+            if (ID == 2) {
+                $("#TextBoxContainerEngine").html("");
+                $("#TextBoxContainerEngine").append(res);
+            }
+            if (ID == 3) {
+                $("#TextBoxContainerTA").html("");
+                $("#TextBoxContainerTA").append(res);
+            }
+            if (ID == 4) {
+                $("#TextBoxContainerFA").html("");
+                $("#TextBoxContainerFA").append(res);
+            }
+            if (ID == 5) {
+                $("#TextBoxContainerRA").html("");
+                $("#TextBoxContainerRA").append(res);
+            }
+            if (ID == 6) {
+                $("#TextBoxContainerCH").html("");
+                $("#TextBoxContainerCH").append(res);
+            }
+            if (ID == 7) {
+                $("#TextBoxContainerMachine").html("");
+                $("#TextBoxContainerMachine").append(res);
+            }
+            //-----------------------------Drop down list fill data-----------------------------------------//
+
+            //setTimeout(function () {
+            //    sendData2Master();
+            //},1000);
+
+            var jsonRes1 = $.parseJSON(myajax.responseText);
+
+            for (var i = 0; i < jsonRes1.length; i++) {
+                var Attributetype = jsonRes1[i].Attribution_Type;
+                //alert(Attributetype);
+                var split_Attribution_Type = Attributetype.split(' ').join('_');
+                var toolbox_post = jsonRes1[i].ToolBoxPost;
+
+                var type = jsonRes1[i].ToolBox;
+                if (type == "DropDownList") {
+                    Datafill(Attributetype, split_Attribution_Type);
+                }
+            }
+        }
+        
+    };
+
+    function Datafill(Attributetype, split_Attribution_Type) {
+        //alert(Attributetype);
+        $.getJSON('/NewModelMaster/GetDropDownLoad', { Attributetype: Attributetype }, function (data) {
+
+            $("#ddl_" + split_Attribution_Type + "").html("");
+            //$("#ddl_" + split_Attribution_Type + "").append('<option>' + '-- ' + 'Select ' + Attributetype + ' --' + '</option>');
+            $("#ddl_" + split_Attribution_Type + "").append('<option value="">Select ' + Attributetype + '</option>');
+            if (data.length > 0) {
+
+                for (j = 0; j < data.length; j++) {
+                    $("#ddl_" + split_Attribution_Type + "").append('<option value="' + data[j].Attribute_ID + '">' + data[j].Attribute_Desc + '</option>');
+
+                }
+            }
+        });
+    };
+    //----------------------------------------------------------------------------------------------//
+    $("#Color_Code").change(function () {
+        debugger;
+        var colorcode = $("#Color_Code").val();
+
+
+        if (colorcode == "False") {
+            $("#IsColourCheck1").css("display", "block");
+
+
+
+            $.ajax({
+                type: "POST",
+                url: '/NewModelMaster/GetColorCode',
+                data: JSON.stringify({ Color_Code: colorcode }),
+                contentType: 'application/json',
+                success: function (data) {
+                    debugger;
+                    $("#Color_Code1").empty();
+                    $("#Color_Code1").append('<option value="0">Select Color</option>');
+                    $.each(data, function (i, data) {
+                        $("#Color_Code1").append('<option value="' + data.id + '">' + data.value + '</option>');
+
+                    });
+                }
+            });
+
+
+        }
+        else {
+            $("#Color_Code1").empty();
+            $("#IsColourCheck1").css("display", "none");
+
+        }
+
+    })
+
+    $('#SaveModelMaster').click(function () {
+        //to Check validation on client side
+        var ErrMsg = $('#ErrMsg').val();
+        var isValid = true
+        $('.mandatoryfields').each(function () {
+            var value = $('#' + $(this).attr('id')).val();
+            if (value.length == 0) {
+
+                $('#' + $(this).attr('id')).addClass('form-control input-validation-error');
+                $('#' + $(this).attr('id')).next().text(ErrMsg);
+                isValid = false;
+            }
+            else {
+                $('#' + $(this).attr('id')).removeClass('input-validation-error');
+                $('#' + $(this).attr('id')).next().text('');
+            }
+        });
+        if (isValid) {
+            var dataModal = [];
+            $('.getdropdownVal').each(function () {
+                dataModal.push({
+                    label: $(this).parent().attr('id'),
+                    Value: $(this).val(),
+                    type: "dropdownList",
+                });
+            });
+            $('.getTextboxVal').each(function () {
+                dataModal.push({
+                    label: $(this).parent().attr('id'),
+                    Value: $(this).val(),
+                    type: "textBox",
+
+                });
+            });
+            $('.getRadioButtonVal').each(function () {
+                dataModal.push({
+                    label: $(this).parent().attr('id'),
+                    Value: document.getElementById($(this).attr('id')).checked,
+                    type: "RadioButton",
+
+                });
+            });
+            $('.getCheckboxVal').each(function () {
+                dataModal.push({
+                    label: $(this).parent().attr('id'),
+                    Value: document.getElementById($(this).attr('id')).checked,
+                    type: "CheckBox",
+
+                });
+            });
+            var colorCode = document.getElementById('Color_Code').checked;
+            var InUse = document.getElementById('In_Use').checked;
+            var IsSpare = document.getElementById('Is_Spare').checked;
+
+            var modeldata = [];
+            modeldata.push({
+                Model_Code: $('#Model_Code').val(),
+                BIW_PartNo: $('#BIW_Part_No').val(),
+                VIN_Code: $('#VIN_Code').val(),
+                BIW_Desription: $('#BIW_Description').val(),
+                Model_Description: $('#Model_Description').val(),
+                Auto_Remarks: $('#Auto_Remarks').val(),
+                In_Use: InUse,
+                OMconfig_ID: $('#OMconfig_ID').val(),
+                Config_ID: $('#Config_ID').val(),
+                Is_Colour_Applicable: $('#Is_Colour_Applicable').val(),
+                Color_Code: colorCode,
+                Colour_ID: $('#Color_Code1').val(),
+                Is_Spare: IsSpare,
+                Body_Line: $('#Body_Line').val(),
+                Paint_Line: $('#Paint_Line').val(),
+                Assembly_Line: $('#Assembly_Line').val(),
+                Platform_Id: $('#Platform_Id').val(),
+                Shop_ID: $('#Shop_ID').val(),
+                /*Added by Ajay 07032019*/
+                Model_Attribute_ID: $('#Model_Attribute_ID').val(),
+                Sub_Assembly_ID: $('#Sub_Assembly_ID').val(),
+                Engine_PartNo: $('#Engine_PartNo').val(),
+                Engine_Part_Desc: $('#Engine_Part_Desc').val(),
+                TA_PartNo: $('#TA_PartNo').val(),
+                TA_Part_Desc: $('#TA_Part_Desc').val(),
+                FA_PartNo: $('#FA_PartNo').val(),
+                FA_Part_Desc: $('#FA_Part_Desc').val(),
+                RA_PartNo: $('#RA_PartNo').val(),
+                RA_PartDesc: $('#RA_PartDesc').val(),
+                Chasis_PartNo: $('#Chasis_PartNo').val(),
+                Chasis_PartDesc: $('#Chasis_PartDesc').val(),
+                Machine_PartNo: $('#Machine_PartNo').val(),
+                Machine_PartDesc: $('#Machine_PartDesc').val(),
+                /*Added by Ajay 07032019*/
+            });
+            $.ajax({
+                type: "POST",
+                url: '/NewModelMaster/SaveModelMasterDataEdit',
+                data: JSON.stringify({ dataModal: JSON.stringify(dataModal), modeldata: JSON.stringify(modeldata) }),
+                contentType: 'application/json',
+                processData: false,
+                success: function (response) {
+                    if (response.status == true) {
+                        uploadImage(response.Id);
+                        //alert(response.message);
+                        window.location.href = "/NewModelMaster/Index";
+                    }
+                    //refreshRackDisplay(rackID);
+
+                },
+                error: function (error) {
+
+                    alert("Error Connecting Server...");
+                }
+            });
+        }
+
+    });
+
+    //$('#Model_Code').change(function () {
+    //    var Model_Code = $('#Model_Code').val();
+    //    ShowModelSaveData(Model_Code);
+    //});
+
+    function ShowModelSaveData(Model_Code) {
+        var dataModel = [];
+        if (Model_Code.length > 0) {
+           
+            $.getJSON('/NewModelMaster/ShowModelMasterData', { Model_Code: Model_Code }, function (data) {
+                if (data != null) {
+                   
+                    if (data.length > 0) {
+                        
+                        $('#VIN_Code').val(data[0].VIN_Code);
+                        $('#BIW_Description').val(data[0].BIW_Description);
+                        $('#Model_Description').val(data[0].Model_Description);
+                        $('#Auto_Remarks').val(data[0].Auto_Remarks);
+                        //BIW_Part_No OMconfig_ID Config_ID In_Use
+                        //$("#BIW_Part_No option[value=" + data[0].BIW_Part_No + "]").prop('selected', 'selected');
+                        $("#OMconfig_ID option[value=" + data[0].OMconfig_ID + "]").prop('selected', 'selected');
+                        $("#Config_ID option[value=" + data[0].Config_ID + "]").prop('selected', 'selected');
+                        $("#In_Use option[value=" + data[0].In_Use + "]").prop('selected', 'selected');
+                        if (data[0].BIW_Part_No != "")
+                            $("#BIW_Part_No option[value=" + data[0].BIW_Part_No + "]").prop('selected', 'selected');
+                        if (data[0].Engine_PartNo != "")
+                            $("#Engine_PartNo option[value=" + data[0].Engine_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].TA_PartNo != "")
+                            $("#TA_PartNo option[value=" + data[0].TA_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].FA_PartNo != "")
+                            $("#FA_PartNo option[value=" + data[0].FA_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].RA_PartNo != "")
+                            $("#RA_PartNo option[value=" + data[0].RA_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].Chasis_PartNo != "")
+                            $("#Chasis_PartNo option[value=" + data[0].Chasis_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].Machine_PartNo != "")
+                            $("#Machine_PartNo option[value=" + data[0].Machine_PartNo + "]").prop('selected', 'selected');
+                        if (data[0].Is_Spare == true) {
+                            document.getElementById('Is_Spare').checked = true;
+                        }
+                        else {
+                            document.getElementById('Is_Spare').checked = false;
+                        }
+                        if (data[0].In_Use == true) {
+                            document.getElementById('In_Use').checked = true;
+                        }
+                        else {
+                            document.getElementById('In_Use').checked = false;
+                        }
+                        if (data[0].Color_Code == true) {
+                            document.getElementById('Color_Code').checked = true;
+                        }
+                        else {
+                            document.getElementById('Color_Code').checked = false;
+                        }
+                        $("#Model_Attribute_ID option[value=" + data[0].Model_Attribute_ID + "]").prop('selected', 'selected');
+                        $("#Body_Line option[value=" + data[0].Body_Line + "]").prop('selected', 'selected');
+                        $("#Paint_Line option[value=" + data[0].Paint_Line + "]").prop('selected', 'selected');
+                        $("#Assembly_Line option[value=" + data[0].Assembly_Line + "]").prop('selected', 'selected');
+                        $("#Shop_ID option[value=" + data[0].Shop_ID + "]").prop('selected', 'selected');
+                        if (data[0].Platform_Id > 0) {
+                            var Platform_ID=data[0].Platform_Id;
+                            $.getJSON('/NewModelMaster/GetPlatformByPlatformID', { Platform_ID: Platform_ID }, function (data) {
+                                if (data.length > 0) {
+
+                                    // Ajax success callback function.
+                                    // Populate dropdown from Json data returned from server.
+                                    $('#Platform_Id option').remove();
+                                    //$('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+                                    for (i = 0; i < data.length; i++) {
+                                        $('#Platform_Id').append('<option value="' + data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                                    }
+                                } else {
+                                    $('#Platform_Id option').remove();
+                                    $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                                    alert("Please add Platform configuration");
+                                }
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+                                // Ajax fail callback function.
+                                $('#Platform_Id option').remove();
+                                $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                                alert('Error getting platform Selection !');
+                            });
+                        }
+                        else {
+                            $('#Platform_Id option').remove();
+                            $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                            alert("Please add Platform configuration");
+                        }
+                        $("#Platform_Id option[value=" + data[0].Platform_Id + "]").prop('selected', 'selected');
+                    }
+                    else {
+                        
+                        $('#VIN_Code').val('');
+                        $('#BIW_Description').val('');
+                        $('#Model_Description').val('');
+                        $('#Auto_Remarks').val('');
+                        //BIW_Part_No OMconfig_ID Config_ID In_Use
+                        $("#BIW_Part_No option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#OMconfig_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Config_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                  
+                        document.getElementById('Is_Spare').checked = false;
+                        document.getElementById('In_Use').checked = true;
+                        document.getElementById('Color_Code').checked = false;
+                        $("#Body_Line option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Paint_Line option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Assembly_Line option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Shop_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                        $("#Model_Attribute_ID option[value=" + 0 + "]").prop('selected', 'selected');
+                    }
+
+                    setTimeout(function () {
+                      
+                        var BIWPartNo = $("#BIW_Part_No").val();
+                        var EnginePartNo = $("#Engine_PartNo").val();
+                        var TAPartNo = $("#TA_PartNo").val();
+                        var FAPartNo = $("#FA_PartNo").val();
+                        var RAPartNo = $("#RA_PartNo").val();
+                        var ChasisPartNo = $("#Chasis_PartNo").val();
+                        var MachinePartNo = $("#Machine_PartNo").val();
+                        if (BIWPartNo != "")
+                        {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 1 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(BIWPartNo);
+                        }  
+                        if (EnginePartNo != "")
+                        {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 2 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(EnginePartNo);
+                        }
+                           
+                        if (TAPartNo != "") {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 3 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(TAPartNo);
+                        }
+                            
+                        if (FAPartNo != "") {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 4 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(FAPartNo);
+                        }
+                           
+                        if (RAPartNo != "") {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 5 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(RAPartNo);
+                        }
+                        
+                        if (ChasisPartNo != "") {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 6 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(ChasisPartNo);
+                        }
+                          
+                        if (MachinePartNo != "") {
+                            var url = "/NewModelMaster/GetData";
+                            ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 7 + "", showPrescentfields, "json");
+                            ShowChildPartMasterData(MachinePartNo);
+                        }
+
+                    }, 3000);
+                    
+                }
+            });
+        }
+    }
+
+
+    function ShowChildPartMasterData(Part_No)
+    {
+        
+        var dataModel = [];
+        if (Part_No.length > 0) {
+
+            $.getJSON('/BIWPartNoMaster/ShowChildPartMasterData', { Part_No: Part_No }, function (data) {
+                if (data != null) {
+                    if (data.length > 0) {
+                        dataModel = JSON.parse(data[0].Attribution_Parameters);
+                        if (dataModel != null) {
+                            if (dataModel.length > 0) {
+                                for (var i = 0; i < dataModel.length; i++) {
+                                    if (dataModel[i].type == "dropdownList") {
+                                        if (dataModel[i].Value.length > 0) {
+                                            var name = dataModel[i].label;
+                                            var dropdownName = name.split(' ').join('_');
+                                            if ($("#ddl_" + dropdownName).length > 0) {
+
+                                                //$("#Sub_Line_Station_ID option[value=" + data[0].Id + "]").prop('selected', 'selected');
+                                                $("#ddl_" + dropdownName + " option[value=" + dataModel[i].Value + "]").prop('selected', 'selected');
+                                            }
+                                        }
+                                    }
+                                    if (dataModel[i].type == "CheckBox") {
+                                        var name = dataModel[i].label;
+                                        var checkboxname = name.split(' ').join('_');
+                                        if ($("#chk_" + checkboxname).length > 0) {
+                                            if (dataModel[i].Value == true) {
+                                                document.getElementById($("#chk_" + checkboxname).attr('id')).checked = true;
+                                            }
+                                            else {
+                                                document.getElementById($("#chk_" + checkboxname).attr('id')).checked = false;
+                                            }
+                                        }
+
+                                        //$("#Sub_Line_Station_ID option[value=" + data[0].Id + "]").prop('selected', 'selected');
+
+                                    }
+                                    if (dataModel[i].type == "RadioButton") {
+                                       
+                                        var name = dataModel[i].label;
+                                        var checkboxname = name.split(' ').join('_');
+                                        if ($("#rbt_" + checkboxname).length > 0) {
+                                            if (dataModel[i].Value == true) {
+                                                document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = true;
+                                            }
+                                            else {
+                                                document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = false;
+                                            }
+                                        }
+
+
+                                    }
+                                }
+                                //-------show static field value---------------------------//
+
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    $('#Sub_Assembly_ID').change(function () {
+        debugger;
+        var assyId = $('#Sub_Assembly_ID').val();
+        var BIWFlag = 0, EnFlag = 0, TAFlag = 0, FAFlag = 0, RAFlag = 0, CHFlag = 0, MFlag = 0;
+        if (assyId != null && assyId.length > 0) {
+            $('#divBIW_Part_No').css('display', 'none');
+            $('#divBIW_Description').css('display', 'none');
+            $('#divEngine_PartNo').css('display', 'none');
+            $('#divEngine_Part_Desc').css('display', 'none');
+            $('#divTA_PartNo').css('display', 'none');
+            $('#divTA_Part_Desc').css('display', 'none');
+            $('#divFA_PartNo').css('display', 'none');
+            $('#divFA_Part_Desc').css('display', 'none');
+            $('#divRA_PartNo').css('display', 'none');
+            $('#divRA_PartDesc').css('display', 'none');
+            $('#divChasis_PartNo').css('display', 'none');
+            $('#divChasis_PartDesc').css('display', 'none');
+            $('#divMachine_PartNo').css('display', 'none');
+            $('#divMachine_PartDesc').css('display', 'none');
+
+            $('#divCountry').css('display', 'none');
+            //$("#TextBoxContainerBIW").css('display', 'none');
+            //$("#TextBoxContainerEngine").css('display', 'none');
+            //$("#TextBoxContainerTA").css('display', 'none');
+            //$("#TextBoxContainerFA").css('display', 'none');
+            //$("#TextBoxContainerRA").css('display', 'none');
+            //$("#TextBoxContainerCH").css('display', 'none');
+
+            for (var i = 0; i < assyId.length; i++) {
+                if (assyId[i] == 1) {
+                    $('#divCountry').css('display', 'block');
+
+                    $('#divBIW_Part_No').css('display', 'block');
+                    $('#divBIW_Description').css('display', 'block');
+                    BIWFlag = 1;
+
+                    $("#TextBoxContainerBIW").css('display', 'none');
+                    $("#BIWImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 1 + "", showPrescentfields, "json");
+
+                    $("#TextBoxContainerBIW").css('display', 'block');
+                    $("#BIWImageContainer").css('display', 'block');
+
+                    var ModelID = $('#Model_ID').val();
+                    $.getJSON('/NewModelMaster/fillCountriesDropdown', { ModelID: ModelID }, function (data) {
+
+                        // Ajax success callback function.
+                        // Populate dropdown from Json data returned from server.
+
+                        // $('#Countries option').remove();
+                        for (i = 0; i < data.length; i++) {
+
+                            $('#Countries').append('<option value="' +
+                                data[i].Country_ID + '">' + data[i].Country_Name + '</option>');
+
+                        }
+                        $("#Countries").select2({
+                            allowClear: true,
+                            placeholder: 'Assign Countries',
+                            multiple: 'multiple'
+                        });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // Ajax fail callback function.
+                        alert('Error getting Countries!');
+                    });
+                }
+                if (assyId[i] == 2) {
+                    $('#divEngine_PartNo').css('display', 'block');
+                    $('#divEngine_Part_Desc').css('display', 'block');
+                    EnFlag = 1;
+
+                    $("#TextBoxContainerEngine").css('display', 'none');
+                    $("#EngineImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 2 + "", showPrescentfields, "json");
+
+                    $("#TextBoxContainerEngine").css('display', 'block');
+                    $("#EngineImageContainer").css('display', 'block');
+                   
+                }
+                if (assyId[i] == 3) {
+                    $('#divTA_PartNo').css('display', 'block');
+                    $('#divTA_Part_Desc').css('display', 'block');
+                    TAFlag = 1;
+
+                    $("#TextBoxContainerTA").css('display', 'none');
+                    $("#TAImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 3 + "", showPrescentfields, "json");
+                    $("#TextBoxContainerTA").css('display', 'block');
+                    $("#TAImageContainer").css('display', 'block');
+
+                }
+                if (assyId[i] == 4) {
+                    $('#divFA_PartNo').css('display', 'block');
+                    $('#divFA_Part_Desc').css('display', 'block');
+                    FAFlag = 1;
+
+                    $("#TextBoxContainerFA").css('display', 'none');
+                    $("#FAImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 4 + "", showPrescentfields, "json");
+                    $("#TextBoxContainerFA").css('display', 'block');
+
+                    $("#FAImageContainer").css('display', 'block');
+
+                    
+                }
+                if (assyId[i] == 5) {
+                    $('#divRA_PartNo').css('display', 'block');
+                    $('#divRA_PartDesc').css('display', 'block');
+                    RAFlag = 1;
+                    $("#TextBoxContainerRA").css('display', 'none');
+                    $("#RAImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 5 + "", showPrescentfields, "json");
+                    $("#TextBoxContainerRA").css('display', 'block');
+                    $("#RAImageContainer").css('display', 'block');
+
+                }
+                if (assyId[i] == 6) {
+                    $('#divChasis_PartNo').css('display', 'block');
+                    $('#divChasis_PartDesc').css('display', 'block');
+                    CHFlag = 1;
+
+                    $("#TextBoxContainerCH").css('display', 'none');
+                    $("#CHImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 6 + "", showPrescentfields, "json");
+                    $("#TextBoxContainerCH").css('display', 'block');
+
+                    $("#CHImageContainer").css('display', 'block');
+
+                }
+                if (assyId[i] == 7) {
+                    $('#divMachine_PartNo').css('display', 'block');
+                    $('#divMachine_PartDesc').css('display', 'block');
+                    MFlag = 1;
+
+                    $("#TextBoxContainerMachine").css('display', 'none');
+                    $("#MachineImageContainer").css('display', 'none');
+                    var url = "/NewModelMaster/GetData";
+                    ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 7 + "", showPrescentfields, "json");
+                    $("#TextBoxContainerMachine").css('display', 'block');
+
+                    $("#MachineImageContainer").css('display', 'block');
+                }
+            }
+            if (BIWFlag == 0) {
+                $('#BIW_Part_No').val("");
+                $('#BIW_Description').val("");
+
+                $('#divBIW_Part_No').css('display', 'none');
+                $('#divBIW_Description').css('display', 'none');
+
+                $("#TextBoxContainerBIW").css('display', 'none');
+                $("#BIWImageContainer").css('display', 'none');
+            }
+            if (EnFlag == 0) {
+                $('#Engine_PartNo').val("");
+                $('#Engine_Part_Desc').val("");
+               
+                $('#divEngine_PartNo').css('display', 'none');
+                $('#divEngine_Part_Desc').css('display', 'none');
+
+                $("#TextBoxContainerEngine").css('display', 'none');
+                $("#EngineImageContainer").html("");
+            }
+            if (TAFlag == 0) {
+                $('#TA_PartNo').val("");
+                $('#TA_Part_Desc').val("");
+                
+                $('#divTA_PartNo').css('display', 'none');
+                $('#divTA_Part_Desc').css('display', 'none');
+
+                $("#TextBoxContainerTA").css('display', 'none');
+                $("#TAImageContainer").html("");
+            }
+            if (FAFlag == 0) {
+                $('#FA_PartNo').val("");
+                $('#FA_Part_Desc').val("");
+                
+                $('#divFA_PartNo').css('display', 'none');
+                $('#divFA_Part_Desc').css('display', 'none');
+
+                $("#TextBoxContainerFA").css('display', 'none');
+                $("#FAImageContainer").html("");
+            }
+            if (RAFlag == 0) {
+                $('#RA_PartNo').val("");
+                $('#RA_PartDesc').val("");
+               
+                $('#divRA_PartNo').css('display', 'none');
+                $('#divRA_PartDesc').css('display', 'none');
+
+                $("#TextBoxContainerRA").css('display', 'none');
+                $("#RAImageContainer").html("");
+            }
+            if (CHFlag == 0) {
+                $('#Chasis_PartNo').val("");
+                $('#Chasis_PartDesc').val("");
+
+                $('#divChasis_PartNo').css('display', 'none');
+                $('#divChasis_PartDesc').css('display', 'none');
+
+                $("#TextBoxContainerCH").css('display', 'none');
+                $("#CHImageContainer").html("");
+            }
+            if (MFlag == 0) {
+                $('#Machine_PartNo').val("");
+                $('#Machine_PartDesc').val("");
+
+                $('#divMachine_PartNo').css('display', 'none');
+                $('#divMachine_PartDesc').css('display', 'none');
+
+                $("#TextBoxContainerMachine").css('display', 'none');
+                $("#MachineImageContainer").html("");
+            }
+        }
+
+
+        if (assyId == "" || assyId == null) {
+            $('#divBIW_Part_No').css('display', 'none');
+            $('#divBIW_Description').css('display', 'none');
+            $('#divEngine_PartNo').css('display', 'none');
+            $('#divEngine_Part_Desc').css('display', 'none');
+            $('#divTA_PartNo').css('display', 'none');
+            $('#divTA_Part_Desc').css('display', 'none');
+            $('#divFA_PartNo').css('display', 'none');
+            $('#divFA_Part_Desc').css('display', 'none');
+            $('#divRA_PartNo').css('display', 'none');
+            $('#divRA_PartDesc').css('display', 'none');
+            $('#divChasis_PartNo').css('display', 'none');
+            $('#divChasis_PartDesc').css('display', 'none');
+            $('#divMachine_PartNo').css('display', 'none');
+            $('#divMachine_PartDesc').css('display', 'none');
+
+            $('#BIW_Part_No').val("");
+            $('#BIW_Description').val("");
+            $('#Engine_PartNo').val("");
+            $('#Engine_Part_Desc').val("");
+            $('#TA_PartNo').val("");
+            $('#TA_Part_Desc').val("");
+            $('#FA_PartNo').val("");
+            $('#FA_Part_Desc').val("");
+            $('#RA_PartNo').val("");
+            $('#RA_PartDesc').val("");
+            $('#Chasis_PartNo').val("");
+            $('#Chasis_PartDesc').val("");
+            $('#Machine_PartNo').val("");
+            $('#Machine_PartDesc').val("");
+
+
+            $("#TextBoxContainerBIW").html("");
+            $("#TextBoxContainerEngine").html("");
+            $("#TextBoxContainerTA").html("");
+            $("#TextBoxContainerFA").html("");
+            $("#TextBoxContainerRA").html("");
+            $("#TextBoxContainerCH").html("");
+            $("#TextBoxContainerMachine").html("");
+
+            $("#BIWImageContainer").html("");
+            $("#EngineImageContainer").html("");
+            $("#TAImageContainer").html("");
+            $("#FAImageContainer").html("");
+            $("#RAImageContainer").html("");
+            $("#CHImageContainer").html("");
+            $("#MachineImageContainer").html("");
+        }
+    })
+
+
+    $("#Shop_ID").change(function () {
+       
+        var shopId = $("#Shop_ID").val();
+        if (shopId != "") {
+            $.ajax({
+                type: "POST",
+                url: '/NewModelMaster/GetLineByShopID',
+                data: JSON.stringify({ Shop_ID: shopId }),
+                contentType: 'application/json',
+                success: function (data) {
+                    
+                    $("#Body_Line option").remove();
+                    $("#Body_Line").append('<option value="0">Select Line</option>');
+                    $.each(data, function (i, data) {
+                        $("#Body_Line").append('<option value="' + data.id + '">' + data.value + '</option>');
+
+                    });
+                }
+            });
+            setTimeout(
+
+                $.ajax({
+                    type: "POST",
+                    url: '/BIWPartNoMaster/GetChildPartMasterData',
+                    data: JSON.stringify({ Shop_ID: shopId }),
+                    contentType: 'application/json',
+                    success: function (data) {
+                        debugger;
+                        $("#Sub_Assembly_ID").empty();
+
+                        $.each(data, function (i, data) {
+                            $("#Sub_Assembly_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                            if (data.id > 0) {
+                                debugger;
+                                var url = "/BIWPartNoMaster/GetAttributionParameters";
+                                ajaxpack.getAjaxRequest(url, "ID=" + data.id + "", showPrescentfields, "json");
+                            }
+
+                        });
+                        $("#Sub_Assembly_ID").trigger("change");
+                    }
+
+
+
+                }),1000
+            )
+        }
+        else {
+            $("#Body_Line").empty();
+            $("#Body_Line option").remove();
+            $("#Body_Line").append('<option value="0">Select Line</option>');
+
+            $('#Platform_Id option').remove();
+            $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+            $("#Config_ID option").remove();
+            $("#Config_ID").append('<option value="">Select Serial No Config</option>');
+
+            $("#Model_Attribute_ID option").remove();
+            $("#Model_Attribute_ID").append('<option value="">Select Attribute</option>');
+        }
+    });
+
+    $('#Body_Line').change(function () {
+        var LineID = $("#Body_Line").val();
+        $('Platform_Id').html("");
+        if (LineID.length > 0) {
+
+            // Populate categories when the page is loaded.
+            $.getJSON('/NewModelMaster/GetPlatformByLine', { LineID: LineID }, function (data) {
+                if (data.length > 0) {
+
+                    // Ajax success callback function.
+                    // Populate dropdown from Json data returned from server.
+                    $('#Platform_Id option').remove();
+                    //$('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Platform_Id').append('<option value="' + data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                    }
+                } else {
+                    $('#Platform_Id option').remove();
+                    $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#Platform_Id option').remove();
+                $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+                alert('Error getting platform Selection !');
+            });
+        }
+        else {
+            $('#Platform_Id option').remove();
+            $('#Platform_Id').append('<option value="">' + $('#Select_Platform').val() + '</option>');
+
+            $("#Config_ID option").remove();
+            $("#Config_ID").append('<option value="">Select Serial No Config</option>');
+
+            $("#Model_Attribute_ID option").remove();
+            $("#Model_Attribute_ID").append('<option value="">Select Attribute</option>');
+        }
+    });
+
+    $("#Platform_Id").change(function () {
+       
+        var platformId = $("#Platform_Id").val();
+        var shopId = $("#Shop_ID").val();
+        var lineId = $("#Body_Line").val();
+        if (platformId != "") {
+            $.ajax({
+                type: "POST",
+                url: '/BIWPartNoMaster/GetSeriesData',
+                data: JSON.stringify({ Platform_ID: platformId }),
+                contentType: 'application/json',
+                success: function (data) {
+                    
+                    $("#Config_ID").empty();
+                    $("#Config_ID").append('<option value="">Select Serial Config.</option>');
+                    $.each(data, function (i, data) {
+                        $("#Config_ID").append('<option value="' + data.id + '">' + data.value + '</option>');
+                    });
+                }
+            });
+
+            setTimeout(
+            $.ajax({
+                type: 'POST',
+                url: "/NewModelMaster/GetAttributeData", // we are calling json method
+                dataType: 'json',
+                data: { PlatformID: platformId, ShopID: shopId, LineID: lineId },
+                success: function (data) {
+                   
+                    $("#Model_Attribute_ID").empty();
+                    $("#Model_Attribute_ID").append('<option value="">Select Attribute</option>');
+
+                    $.each(data, function (i, data) {
+                        $("#Model_Attribute_ID").append('<option value="' + data.Id + '">' + data.Value + '</option>');
+
+                    });
+                }
+            }), 1000)
+        }
+        else {
+            $("#Config_ID").empty();
+            $("#Config_ID option").remove();
+            $("#Config_ID").append('<option value="">Select Serial No Config</option>');
+
+            $("#Model_Attribute_ID option").remove();
+            $("#Model_Attribute_ID").append('<option value="">Select Attribute</option>');
+        }
+    });
+
+    $('#BIW_Part_No').change(function () {
+       
+        //$("#TextBoxContainerBIW").html("");
+        var BIW_Part_No = $("#BIW_Part_No").val();
+        //var url = "/NewModelMaster/GetData";
+        // ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 1 + "", showPrescentfields, "json");
+        document.getElementById("BIWImageContainer").style.display = "block";
+        ShowChildPartMasterData(BIW_Part_No);
+
+        if (BIW_Part_No.length > 0) {
+            $.getJSON('/NewModelMaster/GetBIWDescription', { BIW_Part_No: BIW_Part_No }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#BIW_Description').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#BIW_Description').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#BIW_Description').val('');
+                alert('Error getting BIW Description Selection !');
+            });
+
+            setTimeout(
+          $.ajax({
+              type: 'POST',
+              url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+              dataType: 'json',
+              data: { PartNo: BIW_Part_No },
+              success: function (data) {
+
+                  if (data.length > 0) {
+                      $("#BIWImageContainer").html("");
+                      var res = '<div class="col-md-6">';
+                      var count = 0;
+                      for (var i = 0; i < data.length; i++) {
+                          var BIW = "BIWImage1";
+                          res += '<div class="" id="' + data[i].Image_ID + '">';
+                          res += '<Label for["' + BIW + '"]>' + "BIW Part Image" + '</Label>';
+                          if (data[i].Image_Content != null)
+                              res += '<img id="' + BIW + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                          else if (data[i].Path != null)
+                              res += '<img id="' + BIW + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                          res += '</div>';
+                          count++;
+                      }
+                      res += '</div>';
+                      $("#BIWImageContainer").append(res);
+
+                  }
+              }
+          }), 1000)
+        }
+        else {
+            $('#BIW_Description').val('');
+            document.getElementById("BIWImageContainer").style.display = "none";
+        }
+    });
+
+    $('#Engine_PartNo').change(function () {
+       
+        //$("#TextBoxContainerEngine").html("");
+        var EnginePartNo = $("#Engine_PartNo").val();
+        var ModelID = $("#Model_ID").val();
+        var AssyID = $("#Sub_Assembly_ID").val();
+        var Engine_PartNo = $("#Engine_PartNo").val();
+        var temp = new Array();
+       
+        var Tabledata = {};
+        for (var i = 0; i < AssyID.length; i++) {
+            //Tabledata.Assembly_ID[i] = AssyID[i];
+            temp.push(AssyID[i]);
+        }
+        //document.getElementById("ImageContainer").style.display = "none";
+        document.getElementById("EngineImageContainer").style.display = "block";
+        //document.getElementById("myclass1").style.display = "none";
+
+        //$("#EngineImage").html("");
+        
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 2 + "", showPrescentfields, "json");
+        ShowChildPartMasterData(Engine_PartNo);
+
+        if (Engine_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetEngineDescription', { Engine_Part_No: Engine_PartNo }, function (data) {
+                if (data.length > 0) {
+                    $('#Engine_Part_Desc').val(data[0].VARIANT_DESC);
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+
+                } else {
+                    $('#Engine_Part_Desc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#Engine_Part_Desc').val('');
+                alert('Error getting Engine Description Selection !');
+            });
+
+            setTimeout(
+          $.ajax({
+              type: 'POST',
+              url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+              dataType: 'json',
+              data: { PartNo: Engine_PartNo },
+              success: function (data) {
+
+                  if (data.length > 0) {
+                      $("#EngineImageContainer").html("");
+                      var res = '<div class="col-md-6">';
+                      var count = 0;
+                      for (var i = 0; i < data.length; i++) {
+                          var Engine = "EngineImage";
+                          res += '<div class="" id="' + data[i].Image_ID + '">';
+                          res += '<Label for["' + Engine + '"]>' + "Engine Part Image" + '</Label>';
+                          if (data[i].Image_Content != null)
+                              res += '<img id="' + Engine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                          else if (data[i].Path != null)
+                              res += '<img id="' + Engine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                          res += '</div>';
+                          count++;
+                      }
+                      res += '</div>';
+                      $("#EngineImageContainer").append(res);
+
+                  }
+              }
+          }), 1000)
+        }
+        else {
+            $('#Engine_Part_Desc').val('');
+            document.getElementById("EngineImageContainer").style.display = "none";
+        }
+
+    });
+
+
+    $('#TA_PartNo').change(function () {
+       // $("#TextBoxContainerTA").html("");
+        var TA_PartNo = $("#TA_PartNo").val();
+
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 3 + "", showPrescentfields, "json");
+        document.getElementById("TAImageContainer").style.display = "block";
+        ShowChildPartMasterData(TA_PartNo);
+
+        if (TA_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetTADescription', { TA_Part_No: TA_PartNo }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#TA_Part_Desc').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#TA_Part_Desc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#TA_Part_Desc').val('');
+                alert('Error getting TA Description Selection !');
+            });
+
+            setTimeout(
+         $.ajax({
+             type: 'POST',
+             url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+             dataType: 'json',
+             data: { PartNo: TA_PartNo },
+             success: function (data) {
+
+                 if (data.length > 0) {
+                     $("#TAImageContainer").html("");
+                     var res = '<div class="col-md-6">';
+                     var count = 0;
+                     for (var i = 0; i < data.length; i++) {
+                         var TA = "TAImage1";
+                         res += '<div class="" id="' + data[i].Image_ID + '">';
+                         res += '<Label for["' + TA + '"]>' + "Trans Axle Part Image" + '</Label>';
+                         if (data[i].Image_Content != null)
+                             res += '<img id="' + TA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                         else if (data[i].Path != null)
+                             res += '<img id="' + TA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                         res += '</div>';
+                         count++;
+                     }
+                     res += '</div>';
+                     $("#TAImageContainer").append(res);
+
+                 }
+             }
+         }), 1000)
+        }
+        else {
+            $('#TA_Part_Desc').val('');
+            document.getElementById("TAImageContainer").style.display = "none";
+        }
+    });
+
+    $('#FA_PartNo').change(function () {
+       // $("#TextBoxContainerFA").html("");
+        var FA_PartNo = $("#FA_PartNo").val();
+
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 4 + "", showPrescentfields, "json");
+        document.getElementById("FAImageContainer").style.display = "block";
+        ShowChildPartMasterData(FA_PartNo);
+
+        if (FA_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetFADescription', { FA_Part_No: FA_PartNo }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#FA_Part_Desc').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#FA_Part_Desc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#FA_Part_Desc').val('');
+                alert('Error getting FA Description Selection !');
+            });
+
+            setTimeout(
+         $.ajax({
+             type: 'POST',
+             url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+             dataType: 'json',
+             data: { PartNo: FA_PartNo },
+             success: function (data) {
+
+                 if (data.length > 0) {
+                     $("#FAImageContainer").html("");
+                     var res = '<div class="col-md-6">';
+                     var count = 0;
+                     for (var i = 0; i < data.length; i++) {
+                         var FA = "FAImage1";
+                         res += '<div class="" id="' + data[i].Image_ID + '">';
+                         res += '<Label for["' + FA + '"]>' + "Front Axle Part Image" + '</Label>';
+                         if (data[i].Image_Content != null)
+                             res += '<img id="' + FA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                         else if (data[i].Path != null)
+                             res += '<img id="' + FA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                         res += '</div>';
+                         count++;
+                     }
+                     res += '</div>';
+                     $("#FAImageContainer").append(res);
+
+                 }
+             }
+         }), 1000)
+        }
+        else {
+            $('#FA_Part_Desc').val('');
+            document.getElementById("FAImageContainer").style.display = "none";
+        }
+    });
+
+    $('#RA_PartNo').change(function () {
+       // $("#TextBoxContainerRA").html("");
+        var RA_PartNo = $("#RA_PartNo").val();
+
+       // var url = "/NewModelMaster/GetData";
+        // ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 5 + "", showPrescentfields, "json");
+        document.getElementById("RAImageContainer").style.display = "block";
+        ShowChildPartMasterData(RA_PartNo);
+
+        if (RA_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetRADescription', { RA_Part_No: RA_PartNo }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#RA_PartDesc').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#RA_PartDesc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#RA_PartDesc').val('');
+                alert('Error getting Rear Axle Description Selection !');
+            });
+
+            setTimeout(
+         $.ajax({
+             type: 'POST',
+             url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+             dataType: 'json',
+             data: { PartNo: RA_PartNo },
+             success: function (data) {
+
+                 if (data.length > 0) {
+                     $("#RAImageContainer").html("");
+                     var res = '<div class="col-md-6">';
+                     var count = 0;
+                     for (var i = 0; i < data.length; i++) {
+                         var RA = "RAImage1";
+                         res += '<div class="" id="' + data[i].Image_ID + '">';
+                         res += '<Label for["' + RA + '"]>' + "Rear Axle Part Image" + '</Label>';
+                         if (data[i].Image_Content != null)
+                             res += '<img id="' + RA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                         else if (data[i].Path != null)
+                             res += '<img id="' + RA + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                         res += '</div>';
+                         count++;
+                     }
+                     res += '</div>';
+                     $("#RAImageContainer").append(res);
+
+                 }
+             }
+         }), 1000)
+        }
+        else {
+            $('#RA_PartDesc').val('');
+            document.getElementById("RAImageContainer").style.display = "none";
+        }
+    });
+
+    $('#Chasis_PartNo').change(function () {
+        //$("#TextBoxContainerCH").html("");
+        var Chasis_PartNo = $("#Chasis_PartNo").val();
+
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 6 + "", showPrescentfields, "json");
+        document.getElementById("CHImageContainer").style.display = "block";
+        ShowChildPartMasterData(Chasis_PartNo);
+
+        if (Chasis_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetChasisDescription', { Chasis_Part_No: Chasis_PartNo }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#Chasis_PartDesc').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#Chasis_PartDesc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#Chasis_PartDesc').val('');
+                alert('Error getting Chasis Description Selection !');
+            });
+            setTimeout(
+         $.ajax({
+             type: 'POST',
+             url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+             dataType: 'json',
+             data: { PartNo: Chasis_PartNo },
+             success: function (data) {
+
+                 if (data.length > 0) {
+                     $("#CHImageContainer").html("");
+                     var res = '<div class="col-md-6">';
+                     var count = 0;
+                     for (var i = 0; i < data.length; i++) {
+                         var CH = "CHImage1";
+                         res += '<div class="" id="' + data[i].Image_ID + '">';
+                         res += '<Label for["' + CH + '"]>' + "Chasis Part Image" + '</Label>';
+                         if (data[i].Image_Content != null)
+                             res += '<img id="' + CH + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                         else if (data[i].Path != null)
+                             res += '<img id="' + CH + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                         res += '</div>';
+                         count++;
+                     }
+                     res += '</div>';
+                     $("#CHImageContainer").append(res);
+
+                 }
+             }
+         }), 1000)
+        }
+        else {
+            $('#Chasis_PartDesc').val('');
+            document.getElementById("CHImageContainer").style.display = "none";
+        }
+    });
+
+    $('#Machine_PartNo').change(function () {
+        debugger;
+        //$("#TextBoxContainerCH").html("");
+        var Machine_PartNo = $("#Machine_PartNo").val();
+
+        //var url = "/NewModelMaster/GetData";
+        //ajaxpack.getAjaxRequest(url, "SubAssemblyID=" + 6 + "", showPrescentfields, "json");
+        document.getElementById("MachineImageContainer").style.display = "block";
+        ShowChildPartMasterData(Machine_PartNo);
+
+        if (Machine_PartNo.length > 0) {
+            $.getJSON('/NewModelMaster/GetMachineDescription', { Machine_Part_No: Machine_PartNo }, function (data) {
+                if (data.length > 0) {
+                    dataModel = JSON.parse(data[0].Attribution_Parameters);
+                    if (dataModel != null) {
+                        //ShowDynamicFields(dataModel);
+                    }
+                    $('#Machine_PartDesc').val(data[0].VARIANT_DESC);
+                } else {
+                    $('#Machine_PartDesc').val('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                $('#Machine_PartDesc').val('');
+                alert('Error getting Machine Part Description Selection !');
+            });
+            setTimeout(
+         $.ajax({
+             type: 'POST',
+             url: "/NewModelMaster/GetImagedataPart", // we are calling json method
+             dataType: 'json',
+             data: { PartNo: Machine_PartNo },
+             success: function (data) {
+                 
+                 if (data.length > 0) {
+                     $("#MachineImageContainer").html("");
+                     var res = '<div class="col-md-6">';
+                     var count = 0;
+                     for (var i = 0; i < data.length; i++) {
+                         var Machine = "MachineImage1";
+                         res += '<div class="" id="' + data[i].Image_ID + '">';
+                         res += '<Label for["' + Machine + '"]>' + "Machine Part Image" + '</Label>';
+                         if (data[i].Image_Content != null)
+                             res += '<img id="' + Machine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="data:image/png;base64,' + arrayBufferToBase64(data[i].Image_Content) + '">';
+                         else if (data[i].Path != null)
+                             res += '<img id="' + Machine + '" alt="user image" class="ImageBorder" style="width:100%;height:100%" src="' + data[i].Path + '">';
+                         res += '</div>';
+                         count++;
+                     }
+                     res += '</div>';
+                     $("#MachineImageContainer").append(res);
+
+                 }
+             }
+         }), 1000)
+        }
+        else {
+            $('#Machine_PartDesc').val('');
+            document.getElementById("MachineImageContainer").style.display = "none";
+        }
+    });
+
+    function ShowDynamicFields(dataModel) {
+        if (dataModel.length > 0) {
+            for (var i = 0; i < dataModel.length; i++) {
+                if (dataModel[i].type == "dropdownList") {
+                    if (dataModel[i].Value.length > 0) {
+                        var name = dataModel[i].label;
+                        var dropdownName = name.split(' ').join('_');
+                        if ($("#ddl_" + dropdownName).length > 0) {
+
+                            //$("#Sub_Line_Station_ID option[value=" + data[0].Id + "]").prop('selected', 'selected');
+                            $("#ddl_" + dropdownName + " option[value=" + dataModel[i].Value + "]").prop('selected', 'selected');
+                        }
+                    }
+                }
+                if (dataModel[i].type == "CheckBox") {
+                    var name = dataModel[i].label;
+                    var checkboxname = name.split(' ').join('_');
+                    if ($("#chk_" + checkboxname).length > 0) {
+                        if (dataModel[i].Value == true) {
+                            document.getElementById($("#chk_" + checkboxname).attr('id')).checked = true;
+                        }
+                        else {
+                            document.getElementById($("#chk_" + checkboxname).attr('id')).checked = false;
+                        }
+                    }
+
+
+                }
+
+                if (dataModel[i].type == "RadioButton") {
+                    
+                    var name = dataModel[i].label;
+                    var checkboxname = name.split(' ').join('_');
+                    if ($("#rbt_" + checkboxname).length > 0) {
+                        if (dataModel[i].Value == true) {
+                            document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = true;
+                        }
+                        else {
+                            document.getElementById($("#rbt_" + checkboxname).attr('id')).checked = false;
+                        }
+                    }
+
+
+                }
+            }
+            //-------show static field value---------------------------//
+
+        }
+    }
+
+
+    function uploadImage(Id) {
+      
+        if (validateImageFilter()) {
+            var Image_Name = $('#FileUpload1')[0].files[0];
+            var formData = new FormData();
+            var modelcode = $("#Model_Code").val();
+            var plantID = $('#plantID').val();
+            formData.append("Image_Name", Image_Name);
+            formData.append("modelcode", modelcode);
+            formData.append("plantID", plantID);
+            formData.append("ID", Id);
+            $.ajax({
+                type: "POST",
+                url: '/NewModelMaster/saveImage',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success == false) {
+
+                        className = "alert-warning";
+                        message = "Error occured.Image Not Uploaded.";
+                        iconClass = "fa-exclamation";
+                    }
+                    else {
+
+                        className = "alert-info";
+                        message = "Image Uploaded Sucessfully!";
+                        iconClass = "fa-check";
+
+                    }
+                    var alertHtml = '<div class="box-body myalert">' +
+                        '<div class="alert ' + className + ' alert-dismissable">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa ' + iconClass + '"></i> Model Master </h4>' +
+                        '' + message
+                    '</div></div>';
+                    $('.content-wrapper .content').before(alertHtml);
+
+                    $('html, body').animate({ scrollTop: 0 }, 900);
+                },
+                error: function (error) {
+                    alert(error);
+                    var alertHtml = '<div class="box-body myalert">' +
+                        '<div class="alert alert-warning alert-dismissable">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa fa-eclamation"></i> Model Master </h4>' +
+                        '' + error.message
+                    '</div></div>';
+                    $('.content-wrapper .content').before(alertHtml);
+
+                    $('html, body').animate({ scrollTop: 0 }, 900);
+                }
+            });
+        }
+    }
+
+    function validateImageFilter() {
+        var uploadpath = $('#FileUpload1').val();
+        var fileExtension = uploadpath.substring(uploadpath.lastIndexOf(".") + 1, uploadpath.length);
+
+        if (fileExtension == "jpg" || fileExtension == "png" || fileExtension == "jpeg") {
+            return true;
+        }
+        else {
+            //error code - select only excel files
+            $('#FileUpload1').val('');
+            $('*[data-valmsg-for="Image_Name"]').html("Please select an image File !<br> Allowed Formats - (.jpg|.png|.jpeg) ");
+            return false;
+        }
+    }
+
+    function resetValidationMessages() {
+
+        $('*[data-valmsg-for="Image_Name"]').html("");
+    }
+    $('#FileUpload1').change(function () {
+        validateImageFilter();
+    });
+</script>

@@ -1,0 +1,225 @@
+﻿@model REIN_MES_System.Models.RS_OM_Creation
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="row">
+                @Html.ValidationSummary(true)
+                <div class="col-md-3" style="display:none;">
+
+                    @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                    @Html.HiddenFor(model => model.Row_ID)
+
+                    @Html.DropDownList("Plant_ID", null, String.Empty, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+
+                    @Html.DropDownList("Shop_ID", null, String.Empty, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3 col-lg-offset-1">
+                    @Html.Label("Order Type", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Order_Type, new { @readonly = "readonly", onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Order_Type, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-3 col-lg-offset-1">
+                    @Html.Label("PlatForm", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.RS_OM_Platform.Platform_Name, new { @readonly = "readonly", onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Platform_Id, null, new { @class = "validation_error" })
+                </div>*@
+            </div>
+            <br />
+            <div class="row">
+                @Html.HiddenFor(model => model.Plant_OrderNo)
+                <div class="col-md-3">
+
+                    @Html.Label("Part Number", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Model_Code, new { @readonly = "readonly", onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Model_Code, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-3 col-lg-offset-1">
+
+                    @Html.LabelFor(model => model.Planned_Date, "Planned Date *", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Planned_Date, "{0:yyyy-M-dd}", new { onchange = "", @class = "form-control", @maxlength = "12", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Planned_Date, null, new { @class = "validation_error" })
+
+                </div>
+            </div>
+
+
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label("Quantity", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Qty, new { onchange = "", @class = "form-control", @maxlength = "3" })
+                    @Html.ValidationMessageFor(model => model.Qty, null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-3 col-lg-offset-1">
+                    @Html.Label("Release Quantity", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.Release_Qty, new { @readonly = "readonly", onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Release_Qty, null, new { @class = "validation_error" })
+                </div>
+                @*added by mukesh*@ 
+                @*<div class="col-md-3 col-lg-offset-1">
+                    @Html.Label("Platform Name", htmlAttributes: new { @class = "" })
+
+                    @Html.TextBoxFor(model => model.RS_OM_Platform.Platform_Name, new { @value = @ViewBag.Platform_Name, @readonly = "readonly", onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RS_OM_Platform.Platform_Name, null, new { @class = "validation_error" })
+                </div>*@
+                @*////*@
+            </div>
+            <br />
+            <div class="row">
+               
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="submit" value="Save" class="btn btn-primary add_orders" />
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+@section Scripts
+        {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @*<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+        <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Planned_Date").datepicker(
+          {
+              format: 'yyyy-mm-dd',
+              startDate: '+0d',
+              autoclose: true
+          });
+        })
+        //shop_Id find using plant
+        $("#Plant_ID").on("change", function () {
+            var Plant = $("#Plant_ID").val();
+            $('#Shop_ID').html("");
+            if (Plant.length > 0) {
+                // Populate categories when the page is loaded.
+                $.getJSON('/Partmaster/GetPlantID', { Plant_Id: Plant }, function (data) {
+
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        $('#Shop_ID option').remove();
+                        $('#Shop_ID').append('<option value=""></option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Shop_ID').append('<option value="' +
+                                         data[i].Shop_ID + '">' + data[i].Shop_Name + '</option>');
+                        }
+                    }
+                    else {
+                        alert("No Shop Available for this Plant!");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Plant in order creation !');
+                });
+            }
+
+        }); // Shop Select Change Event End
+
+
+        //part_series find using shop
+        $("#Shop_ID").on("change", function () {
+
+            var Shop = $("#Shop_ID").val();
+            $('Series_Code').html("");
+            if (Shop.length > 0) {
+                // Populate categories when the page is loaded.
+                $.getJSON('/OrderCreation/GetPartSeries', { Shop_id: Shop }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        $('#Series_Code option').remove();
+                        $('#Series_Code').append('<option value=""></option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Series_Code').append('<option value="' +
+                                         data[i].Series_Code + '">' + data[i].Series_Description + '</option>');
+                        }
+                    } else {
+                        $('#Series_Code option').remove();
+                        alert("No Series Available for this  Shop!");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting part_series in order creation !');
+                });
+            }
+
+        }); // Shop Select Change Event End
+
+
+        //Part Number find using series
+        $("#Series_Code").on("change", function () {
+            var Shop = $("#Shop_ID").val();
+            var seriescode = $("#Series_Code").val();
+
+            $('Model_Code').html("");
+            if (seriescode.length > 0 && Shop.length > 0) {
+                // Populate categories when the page is loaded.
+                $.getJSON('/OrderCreation/GetPartNumber', { Shop_Id: Shop, series_code: seriescode }, function (data) {
+                    if (data.length > 0) {
+                        // Ajax success callback function.
+                        $('#Model_Code option').remove();
+                        $('#Model_Code').append('<option value=""></option>');
+
+                        for (i = 0; i < data.length; i++) {
+                            $('#Model_Code').append('<option value="' +
+                                         data[i].Id + '">' + data[i].Value + '</option>');
+                        }
+                    } else {
+                        $('#Model_Code option').remove();
+                        alert("No part Number Available for this Part Series!");
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    alert('Error getting Part number on order creation !');
+                });
+            }
+        }); // Shop Select Change Event End
+        //added by mukesh
+        //refllect value of quantity field to release quantity field
+        $("#Qty").keyup(function () {
+            $("#Release_Qty").val($(this).val());
+        });
+
+    </script>
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

@@ -1,0 +1,65 @@
+﻿@model REIN_MES_System.Models.RS_Serial_Number_Configuration
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @{ 
+                var shopname = db.RS_Shops.Where(m => m.Shop_ID == Model.Shop_ID).Select(m => m.Shop_Name).FirstOrDefault();
+                var platformName = db.RS_OM_Platform.Where(m => m.Platform_ID == Model.Platform_ID).Select(m => m.Platform_Name).FirstOrDefault();
+            }
+            @Html.DisplayFor(model => shopname)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Platform Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => platformName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Display Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Display_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Plant Code")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plant_Code)
+        </dd>
+        <dt>
+            @Html.DisplayName("Running Serial Number")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Running_Serial_Number)
+        </dd>
+
+       
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Config_ID }, new { @class = "btn btn-primary" }) 
+    @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+</p>
+

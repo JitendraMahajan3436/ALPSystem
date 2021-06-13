@@ -1,0 +1,123 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_SOP>
+@using REIN_MES_System.App_LocalResources;
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<p>
+    <a href="@Url.Action("Create", "SOP")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+    @*@Html.ActionLink("Create New", "Create", null, htmlAttributes: new { @class = "btn btn-social btn-linkedin" })*@
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.SOP_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+                </th>
+                <th>
+                    @Html.Raw(ResourceDisplayName.Line_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+                </th>
+                <th>
+                    @Html.Raw(ResourceDisplayName.Family)
+                </th>
+                <th>
+                    @Html.Raw(ResourceDisplayName.Model_Code)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SOP_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_OM_Platform.Platform_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model_Code)
+                    </td>
+                    <td>
+                        <a href="@Url.Action(ResourceGlobal.Edit, "SOP", new { id = item.SOP_ID })" class="col-md-1"><i class="fa fa-edit"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Details, "SOP", new { id = item.SOP_ID })" class="col-md-1"><i class="fa fa-fw fa-laptop"></i></a>
+                        @*@using (Html.BeginForm("Delete", "SOP", FormMethod.Post, new { @class = "delete-form col-md-1" }))
+                            {
+                                @Html.Hidden("id", item.SOP_ID)
+                                @Html.AntiForgeryToken()
+                                <a href="" class="delete-btn"><i class="fa fa-trash"></i></a>
+                            }*@
+                        <a href="@Url.Action(ResourceGlobal.Delete, "SOP", new { id = item.SOP_ID })" class="col-md-1"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+@section scripts{
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$(".delete-btn").on('click', function (event) {
+            //    event.preventDefault();
+            //    if (confirm("Are you sure you want to delete this record ? ")) {
+            //        $(this).parent().submit();
+            //    }
+            //});
+            $('.datatable_completes tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.datatable_completes').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

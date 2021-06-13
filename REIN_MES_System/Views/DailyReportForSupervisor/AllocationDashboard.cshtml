@@ -1,0 +1,86 @@
+﻿@model IEnumerable<REIN_MES_System.Models.AllocationDashboard>
+
+@{
+    ViewBag.Title = "AllocationDashboard";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+<div style="margin: 0px auto; width: 1300px;">
+    <table id="scroller1" class="table table-bordered table-striped datatable_completes" style="margin-bottom: 5px;">
+        <thead>
+            <tr>
+                <th>Token Number</th>
+                <th>Employee Name</th>
+                <th>Line Name</th>
+                <th>Station Name</th>
+                <th>Shop Name</th>
+
+            </tr>
+        </thead>
+
+    </table>
+
+
+    <table id="scroller" class="table table-bordered table-striped datatable_completes">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @Html.DisplayFor(modelItem => item.Employee_Token)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Employee_Name) </td>
+                    @*<td>@Html.DisplayFor(modelItem => item.RS_Employee.Employee_No)</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.Line_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Station_Name) </td>
+                    <td>@Html.DisplayFor(modelItem => item.Shop_Name) </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+@*</ul>*@
+
+@section scripts {
+
+
+    <script type="text/javascript" src="~/Scripts/jquery.simplyscroll.min.js"></script>
+
+
+
+    @* @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")*@
+    @*@Scripts.Render("~/bundles/DailyReportManagement_file")*@
+
+    @*<link href="~/Content/AllocationDashboard.css" rel="stylesheet"/>*@
+
+
+
+}
+
+<link href="~/Content/AllocationDashboard.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(function () { //on DOM ready
+        // alert("hi");
+        $("#scroller").simplyScroll({
+            customClass: 'vert',
+            orientation: 'vertical',
+            auto: true,
+            manualMode: 'loop',
+            frameRate: 20,
+            speed: 5
+        });
+    });
+
+    setTimeout(function (e) {
+        var url = "/DailyReportForSupervisor/getDailyAllocation";
+        ajaxpack.getAjaxRequest(url, "", "json");
+
+    }, 20000);
+    // alert("hi");
+</script>
+
+
+

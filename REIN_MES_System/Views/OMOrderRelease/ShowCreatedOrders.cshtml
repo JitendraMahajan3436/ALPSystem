@@ -1,0 +1,72 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Creation>
+
+     @*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+
+
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Today's Created Orders</div>
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                  
+                    <th>
+                        @Html.DisplayName("Model Code")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Order Type")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Quantity")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Realease Qty")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Series")
+                    </th>
+
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model_Code)
+                        </td>
+                        <td>
+                            
+                            @if (item.Order_Type == "P")
+                            {
+                                @Html.Label("Parent")
+                            }
+                            else
+                            {
+                                @Html.Display("Spare")
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Qty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Release_Qty)
+                        </td>  
+                        <td>
+                           @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+                        </td>
+
+                        <td>
+                            <a class="create_order" id="@item.Row_ID" href="javascript:void(0);">Release Order</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div></div>

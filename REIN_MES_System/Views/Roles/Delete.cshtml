@@ -1,0 +1,90 @@
+﻿@model REIN_MES_System.Models.RS_Roles
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-6">
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Role_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Role_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Role_Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Role_Description)
+            </dd>
+
+            @*<dt>
+                @Html.DisplayNameFor(model => model.Is_Transfered)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Is_Transfered)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Is_Purgeable)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Is_Purgeable)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Inserted_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Inserted_Date)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Updated_Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Updated_Date)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MM_Users.User_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MM_Users.User_Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MM_Users1.User_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MM_Users1.User_Name)
+            </dd>*@
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-primary" /> 
+                @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        }
+    </div>
+</div>

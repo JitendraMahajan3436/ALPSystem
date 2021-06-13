@@ -1,0 +1,85 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+@{
+    ViewBag.Title = "UnHoldOrders";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<!-- Main content -->
+<section class="content">
+    <div class="box holded-ordersbox">
+        <div class="box-header with-border">
+            <div class="col-md-3">
+                <h4 style="margin:0"><b>Holded Orders List</b></h4>
+            </div>
+            <div class="col-md-8">
+                <div id="order-message-block" class="shop-notify order-start-notify"></div>
+            </div>
+            <div class="box-tools pull-right">
+                @*<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>*@
+            </div>
+        </div>
+        <div class="box-body">
+            <div>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Order No</th>
+                            <th>Model Code</th>
+                            <th>Series</th>
+                            <th>Remarks</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Order_No)</td>
+                                <td>@Html.DisplayFor(modelItem => item.partno)</td>
+                                <td>@Html.DisplayFor(modelItem => item.RS_Series.Series_Description)</td>
+                                <td class="tdRemarks"><input type="text" maxlength="100" name="unholdRemark" class="unholdRemark" /></td>
+                                <td><button class="btn btn-primary unhold-btn" data-rowid="@item.Row_ID">UnHold</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".unhold-btn").click(function () {
+                var rowid = $(this).data("rowid");
+                $this = $(this);
+                var remarks = $(this).parent().parent().find('.tdRemarks').find(".unholdRemark").val();
+                $('#order-message-block').html("");
+                $('#order-message-block').removeClass('bg-correct').removeClass('bg-error');
+                $(".unhold-btn").hide();
+                $.getJSON('/ManageOrders/UnHoldOrder', { rowID: rowid, remark: remarks }, function (data) {
+                    if (data == true) {
+                        $this.parent().parent().css("background", "red");
+                        $this.parent().parent().remove();
+                        $('#order-message-block').html("Successfully UnHolded Order.");
+                        $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                    } else {
+                        $('#order-message-block').html("Unable to UnHold the Order !");
+                        $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                    }
+                    $(".unhold-btn").show();
+                }).fail(function (d, textStatus, errorThrown) {
+                    $('#order-message-block').html("Unable to UnHold the Order.Please try refreshing the page and Retry ! [Status: " + textStatus + " | Details: " + errorThrown + "]");
+                    $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    $(".unhold-btn").show();
+                });
+            });
+        });
+    </script>
+}

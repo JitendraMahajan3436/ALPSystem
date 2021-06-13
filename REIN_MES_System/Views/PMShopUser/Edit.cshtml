@@ -1,0 +1,123 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Maintenance_Log_New
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PM_Log_ID)
+
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.RS_Shops.Shop_Name, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Machine_ID, "Machine Name", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.RS_MT_Machines.Machine_Name, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                @Html.ValidationMessageFor(model => model.Machine_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Scheduled_Date, "Calander", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Scheduled_Date, "{0:yyyy/MM/dd}", new { onchange = "", @class = "form-control", @readonly = "true" })
+                @*@Html.TextBoxFor(model => model.Scheduled_Date,  htmlAttributes: new { @class = "form-control", @readonly = "true" })*@
+                @Html.ValidationMessageFor(model => model.Scheduled_Date, null, new { @class = "validation_error" })
+            </div>
+        </div>
+       <br />
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Is_Acknowledge, "Is_Acknowledge", htmlAttributes: new { @class = "" })
+
+                @Html.CheckBox("Is_Acknowledge")
+                @Html.ValidationMessageFor(model => model.Is_Acknowledge, null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Acknowledge_Date, "Done Date", htmlAttributes: new { @class = "" })
+                @Html.TextBoxFor(model => model.Acknowledge_Date, "{0:dd/MM/yyyy}", new { onchange = "", @class = "form-control"})
+                @*@Html.TextBoxFor(model => model.Confirmed_Date, htmlAttributes: new { @class = "form-control" })*@
+                @Html.ValidationMessageFor(model => model.Acknowledge_Date, null, new { @class = "validation_error" })
+            </div>
+           
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Acknowledge_User_ID, "Operator User ID", htmlAttributes: new { @class = "" })
+
+                @Html.TextBoxFor(model => model.Acknowledge_User_ID, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Acknowledge_User_ID, null, new { @class = "validation_error" })
+            </div>
+        </div>
+        <br />
+      
+        <div class="row">
+            <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#Acknowledge_Date").attr("disabled", "disabled");
+        $("#Acknowledge_User_ID").attr("disabled", "disabled");
+        $("#Is_Acknowledge").click(function () {
+       
+            if ($(this).is(":checked")) {
+                $("#Acknowledge_Date").removeAttr("disabled");
+                $("#Confirmed_Date").focus();
+                $("#Acknowledge_User_ID").removeAttr("disabled");
+             
+            } else {
+                $("#Acknowledge_Date").attr("disabled", "disabled");
+                $("#Acknowledge_User_ID").attr("disabled", "disabled");
+            }
+        });
+    });
+</script>
+
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        $("#Acknowledge_Date").datepicker(
+           {
+               format: 'yyyy-mm-dd',
+               autoclose: true
+           });
+
+        getDateD();
+
+
+        $('#Acknowledge_Date').on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+
+    });
+
+
+    function getDateD() {
+        var d = new Date();
+        var today = d.getDate();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        $("#Acknowledge_Date").datepicker("setDate", new Date(year, month,yesterday));
+
+    }
+
+</script>
+

@@ -1,0 +1,215 @@
+﻿@model REIN_MES_System.Models.ShopwiseManualConsumption
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+
+}
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Shop Name </label>
+                            @Html.DropDownList("Shop_ID", null, "Select Shop ", new { @class = "form-control", @style = "max-width:100%" })
+                            @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Feeder Name </label>
+
+                            @Html.DropDownListFor(model => model.TagIndex,  Enumerable.Empty<SelectListItem>(),  new { @class = "form-control "@*, @style = "max-width:100%"*@})
+                            @Html.ValidationMessageFor(model => model.TagIndex, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            @Html.Label("Yesterday Reading", htmlAttributes: new { @class = "control-label" })
+
+                            @*@Html.TextBox("YesterdayConsumtion", null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })*@
+                            @Html.TextBox("YesterdayConsumtion", null, new { @class = "form-control", @readonly = "readonly" })
+                            @*@Html.Hidden("Plant_ID")*@
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Reading</label>
+                            @*@Html.LabelFor(model => model.Consumption, htmlAttributes: new { @class = "control-label" })*@
+
+                            @Html.EditorFor(model => model.Consumption, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Consumption, "", new { @class = "text-danger" })
+                            @Html.Hidden("Plant_ID")
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="lebal-font"> From Date</label>
+                            @Html.TextBox("ConsumptionDate", null, new { @class = "ConsumptionDate form-control example1", @style = "max-width:100%", })
+                     
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label> Operation(Addition & Subraction) *</label>
+                            @Html.DropDownListFor(model => model.Consider, new SelectList(new List<object> { new { value = "", text = "Select" }, new { value = "True", text = "Addition to Main Meter" }, new { value = "False", text = "Subtraction from Main Meter" } }, "value", "text", 2), new { @class = "form-control select2", })
+                            @Html.ValidationMessageFor(model => model.Consider, "", new { @class = "text-danger" })
+                            @Html.Hidden("Plant_ID")
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <input type="submit" value="Save" class="btn btn-linkedin" />
+                            @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+
+}
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#Shop_ID").change(function () {
+
+
+            var Shop_Id = $("#Shop_ID").val();
+
+            var options = {};
+            options.url = "/CommanMethod/Manualmeterconfig";
+            options.type = "POST";
+            options.data = JSON.stringify({ Shop_Id: Shop_Id });
+            options.contentType = "application/json";
+
+            options.success = function (id) {
+
+                $('#TagIndex option').remove();
+
+                $("#TagIndex").html(""); // clear before appending new list
+                $("#TagIndex").append(
+                    $('<option></option>').val(0).html("Select Feeder"));
+                $.each(id, function (i, test) {
+                    $("#TagIndex").append(
+                        $('<option></option>').val(test.TagIndex).html(test.FeederName).select('selected Feeder'));
+
+
+
+
+                    //prop('selected Feeder', false));
+                });
+
+                var elements = [];
+                elements = document.getElementsByClassName("mdl");
+                for (var i = 0; i < elements.length; i++) {
+                    elements[i].value = "";
+                }
+
+            };
+            //$("#Feeder").select2({
+            //    allowClear: true,
+            //    placeholder: 'Assign Feeder',
+            //    multiple: 'multiple'
+            //});
+            options.error = function () {
+                alert("Invalid Feeder ");
+            };
+            $.ajax(options);
+
+
+        })
+        $("#TagIndex").change(function () {
+
+            var shopid = $("#Shop_ID").val();
+            var tagindex = $("#TagIndex").val();
+            var tag1 = $("#YesterdayConsumtion").val();
+            $.ajax({
+                type: "POST",
+                url: "/ShopwiseManulReading/YesterdayMeterReading",
+                data: { ShopID: shopid, TagIndex: tagindex },
+
+                success: function (id) {
+                    //alert(id);
+                    $("#YesterdayConsumtion").val(id);
+                }
+
+
+
+                //    ('<option></option>').val(test.YesterdayConsumtion).html(test.YesterdayReading).prop()
+
+                //("#YesterdayConsumtion option[value='']").attr('select Feeder', true)
+
+            });
+
+            //$("#Feeder").select2({
+            //    allowClear: true,
+            //    placeholder: 'Assign Feeder',
+            //    multiple: 'multiple'
+            //});
+            options.error = function () {
+                alert("Invalid Feeder ");
+            };
+            $.ajax(options);
+
+
+        })
+
+
+    })
+
+
+    $(function () {
+        var start = $("#ConsumptionDate").val();
+        $("#ConsumptionDate").datepicker(
+            {
+                format: 'dd/MM/yyyy',
+                autoclose: true,
+                endDate: '+0d'
+            })
+
+
+
+    })
+
+
+</script>

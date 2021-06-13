@@ -1,0 +1,189 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Preventive_Equipment>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<div class="row" id="MinorStoppagesCycleContainer">
+    <div class="col-md-12">
+        @{ if (globalData != null)
+         {
+             if (globalData.isErrorMessage == true || globalData.isSuccessMessage == true || globalData.isAlertMessage == true)
+             {
+                <div class="box-body">
+                    @{
+                 if (globalData != null)
+                 {
+                    <div class="alert @{ if (globalData.isErrorMessage == true) { <text>alert-danger</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>alert-info</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>alert-warning</text>} } alert-dismissable" @{ if ((globalData.isErrorMessage == true) || (globalData.isSuccessMessage == true) || (globalData.isAlertMessage == true)) { <text> style="display:block;" </text>                                                 } else { <text> style="display:none;" </text>                                                } }>
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4>
+                            <i class="icon fa @{ if (globalData.isErrorMessage == true) { <text>fa-ban</text>}
+                                                 else if (globalData.isSuccessMessage == true){ <text>fa-check</text>}
+                                                 else if (globalData.isAlertMessage == true){<text>fa-warning</text>} }"></i> @globalData.messageTitle
+                                            </h4>
+                                            @globalData.messageDetail
+                                        </div>
+                 }
+                    }
+                </div>
+             }
+         }
+        }
+        <div class="nav-tabs-custom">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        if (i == 1)
+                        {
+                            <li class="active"><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-machineid="@machineObj.Machine_ID" data-toggle="tab" class="machine-tab">@machineObj.Machine_Name</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="#machine_@machineObj.Machine_ID" data-target-tab="machine_@machineObj.Machine_ID" data-machineid="@machineObj.Machine_ID" data-toggle="tab" class="machine-tab">@machineObj.Machine_Name</a></li>
+                        }
+                    }
+                }
+            </ul>
+            <div class="tab-content">
+                @if (ViewBag.MachineList != null)
+                {
+                    int i = 0;
+                    foreach (var machineObj in ViewBag.MachineList)
+                    {
+                        i++;
+                        <div class='tab-pane @((i == 1)? "active": "")' id="machine_@machineObj.Machine_ID" style="position: relative;">
+                            <div class="row tbm-container">
+                                <div class="col-md-12">
+                                    @{ int j = 0; }
+                                    @foreach (var item in Model.Where(a => a.Machine_ID == machineObj.Machine_ID))
+                                    {
+                                        <div class="col-md-5 tbm-equipment-box">
+                                            <div class="col-md-12 box-header">
+                                                <span class="info-box-icon"><i class="fa fa-info"></i></span>
+                                                <h4 class="text-uppercase">
+                                                    @Ajax.ActionLink(item.Equipment_Name, "getEquipmentData", "TBMDashboard", new { eqpId = item.EQP_ID }, new AjaxOptions()
+                                                        {
+                                                            HttpMethod = "Get",
+                                                            UpdateTargetId = "equipmentDetailsBlock",
+                                                            InsertionMode = InsertionMode.Replace,
+                                                            OnBegin = "Loadingajax",
+                                                            OnComplete = "showEquipmentDetailsModal"
+                                                        },
+                                                        new { @class = "", id = "" })
+
+                                                </h4>
+                                            </div>
+                                            <div class="col-md-12" data-eqpid="@item.EQP_ID">
+                                                <div class="col-md-6 eqp-detail-box">
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text">Balance Life</span>
+                                                        <span class="info-box-number eqp-remaining-life">@item.Remaining_Life / @item.Designated_Life</span>
+                                                        <div class="progress text-center">
+                                                            <span></span>
+                                                            <div class="progress-bar bg-green-gradient eqp-remlife-perc text-center"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 eqp-detail-box">
+                                                    <div class="info-box-content">
+                                                        <span class="info-box-text">Balance Cycles</span>
+                                                        <span class="info-box-number eqp-remaining-cycle"></span>
+                                                        <div class="progress text-center">
+                                                            <span></span>
+                                                            <div class="progress-bar bg-green-gradient eqp-remcycle-perc "></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div><!-- /.nav-tabs-custom -->
+    </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content" id="equipmentDetailsBlock">
+
+        </div>
+    </div>
+</div>
+<link href="~/Content/theme/TBMDashboard.css" rel="stylesheet" />
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var repeater;
+        function Loadingajax() {
+            $('#myModal1').modal();
+            $("#machineIOListBlock").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+        }
+        function showEquipmentDetailsModal() {
+            $('#myModal1').modal();
+        }
+        function updateEquipment() {
+            var machineID = $('.nav-tabs li.active a.machine-tab').data('machineid');
+            //console.log(machineID);
+            $.getJSON('/TBMDashboard/getEquipmentLifeDetails', { machineId: machineID }, function (data) {
+                //resetAllLines();
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    $.each(data, function (idx, eqpObj) {
+
+                        var eqpID = eqpObj.EQP_ID;
+                        var eqpTotalLife = eqpObj.Designated_Life;
+                        var eqpLifePerCycle = eqpObj.Life_Per_Cycle;
+                        var eqpRemainingLife = eqpObj.Remaining_Life;
+                        var totalLifePerc = Math.floor((eqpRemainingLife / eqpTotalLife) * 100);
+                        var totalcyclePerc = Math.floor(((eqpRemainingLife / eqpLifePerCycle) / (eqpTotalLife / eqpLifePerCycle)) * 100);
+                        var warningAt = eqpObj.Warning_At;
+                        var stopAt = eqpObj.Stop_At;
+
+                        var eqpDomObj = $('*[data-eqpID="' + eqpID + '"]');
+                        eqpDomObj.find('.eqp-remaining-life').text(eqpRemainingLife + " / " + eqpTotalLife);
+                        eqpDomObj.find('.eqp-remaining-cycle').text(Math.floor(eqpRemainingLife / eqpLifePerCycle));
+                        eqpDomObj.find('.eqp-remlife-perc').css('width', totalLifePerc + "%");
+                        eqpDomObj.find('.eqp-remcycle-perc').css('width', totalcyclePerc + "%");
+                        eqpDomObj.find('.eqp-remlife-perc').prev().text(totalLifePerc + "%");
+                        eqpDomObj.find('.eqp-remcycle-perc').prev().text(totalcyclePerc + "%");
+
+                        if (eqpRemainingLife <= warningAt) {
+                            if (eqpRemainingLife <= stopAt) {
+                                eqpDomObj.addClass('bg-faulty');
+                                eqpDomObj.find('.progress-bar').addClass('bg-danger').removeClass('bg-yellow').removeClass('bg-green-gradient');
+                            } else {
+                                //eqpDomObj.addClass('bg-faulty');
+                                eqpDomObj.removeClass('bg-faulty');
+                                eqpDomObj.find('.progress-bar').addClass('bg-yellow').removeClass('bg-green-gradient').removeClass('bg-danger');
+                            }
+                        } else {
+                            eqpDomObj.removeClass('bg-faulty');
+                            eqpDomObj.find('.progress-bar').addClass('bg-green-gradient').removeClass('bg-yellow').removeClass('bg-danger');
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting cycle step Signal !');
+            });
+        }
+
+        $(document).ready(function () {
+            updateEquipment();
+            repeater = setInterval(updateEquipment, 5000);
+        });
+    </script>
+}

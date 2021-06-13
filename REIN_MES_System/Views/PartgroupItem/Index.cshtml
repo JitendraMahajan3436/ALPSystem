@@ -1,0 +1,54 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_PartgroupItem>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Part_No)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Partgroup.Partgrup_Desc)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Part_No)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Partgroup.Partgrup_Desc)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PartgroupItem_ID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.PartgroupItem_ID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PartgroupItem_ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+

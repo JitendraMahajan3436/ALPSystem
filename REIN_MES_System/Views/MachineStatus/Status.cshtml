@@ -1,0 +1,320 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+@{
+    ViewBag.Title = "Status";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<br />
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="machine-status-box-header">
+                @*<span style="font-size:small; font-weight: bold; float:right;">Legend</span>*@
+                <span class="machine-status-box-number">
+                <button  class="btn mt-green font-div-text">Healthy</button>
+                <button  class="btn mt-orange font-div-text">Idle</button>
+                <button  class="btn mt-red font-div-text">Faulty</button>
+                <button  class="btn mt-blue font-div-text">Connection Failure</button>
+            </span>
+            </div>
+            @*<div class="col-md-2">
+                <button class="btn mt-green font-div-text">Healthy</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn mt-orange font-div-text">Idle</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn mt-red font-div-text">Faulty</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn mt-blue font-div-text">Connection Failure</button>
+            </div>*@
+        </div>
+    </div>
+    @*<h3 class="text-center">Machine Status Screen</h3>*@
+
+    <div class="row">
+        @*<h4 class="bg-dark text-center pull-left">ShopName : @ViewBag.ShopName </h4>
+            <h4 class="bg-dark text-center pull-right">StationName : @ViewBag.StationName</h4>*@
+        <div class="col-md-12 sop-wrapper">
+            <div class="col-md-12">
+
+                <div class="col-md-12 center-block homeslider">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators hidden">
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (var shop in ViewBag.Shops)
+                                {
+                                    if (i == 0)
+                                    {
+                                        <li class="active" data-target="#myCarousel" data-slide-to="0"></li>
+                                    }
+                                    else
+                                    {
+
+                                        <li data-target="#myCarousel" data-slide-to=@i></li>
+                                    }
+                                    i++;
+                                }
+                            }
+
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner col-md-12" role="listbox">
+
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (dynamic shop in ViewBag.Shops)
+                                {
+
+                                    if (i == 0)
+                                    {
+                                        <div class="item active">
+                                            <div class="machine-info-box-header"><span class="machine-info-box-number">@shop.Shop_Name</span></div>
+
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="machine-info-box" data-id="@machine.Machine_ID">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="item">
+                                            <div class="item active">
+                                                <div class="machine-info-box-header"><span class="machine-info-box-number">@shop.Shop_Name</span></div>
+                                            </div>
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="machine-info-box" data-id="@machine.Machine_ID">
+
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    i++;
+                                }
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                @*<div class="nav-tabs-custom carousel slide" data-ride="carousel" id="whatIsCarousel">
+
+                        <ul class="nav nav-tabs pull-right carousel-inner">
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (var shop in ViewBag.Shops)
+                                {
+
+                                    i++;
+                                    if (i == 1)
+                                    {
+                                        <li class="active" data-target="#whatIsCarousel" data-slide-to="0"><a href="#shop_@shop.Shop_ID" data-toggle="tab">@shop.Shop_Name</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li data-target="#whatIsCarousel" data-slide-to=@(i-1)><a href="#shop_@shop.Shop_ID" data-toggle="tab">@shop.Shop_Name</a></li>
+                                    }
+                                }
+                            }
+                            <li class="pull-left header"><i class="fa fa-inbox"></i>Machines Status</li>
+                        </ul>
+
+                        <div class="tab-content no-padding panel-body">
+
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (dynamic shop in ViewBag.Shops)
+                                {
+                                    i++;
+                                    if (i == 1)
+                                    {
+
+                                        <div class="tab-pane active" id="shop_@shop.Shop_ID" style="position: relative;">
+
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="info-box" data-id="@machine.Machine_ID">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="tab-pane" id="shop_@shop.Shop_ID" style="position: relative;">
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="info-box" data-id="@machine.Machine_ID">
+
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*<link href="~/Content/theme/base/jquery-ui.css" rel="stylesheet" />
+        <script src="~/Content/theme/base/jquery-ui.js"></script>
+        <script src="~/Content/theme/base/jquery-ui.min.js"></script>*@
+    <script src="~/Scripts/carousel.js"></script>
+    <script type="text/javascript">
+
+        //$(function () {
+        //    $("#tabs").tabs();
+        //});
+
+
+        $(document).ready(function () {
+            checkStatus();
+
+            $('[data-toggle="tooltip"]').tooltip();
+            window.setInterval(checkStatus, 10000);
+
+            $('.carousel').carousel({
+                pause: "false"
+            });
+
+        });
+
+
+
+        function blink(selector) {
+            $(selector).fadeOut('slow', function () {
+                $(this).fadeIn('slow', function () {
+                    blink(this);
+                });
+            });
+        }
+
+        blink('.blink');
+        function checkStatus() {
+            $.getJSON('/MachineStatus/getStatus', function (data) {
+                // alert(data);
+                if (data.length > 0) {
+                    //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                    
+                    $.each(data, function (i, item) {
+
+                        var machineid = data[i].Machine_ID;
+                        var isHealthy = data[i].isHealthy;
+                        var isFaulty = data[i].isFaulty;
+                        var isIdle = data[i].isIdle;
+                        var isHeartBit = data[i].Heart_Bit;
+                        // serialno = serialno.substr(serialno.length - 5);
+
+                        if (isHealthy) {
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            //.css("background", "green");
+                        }
+                        else if (isFaulty) {
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('blinker');
+                            //  $('*[data-id="' + machineid + '"]').children("div").css("background", "red");
+                            // blink($('.machine-info-box .blinker'));
+
+                        }
+                        else if (isIdle) {
+
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            // $('*[data-id="' + machineid + '"]').children("div").css("background", "orange");
+                        }
+                        else if (isHeartBit) {
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-blue');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            // $('*[data-id="' + machineid + '"]').children("div").css("background", "blue");
+                        }
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                console.log('Error getting Machine Status !');
+            });
+
+        }
+    </script>
+}
+
+<style type="text/css">
+    .mt-green {
+        background: #26a831;
+    }
+
+    .mt-red {
+        background-color: tomato;
+    }
+
+    .mt-blue {
+        /*background: rgba(96, 59, 190, 0.33);*/
+        background: rgba(189, 184, 34, 1);
+    }
+
+    .mt-orange {
+        background: rgba(255, 106, 0, 0.54);
+    }
+</style>

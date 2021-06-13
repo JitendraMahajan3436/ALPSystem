@@ -1,0 +1,267 @@
+﻿@model REIN_MES_System.Models.RS_Serial_Number_Data
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Row_ID)
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Part_No, htmlAttributes: new { @class = "" })
+                @Html.DropDownListFor(model => model.Part_No, null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Part_No)
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Suffix, htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.Suffix, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Suffix)
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Prefix, htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.Prefix, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Prefix)
+
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Running_Serial, htmlAttributes: new { @class = "" })
+                @Html.EditorFor(model => model.Running_Serial, null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Running_Serial)
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            @if (Model.Plant_Code != null && Model.Plant_Code != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Plant_Code, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Plant_Code, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Plant_Code)
+                </div>
+
+            }
+            @if (Model.Year_Code != null && Model.Year_Code != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Year_Code, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Year_Code, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Year_Code)
+
+                </div>
+            }
+            @if (Model.Month_Code != null && Model.Month_Code != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Month_Code, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Month_Code, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Month_Code)
+
+                </div>
+
+            }
+            @if (Model.Model != null && Model.Model != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Model, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Model)
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            @if (Model.Varient_Group != null && Model.Varient_Group != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Varient_Group, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Varient_Group, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Varient_Group)
+                </div>
+            }
+            @if (Model.Common != null && Model.Common != "")
+            {
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Common, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Common, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Common)
+                </div>
+            }
+            @if (Model.Tractor_Family != null && Model.Tractor_Family != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Tractor_Family, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Tractor_Family, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Tractor_Family)
+                </div>
+            }
+            @if (Model.Brand != null && Model.Brand != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Brand, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Brand)
+                </div>
+            }
+        </div>
+
+        <div class="row">
+
+            @if (Model.Engine_Family != null && Model.Engine_Family != "")
+            {
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Engine_Family, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Engine_Family, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Engine_Family)
+                </div>
+            }
+            @if (Model.Tractor_Model != null && Model.Tractor_Model != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Tractor_Model, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Tractor_Model, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Tractor_Model)
+                </div>
+            }
+            @if (Model.Tractor_Feture_A != null && Model.Tractor_Feture_A != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Tractor_Feture_A, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Tractor_Feture_A, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Tractor_Feture_A)
+
+                </div>
+
+            }
+            @if (Model.Tractor_Feture_B != null && Model.Tractor_Feture_B != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Tractor_Feture_B, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Tractor_Feture_B, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Tractor_Feture_B)
+
+                </div>
+            }
+        </div>
+
+
+        <div class="row">
+            @if (Model.Model_Year != null && Model.Model_Year != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Model_Year, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Model_Year, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Model_Year)
+                </div>
+            }
+            @if (Model.Assembly_Plant != null && Model.Assembly_Plant != "")
+            {
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Assembly_Plant, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Assembly_Plant, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Assembly_Plant)
+
+                </div>
+            }
+            @if (Model.Model_Month != null && Model.Model_Month != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Model_Month, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Model_Month, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Model_Month)
+
+                </div>
+            }
+            @if (Model.Trans_Series != null && Model.Trans_Series != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Trans_Series, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Trans_Series, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Trans_Series)
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            @if (Model.Trans_Year != null && Model.Trans_Year != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Trans_Year, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Trans_Year, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Trans_Year)
+                </div>
+
+            }
+            @if (Model.Trans_Month != null && Model.Trans_Month != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Trans_Month, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Trans_Month, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Trans_Month)
+                </div>
+
+            }
+            @if (Model.Hyd_series != null && Model.Hyd_series != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Hyd_series, htmlAttributes: new { @class = "" })
+
+                    @Html.EditorFor(model => model.Hyd_series, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Hyd_series)
+                </div>
+            }
+            @if (Model.Hyd_year != null && Model.Hyd_year != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Hyd_year, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Hyd_year, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Hyd_year)
+                </div>
+            }
+        </div>
+
+        <div class="row">
+            @if (Model.Hyd_month != null && Model.Hyd_month != "")
+            {
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Hyd_month, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.Hyd_month, null, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Hyd_month)
+                </div>
+            }
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,220 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Calibration_Log>
+
+@{
+    ViewBag.Title = "Confirm";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                </th>*@
+
+            <th>
+                @Html.DisplayName("Station Name")
+            </th>
+            <th>
+                @Html.DisplayName("Calibration Tool")
+            </th>
+            <th>
+                @Html.DisplayName("Calibration Description")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Is_Maintenance_Done)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Special_Observation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Remark)
+                </th>*@
+            <th>
+                @Html.DisplayName("Scheduled Date")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Last_Maintenance_Date)
+                </th>*@
+            <th>
+                @Html.DisplayName("Cycle Period")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Receipent_Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Mail_Sent)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Deleted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Transfered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Purgeable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee2.Employee_Name)
+                </th>*@
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                    </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Calibration_Tool)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Calibration_Description)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Is_Maintenance_Done)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Special_Observation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Scheduled_Date)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Last_Maintenance_Date)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cycle_Period)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Receipent_Email)
+                    </td>*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Is_Mail_Sent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Deleted)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Transfered)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Host)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Inserted_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated_Host)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Employee2.Employee_Name)
+                    </td>*@
+
+                <td>
+                    @if (item != null)
+                {
+                @Ajax.ActionLink("Confirm", "SaveRemark", "Calibration", new { id = item.C_Tool_Log_ID }, new AjaxOptions()
+                                         {
+                                             HttpMethod = "Get",
+                                             UpdateTargetId = "create-modal-body",
+                                             InsertionMode = InsertionMode.Replace,
+                                             OnBegin = "Loadingajax",
+                                             OnComplete = "showCreateModal"
+                                         },
+                                    new { @class = "btn btn-primary", id = "confirm-btn" }) }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Edit Calibration </h4>
+            </div>
+            <div class="modal-body">
+                <div id="create-modal-body"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*<script src="~/Scripts/jquery.validate.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>*@
+    <script type="text/javascript">
+        $(function () {
+
+        });
+
+        function Loadingajax() {
+         //   $("#loader").show();
+        }
+        function showCreateModal() {
+           // $("#loader").hide();
+            $('#myModal').modal();
+        }
+    </script>
+}

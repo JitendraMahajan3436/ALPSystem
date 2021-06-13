@@ -1,0 +1,200 @@
+﻿@{
+    ViewBag.Title = "Engine Test Bed";
+    Layout = "~/Views/Shared/withoutsidebarNoMenu/_Layout.cshtml";
+}
+
+<br />
+<div class="col-md-12">
+    <table border="0" align="center" class="table table-bordered" style="background-color:white">
+        @*<tr class="bg-aqua-active color-palette"><td align="center" colspan="3" style="font-family:Cambria;font:40px bold"><b></b></td></tr>*@
+        <tr class="datetime bg-light-blue-active color-palette"><td colspan="3" style="font-family:Cambria;font:40px bold"><span id="hdate"></span><span id="hTime" style="float:right"></span></td></tr>
+        <tr class="tblRow bg-light-blue color-palette"><td><span><b>Daily Plan :@ViewBag.plan</b></span></td><td colspan="2" align="center"> <span id="Actualpro" style="align-content:center"><b>Assembly Actual : 00</b></span></td></tr>
+    </table>
+
+    <div class="col-md-12">
+        <table class="table table-bordered" style="background-color:white">
+            <tr class="tblRow bg-gray-active color-palette"><td><b>TEST BED- 02</b><span class="img1"><img id="21_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="21" class="col-md-1 bg-teal-active color-palette total"><center><b>00</b></center></td><td class="col-md-2"><b>TEST BED- 01</b><span class="img1"><img id="20_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="20" class="total bg-teal-active color-palette"><center><b>00</b></center></td></tr>
+            <tr class="tblRow bg-gray-active color-palette"><td class="col-md-3"><b>TEST BED- 04</b><span class="img1"><img id="23_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="23" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td><td class="col-md-3"><b>TEST BED- 03</b><span class="img1"><img id="22_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="22" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td></tr>
+            <tr class="tblRow bg-gray-active color-palette"><td class="col-md-3"><b>TEST BED- 06</b><span class="img1"><img id="25_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="25" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td><td class="col-md-3"><b>TEST BED- 05</b><span class="img1"><img id="24_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="24" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td></tr>
+            <tr class="tblRow bg-gray-active color-palette"><td class="col-md-3"><b>TEST BED- 08</b><span class="img1"><img id="27_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="27" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td><td class="col-md-3"><b>TEST BED- 07</b><span class="img1"><img id="26_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="26" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td></tr>
+            <tr class="tblRow bg-gray-active color-palette"><td class="col-md-3"><b>TEST BED- 10(QA)</b><span class="img1"><img id="29_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="29" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td><td class="col-md-3"><b>TEST BED- 09</b><span class="img1"><img id="28_img" class="img1" src="~/Content/images/red.png" /></span></td><td id="28" class="total col-md-1 bg-teal-active color-palette"><center><b>00</b></center></td></tr>
+            <tr class="total bg-light-blue color-palette"><td colspan="4" class="col-md-2" id="total" style="align-items:center">Engine Test Bed Output :</td></tr>
+            <tr style="float:left">
+                <td colspan="4">
+                    <div class='station-box'><img id="" class="img2" src="~/Content/images/green.png" />Running</div>
+                    <div class='station-box'><img id="" class="img2" src="~/Content/images/blue.png" />OFF</div>
+                    <div class='station-box'><img id="" class="img2" src="~/Content/images/yellow.png" />Idle</div>
+                    <div class='station-box'><img id="" class="img2" src="~/Content/images/red.png" />Fault</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-12">
+        <table style="float:right"></table>
+        <div style="display:inline-block"><div></div><div></div><div></div></div>
+    </div>
+</div>
+
+
+<style type="text/css">
+    .tblRow {
+        align-items: center;
+        font: 70px bold;
+        margin-right: 2px;
+        padding: 2px;
+    }
+
+    .station-box {
+        width: 160px;
+        height: 160px;
+        border: 3px solid red;
+        background-color: white;
+        text-align: center;
+        font: 35px bold;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+        margin: 5px;
+        padding: 0px;
+        font-weight: bold;
+        color: blue;
+        align-content: center;
+    }
+
+    .total {
+        align-items: center;
+        font: 100px bold;
+        margin-right: 2px;
+        padding: 2px;
+    }
+
+    .datetime {
+        align-items: center;
+        font: 40px bold;
+        margin-right: 2px;
+        padding: 2px;
+    }
+
+    .img1 {
+        height: 130px;
+        width: 130px;
+        float: right;
+    }
+
+    .img2 {
+        height: 100px;
+        width: 100px;
+        font: 16px black;
+    }
+</style>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+
+<script>
+    $(document).ready(function () {
+        // Result();
+        $(".main-header").css('display', 'none');
+        setInterval("getTime()", 1000);
+        setInterval("TestBedCountForEngine()", 5001);
+        setInterval("ActualProduction()", 1200);
+        setInterval("TestBedCycleData()", 6000);
+
+    });
+
+    function getTime() {
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+        var date = dt.toDateString();
+
+        $('#hTime').html("<b>" + "Time : " + time + "</b>");
+        $('#hdate').html("<b>" + "Date : " + date + "</b>");
+    }
+
+    function TestBedCountForEngine() {
+        url = "/EngineAndon/TestBedCountForEngine";
+        ajaxpack.getAjaxRequest(url, "", RefreshDiv, "json");
+    }
+    function RefreshDiv() {
+
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            var jsonRes = $.parseJSON(myajax.responseText);
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+                var res = "";
+                var length = jsonRes.length;
+                for (var i = 0; i < jsonRes.length; i++) {
+                    $("#" + jsonRes[i].Value).empty();
+                    $("#" + jsonRes[i].Value).html("<center><b>" + jsonRes[i].Count + "</b></center>")
+                }
+
+            }
+        }
+    }
+    //TestBedCycleData
+    function TestBedCycleData() {
+        url = "/EngineAndon/TestBedCycleData";
+        var machineId = "31,32,33,34,35";
+        ajaxpack.getAjaxRequest(url, "machineId=" + machineId, RefreshTestBedCycle, "json");
+    }
+
+    function RefreshTestBedCycle() {
+
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            var jsonRes = $.parseJSON(myajax.responseText);
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1 || myajax.status == "") {
+                var res = "";
+                var length = jsonRes.length;
+
+                for (var i = 0; i < jsonRes.length; i++) {
+                    if (jsonRes[i].Heart_Bit == null) {
+                        if (jsonRes[i].isFaulty == true) {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/red.png")
+                        }
+                        else if (jsonRes[i].isHealthy == true) {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/green.png")
+                        }
+                        else if (jsonRes[i].isIdle == true) {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/yellow.png")
+                        }
+                        else {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/yellow.png")
+                        }
+                    }
+                    
+                    else {
+                        if (jsonRes[i].Heart_Bit == true) {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/blue.png")
+                        }
+                        else {
+                            $("#" + jsonRes[i].Machine_ID + "_img").prop("src", "/Content/images/red.png")
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    function ActualProduction() {
+        $.getJSON('/EngineAndon/ActualProduction', { shopid: 1, stationId: 25 }, function (data) {
+            $("#Actualpro").empty();
+            $("#Actualpro").html("<b>Assembly Actual : " + data + "</b>");
+        });
+        $.getJSON('/EngineAndon/TestBedTotal', "", function (data) {
+            $("#total").empty();
+            $("#total").html("<center><b>Engine Test Bed Output : " + data + "</b></center>");
+        });
+    }
+
+</script>

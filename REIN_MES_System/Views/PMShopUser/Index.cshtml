@@ -1,0 +1,73 @@
+﻿@model REIN_MES_System.Models.RS_MT_Preventive_Maintenance_Log_New
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-sm-3">
+            @Html.LabelFor(model => model.Scheduled_Date, "Calander", htmlAttributes: new { @class = "" })  *
+            <div class='input-group date' id='Scheduled_Date'>
+                <input type='text' class="form-control" placeholder="Select Date" />
+                <span class="input-group-addon">
+                    <span class="fa fa-fw fa-calendar"></span>
+                </span>
+
+            </div>
+            @Html.ValidationMessageFor(model => model.Scheduled_Date, null, new { @class = "validation_error" })
+           </div>
+
+
+
+        @*@Html.LabelFor(model => model.Scheduled_Date, "Calander", htmlAttributes: new { @class = "" })  *
+        @Html.TextBoxFor(model => model.Scheduled_Date, "--Select Date--", htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Scheduled_Date, null, new { @class = "validation_error" })*@
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-solid box-default" id="divpartialview">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Scheduled_Date").change(function (event) {
+            var schedule = $("#Scheduled_Date :text").val();
+            if (schedule.length > 0) {
+                $("#divpartialview").load("/PMShopUser/getdata?scheduleddate=" + schedule);
+            }
+        });
+
+    })
+</script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        $("#Scheduled_Date").datepicker(
+           {
+               format: 'yyyy-mm-dd',
+               autoclose: true
+           });
+
+        getDateD();
+        $('#Scheduled_Date').on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+
+    });
+
+    function getDateD() {
+        var d = new Date();
+        var today = d.getDate();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        $("#Scheduled_Date").datepicker("setDate", new Date(year, month));
+
+    }
+
+</script>

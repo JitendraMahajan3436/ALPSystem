@@ -1,0 +1,144 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Daily_MIS>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+@*<h2>Index</h2>*@
+
+<p>
+    @*@Html.ActionLink("  Create New", "Create")*@
+    <a href="@Url.Action("Create", "DailyMIS")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+
+</p>  
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        @*<table class="table">*@
+            <tr>
+              @*  <th>
+        @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+    </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Log_Date)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.From_Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.To_Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Total_Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Reason)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Remark)
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Is_Transfered)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Is_Purgeable)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Is_Edited)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Inserted_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Updated_Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Is_Active)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Is_Deleted)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                    </th>*@
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Log_Date)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total_Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Reason)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Is_Transfered)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Is_Purgeable)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Is_Edited)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inserted_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Updated_Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Is_Active)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Is_Deleted)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                        </td>*@
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Row_ID })
+                        @* @Html.ActionLink("Details", "Details", new { id=item.Row_ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.Row_ID })*@
+                    </td>
+                </tr>
+            }
+
+        </table>

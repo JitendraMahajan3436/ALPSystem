@@ -1,0 +1,358 @@
+﻿
+
+@{
+    ViewBag.Title = "ShopwiseRpt";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+
+
+
+
+
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="flex"  id="div1">
+
+            @Html.ValidationSummary(true)
+
+            <div class="flex">
+                <div class="col-md-2">
+                    @Html.Label("Type", "Report Type", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("Type", new SelectList(new List<object> { new { value = "1", text = "Daily" }, new { value = "2", text = "Monthly" } }, "value", "text", 1), new { @class = "form-control select2" })
+                    @Html.ValidationMessage("Type", null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-lg-6" style="padding:0px;display:block" id="Daywise">
+                    <div class="col-lg-4">
+
+
+                        <label class="lebal-font">Date Range</label>
+                        @Html.DropDownList("ddlDateRange", null, htmlAttributes: new { @class = "form-control select2", @style = "max-width:100%" })
+                        <span class="error" id="ddlDateRangeId" style="color:red;display:none">Date Range field is required</span>
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("StartDate", " Date", htmlAttributes: new { @class = "" })
+                        @Html.TextBox("StartDate", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off", disabled = "false" })
+                        @Html.ValidationMessage("StartDate", null, new { @class = "validation_error" })
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.Label("EndDate", " Date", htmlAttributes: new { @class = "" })
+                        @Html.TextBox("EndDate", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off", disabled = "false" })
+                        @Html.ValidationMessage("EndDate", null, new { @class = "validation_error" })
+                    </div>
+                </div>
+                <div class="col-md-3" id="YearWise" style="display:none">
+                    @Html.Label("Year", " Year", htmlAttributes: new { @class = "" })
+                    @Html.TextBox("Year", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off" })
+                    @Html.ValidationMessage("Year", null, new { @class = "validation_error" })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Shop", " Shop", htmlAttributes: new { @class = "" })
+                    @*@Html.DropDownList("Shop_ID", null, htmlAttributes: new { @class = "form-control", @autoComplete = "off", @readOnly = "true" })*@
+                    @Html.DropDownList("Shop_ID", null, "ALL", htmlAttributes: new { @class = "form-control select2", @autoComplete = "off", @readOnly = "true" })
+                    @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+                    @Html.Hidden("ShiftTime")
+                    @Html.Hidden("PlantCode")
+                </div>
+
+                <div class="col-md-2" style="margin-top:2%">
+                    <label></label>
+                    <input id="GenerateReport" type="button" value="Generate Log" class="btn btn-primary" />
+                    @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))"><i class="fa fa-fw fa-arrow-circle-up" id="btntoggle" style="font-size:30px"> </i></a></center>
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-sm-12">
+                    <iframe width="100%" height="350px" id="ContentFrame" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @*@Scripts.Render("~/bundles/QualityReportManagement_file")*@
+
+    }
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+</div>
+
+ 
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        $("#StartDate").datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                autoclose: true,
+                endDate: '+0d'
+            })
+        $("#EndDate").datepicker(
+            {
+                format: 'mm/dd/yyyy',
+                autoclose: true,
+                endDate: '+0d'
+            })
+
+
+
+        $("#Year").datepicker({ viewMode: "years", minViewMode: "years", format: 'yyyy' });
+        //$("#Year").datepicker({ , });
+
+
+
+        $("#siderbarmenu").click();
+
+        if ($("#ddlDateRange").val() == "2") {
+            $("#StartDate").prop('readonly', true);
+            $("#EndDate").prop('readonly', true);
+            $today = new Date();
+            $yesterday = new Date($today);
+            $yesterday.setDate($today.getDate() - 1);
+            var $dd = $yesterday.getDate();
+            var $mm = $yesterday.getMonth() + 1;
+            var $yyyy = $yesterday.getFullYear();
+            if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $mm + '/' + $dd + '/' + $yyyy;
+            $("#StartDate").val($yesterday);
+            $("#EndDate").val($yesterday);
+        }
+        $("#Type").change(function () {
+            if ($("#Type").val() == "1") {
+
+                $("#Daywise").show();
+                $("#YearWise").hide();
+            }
+            else {
+                $("#Daywise").hide();
+                $("#YearWise").show();
+            }
+        })
+
+
+        $("#GenerateReport").click(function (e) {
+            debugger;
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+            var Year = $("#Year").val();
+            var shop = document.getElementById("Shop_ID").value;
+            var RptType = document.getElementById("Type").value;
+
+            if (RptType == '1') {
+                $today = new Date();
+                $yesterday = new Date($today);
+                var $yyyy = $yesterday.getFullYear();
+                Year = $yyyy;
+                if (StartDate == "") {
+                    alert("Please select Start Date");
+                    return;
+                }
+                if (EndDate == "") {
+                    alert("Please select End Date");
+                    return;
+                }
+                if (shop == "") {
+                    shop = 0;
+                }
+                if (StartDate > EndDate) {
+                    alert("From Date Should Be Less Than To Date");
+                    return;
+                }
+                if (StartDate == EndDate) {
+                  if (StartDate != "" && EndDate != "") {
+
+                        // MVML
+                        $yesterday = new Date(StartDate);
+                        var $dd = $yesterday.getDate();
+                        var $mm = $yesterday.getMonth() + 1;
+                        var $yyyy = $yesterday.getFullYear();
+                        if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $dd + '/' + $mm + '/' + $yyyy;
+
+                        $('#ContentFrame').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2frpt_ShopwiseConsumtionRep&FromDate=' + $yesterday + '&Shop_ID=' + shop);
+
+                       
+
+
+                    }
+                }
+                else {
+
+
+
+
+                    
+                    $('#ContentFrame').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2fShopWiseConsumptionNewV1&Type_ID=' + 1 + '&FromDate=' + StartDate + '&EndDate=' + EndDate + '&Shop_ID=' + shop + '&Year=' + Year);
+
+                    
+                }
+            }
+            else {
+                if (Year == "") {
+                    alert("Please select Year");
+                    return;
+                }
+                if (shop == "") {
+                    shop = 0;
+                }
+                $today = new Date();
+                $yesterday = new Date($today);
+
+                
+                $('#ContentFrame').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fEnergy+Management+System%2fShopWiseConsumptionNewV1&Type_ID=' + 0 + '&FromDate=' + $yesterday + '&EndDate=' + $yesterday + '&Shop_ID=' + shop + '&Year=' + Year);
+
+            }
+        });
+
+        $("#ddlDateRange").change(function () {
+            debugger;
+            if ($("#ddlDateRange").val() == "1") {
+
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate());
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $mm + '/' + $dd + '/' + $yyyy;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+                //$("#StartDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+                //$("#EndDate").datepicker({ format: 'dd/mm/yyyy' }).datepicker("setDate", new Date());
+
+            }
+            else if ($("#ddlDateRange").val() == "2") {
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $yesterday = new Date($today);
+                $yesterday.setDate($today.getDate() - 1);
+                var $dd = $yesterday.getDate();
+                var $mm = $yesterday.getMonth() + 1;
+                var $yyyy = $yesterday.getFullYear();
+                if ($dd < 10) { $dd = '0' + $dd } if ($mm < 10) { $mm = '0' + $mm } $yesterday = $mm + '/' + $dd + '/' + $yyyy;;
+                $("#StartDate").val($yesterday);
+                $("#EndDate").val($yesterday);
+            }
+            else if ($("#ddlDateRange").val() == "3") {
+
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                //$startDate.setDate($today.getDate() - $today.getDay());
+                $endDate = new Date($today);
+                //$endDate.setDate($startDate.getDate() + 7);
+
+
+                var $mm = $startDate.getMonth() + 1;
+                var $yyyy = $startDate.getFullYear();
+                if ($mm < 10) { $mm = '0' + $mm } $startDate = $mm + '/' + '01' + '/' + $yyyy;
+
+                $("#StartDate").val($startDate);
+
+
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth() + 1, 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $mm1 + '/' + $dd1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+            else if ($("#ddlDateRange").val() == "4") {
+
+                $("#StartDate").prop('readonly', true);
+                $("#EndDate").prop('readonly', true);
+                $today = new Date();
+                $startDate = new Date($today);
+                $endDate = new Date($today);
+                //******************* Added by Ajay 01012019
+                var prevDate = new Date($startDate.getFullYear(), $startDate.getMonth() - 1, 1);
+                var $mm = prevDate.getMonth() + 1;
+                var $yyyy = prevDate.getFullYear();
+
+                if ($mm < 10) { $mm = '0' + $mm } prevDate = $mm + '/' + '01' + '/' + $yyyy;
+
+                $("#StartDate").val(prevDate);
+                //******************* Added by Ajay 01012019
+                var $endDate = new Date($endDate.getFullYear(), $endDate.getMonth(), 0);
+                var $dd1 = $endDate.getDate();
+                var $mm1 = $endDate.getMonth() + 1;
+                var $yyyy1 = $endDate.getFullYear();
+
+                if ($dd1 < 10) { $dd1 = '0' + $dd1 } if ($mm1 < 10) { $mm1 = '0' + $mm1 } $endDate = $mm1 + '/' + $dd1 + '/' + $yyyy1;
+                $("#EndDate").val($endDate);
+            }
+
+            else {
+
+                $("#StartDate").prop('readonly', false);
+                $("#EndDate").prop('readonly', false);
+                $("#StartDate").prop('disabled', false);
+                $("#EndDate").prop('disabled', false);
+                $("#StartDate").val('');
+                $("#EndDate").val('');
+
+
+
+            }
+
+
+
+        });
+
+
+    });
+
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+            $("#btntoggle").removeClass("fa fa-fw fa-arrow-circle-up");
+            $("#btntoggle").addClass("fa fa-fw fa-arrow-circle-down");
+
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            $("#btntoggle").removeClass("fa fa-fw fa-arrow-circle-down");
+            $("#btntoggle").addClass("fa fa-fw fa-arrow-circle-up");
+        }
+    }
+
+
+</script>
+
+
+
+

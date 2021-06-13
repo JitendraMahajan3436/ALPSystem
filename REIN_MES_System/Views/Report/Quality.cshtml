@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Quality";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2 class="col-md-3 header">Quality Reports</h2>
+
+<div class="col-md-12">
+    @using (Html.BeginForm("Generate", "Report", FormMethod.Post, new { }))
+    {
+        <div class="row">
+            <div class="col-md-offset-3 col-md-5">
+                @Html.Label("Search By :")
+                @Html.DropDownList("SearchBy", (IEnumerable<SelectListItem>)ViewBag.SearchBy, "-- Search By --", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div id="divcontrols">
+            <div class="row">
+                <div class="col-md-4" id="shop">
+                    @Html.Label("Shop Name")
+                    @Html.DropDownList("Shop_ID", (IEnumerable<SelectListItem>)ViewBag.Shop_ID, "--Select Shop--", htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-md-4" id="shop">
+                    @Html.Label("Model Name")
+                    @Html.DropDownList("Model_ID", (IEnumerable<SelectListItem>)ViewBag.Model_ID, "--Select Model--", htmlAttributes: new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-4" id="fm">
+                    @Html.Label("Family Name")
+                    @Html.DropDownList("Family", (IEnumerable<SelectListItem>)ViewBag.Family, "--Select Family--", htmlAttributes: new { @class = "form-control" })
+                </div>
+
+                @*<div class="col-md-4" id="Series">
+                    @Html.Label("Part Series")
+                    @Html.DropDownList("Part_Series", Enumerable.Empty<SelectListItem>(), "--Select Series--", htmlAttributes: new { @class = "form-control" })
+                </div>*@
+
+                <div class="row" id="date">
+                    <div class="col-md-4">
+                        @Html.Label("Date From")
+                        @Html.TextBox("DateFrom", "", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label("Date To")
+                        @Html.TextBox("DateTo", "", htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <input type="submit" value="View Report" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script>
+            $(document).ready(function () {
+
+                $("#DateFrom").datepicker({ format: "yyyy/MM/dd" });
+
+                $("#DateTo").datepicker({ format: "yyyy/MM/dd" });
+
+                $('#DateFrom').on('changeDate', function (ev) {
+                    $(this).datetimepicker('hide');
+                });
+                $('#DateTo').on('changeDate', function (ev) {
+                    $(this).datetimepicker('hide');
+                });
+
+                $("#Shop_ID").on("change", function () {
+                    $("#Machie_ID").html("");
+                    // $("#Line_ID").html("");
+                    var Plant_ID = $('#Shop_ID').val();
+                    if (Plant_ID.length > 0) {
+                        //alert(Plant_ID);
+                        $.getJSON('/Reports/GetModelsByShopID', { shopid: Plant_ID }, function (data) {
+                            //alert(data);
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    $('#Machie_ID').append('<option value="' +
+                                                 data[i].Model_Code + '">' + data[i].Model_Code + '</option>');
+                                }
+
+                            }
+                            else {
+                                alert("Machines is not present")
+                            }
+                        });
+                    }
+                });
+
+
+
+
+            });
+
+
+
+    </script>
+}
+
+

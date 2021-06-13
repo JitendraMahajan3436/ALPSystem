@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "StagewiseProductionReport";
+    Layout = "~/Views/Shared/Admin/_Layout.cshtml";
+}
+
+<script src="/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.full.min.js"></script>
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.css">
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label("Shop_ID", "Shop Name", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                    @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Platform_ID", "Platform", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("Platform_ID", null, "All", new { @class = "form-control" })
+                    @Html.ValidationMessage("Platform_ID", null, new { @class = "validation_error", @id = "spanPlatformValidation" })
+
+                </div>
+                <div class="col-md-3">
+                    <label id="fromdatelabel">From Date:</label>
+                    <input type="text" id="txtFromDate" name="FromDate" class="form-control" placeholder="From Date" />
+                </div>
+                <div class="col-md-3">
+                    <label>To Date:</label>
+                    <input type="text" id="txtToDate" name="ToDate" class="form-control" placeholder="To Date" />
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 6px;">
+
+                @*<div class="col-md-3">
+                        <label id="fromdatelabel">From Date:</label>
+                        <input type="text" id="txtFromDate" name="FromDate" class="form-control" placeholder="From Date" />
+                    </div>
+                    <div class="col-md-3">
+                        <label>To Date:</label>
+                        <input type="text" id="txtToDate" name="ToDate" class="form-control" placeholder="To Date" />
+                    </div>*@
+
+                <div class="col-md-3" style="margin-top: 30px;">
+                    @*<label>Summary:</label>*@
+                    <input type="radio" id="ModelCode" class="stage" name="Stagewise" checked />
+                    @Html.Label("Model Code")
+
+                </div>
+                <div class="col-md-3" style="margin-top: 30px;">
+                    <input type="radio" id="BiwCode" class="stage" name="Stagewise" />
+
+                    @Html.Label("Biw Code", new { @class = "" })
+                    @*<input type="button" id="StageWiseProductionReport" value="Generate Report" class="btn btn-primary" />*@
+
+                </div>
+
+                <div class="col-md-3">
+                    <br />
+                    <input type="button" id="StageWiseProductionReport" value="Generate Report" class="btn btn-primary" />
+
+                </div>
+            </div>
+
+            <br />
+
+
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        @*<br />*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class="" col-md-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame_StageWiseReport" id="ContentFrame_StageWiseReport" width="100%" height="900px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/DateTime")*@
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+
+    <style>
+        iframe {
+            border: 2px #2036a7 solid;
+        }
+    </style>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+
+    });
+
+
+    $('.stage').on('change', function () {
+        debugger;
+        var modelcode = document.getElementById("ModelCode").checked;
+        var biwcode = document.getElementById("BiwCode").checked;
+
+        if (modelcode == true) {
+            $("#BiwCode").prop("checked", false);
+            $("#ModelCode").prop("checked", true);
+        }
+        else {
+            $("#BiwCode").prop("checked", true);
+            $("#ModelCode").prop("checked", false);
+        }
+
+    });
+
+
+
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+
+    $('#txtFromDate').datetimepicker({
+        format: 'Y-m-d H:i',
+        //format: 'm/d/Y H:i',
+        formatTime: 'H:i',
+        formatDate: 'yyyy/MM/dd',
+        //defaultTime: shiftStartTime,//'06:30 AM',
+        defaultDate: new Date(),
+        timepickerScrollbar: true,
+        hours12: false,
+    });
+
+    $('#txtToDate').datetimepicker({
+        format: 'Y-m-d H:i',
+        //format: 'm/d/Y H:i',
+        formatTime: 'H:i',
+        formatDate: 'yyyy/MM/dd',
+        //defaultTime: shiftStartTime,//'06:30 AM',
+        defaultDate: new Date(),
+        timepickerScrollbar: true,
+        hours12: false,
+    });
+
+     $("#Shop_ID").on("change", function () {
+
+        var Shop_Id = $("#Shop_ID").val();
+        $('#Platform_ID option').remove();
+        if (Shop_Id.length) {
+            $("#Platform_ID").prop('disabled', false);
+            $.getJSON('/ProductionReports/GetPlatform', { Shop_Id: Shop_Id }, function (data) {
+                if (data.length > 0) {
+                     $('#Platform_ID').append('<option value="0">ALL</option>');
+                    if (data.length > 1) {
+                        for (i = 0; i < data.length; i++) {
+                            $('#Platform_ID').append('<option value="' +
+                                         data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                        }
+                    } else {
+                        for (i = 0; i < data.length; i++) {
+                            $('#Platform_ID').append('<option value="' +
+                                         data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                        }
+                    }
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                $("#Platform_ID").change();
+            });
+        }
+        else {
+            $("#Platform_ID").prop('disabled', true);
+
+        }
+
+    });
+    $("#StageWiseProductionReport").click(function (e) {
+        debugger;
+
+        var fromdate = $("#txtFromDate").val();
+        var todate = $("#txtToDate").val();
+        var Shopid = $("#Shop_ID").val();
+        var Platform = $("#Platform_ID").val();
+
+        var biwcode = document.getElementById("BiwCode").checked
+        var modelcode = document.getElementById("ModelCode").checked
+
+        if (Platform == '') {
+            alert('Select Platform');
+            return false;
+        }
+        if (Shopid == '') {
+            alert('Select Shop');
+            return false;
+        }
+        if (fromdate == '') {
+            alert('Select From Date');
+            return false;
+        }
+        if (todate == '') {
+            alert('Select To Date');
+            return false;
+        }
+        var PlatformAll = false;
+        if (Platform == 0) {
+            PlatformAll = true;
+        }
+        debugger;
+        //Platform = 32;
+        if (modelcode == true) {
+
+            $('#ContentFrame_StageWiseReport').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fDrona%2fModelWise_ProductionReport&rs:Command=Render&Shop=' + Shopid + '&FromDate=' + fromdate + '&ToDate=' + todate + '&PlatformId=' + Platform + '&PlatformAll=' + PlatformAll);
+
+        }
+        else {
+            $('#ContentFrame_StageWiseReport').attr('src', 'http://mmzhbdrnrept/Drona/Pages/ReportViewer.aspx?%2fDrona%2fBodyWise_ProductionReport&rs:Command=Render&Shop=' + Shopid + '&FromDate=' + fromdate + '&ToDate=' + todate + '&PlatformId=' + Platform + '&PlatformAll=' + PlatformAll );
+        }
+
+    });
+
+
+</script>
+

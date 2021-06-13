@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Mahindra_FD.Models.MM_AM_Operator_Zone>
+@using Mahindra_FD.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Zone")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Zone_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MM_Shops.Shop_Name)
+            </th>                     
+           
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Zone_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MM_Shops.Shop_Name)
+                </td>
+                <td>
+                    <a href="@Url.Action(ResourceGlobal.Edit, "Zone", new { id = item.Zone_ID })"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action(ResourceGlobal.Details, "Zone", new { id = item.Zone_ID })"><i class="fa fa-fw fa-laptop" title="Details"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action(ResourceGlobal.Delete, "Zone", new { id = item.Zone_ID })"><i class="fa fa-trash" title="Delete"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

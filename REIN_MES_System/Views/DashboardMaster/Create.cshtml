@@ -1,0 +1,180 @@
+﻿@model REIN_MES_System.Models.RS_Dashboard_Master
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+
+<br />
+<div class="col-md-12 manager_Line">
+    @using (Html.BeginForm("Create", "DashboardMaster", FormMethod.Post, new { id = "add_IP"}))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Shop_ID", null, "Select Shop", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class=" col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Line_ID, "Line Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Line_ID", null, "Select Line", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Line_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class=" col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Setup_ID, "Setup Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Setup_ID", null, "Select Setup", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Setup_ID, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Shift_ID, "Shift Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.DropDownList("Shift_ID", null, "Select Shift", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shift_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Dashboard_Name, "Dashboard Name", htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Dashboard_Name, null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Dashboard_Name, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    @Html.LabelFor(model => model.Host_Name, "IP Address", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Host_Name, null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Host_Name, null, new { @class = "validation_error" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-4 col-lg-4 col-sm-4">
+                    <input type="submit" value="Save" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+
+
+        </div>
+
+    }
+        
+
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+
+    }
+    </div>        
+    <script>
+        $(document).ready(function (e) {
+
+            $("#add_IP").validate({
+                //ignore: [],
+                rules: {
+                    Shop_ID: "required",
+                    Line_ID: "required",
+                    Shift_ID: "required",
+                    Setup_ID: "required",
+                    Host_Name: "required"
+                }
+            });
+            
+           
+            $("#Shop_ID").change(function (e) {
+
+                var shopId = $("#Shop_ID").val();
+                if (shopId) {
+                    var url = "/Line/GetLineByShopID";
+                    ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val() + "", showLineShopID, "json");
+                    setTimeout(function () {
+                        url = "/Shop/GetShiftByShopID";
+                        ajaxpack.getAjaxRequest(url, "shopId=" + $("#Shop_ID").val(), showShiftShopID, "json");
+                    }, 2000);
+                }
+                else {
+                    clearSelectBox("Line_ID");
+                    clearSelectBox("Shift_ID");
+                }
+            });
+
+
+            function showLineShopID() {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Line_ID");
+                    }
+                }
+            }
+
+            function showShiftShopID() {
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+                        SelectOptionHTML(jsonRes, "Shift_ID");
+                    }
+                }
+            }
+
+            function SelectOptionHTML(jsonRes, targetId) {
+                //var jsonRes = $.parseJSON(myajax.responseText);        
+                var res = "";
+                for (var i = 0; i < jsonRes.length; i++) {
+                    res += "<option value='" + jsonRes[i].Id + "'>" + jsonRes[i].Value + "</option>";
+                }
+
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>" + res;
+                $("#" + targetId).html(res);
+            }
+
+            function clearSelectBox(targetId) {
+                var res = "";
+                res = "<option value=''>" + $("#" + targetId + " option:first").html() + "</option>";
+
+                $("#" + targetId).html(res);
+            }
+
+            $("#Line_ID").change(function () {
+                
+                var shopid = $("#Shop_ID").val();
+                var lineid = $("#Line_ID").val();
+
+                $("#Setup_ID").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Getsetupbylineid")', // we are calling json method
+                    dataType: 'json',
+                    data: { LineId: lineid, ShopID:shopid},
+
+
+                    success: function (data) {
+                        $("#Setup_ID").append('<option value="">--Select--- </option>');
+
+                        $.each(data, function (i, data) {
+                            $("#Setup_ID").append('<option value="' + data.Id + '">' + data.Value + '</option>');
+
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+
+
+
+            });
+        });
+        
+    </script>

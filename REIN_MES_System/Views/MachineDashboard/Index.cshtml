@@ -1,0 +1,236 @@
+﻿@model REIN_MES_System.Models.Dashboard
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-bold">Time Based Maintenance</div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped datatable_completes table-responsive">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("Machine Number")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Machine Name")
+                                </th>
+                                @*<th>
+                                    @Html.DisplayName("Machine Part")
+                                </th>*@
+                                <th>
+                                    @Html.DisplayName("Scheduled Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Cycle (Months)")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lst_TBM)
+                            {
+                            <tr>
+                                <td>@Html.DisplayFor(modelitem => item.RS_MT_Machines.Machine_Number)</td>
+                                <td>@Html.DisplayFor(modelitem => item.RS_MT_Machines.Machine_Name)</td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.RS_MT_Preventive_Equipment.Equipment_Name)
+                                </td>*@
+                                <td>@Html.DisplayFor(modelitem => item.Scheduled_Date)</td>
+                                <td>@Html.DisplayFor(modelitem => item.Cycle_Period)</td>
+                            </tr>
+
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-bold">Preventive Maintenance</div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped datatable_completes table-responsive">
+                        <thead>
+
+                            <tr>
+                                @*<th>
+                                    @Html.DisplayName("Machine Number")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Machine Name")
+                                </th>*@
+                                @*<th>
+                                    @Html.DisplayName("Machine Part")
+                                </th>*@
+                                <th>
+                                    @Html.DisplayName("Scheduled Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Cycle (Months)")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lst_PM)
+                            {
+                                <tr>
+
+                                    @*<td>
+                                        @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Number)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                                    </td>*@
+                                    @*<td>
+                                        @Html.DisplayFor(modelItem => item.RS_MT_Preventive_Equipment.Equipment_Name)
+                                    </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Scheduled_Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cycle_Period)
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-bold">Machine Based Clita</div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped datatable_completes table-responsive">
+                        <thead>
+                            <tr>
+                                @*<th>
+                                    @Html.DisplayName("Machine Number")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Machine Name")
+                                </th>*@
+                                <th>
+                                    @Html.DisplayName("Clita item")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Start Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("End Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Cycle")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lst_MachineClita)
+                            {
+                                <tr>
+                                    @*<td>@Html.DisplayFor(modelitem => item.RS_MT_Machines.Machine_Number)</td>
+                                    <td>@Html.DisplayFor(modelitem => item.RS_MT_Machines.Machine_Name)</td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Clita_Item)
+                                    </td>
+                                    <td>@Html.DisplayFor(modelitem => item.Start_Date)</td>
+                                    <td>@Html.DisplayFor(modelitem => item.End_Date)</td>
+                                    <td>@Html.DisplayFor(modelitem => item.Cycle)</td>
+                                </tr>
+
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-bold">Station Based Clita</div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped datatable_completes table-responsive">
+                        <thead>
+
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("Station Name")
+                                </th>
+                                @*<th>
+                                @Html.DisplayName("Machine Name")
+                            </th>*@
+                                <th>
+                                    @Html.DisplayName("Clita Item")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Start Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("End Date")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Cycle")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lst_StationClita)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                                    </td>
+                                    @*<td>
+                                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                                </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Clita_Item)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Start_Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.End_Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cycle)
+                                    </td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

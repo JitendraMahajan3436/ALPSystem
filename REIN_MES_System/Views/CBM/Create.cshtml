@@ -1,0 +1,445 @@
+﻿@model ZHB_AD.Models.MM_Area_CBM_Mapping
+
+@{
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<style>
+    input.metercheckbox {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 20px
+    }
+
+    #tblCBM {
+        counter-reset: serial-number; /* Set the serial number counter to 0 */
+    }
+
+        #tblCBM td:first-child:before {
+            counter-increment: serial-number; /* Increment the serial number counter */
+            content: counter(serial-number); /* Display the counter */
+        }
+
+    #tblCBM {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    #tblCBM, th, td {
+        border: 1px solid #cdcdcd;
+        text-align: center;
+    }
+
+        #tblCBM th, #tblLoss td {
+            padding: 10px;
+            text-align: left;
+        }
+
+    .panel-primary > .panel-heading {
+        color: #fff;
+        height: 46px;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    #testy {
+        z-index: 99999;
+    }
+</style>
+
+
+<link href="~/Content/theme/plugins/select2/select2.min.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Shop Name *</label>
+                        @*@Html.LabelFor(model => model.Category_Name, htmlAttributes: new { @class = "control-label " })*@
+
+                        @*@Html.DropDownList("Shop_ID", null, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.Shop_ID, null, "Select Shop", new { @class = "form-control", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(model => model.Shop_ID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Area Name *</label>
+
+
+                        @Html.DropDownListFor(model => model.Area_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Area_ID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+
+
+                    <div class="panel" style="width:100%">
+
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Machine *</label>
+
+
+                                @Html.DropDownListFor(model => model.Machine_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2" })
+                                @Html.ValidationMessageFor(model => model.Machine_ID, "", new { @class = "text-danger MachineName" })
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>CBM *</label>
+
+                                @Html.DropDownListFor(model => model.CBM_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control select2" })
+                                @Html.ValidationMessageFor(model => model.CBM_ID, "", new { @class = "text-danger CBMName" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <input type="button" class="btn btn-primary " style="margin-top:26px" value="Add" name="Add" id="btnAdd">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+
+                    <div class="panel panel-primary">
+                        <!-- Development and Action Plan Review -->
+                        <div class="panel-heading">
+                            <h4 style="margin-top:0%;">CBM Table</h4>
+                        </div>
+                        <div class="bs-example">
+                            <div class="Container">
+                                <table id="tblCBM">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr No</th>
+                                            <th>Machine</th>
+                                            <th>CBM</th>
+
+                                            <th style="display:none">MachineId</th>
+                                            <th style="display:none">CbmId</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="display:none"><input type="checkbox" name="record"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+                                            <td style="display:none"></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <input type="button" name="Delete Select Row" value="Delete Select Row" id="btnlosssDelete" class="delete-row btn btn-danger" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="submit" value="Save" id="btnSubmit" class="btn btn-primary" />
+                    @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-linkedin" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="testy">
+
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Content/theme/plugins/select2/select2.full.js"></script>
+    <link href="~/Content/theme/plugins/toastee/css/styles.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/toastee/js/jquery.toastee.0.1.js"></script>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".select2").select2();
+        $("#Shop_ID").change(function () {
+
+            var Shop_Id = $("#Shop_ID").val();
+            var options = {};
+            options.url = "/CommanMethod/ShopwiseArea";
+            options.type = "POST";
+            options.data = JSON.stringify({ Shop_Id: Shop_Id });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (id) {
+
+                //  $('#Feeder option').remove();
+                $("#Area_ID").html(""); // clear before appending new list
+                $.each(id, function (i, test) {
+                    $("#Area_ID").append(
+
+
+                        $('<option></option>').val(test.Area_Id).html(test.Area_Name).prop('selected', true));
+                });
+
+
+            };
+
+            options.error = function () {
+                alert("Invalid Area ");
+            };
+            $.ajax(options);
+            Machine(Shop_Id)
+
+        })
+        function Machine(shop) {
+            var options = {};
+            options.url = "/CBM/ShopwiseMachine";
+            options.type = "POST";
+            options.data = JSON.stringify({ Shop_Id: shop });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (id) {
+
+                //  $('#Feeder option').remove();
+                $("#Machine_ID").html(""); // clear before appending new list
+                $.each(id, function (i, test) {
+                    $("#Machine_ID").append(
+
+
+                        $('<option></option>').val(test.Machine_ID).html(test.Machine_Name).prop('selected', true));
+                });
+
+
+            };
+
+            options.error = function () {
+                alert("Invalid Machine ");
+            };
+            $.ajax(options);
+        }
+        $("#Machine_ID").change(function () {
+
+            var Machine = $("#Machine_ID").val();
+            var options = {};
+            options.url = "/CBM/MachinewiseCBM";
+            options.type = "POST";
+            options.data = JSON.stringify({ Machine_Id: Machine });
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (id) {
+
+                //  $('#Feeder option').remove();
+                $("#CBM_ID").html(""); // clear before appending new list
+                $.each(id, function (i, test) {
+                    $("#CBM_ID").append(
+
+
+                        $('<option></option>').val(test.CBM_ID).html(test.Machine_Parameter).prop('selected', true));
+                });
+
+
+            };
+
+            options.error = function () {
+                alert("Invalid Machine");
+            };
+            $.ajax(options);
+
+
+        })
+    });
+</script>
+
+<script type="text/javascript">
+
+    $("#btnAdd").click(function () {
+
+        debugger
+
+        $('.onlydigit2').html("");
+
+        var Machine = $("#Machine_ID").val();
+        var CBM = $("#CBM_ID").val();
+
+
+        if (Machine != null && CBM != null) {
+            $(".Lossaccpet1").html(null);
+            var MachineName = $("#Machine_ID").children("option:selected").text().trim();
+            var CBMName = $("#CBM_ID").children("option:selected").text().trim();
+            var Meterdetils = new Array();
+            var CBMresult = true;
+
+            $("#tblCBM TBODY TR").each(function () {
+
+                debugger;
+                var row = $(this);
+                var Meterdetil = {};
+                var CBMId = row.find("TD").eq(5).html();
+                Meterdetil.CBM = CBMId;
+
+                Meterdetils.push(Meterdetil);
+            });
+
+            for (var i = 0; i < Meterdetils.length; i++) {
+                debugger
+
+
+                if (Meterdetils[i].CBM == CBM) {
+                    CBMresult = false;
+
+                }
+            }
+
+            if (CBMresult) {
+
+
+
+                var options = {};
+                //var TagINDex = Tag_Index;
+                options.url = "/CBM/checkexistCBM";
+                options.type = "POST";
+                options.data = JSON.stringify({ CBM: CBM });
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (result) {
+
+                    var count = result.length;
+                    if (count > 0) {
+                        $('.onlydigit2').html("alredy exist CBM so please enter another CBM");
+                        $('#CBM_ID').focus();
+                    }
+                    else {
+                        var markup = "<tr><td></td><td>" + MachineName + "</td><td>" + CBMName + "</td> <td><input type='checkbox' value='" + CBMName + "' id='" + CBM + "' name='record'></td><td style='display:none'>" + Machine + "</td><td style='display:none'>" + CBM + "</td></tr>"
+                        $("#tblCBM tbody").append(markup);
+                    }
+                };
+                options.error = function () {
+                    alert("Invalid CBM");
+                };
+                $.ajax(options);
+            }
+            else {
+                $('.CBMName').html("Allreday exist CBM");
+                $('#CBM_ID').focus();
+            }
+        }
+
+        else if (Machine == null && CBM == null) {
+            debugger
+
+
+            $('.MachineName').html("Please Select Machine");
+            $('#Machine_ID').focus();
+
+            $('.CBMName').html("Please Select CBM");
+            $('#CBM_ID').focus();
+        }
+
+
+
+
+    });
+    $(".delete-row").click(function () {
+
+        debugger;
+        $("#tblCBM tbody").find('input[name="record"]').each(function () {
+            if ($(this).is(":checked")) {
+                debugger;
+                // var row = $(this);
+                var Rorid = $(this).val();
+                $(this).parents("tr").remove();
+                var count = parseInt($("#hdnlosscount").val()) + parseInt(Rorid);
+                $("#hdnlosscount").val(count);
+            }
+        });
+    });
+    $('#btnSubmit').click(function () {
+        debugger;
+        var status = true;
+        var shopId = $("#Shop_ID").val();
+        var AreaId = $("#Area_ID").val();
+
+        var rowCount = $('#tblCBM tr').length;
+
+        if (shopId == "") {
+            $('.shop').html("please select Shop Name");
+            status = false;
+
+        }
+
+        if (AreaId == "") {
+            $('.Area').html("please select Area ");
+            status = false;
+        }
+
+        if (rowCount <= 2) {
+            $('#testy').toastee({
+                type: 'error',
+                width: '200px',
+                height: '100px',
+
+                message: 'atlest 1 CBM Prameter added',
+            });
+            status = false;
+        }
+        var Resultlist = Array()
+        if (status) {
+
+
+            $("#tblCBM TBODY TR").each(function () {
+
+
+                var row = $(this);
+                var result = {};
+
+                debugger;
+                result.Shop = shopId;
+                result.Area = AreaId;
+                result.Machine = row.find("TD").eq(4).html();
+                result.CBM = row.find("TD").eq(5).html();
+                Resultlist.push(result);
+            });
+
+
+            $.ajax({
+                type: "POST",
+                url: "/CBM/addCBM",
+                data: JSON.stringify(Resultlist),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#testy').toastee({
+                        type: 'success',
+                        width: '300px',
+                        height: '100px',
+                        message: data.Message,
+                    });
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000);
+                }
+            });
+        }
+
+    });
+</script>
+

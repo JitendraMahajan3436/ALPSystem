@@ -1,0 +1,170 @@
+﻿@model REIN_MES_System.Models.RS_Lines
+
+@{
+    ViewBag.Title = "SkillSetAllocation";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.LabelFor(model => model.Line_ID, "Line Name")
+            @Html.DropDownListFor(model => model.Line_ID, (IEnumerable<SelectListItem>)ViewBag.Line_ID, "Select Line", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="col-md-6">
+            <br />
+            @Html.ActionLink("Upload File", "Upload", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+
+        <div class="col-md-12">
+            <div id="divPartialView" style="height:700px;width:99%;overflow:scroll;" class="form-control"></div>
+        </div>
+    </div>
+</div>
+<div class="loading_spinner_image" style="display:none;">
+    <img src="~/Content/loading-bar.gif" />
+</div>
+
+<style type="text/css">
+    .loading_spinner_image {
+        left: 25%;
+        position: absolute;
+        top: 10%;
+    }
+</style>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <link href="~/Content/EmployeeSkillSet.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+            var oTable;
+
+            //$("#mytableinputtext").keyup(function () {
+            //    oTable.search($(this).val()).draw();
+            //});
+
+            $("#divmsg").hide();
+            $("#Line_ID").change(function (event) {
+              
+                if ($("#Line_ID").val().length > 0) {
+                    $(".loading_global_spinner_image").show();
+                    $.ajax({
+                        url: "CreateSkillSetAllocationTable/" + $("#Line_ID").val(),
+                        data: { lineid: $("#Line_ID").val() /* add other additional parameters */ },
+                        cache: false,
+                        type: "POST",
+                        dataType: "html",
+
+                        success: function (data, textStatus, XMLHttpRequest) {
+                            var obj = $.parseJSON(data);
+                            $("#divPartialView").html(obj);
+                            $(".loading_global_spinner_image").hide();
+
+                            $('#myTable').DataTable({
+                                "ordering": false,
+                                "paging": false
+                            });
+
+                            //$('#myTable').fxdHdrCol({
+                            //    //"ordering": false,
+                            //    //"paging": false
+                            //    fixedCols:1
+
+                            //});
+                            // HTML DOM replace
+                        }
+                    });
+                }
+                else {
+                    $("#divPartialView").html(null);
+                }
+            });
+
+
+
+        })
+
+        function SaveSkillSet(EmployeeID, StationID, obj, Skilllevel) {
+
+            //alert("hello Emp:" + EmployeeID + "Station:" + StationID + obj);
+
+            $(".loading_global_spinner_image").show();
+            // $("#" + obj.id).attr("style", "background:green");
+            $.ajax({
+                url: "SaveEmployeeSkillSet/" + obj.id,
+                data: { controlid: obj.id, empid: EmployeeID, stationid: StationID, skilllevel: Skilllevel, lineid: $("#Line_ID").val()/* add other additional parameters */ },
+                cache: false,
+                type: "POST",
+                dataType: "html",
+
+                success: function (data, textStatus, XMLHttpRequest) {
+                    var obj = $.parseJSON(data);
+                    console.log(obj.Data);
+                    $("#divPartialView").html(obj.Data);
+                    $(".loading_global_spinner_image").hide();
+
+                    $('#myTable').DataTable({
+                        "ordering": false,
+                        "paging": false
+                    });
+                    //$('#myTable').fxdHdrCol({
+                    //    //"ordering": false,
+                    //    //"paging": false
+                    //    fixedCols: 1
+
+                    //});
+
+
+
+                    //$("#divmsg").html(obj1);// HTML DOM replace
+
+                }
+            })
+        }
+
+        function resetSkillset(stationID, EmployeeID, obj) {
+            $(".loading_global_spinner_image").show();
+            // $("#" + obj.id).attr("style", "background:green");
+            $.ajax({
+                url: "ResetEmployeeSkillSet/" + obj.id,
+                data: { empid: EmployeeID, stationid: stationID, lineid: $("#Line_ID").val()/* add other additional parameters */ },
+                cache: false,
+                type: "POST",
+                dataType: "html",
+
+                success: function (data, textStatus, XMLHttpRequest) {
+                    var obj = $.parseJSON(data);
+                    $("#divPartialView").html(obj.Data);
+                    $(".loading_global_spinner_image").hide();
+
+                    $('#myTable').DataTable({
+                        "ordering": false,
+                        "paging": false
+                    });
+
+                    //$('#myTable').fxdHdrCol({
+                    //    //"ordering": false,
+                    //    //"paging": false
+                    //    fixedCols: 1
+
+                    //});
+
+
+
+                    //$("#divmsg").html(obj1);// HTML DOM replace
+
+                }
+            });
+        }
+
+    </script>
+}

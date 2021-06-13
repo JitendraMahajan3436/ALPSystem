@@ -1,0 +1,508 @@
+﻿@{
+    ViewBag.Title = "NAGPUR-FD HYDRAULICSHOP";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+<div class="row table-responsive tracking-container">
+    <div class="alarmColorLabel tractorShopLabel clearfix">
+        <div class="row">
+            <div class="col-xs-7 legend-block">
+                <div class="row">
+                    <div class="legend-symbol lineStopTrigger"></div><div class="legend-title">Line Stop Station</div>
+                </div>
+                <div class="row">
+                    <div class="legend-symbol backgroundMaterialCall"></div><div class="legend-title">Material Call</div>
+                </div>
+                <div class="row">
+                    <div class="legend-symbol backgroundProductionCall"></div><div class="legend-title">Supervisor Call</div>
+                </div>
+                <div class="row">
+                    <div class="legend-symbol backgroundQualityCall"></div><div class="legend-title">Maintenance Call</div>
+                </div>
+            </div>
+            <div class="col-xs-5 legend-block">
+                <div class="row">
+                    <div class="legend-symbol TakeInOut TakeIn"></div><div class="legend-title">Take In</div>
+                </div>
+                <div class="row">
+                    <div class="legend-symbol TakeInOut TakeOut"></div><div class="legend-title">Take Out</div>
+                </div>
+                <div class="row">
+                    <div class="legend-symbol track-mc-status mc-bad"></div><div class="legend-title">Faulty M/C</div>
+                </div>
+                <div class="row">
+                    <div>
+                        <button class="btn btn-xs btn-info btn-flat btn-showcallsummary" data-toggle="modal" data-target="#myModal3">Show Summary</button>
+                        @*<div class="alarmsummary-content" id="alarmSummary">
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Call Type</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="floating-div direction-bottom vtu-line-seperator" data-line-id="18">
+        <div class="horizontal-title-box">VTU Line</div>
+        <div class="direction-box"><marquee direction="right"><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i></marquee></div>
+    </div>
+    <div class="floating-div direction-bottom cv-line-seperator" data-line-id="18">
+        <div class="horizontal-title-box">CV Line</div>
+        <div class="direction-box"><marquee direction="right"><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i><i class="fa fa-arrow-right"></i></marquee></div>
+    </div>
+    <table class="tracking-table">
+        <tbody>
+            <tr><td><div class="station-box"><h1></h1></div></td></tr>
+            <tr><td><div class="station-box"><h1></h1></div></td></tr>
+            <tr>
+                <td colspan="22"></td>
+                <td rowspan="7" colspan="2">
+                    <div class="empty-shop">
+                        <span class="">TEST BED</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="4"></td>
+                <td colspan="2" class="line-item line-horizontal line-type-3">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="77">
+                        <div class=" station-title">GPMCM</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td colspan="2" class="line-item line-horizontal line-type-3">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="77">
+                        <div class=" station-title">VTUWM</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td colspan="2" class="line-item  line-horizontal line-type-3">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="79">
+                        <div class=" station-title">Buffer</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="155">
+                        <div class=" station-title">VTU1</div>
+                        <div class="station-body"></div>
+                    </div>
+                    <p class="station-info station-info-top" data-toggle="modal" data-target="#myModal1">ORDER START</p>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="156">
+                        <div class=" station-title">VTU2</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="157">
+                        <div class=" station-title">VTU3</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="158">
+                        <div class=" station-title">VTU4</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="159">
+                        <div class=" station-title">VTU5</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="86">
+                        <div class=" station-title">VTU6</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item  line-horizontal line-type-1">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="87">
+                        <div class=" station-title">VTU7</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="22"><div class="station-box"><h1></h1></div></td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td class="join-td">
+                    <div class="join-bottom-right">
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-1</div>
+                        <div class="station-body"></div>
+                    </div>
+                    <p class="station-info station-info-top">ORDER START</p>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-2</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-3</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-4</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-5</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-6</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-7</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-2">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">CV-8</div>
+                        <div class="station-body"></div>
+                    </div>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td class="join-td">
+                    <div class="join-bottom-left">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td class="">
+                    <div class="line-arrow-box line-up">
+                    </div>
+                </td>
+                <td colspan="10"></td>
+                <td class="">
+                    <div class="line-arrow-box line-down">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="line-item line-horizontal line-type-3">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="69">
+                        <div class=" station-title">ULTCM</div>
+                        <div class="station-body"></div>
+                    </div>
+                    <p class="station-info">UltraSonic Cleaning Machine</p>
+                </td>
+                <td class="">
+                    <div class="line-arrow-box line-right">
+                    </div>
+                </td>
+                <td class="line-item line-horizontal line-type-3">
+                    <div class="station-box" data-toggle="modal" data-target="#myModal" data-station-id="67">
+                        <div class=" station-title">ROBCM</div>
+                        <div class="station-body"></div>
+                    </div>
+                    <p class="station-info">Robotic Cleaning Machine</p>
+                </td>
+                <td colspan="10"></td>
+                <td colspan="3">
+                    <div class="empty-shop">
+                        <span class="">CV TEST BED</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body no-padding">
+                <table class="table table-bordered station-detail-table">
+                    <tbody>
+                        <tr><td class="bg-dark text-right">ASN</td><td id="station-Item"></td></tr>
+                        @*<tr><td class="bg-dark text-right">Model</td><td id="station-ItemModel"></td></tr>*@
+                        <tr><td class="bg-dark text-right">Model Series</td><td id="station-ItemModelSeries"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@*nilesh*@
+@*@Html.ActionLink("Avix SOS", "DownloadAvixFile", "Tracking", new { documentPath = "Mahindra SOS.avx4" }, htmlAttributes: new { @class = "btn btn-info btn-sm col-md-12 btn-flat" })*@
+
+
+<!-- Modal -->
+@*<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="myModalLabel1">RELEASED ORDERS</h4>
+            </div>
+            <div class="modal-body no-padding table-responsive tracking-orders-wrapper">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Order No</td>
+                            <td>Model Code</td>
+                            <td>Remarks</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>  @item.Order_No </td>
+                                <td>  @item.Model_Code </td>
+                                <td>  @item.Remarks </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@section Scripts {
+    @*<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>*@
+    <!--Reference the autogenerated SignalR hub script. -->
+    @*<script src="/signalr/hubs"></script>*@
+    <script>
+        //function getAllMessages() {
+        //    var tbl = $('#messagesTable');
+        //    $.ajax({
+        //        url: '/Tracking/GetMessages',
+        //        type: 'GET',
+        //        dataType: 'json'
+        //    }).success(function (result) {
+        //        //tbl.empty().append(result);
+        //        $.each(result, function (idx, tracking) {
+
+        //            var stationid = tracking.Station_ID;
+        //            var serialno = (tracking.SerialNo);
+        //            //serialno = serialno.substr(serialno.length - 5);
+
+        //            $('*[data-station-id="' + stationid + '"]').children(".station-body").text(serialno);
+        //            //$('*[data-station-id="' + stationid + '"]').children(".station-body").text(serialno);
+        //        });
+        //    }).error(function () {
+        //        alert("error");
+        //    });
+        //}
+    function resetStationData() {
+        $("#myModalLabel").text("");
+        //$("#station-ItemDSN").text("");
+        $("#station-Item").text("");
+        $("#station-ItemModel").text("");
+        $("#station-ItemModelSeries").text("");
+    }
+    function resetAllStation() {
+        //$(".station-box").removeData("data-station-id");
+        //$(".station-box").removeData("data-station-DSN");
+        //$(".station-box").removeData("data-station-Serial");
+        //$(".station-box").removeData("data-station-Model");
+        //$(".station-box").removeData("data-station-ModelSeries");
+
+        //$(".station-box .station-title").text("");
+        $(".station-box .station-body").text("");
+
+    }
+    function  resetAllLines(){
+        $(".floating-div").removeClass("LineStoped backgroundRed");
+        $(".station-box .station-body").removeClass("triggeredStation");
+        $(".station-box .station-body").removeClass("lineStopTrigger");
+        $(".station-box .station-body").removeClass("backgroundMaterialCall");
+        $(".station-box .station-body").removeClass("backgroundProductionCall");
+        $(".station-box .station-body").removeClass("backgroundQualityCall");
+    }
+
+    function checkTracking() {
+        resetAllLines();
+        $.getJSON('/Tracking/checkIfLineStop', { shopid: 3 }, function (data) {
+
+            if (data.length > 0) {
+                $.each(data, function (idx, lineStop) {
+
+                    var lineid = lineStop.Line_ID;
+                    var stationid = lineStop.LineStopStation_ID;
+                    $('*[data-line-id="' + lineid + '"]').addClass("LineStoped backgroundRed");
+                    $('*[data-station-id="' + stationid + '"]').addClass("triggeredStation lineStopTrigger");
+
+                });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Line Stop Data !');
+        });
+
+        $.getJSON('/Tracking/getStationCalls', { shopid: 3 }, function (data) {
+            if (data.length > 0) {
+                $.each(data, function (idx, stationCalls) {
+
+                    var stationid = stationCalls.Station_ID;
+                    var divObj = $('*[data-station-id="' + stationid + '"]').children(".station-body");
+                    if (stationCalls.Material_Call) {
+                        divObj.addClass("backgroundMaterialCall");
+                    }
+                    if (stationCalls.Production_Call) {
+                        divObj.addClass("backgroundProductionCall");
+                    }
+                    if (stationCalls.Quality_Call) {
+                        divObj.addClass("backgroundQualityCall");
+                    }
+                });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Station Calls !');
+        });
+
+        $.getJSON('/Tracking/trackOrder', { shopid: 3 }, function (data) {
+            resetAllStation();
+            if (data.length > 0) {
+                //PARSING THE TRACKING DATA RECIEVED FOR ENGINE SHOP
+                $.each(data, function (idx, tracking) {
+
+                    var stationid = tracking.Station_ID;
+                    var serialno = (tracking.SerialNo);
+
+                    if (serialno != null) {
+                        if (serialno.length > 5) {
+                            serialno = serialno.substr(serialno.length - 5);
+                        } else {
+                            serialno = '';
+                        }
+                    } else {
+                        serialno = '';
+                    }
+
+                    $('*[data-station-id="' + stationid + '"]').children(".station-body").text(serialno);
+                });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // Ajax fail callback function.
+            console.log('Error getting Tracking Data !');
+        });
+    }
+    $(document).ready(function () {
+         //checkTracking();
+         //window.setInterval(checkTracking, 5000);
+
+         setInterval(function () {
+             $('.LineStoped').toggleClass("backgroundRed");
+             $('.triggeredStation').toggleClass("lineStopTrigger");
+         }, 300);
+
+         $('#myModal').on('shown.bs.modal', function (e) {
+             $(".modal-content").addClass("modal-overlay");
+            var invokerstation = $(e.relatedTarget);
+            var station = invokerstation.data("station-id");
+            $.getJSON('/Tracking/getStationData', { shopid: 3, stationid: station }, function (data) {
+
+                if (data != null) {
+                    $("#myModalLabel").text(data.Station_Name);
+                    //$("#station-ItemDSN").text(data.DSN);
+                    $("#station-Item").text(data.SerialNo);
+                    $("#station-ItemModel").text(data.Model_Code);
+                    $("#station-ItemModelSeries").text(data.Series_Code);
+
+                } else {
+                    resetStationData();
+                }
+                $(".modal-content").removeClass("modal-overlay");
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                alert('Error getting Station Data !');
+            });
+        });
+    });
+    </script>
+
+
+
+}

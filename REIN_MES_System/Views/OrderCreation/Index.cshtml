@@ -1,0 +1,447 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_Creation>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<p class="position_absolute">
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <a href="@Url.Action("Create", "OrderCreation")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a> <a href="@Url.Action("ExcelUpload", "OrderCreation")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-upload"></i> @ResourceGlobal.Upload</a>
+</p>
+
+<div class="table-responsive order_release">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                @*<th>
+                        @Html.DisplayName("Plant Name")
+                    </th>*@
+                <th>
+                    @Html.DisplayName("Shop Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Part Number")
+                </th>
+               <th>
+                    @Html.DisplayName("Planned Date")
+                </th>
+                <th>
+                    @Html.DisplayName("Qty")
+                </th>
+                <th>
+                    @Html.DisplayName("Release Qty")
+                </th>
+                @*<th>
+                        @Html.DisplayName("Started Qty")
+                    </th>*@
+
+                <th>
+                    @Html.DisplayName("Cumulative Count")
+                </th>
+                <th style="display:none;">
+                    @Html.DisplayName("Order Release")
+                </th>
+                <th>
+                    @Html.DisplayName("Platform ")
+                </th>
+                <th>
+                    @Html.DisplayName("Order Type ")
+                </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int Cumulative_Count = 0; DateTime? plannedDate = new DateTime(); }
+            @foreach (var item in Model)
+            {
+                if (plannedDate.Value.Year == item.Planned_Date.Value.Year && plannedDate.Value.Month == item.Planned_Date.Value.Month && plannedDate.Value.Day == item.Planned_Date.Value.Day)
+                {
+                    Cumulative_Count = Cumulative_Count + item.Qty;
+
+                }
+                else
+                {
+                    Cumulative_Count = item.Qty;
+                    plannedDate = item.Planned_Date;
+
+                }
+                <tr>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                        </td>*@
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model_Code)
+                    </td>
+                   
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Planned_Date.Value.ToShortDateString())*@
+                        @item.Planned_Date.Value.ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Release_Qty)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Started_Qty)
+                        </td>*@
+                    <td>
+                        @Cumulative_Count
+                    </td>
+                    <td>
+                     @Html.DisplayFor(modelItem => item.RS_OM_Platform.Platform_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Order_Type)
+                    </td>
+                    <td style="display:none;">
+                        <a class="create_order btn btn-primary" id="@item.Row_ID" href="javascript:void(0);">Release Order</a>
+
+                    </td>
+                    <td>
+                        @*<a href="@Url.Action("Edit", "OrderCreation", new { id = item.Row_ID})"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;*@
+                        <a href="@Url.Action("Delete", "OrderCreation", new { id = item.Plant_OrderNo })"><i class="fa fa-trash" style="color:red"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Release Order Form</h4>
+                </div>
+
+                <div class="modal-body">
+                    @*changes*@
+
+                    <div class="form-horizontal">
+
+                        @Html.ValidationSummary(true)
+
+
+                        <div class="row">
+                            <div class="col-md-3">
+
+                                @Html.Label("Order No *", htmlAttributes: new { @class = "" })
+
+                                @Html.TextBox("Plant_OrderNo", "", new { onchange = "", @class = "form-control", disabled = "true" })
+                                @Html.ValidationMessage("Plant_OrderNo")
+                            </div>
+
+                            <div class="col-md-5">
+                                @Html.Label("Part Number *", htmlAttributes: new { @class = "" })
+
+                                @Html.TextBox("Model_Code", "", new { onchange = "", @class = "form-control", disabled = "true" })
+                                @Html.ValidationMessage("Model_Code")
+                            </div>
+
+                            <div class="col-md-4" style="display:none">
+                                @Html.Label("Colour", htmlAttributes: new { @class = "" })
+
+                                @Html.TextBox("Model_Color", "", new { onchange = "", @class = "form-control", disabled = "true" })
+                                @Html.ValidationMessage("Model_Color")
+                            </div>
+
+                            <div class="col-md-4">
+                                @Html.Label("Order Type *", htmlAttributes: new { @class = "" })
+
+                                @Html.TextBox("Order_Type", "", new { onchange = "", @class = "form-control popup_order_type", disabled = "true" })
+                                @Html.ValidationMessage("Order_Type")
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                @Html.Label("Series *", htmlAttributes: new { @class = "" })
+                                @Html.TextBox("Series_Code", "", new { onchange = "", @class = "form-control", disabled = "true" })
+                            </div>
+
+                            <div class="col-md-5">
+                                @Html.Label("Release Qty *", htmlAttributes: new { @class = "" })
+                                @Html.TextBox("Rel_qty", "", null, new { onchange = "", @class = "form-control", disabled = "true" })
+                            </div>
+
+                            <div class="col-md-4">
+                                @Html.Label("Quantity *", htmlAttributes: new { @class = "" })
+
+                                <input type="text" id="Quantity" name="Quantity" class="form-control" />
+                                @Html.ValidationMessage("Remarks", "", new { @id = "errorQuantity" })
+                            </div>
+
+                            <div class="col-md-4" style="display:none">
+                                @Html.Label("Country", htmlAttributes: new { @class = "" })
+
+                                @*@@Html.DropDownList("Country", Enumerable.Empty<SelectListItem>(), ResourceOrder_Release.Plant_Label_Country_Select, new { onchange = "", @class = "form-control" })*@*
+                                @Html.TextBox("Country_ID", new { onchange = "", @class = "form-control", disabled = "true" })
+                                @Html.ValidationMessage("Country_ID")
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+                            <div class="col-md-4" style="display:none">
+                                @Html.Label("Priority", htmlAttributes: new { @class = "" })
+
+                                @Html.Editor("Priority", null, null, new { @class = "form-control" })
+                                @Html.ValidationMessage("Priority", "", new { @id = "errorPriority" })
+                            </div>
+
+                            <div class="col-md-8">
+                                @Html.Label("Remarks", htmlAttributes: new { @class = "" })
+
+                                <input type="text" id="Remarks" name="Remarks" class="form-control" />
+                                @*@Html.EditorFor(model => model.Remarks, null, null, new { @class = "form-control" })*@
+                                @Html.ValidationMessage("Remarks", "", new { @id = "errorRemarks" })
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="">
+                            @using (Ajax.BeginForm("CreateOrders", "OMOrderRelease", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "show_release_orders", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "release_image", enctype = "multipart/form-data" }))
+                            {
+                                <input type="hidden" name="hdnQuantity" id="hdnQuantity" />
+                                <input type="hidden" name="hdnRemark" id="hdnRemark" />
+                                <input type="hidden" name="hdnPriority" id="hdnPriority" />
+                                <input type="hidden" name="hdnTotalQuantity" id="hdnTotalQuantity" />
+                                <input type="hidden" name="hdnRowId" id="hdnRowId" />
+                                <input type="button" id="show_order_ready_to_release" class="btn btn-primary" data-dismiss="modal" value="Release Order" />
+                                <button type="submit" id="releseID" class="btn btn-primary show_order_quantity" style="display:none;">Release Order</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            }
+                        </div>
+
+                        <div id="show_release_orders">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary order_popup" data-toggle="modal" data-target="#myModal" style="display:none">Release Order</button>
+
+
+
+<style type="text/css">
+
+</style>
+
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/ajax-validate")
+    @Scripts.Render("~/bundles/datatables")
+
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+
+
+    <script type="text/javascript">
+
+      @*---------------------Order Release----------------------------*@
+
+
+        $('.order_release').on('click', '.create_order', function () {
+
+            // var val = document.getElementById('Plant_ID').value;
+
+            $("#hdnRowId").val("");
+            var id = $(this).attr("id");
+            if (id) {
+
+                $("#hdnTotalQuantity").val("");
+                $("#hdnRemark").val("");
+                $("#hdnPriority").val("");
+                $("#hdnQuantity").val("");
+                $("#hdnRowId").val(id);
+
+                var url = "/OMOrderRelease/GetCreatedOrderDetails";
+                ajaxpack.getAjaxRequest(url, "rowId=" + id + "", showOrderDetails, "json");
+            }
+        });
+
+        $('.order_release').on('click', '#show_order_ready_to_release', function () {
+            //alert("okok");
+            //return false;
+            var rowId = $("#hdnRowId").val();
+            var quantity = $("#hdnQuantity").val();
+
+            var remark = $("#hdnRemark").val();
+
+            var url = "/OMOrderRelease/CreateOrders";
+
+            $(".loading_global_spinner_image").show();
+            ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "&remark=" + remark + "&quantity=" + quantity, showOrderRelease, "json");
+        });
+
+
+
+        $("#show_order_ready_to_release").click(function (e) {
+            //alert("ok");
+            // check validation
+            $("#errorPriority").html("");
+            $("#errorQuantity").html("");
+            $("#errorRemarks").html("");
+
+            //$("#hdnPriority").val("");
+            $("#hdnQuantity").val("");
+            $("#hdnRemark").val("");
+            $("#show_release_orders").html("");
+
+            //if($("#Priority").val()=="" || $("#Priority").val()==null)
+            //{
+            //    alert("pok");
+            //    $("#errorPriority").html("Required");
+            //    return false;
+            //}
+            //else
+
+
+            if ($("#Quantity").val() == "" || $("#Quantity").val() == null) {
+                //alert("Qok");
+                $("#errorQuantity").html("Please Enter Quantity");
+                return false;
+            }
+            else if ($("#Remarks").val() == "" || $("#Remarks").val() == null) {
+                //alert("rok");
+                // $("#errorRemarks").html("Required");
+                //return false;
+            }
+
+            var quantity = parseInt($("#Quantity").val());
+            var totalQuantity = parseInt($("#hdnTotalQuantity").val());
+            if (quantity < 0) {
+                //alert("qeok");
+                $("#errorQuantity").html("Please Enter Quantity greter than 0");
+            }
+            else
+                if (quantity > totalQuantity) {
+                    //alert("eqok");
+                    $("#errorQuantity").html("Release Quantity is greter than Actual Quantity");
+                }
+                else {
+                    //alert("ok inside");
+                    // ready to process result
+                    //$("#hdnPriority").val($("#Priority").val());
+                    $("#hdnQuantity").val($("#Quantity").val());
+                    $("#hdnRemark").val($("#Remarks").val());
+                    //$(".show_order_quantity").submit();
+                }
+        });
+
+
+        function showOrderRelease() {
+            //$(".loading_spinner_image").show();
+            $("#releseID").addClass("disabled");
+
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                //alert("4");
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    if (jsonRes == true) {
+
+                        alert("Order released successfully");
+
+                        $("#show_created_orders").html("");
+                        $("#show_release_orders").html("");
+                        $("#show_created_order_list").trigger("click");
+
+                        location.reload();
+                        $(".loading_global_spinner_image").hide();
+                    }
+                    else {
+                        alert("Order not release.....! BOM not Available for this Model");
+
+                        $("#show_created_orders").html("");
+                        $("#show_release_orders").html("");
+                        $("#show_created_order_list").trigger("click");
+
+                        location.reload();
+                    }
+                }
+            }
+        }
+
+        $("#show_created_order_list").click(function (e) {
+            var val = document.getElementById('Plant_ID').value;
+            $("#show_created_orders").html("");
+            $("#show_release_orders").html("");
+        });
+
+        @*---------------------Show Order Details----------------------------*@
+
+
+        function showOrderDetails() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) {
+                    //alert("hi");
+                    //if request was successful or running script locally
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    $("#Plant_OrderNo").val(jsonRes[0].Plant_OrderNo);
+                    $("#Model_Code").val(jsonRes[0].Model_Code);
+                    $("#Model_Color").val(jsonRes[0].Colour_ID);
+                    $("#Series_Code").val(jsonRes[0].Series_Code);
+                    if (jsonRes[0].Order_Type == "P") {
+                        $(".popup_order_type").val("Parent");
+                    }
+                    else
+                        if (jsonRes[0].Order_Type == "S") {
+                            $(".popup_order_type").val("Spare");
+                        }
+
+                    $("#Country").val(jsonRes[0].Country_ID);
+                    $("#Rel_qty").val(jsonRes[0].Release_Qty);
+                    if ($("#Rel_qty").val(jsonRes[0].Release_Qty) == "" || $("#Rel_qty").val(jsonRes[0].Release_Qty) == null) {
+                        $("#Quantity").val(jsonRes[0].Qty);
+                    }
+                    else {
+                        var qty = 0;
+                        var rel_qty = 0;
+                        var total_qty = 0;
+
+                        qty = jsonRes[0].Qty;
+                        rel_qty = jsonRes[0].Release_Qty;
+                        total_qty = (qty - rel_qty);
+                        $("#Quantity").val(total_qty);
+                    }
+                    $("#hdnTotalQuantity").val(jsonRes[0].Quantity_Min_To_Release);
+                    //SelectOptionHTML(jsonRes, "Shop_ID");
+                    $(".order_popup").trigger("click");
+
+                }
+            }
+        }
+
+    </script>
+
+}
+
+
+
+

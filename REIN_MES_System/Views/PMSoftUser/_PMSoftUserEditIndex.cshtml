@@ -1,0 +1,67 @@
+﻿@model REIN_MES_System.Models.MM_MT_PM_Maintenance_Part
+@using REIN_MES_System.App_LocalResources;
+@Html.Hidden("Shop_ID")
+    <div class="table-responsive" style="padding-left:13px;padding-right:13px">
+        <table class="table table-responsive table-bordered table-striped datatable_completes">
+            <thead>
+                <tr>
+                    <th>
+                        Machine Name
+                    </th>
+                    <th>
+                        Part Name
+                        @*@Html.DisplayNameFor(model => model.Part_ID)*@
+                    </th>
+                    <th>
+                        Quantity
+                        @*@Html.DisplayNameFor(model => model.Quantity)*@
+                    </th>
+                    <th>
+                        Done Date
+                        @*@Html.DisplayNameFor(model => model.Done_Date)*@
+                    </th>
+                    <th>
+                        Operator ID
+                        @*@Html.DisplayNameFor(model => model.Operator_User_ID)*@
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewData["MaintenancePart"] as IList<REIN_MES_System.Models.MM_MT_PM_Maintenance_Part>)
+            {
+                    <tr>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Machine_ID)*@
+                            @item.RS_MT_Machines.Machine_Name
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Part_ID)*@
+                            @item.MM_MT_Maintenance_Part.Part_Name
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Quantity)*@
+                            @item.Quantity
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Done_Date)*@
+                            @item.Done_Date
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Operator_User_ID)*@
+                            @item.Operator_User_ID
+                        </td>
+
+                        <td>
+                            <a href="@Url.Action("DeleteMaintenancePart", "PMSoftUser", new { id = item.PMMP_ID })"><i class="fa fa-trash" title="Delete"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @section scripts {
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+    }

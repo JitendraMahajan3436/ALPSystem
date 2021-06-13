@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="88080ea6e05d4f2084673172c0a6b399" Name="Diagram1">
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Feeder_DailyReport" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Feeder_DailyReport1" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Category" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_CBM_Category_Image" Width="1.5" PointX="6" PointY="119.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_CBM_Group" Width="1.5" PointX="9.75" PointY="144.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_CBM_Group_Mapping" Width="1.5" PointX="13" PointY="140.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_CBM_Parameter_Category" Width="1.5" PointX="6" PointY="114" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_CBM_Parameter_Type" Width="1.5" PointX="6" PointY="131.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Comman_Feeder_Consumption_Factor" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_CBM_Data" Width="1.5" PointX="10.5" PointY="129.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_CBM_Parameter_State" Width="1.5" PointX="10.5" PointY="133.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_CBM_Record" Width="1.5" PointX="7.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_Alarm_Data" Width="1.5" PointX="7.5" PointY="135.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_Alarm_Data_History" Width="1.5" PointX="10.5" PointY="138.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_Alarm_Types" Width="1.5" PointX="5.25" PointY="125.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_Alarms" Width="1.5" PointX="13" PointY="146.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_Alarms_Master" Width="1.5" PointX="10.75" PointY="123.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_Machine_IO_Signals" Width="1.5" PointX="3" PointY="78" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_MachineCycle_Status" Width="1.5" PointX="9.75" PointY="149.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_MinorStoppage_Cycle_Signals" Width="1.5" PointX="12" PointY="158.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_PLC_Status" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Ctrl_TBM_MachineEquipment" Width="1.5" PointX="9.75" PointY="153.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_DateRange" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_EMAIL_RECEIPENTS" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_FeederCategeryMapping" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Feeders" Width="1.5" PointX="5.25" PointY="181.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Feederwise_Daily_Analytics" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Feederwise_Time_Averge_Consumption" Width="1.5" PointX="2.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Feederwise_TimeConsumption" Width="1.5" PointX="9.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_ManualFeeder_Consumption" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Meter" Width="1.5" PointX="9.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MFL" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MinutesRange" Width="1.5" PointX="11.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_CBM_Mail_Log" Width="1.5" PointX="15.5" PointY="140.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Clita" Width="1.5" PointX="13.5" PointY="129.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Clita_Classification" Width="1.5" PointX="3" PointY="82" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Clita_Method" Width="1.5" PointX="3" PointY="86.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Clita_Standard" Width="1.5" PointX="3" PointY="102" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Clita_Tool" Width="1.5" PointX="3" PointY="106.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_ClitaItems_Tools_Relation" Width="1.5" PointX="15.75" PointY="121.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Conditional_Based_Maintenance" Width="1.5" PointX="8.25" PointY="121.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Daily_Clita_ConsumTime" Width="1.5" PointX="17.75" PointY="140.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Daily_Clita_Log" Width="1.5" PointX="15.75" PointY="152.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Daily_Temp_Clita_Log" Width="1.5" PointX="15.75" PointY="147.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_IO_TagWords_Mapping" Width="1.5" PointX="6" PointY="104.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Machine_IO" Width="1.5" PointX="3.75" PointY="111.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Machine_IO_Alarm_Relation" Width="1.5" PointX="13" PointY="124.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_MinorStoppageCycle" Width="1.5" PointX="9.75" PointY="157.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_MTTUW_Machines" Width="1.5" PointX="7.5" PointY="141" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Preventive_Equipment" Width="1.5" PointX="15.75" PointY="130.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_Preventive_Equipment_Log" Width="1.5" PointX="18.75" PointY="126.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MT_TBM_Mail_Log" Width="1.5" PointX="20" PointY="140.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Employee" Width="1.5" PointX="3" PointY="146.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Error_Log" Width="1.5" PointX="3" PointY="154.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_IoT_Tags" Width="1.5" PointX="3" PointY="160.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Lines" Width="1.5" PointX="3" PointY="165.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Plants" Width="1.5" PointX="0.75" PointY="101.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Purge_Master" Width="1.5" PointX="11.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Purge_ModuleWise_Duration" Width="1.5" PointX="6.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Shift" Width="1.5" PointX="3" PointY="175" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Shops" Width="1.5" PointX="3" PointY="190.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Stations" Width="1.5" PointX="5.25" PointY="166.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_MTTUW_Unit_OF_Measurement" Width="1.5" PointX="3" PointY="207" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Parameter" Width="1.5" PointX="3" PointY="211.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Parameter_Category" Width="1.5" PointX="3.75" PointY="120.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Performance_Indices_Energy" Width="1.5" PointX="11.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_PLC_List" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_PowerTarget" Width="1.5" PointX="5.25" PointY="186.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_ShopsCategory" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Shopwise_Time_Average_Consumption" Width="1.5" PointX="13.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Shopwise_TimeConsumption" Width="1.5" PointX="8.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_TBM_Image" Width="1.5" PointX="18" PointY="135.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_TBM_Reset_History" Width="1.5" PointX="20" PointY="144.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Unit_Measurement" Width="1.5" PointX="13.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.MM_Yearwise_PlantEnergy" Width="1.5" PointX="13.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.ProcedureTraceValue" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Production" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Shop_Index_Config" Width="1.5" PointX="5.25" PointY="191.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Shopwise_Daily_Consumption" Width="1.5" PointX="2.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.ShopwiseManualConsumption" Width="1.5" PointX="5.25" PointY="196.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.ShopwiseManualProduction" Width="1.5" PointX="5.25" PointY="202.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.Total_Transmission_Loss_Consumption" Width="1.5" PointX="15.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZHB_AD_MTTUW.UtilityMainFeederMapping" Width="1.5" PointX="7.5" PointY="194.75" IsExpanded="true" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_FeederCategeryMapping_MM_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Category_Image_MM_Parameter_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Parameter_Category_MM_CBM_Category_Image" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_CBM_Category_Image" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Group_Mapping_MM_CBM_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Group_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Group_Mapping_MM_MT_Conditional_Based_Maintenance" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Group_Mapping_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_CBM_Parameter_Category_MM_Parameter_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_CBM_Parameter_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_CBM_Parameter_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_CBM_Data_MM_MT_Conditional_Based_Maintenance" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_CBM_Parameter_State_MM_MT_Conditional_Based_Maintenance" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_History_MM_Ctrl_Machine_Alarms_Master" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_History_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_History_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_History_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Data_History_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Types_MM_MTTUW_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Types_MM_MTTUW_Employee1" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarm_Types_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_Master_MM_Ctrl_Machine_Alarm_Types" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_Ctrl_Machine_Alarms_Master" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Employee1" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_Master_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_Alarms_Master_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Machine_IO_Alarm_Relation_MM_Ctrl_Machine_Alarms_Master" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_Machine_IO_Signals_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_MachineCycle_Status_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_MinorStoppage_Cycle_Signals_MM_MT_MinorStoppageCycle" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_PLC_Status_MM_PLC_List" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Ctrl_TBM_MachineEquipment_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Feeders_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_UtilityMainFeederMapping_MM_Feeders" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_CBM_Mail_Log_MM_MT_Conditional_Based_Maintenance" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_CBM_Mail_Log_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MT_Clita_Classification" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MT_Clita_Method" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MT_Clita_Standard" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MTTUW_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_ClitaItems_Tools_Relation_MM_MT_Clita" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MT_Clita" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_Log_MM_MT_Clita" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Temp_Clita_Log_MM_MT_Clita" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_Classification_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_Method_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_Standard_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Clita_Tool_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_ClitaItems_Tools_Relation_MM_MT_Clita_Tool" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_MTTUW_Employee_Inserted_User_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_MTTUW_Employee_Updated_User_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Conditional_Based_Maintenance_MM_Parameter_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MTTUW_Shift" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_ConsumTime_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Clita_Log_MM_MTTUW_Shift" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Daily_Temp_Clita_Log_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_IO_TagWords_Mapping_MM_MT_Machine_IO" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_IO_TagWords_Mapping_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Machine_IO_Alarm_Relation_MM_MT_Machine_IO" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MinorStoppageCycle_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MinorStoppageCycle_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MTTUW_Machines_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MTTUW_Machines_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MTTUW_Machines_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_MTTUW_Machines_MM_MTTUW_Stations" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_Log_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_TBM_Mail_Log_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_TBM_Reset_History_MM_MT_MTTUW_Machines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_MM_MTTUW_Employee_Inserted_User_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_MM_MTTUW_Employee_Updated_User_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_TBM_Mail_Log_MM_MT_Preventive_Equipment" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_TBM_Image_MM_MT_Preventive_Equipment" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_TBM_Reset_History_MM_MT_Preventive_Equipment" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MT_Preventive_Equipment_Log_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Employee_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Error_Log_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_IoT_Tags_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Lines_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Stations_MM_MTTUW_Lines" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Shift_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Shops_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_MTTUW_Unit_OF_Measurement_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_Parameter_MM_MTTUW_Plants" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_PowerTarget_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_MM_PowerTarget_MM_MTTUW_Shops1" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_Shop_Index_Config_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_ShopwiseManualConsumption_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_ShopwiseManualProduction_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_UtilityMainFeederMapping_MM_MTTUW_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ZHB_AD_MTTUW.FK_UtilityMainFeederMapping_MM_Parameter" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

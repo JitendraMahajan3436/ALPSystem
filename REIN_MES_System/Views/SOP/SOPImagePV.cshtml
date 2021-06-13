@@ -1,0 +1,11 @@
+﻿@if (ViewBag.Message == null)
+{
+    if (ViewBag.ImageName != null)
+    {
+        <img src="~/Content/images/@ViewBag.ImageName" />
+    }
+}
+else
+{
+    <h3 class="bg-red-active text-center">@ViewBag.Message</h3>
+}

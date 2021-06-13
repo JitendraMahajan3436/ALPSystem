@@ -1,0 +1,88 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Manual_Data_Collection>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+}
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "ManualDataCollection")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+
+
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            <th>
+                @Html.DisplayName("Station Name")
+            </th>
+            <th>
+                @Html.DisplayName("Shift Name")
+            </th>
+            <th>
+                @Html.DisplayName("Parameter Name")
+            </th>
+            <th>
+                @Html.DisplayName("Min Value")
+            </th>
+            <th>
+                @Html.DisplayName("Max Value")
+            </th>
+            <th>
+                @Html.DisplayName("Frequency")
+            </th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shift.Shift_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MM_MT_Parameter.Parameter_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.Minimum_Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Maximum_Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Frequency)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "ManualDataCollection", new { id = item.MDC_ID })"><i class="fa fa-edit"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Details", "ManualDataCollection", new { id = item.MDC_ID })"><i class="fa fa-fw fa-laptop"></i></a> &nbsp;&nbsp;
+                    <a href="@Url.Action("Delete", "ManualDataCollection", new { id = item.MDC_ID })"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

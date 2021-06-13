@@ -1,0 +1,148 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_PM_Activity>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<style>
+.dataTables_wrapper{
+    overflow-x:scroll;
+}
+</style>
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "PMActivity")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive no-border">
+    <table class="table table-responsive table-bordered table-striped datatable_completes">
+
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Plant_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Shop_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Line_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Station_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Machine_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activity_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activity_Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Frequency)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Last_Date)
+                </th>
+                <th>
+                    @Html.DisplayName("Due Date")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Activity_Owner_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EQP_ID)
+                </th>
+                <th>
+                    @ResourceGlobal.Action
+                </th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activity_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Activity_Description)
+                </td>
+                <td>
+                    @item.Frequency
+                </td>
+                <td>
+                    @item.Start_Date.ToShortDateString()
+                </td>
+                <td>
+                    @{
+                        var StartDate = item.Start_Date;
+                        var EndDate = item.Last_Date;
+                        var Frequency = item.Frequency;
+                        if (EndDate == null)
+                        {
+                            EndDate = StartDate.AddDays(Convert.ToDouble(Frequency));
+                        }
+                    }
+                    @EndDate.Value.ToShortDateString()
+                </td>
+                <td>
+                    @{
+                        var ActivityEndDate = item.Last_Date;
+                        var ActivityDueDate = DateTime.Now;
+                        if (ActivityEndDate == null)
+                        {
+                            ActivityDueDate = item.Start_Date;
+                        }
+                        else
+                        {
+                            var ActEndDate = Convert.ToDateTime(ActivityEndDate);
+                            ActivityDueDate = ActEndDate.AddDays(Convert.ToDouble(Frequency));
+                        }
+                    }
+                    @ActivityDueDate.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_PM_Equipment.Equipment_Name)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "PMActivity", new { id = item.Activity_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+                    <a href="@Url.Action("Details", "PMActivity", new { id = item.Activity_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a>
+                    <a href="@Url.Action("Delete", "PMActivity", new { id = item.Activity_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+                </td>
+            </tr>
+                        }
+
+    </table>
+</div>
+
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+
+

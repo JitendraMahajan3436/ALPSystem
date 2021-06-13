@@ -1,0 +1,116 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Partmaster>
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.custom_Helper;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "Partmaster")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive">
+    
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                @*<th>
+                        @Html.DisplayName("Plant Name")
+                    </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.Shop_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Partgroup_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Part_No)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Part_Description)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Series_Code)
+                </th>*@
+                @*<th>
+                        @Html.DisplayName("Stage")
+                    </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.Genealogy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Error_Proofing)
+                </th>
+                @*<th>
+                        @Html.DisplayName("Kitting")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Sequencing")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Is Finish Partno")
+                    </th>*@
+
+                <th>@ResourceGlobal.Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RS_Partgroup.Partgrup_Desc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Part_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Part_Description)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+                    </td>*@
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Stage)
+                        </td>*@
+                    <td>
+                        @Html.YesNo(item.Genealogy)
+                    </td>
+                    <td>
+                        @Html.YesNo(item.Error_Proofing)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Kitting)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sequence)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.isFinished)
+                        </td>*@
+
+                    <td>
+                        <a href="@Url.Action(ResourceGlobal.Edit, "Partmaster", new { id = item.PartMaster_ID + "/" })"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Details, "Partmaster", new { id = item.PartMaster_ID + "/" })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a>
+                        <a href="@Url.Action(ResourceGlobal.Delete, "Partmaster", new { id = item.PartMaster_ID + "/" })"><i class="fa fa-trash" style="color:red"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+
+

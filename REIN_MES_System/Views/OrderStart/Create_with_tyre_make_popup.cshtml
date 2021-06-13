@@ -1,0 +1,531 @@
+﻿@model REIN_MES_System.Models.RS_OM_OrderRelease
+@using REIN_MES_System.Models
+
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    SelectList tyreMakeName = ViewBag.MakeDetails;
+
+}
+
+
+<div class="box">
+    <div class="box-header with-border">
+        <div class="col-md-8">
+            <div id="order-message-block" class="shop-notify order-start-notify"></div>
+        </div>
+        <div class="box-tools pull-right">
+            @*<button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>*@
+
+            @*added by Jitendra Mahajan*@
+            <input type="hidden" id="stationID" name="stationID" value="@ViewBag.Station_ID_User" />
+
+        </div>
+    </div>
+    <div class="box-body">
+        <div>
+            <div class="col-md-12 Order_Start">
+                <h4><b>Release Order List</b></h4>
+                <div class="col-md-12 plant-line">
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true)
+                        <div class="row">
+                            <div class="">
+                                @using (Ajax.BeginForm("ShowStartOrderList", "OrderStart", new AjaxOptions()
+                                {
+                                    HttpMethod = "POST",
+                                    UpdateTargetId = "showStartedOrderDetail",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnBegin = "StartedOrdersLoadBegin",
+                                    OnComplete = "StartedOrdersLoadComplete",
+                                }, new { @id = "showStartedOrderList" }))
+                                {
+                                    <input type="hidden" id="startOrderListShopId" name="startOrderListShopId" value="@ViewBag.Shop_ID_User" />
+                                    <input type="hidden" id="startOrderListLineId" name="startOrderListLineId" value="@ViewBag.Line_ID_User" />
+                                }
+
+                                <div id="showStartedOrderDetail">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<h5> <b>Ready To Release Order List</b> </h5>*@
+
+                        <div class="row">
+                            @*<div class="col-md-12 plant-line">*@
+                            <div class="">
+                                @using (Ajax.BeginForm("ShowOrderListByShopAndLine", "OrderStart", new AjaxOptions()
+                                {
+                                    HttpMethod = "POST",
+                                    UpdateTargetId = "showReleasedOrderDetail",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnBegin = "ReleasedOrdersLoadBegin",
+                                    OnComplete = "ReleasedOrdersLoadComplete",
+                                }, new { @id = "showReleaseOrderList" }))
+                                {
+                                    <input type="hidden" id="orderListShopId" name="orderListShopId" value="@ViewBag.Shop_ID_User" />
+                                    <input type="hidden" id="orderListLineId" name="orderListLineId" value="@ViewBag.Line_ID_User" />
+                                }
+
+                                <div id="showReleasedOrderDetail">
+
+                                </div>
+
+                           
+                            </div>
+                            @*</div>*@
+                        </div>
+
+
+                        <div class=" row">
+                            <h4><b>Serial Number</b></h4>
+                            <div class="col-md-3 no-padding">
+                                @Html.TextBox("Serial_Number1", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                                @Html.ValidationMessage("Serial_Number1", null, new { @class = "validation_error" })
+                            </div>
+                            <div class="plant-line">
+
+                                <div class="col-md-4">
+                                    <input type="button" id="btnStart_reprint" value="REPRINT" class="btn btn-primary" />
+                                    @Ajax.ActionLink("SHOW RELEASE ORDER LIST", "loadAllReleasedOrders", "OrderStart", new AjaxOptions()
+                               {
+                                   HttpMethod = "Get",
+                                   UpdateTargetId = "releasedOrdersBody",
+                                   InsertionMode = InsertionMode.Replace,
+                                   OnBegin = "Loadingajax",
+                                   OnComplete = "LoadingajaxComplete"
+                               }, new { @class = "btn btn-primary order_popup", id = "show_release" })
+                                    @*<input type="button" id="show_release" value="SHOW RELEASE ORDER LIST" class="btn btn-primary order_popup" data-toggle="modal" data-target="#myModal" />*@
+                                    <input type="button" id="btn_refresh" value="REFRESH" class="btn btn-warning" />
+
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*Show Order Release data*@
+
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Release Order</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-horizontal" id="releasedOrdersBody">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="myModal_TyreMake" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">TYRE MAKE DETAILS </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <input type="hidden" id="Model_Code" name="Model_Code" value="" />
+                                        <input type="hidden" id="Row_ID" name="Row_ID" value="" />
+                                        <div class="form-group">
+                                            <div class="col-sm-4">
+                                                TYRE Make Name:
+                                            </div>
+                                            <div class="col-sm-6">
+                                                @Html.DropDownList("TyreMake", tyreMakeName,"----select Tyre Company----", new { @class = "form-control" })
+                                                <span style="display:none" id="validateMake">
+                                                    * Please Select TYRE Make
+                                                </span>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4">
+                                                TYRE Size:
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="Tyre_Size" class="form-control" />
+                                            </div>
+
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-sm-12 text-center">
+                                            <button class="btn btn-primary" id="btnTyreMakeSave" name="contactSubmit">Save </button>
+                                            <span class="col-sm-1"></span>
+                                            <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="loading_global_spinner_image" style="display:none;">
+                    @*<img src="~/Content/images/loader2.GIF" />*@
+                    <img src="~/Content/images/gears.gif" />
+                </div>
+            </div>
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+                @Scripts.Render("~/Content/theme/plugins/datatables/js")
+                @Styles.Render("~/Content/theme/plugins/datatables/css")
+                @Scripts.Render("~/Scripts/user_datatable")
+                @Styles.Render("~/fdtheme/spinner_css")
+                @Scripts.Render("~/fdtheme/spinner_js")
+
+                <script src="~/Scripts/jquery.validate.min.js"></script>
+                <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+                <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+                <script type="text/javascript">
+                    function StartedOrdersLoadBegin() {
+                        $("#showStartedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                    }
+                    function StartedOrdersLoadComplete() {
+                    }
+                    function ReleasedOrdersLoadBegin() {
+                        $("#showReleasedOrderDetail").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                    }
+                    function ReleasedOrdersLoadComplete() {
+                    }
+                    function Loadingajax() {
+                        $('#myModal').modal();
+                        $("#releasedOrdersBody").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+                    }
+                    //setInterval(function () {
+                    //    $(".start_orders").click();
+                    //}, 5000);
+
+                    $(document).ready(function () {
+                        //code for tyre validation 5/04/2017
+                        $('#Tyre_Size').attr('readonly', true);
+
+                        $("#btnTyreMakeSave").click(function () {
+                            var TyreMake = $("#TyreMake").val();
+                            var isDisabled = $('#TyreMake').prop('disabled');
+                           // alert(isDisabled);
+
+                            
+                            if (isDisabled == true) {
+                                showReleasedOrderDetail();
+                                $('#Tyre_Size').attr('readonly', true);
+                                //$("#btnTyreMakeSave").prop('disabled', true);
+                            }
+                            else {
+                                $("#btnTyreMakeSave").prop('disabled', false);
+                                if (TyreMake == 0) {
+                                    $("#validateMake").css('display', 'block');
+                                    $("#TyreMake").addClass('bg-error');
+                                    $("#TyreMake").focus();
+                                }
+                                else {
+                                    $('#TyreMake').attr('disabled', false);
+                                    $("#validateMake").css('display', 'none');
+                                    $("#TyreMake").removeClass('bg-error');
+                                  
+                                    showReleasedOrderDetail();
+                                }
+                            }
+                            
+
+                        });
+
+
+
+
+
+
+
+                        $("#btn_refresh").click(function (e) {
+                            loadShopOrderList();
+                            loadShopStartedList();
+                        });
+
+
+
+                        //Added By Amol
+                        $("#showReleasedOrderDetail").on("click", ".start_orders", function (e) {
+                            var stationID = $("#stationID").val();
+                           // alert("stationid :" + stationID);
+                            var rowId = $(this).data("order-rowid");
+                            $("#Row_ID").val(rowId);
+                            // added by Jitendra Mahajan 27/03/2017
+                            if (rowId) {
+                                if (stationID == "158" || stationID == "228") {
+                                    var url = "/OrderStart/GetTyreMakeDeailsByMoelCode";
+                                    ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "", showMakeDetail, "json");
+                                }
+                                else {
+                                    showReleasedOrderDetail();
+                                }
+                            }
+                        });
+
+
+
+
+
+                        //End
+
+                        function showReleasedOrderDetail() {
+                            var rowId = $("#Row_ID").val();
+                            var Tyre_Size = $("#Tyre_Size").val();
+                            var tyreMakeId = $('#TyreMake').val();
+                          //  alert("DropDown " + tyreMakeId);
+                            var Model_Code = $("#Model_Code").val();
+                            if (rowId) {
+                                var url = "/OrderStart/StartOrder";
+                                $(".loading_global_spinner_image").show();
+                                //ajaxpack.getAjaxRequest(url, "rowId=" + rowId + "&plantId=" + plantId + "&shopId=" + shopId + "&lineId=" + lineId + "&stationId=" + stationId + "&orderno=" + orderNo + "&modelcode=" + modelCode + "&rsn=" + RSN, showOrderStartDetail, "json");
+                                $.getJSON(url, { rowId: rowId, Tyre_Size: Tyre_Size, Model_Code: Model_Code, tyreMakeId: tyreMakeId }, function (data) {
+                                    if (data != null) {
+                                        if (data.status == true) {
+                                            $('#order-message-block').html("Order is Started.....!");
+                                            $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                            $("html, body").animate({ scrollTop: 0 }, "slow");
+                                            $(".loading_global_spinner_image").hide();
+                                            $('#myModal_TyreMake').modal('hide');
+                                            //added by Jitendra Mahajan 5/04/2017
+                                            $("#TyreMake").val("");
+                                            $("#Tyre_Size").val("");
+                                        }
+                                        else {
+                                            $('#order-message-block').html(data.message);
+                                            $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                            $("html, body").animate({ scrollTop: 0 }, "slow");
+                                            $(".loading_global_spinner_image").hide();
+                                            //$("#message-block").addClass('bg-error');
+                                            //alert("Line is Stop Order is Not Started !");
+                                        }
+                                        //getTopOrderDetail();
+                                        loadShopOrderList();
+                                        loadShopStartedList();
+                                    } else {
+                                        $(".loading_global_spinner_image").hide();
+                                        //$("#message-block").addClass('bg-error');
+                                        //alert("Line is Stop Order is Not Started !");
+                                    }
+
+                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                $('#order-message-block').html("No orders are available to start.....!");
+                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                $('#myModal_TyreMake').modal('hide');
+                            }
+                        }
+
+
+
+
+
+
+
+
+                        //added by Jitendra Mahajan 27/03/2017
+                        function showMakeDetail() {
+                            
+                            var myajax = ajaxpack.ajaxobj
+                            var myfiletype = ajaxpack.filetype
+                            if (myajax.readyState == 4) {
+
+                                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                                    var jsonRes = $.parseJSON(myajax.responseText);
+                                    if (jsonRes.length > 0) {
+                                        var TyreMakeID = jsonRes[0].Tyre_Make_ID;
+                                        var TyresizeFront = jsonRes[0].Tyre_Make_Size_Front;
+                                       // alert(TyresizeFront + " : TyresizeFront");
+                                        var TyresizeRear = jsonRes[0].Tyre_Make_Size_Rear;
+                                        //alert(TyresizeRear + " : TyresizeRear")
+                                        var RowID = jsonRes[0].Row_ID;
+                                        $("#Row_ID").val(RowID);
+
+                                        $('#TyreMake').val("");
+                                        $('#Tyre_Size').val("");
+
+                                        $('#myModal_TyreMake').modal('show');
+                                        // tyre make null
+                                        if (TyreMakeID == "" || TyreMakeID == null) {
+                                            // process to allow operator to select dropdown
+                                            $('#TyreMake').prop('disabled', false);
+                                        } else {
+                                            // read only drop down
+                                            $('#TyreMake').prop('disabled', true);
+                                            $('#TyreMake').val(jsonRes[0].Tyre_Make_ID);
+                                        }
+
+                                        var type_size = "";
+                                        if (jsonRes[0].stationID == 228) {
+                                            type_size = jsonRes[0].Tyre_Make_Size_Front;
+                                        } else {
+                                            type_size = jsonRes[0].Tyre_Make_Size_Rear;
+                                        }
+
+                                        $('#Tyre_Size').attr('readonly', true);
+                                        $('#Tyre_Size').val(type_size);
+
+
+
+                                        /*if (jsonRes[0].stationID == 228) {
+                                           // alert("228");
+                                            if (TyreMake != "") {
+                                                $('#Tyre_Size').val(TyresizeFront);
+                                                $('#myModal_TyreMake').modal('show');
+                                                $('#TyreMake').val(jsonRes[0].Tyre_Make_ID);
+                                                $("#Model_Code").val(jsonRes[0].Model_Code);
+                                                $('#TyreMake').prop('disabled', true);
+                                                if ($('#Tyre_Size').length > 0) {
+                                                    $('#Tyre_Size').attr('readonly', true);
+                                                }
+                                                else {
+
+                                                    $('#Tyre_Size').attr('readonly', true);
+                                                }
+                                            }
+                                            else {
+                                                $('#TyreMake').prop('disabled', false);
+                                                $('#Tyre_Size').attr('readonly', true);
+                                               
+                                                
+                                            }
+
+                                        }//station
+                                        else if (jsonRes[0].stationID == 158) {
+                                            //alert("158");
+                                            if (TyreMake != "") {
+                                                $('#TyreMake').val(jsonRes[0].Tyre_Make_ID);
+                                                $("#Model_Code").val(jsonRes[0].Model_Code);
+                                                $('#TyreMake').prop('disabled', true);
+                                                if ($('#Tyre_Size').length > 0) {
+                                                    $('#Tyre_Size').attr('readonly', true);
+                                                }
+                                                else {
+                                                    $('#Tyre_Size').attr('readonly', true);
+                                                }
+                                                $('#Tyre_Size').val(TyresizeRear);
+                                                $('#myModal_TyreMake').modal('show');
+                                            }
+                                            else {
+                                                $('#Tyre_Size').attr('readonly', true);
+                                                $('#TyreMake').prop('disabled', false);
+                                            }
+                                        } */
+                                    }//Json Length
+                                    else {
+                                        $('#TyreMake').prop('disabled', false);
+                                        $('#myModal_TyreMake').modal('show');
+                                    }
+                                }
+                            }
+                        }
+
+
+
+
+
+                        //Reprint Serial Number
+                        $("#btnStart_reprint").click(function (e) {
+                            var serial_number = document.getElementById("Serial_Number1").value;
+                            if (serial_number) {
+                                var url = "/OrderStart/isReprint";
+                                //ajaxpack.getAjaxRequest(url, "serial_number=" + serial_number + "&Shop_Id=" + shopId, isreprintOrderStart, "json");
+                                $.getJSON(url, { serial_number: serial_number }, function (data) {
+
+                                    if (data == true) {
+                                        document.getElementById("Serial_Number1").value = "";
+                                        document.getElementById("Serial_Number1").focus();
+                                    }
+                                    else {
+                                        $('#order-message-block').html("Invalid Serial Number Please Check Serial Number.....!");
+                                        $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                        $("html, body").animate({ scrollTop: 0 }, "slow");
+
+                                        document.getElementById("Serial_Number1").value = "";
+                                        document.getElementById("Serial_Number1").focus();
+                                    }
+                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                    location.reload();
+                                });
+                            }
+                            else {
+                                $('#order-message-block').html("Please Enter Serial Number.....!");
+                                $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                                $(".loading_global_spinner_image").hide();
+                            }
+                        });
+
+                        $("#showReleasedOrderDetail").on("click", ".hold_orders", function (e) {
+                            //alert($(this).attr("id"));
+                            var rowid = $(this).data("order-rowid");
+                            var url = "/ManageOrders/changeOrderStateLinewise";
+                            //ajaxpack.getAjaxRequest(url, "status=Hold&orderNo=" + orderNo + "&remark=" + remark + "&shopId=" + shopId + "&lineId=" + lineId, showHoldOrderDetail, "json");
+                            $.getJSON(url, { status: "Hold", rowID: rowid }, function (data) {
+                                if (data != null) {
+                                    if (data == true) {
+                                        loadShopOrderList();
+                                        $('#order-message-block').html("Order holded Successfully.....!");
+                                        $('#order-message-block').addClass('bg-correct').removeClass('bg-error');
+                                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                                    }
+                                    else {
+                                        $('#order-message-block').html("Order hold Not allowed.....!");
+                                        $('#order-message-block').addClass('bg-error').removeClass('bg-correct');
+                                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                                    }
+                                }
+                            }).fail(function (jqXHR, textStatus, errorThrown) {
+                                location.reload();
+                            });
+                        });
+
+                        $('#order_start').dataTable();
+
+                        setTimeout(function (e) {
+                            //getTopOrderDetail();
+                            loadShopOrderList();
+                            loadShopStartedList();
+                        }, 500);
+
+                    });// DOCUMENT READY STATE END
+
+
+                    function loadShopOrderList() {
+                        $("#showReleaseOrderList").submit();
+                    }
+
+                    function loadShopStartedList() {
+                        $("#showStartedOrderList").submit();
+                    }
+
+                    //-----------------------------------------------------------------//
+                </script>
+            };
+        </div>
+    </div><!-- /.box-body -->
+    <br /><br />
+</div><!-- /.box -->

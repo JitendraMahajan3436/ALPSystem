@@ -1,0 +1,223 @@
+﻿@using REIN_MES_System.App_LocalResources;
+<style>
+    tr:hover {
+        background: #87bdd8 !important;
+        color: white;
+    }
+
+    table.dataTable thead th, table.dataTable thead td {
+        border: 1px solid #111;
+        text-align: center;
+    }
+
+    .select2-results {
+        color: white !important;
+        background-color: gray;
+    }
+
+    .select2-results__options {
+        list-style: none;
+        margin: 0;
+        padding: 1px;
+    }
+
+    body {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .dataTables_wrapper {
+        width: 84vw;
+    }
+
+    input[type="search"] {
+        height: 28px;
+        width: 500px !important;
+        margin: 0;
+        padding: 0;
+        font-size: 15px;
+        border: 1px solid #CCCCCC;
+        float: right;
+        margin-left: 1em;
+    }
+
+    div.dataTables_filter label {
+        white-space: nowrap;
+        text-align: right !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        width: 70vw; /*100%;*/
+        float: right;
+        text-align: center;
+        /*//align the Search box to center. left and right also valid*/
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        /*padding: 4px;*/
+        width: 100% !important;
+        /*box-sizing: border-box;*/
+    }
+</style>
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    //@item.FileName  // instead .FileName use property which u used in ur model class
+    
+}
+
+<div class="box">
+    <div class="box-header with-border">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 col-sm-3">
+                @*@Html.CheckBox("WIP", new { @class = "modelist" })*@
+                <input type="radio" id="WIP" class="modelist" name="tracemode" />
+                @Html.Label("WIP")
+            </div>
+            <div class="col-md-3 col-lg-3 col-sm-3">
+                @*@Html.CheckBox("CompletedRecord", new { @class = "modelist" })*@
+                <input type="radio" id="CompletedRecord" class="modelist" name="tracemode" />
+                @Html.Label("Completed", new { @class = "" })
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label style="width: 9rem;">WIP : </label>
+                <label id="lblTotalCount"></label>
+
+            </div>
+
+            <div class="col-md-4 col-lg-4 col-sm-4">
+                <label>Last @globalData.pageTitle Serial No : </label>
+                <label id="lblLastBin"></label>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 50%;">
+            <div class="col-md-4 col-lg-4 col-sm-2">
+                <label>Completed : </label>
+                <label id="lblCompletedCount"></label>
+
+            </div>
+        </div>
+        <div class="row" id="WIPContent" style="margin-top:3%">
+            @*<h4 style="    padding: 15px;">
+                    <b>Body Serial Number</b>
+                </h4>*@
+
+            <div class="col-md-3 ">
+                @Html.Label("Body Serial Number")
+                @Html.TextBox("Serial_Number", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                <span id="spanSerialNo" style="color:red"></span>
+            </div>
+
+            <div class="col-md-2 ">
+                @Html.Label("New Carrier No")
+                @Html.TextBox("Carrier_No", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control", @style = "width:70%" })
+                <span id="spanSHNumber" style="color:red"></span>
+            </div>
+            @*<div class="col-md-2 ">
+                    @Html.Label("Skid")
+                    @Html.TextBox("Skid_No", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                    <span id="spanSkidNumber" style="color:red"></span>
+                </div>*@
+            <div class="col-md-2">
+                @Html.Label("Barcode")
+                @Html.TextBox("Barcode", null, string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })
+                <span id="spanBarcode" style="color:red"></span>
+            </div>
+            <div class="col-md-3 ">
+                @Html.Label(ResourceDisplayName.PaintShop_Selection)
+
+                @* @Html.DropDownList("Shop_ID", Enumerable.Empty<SelectListItem>(), string.Empty, htmlAttributes: new { onchange = "", @class = "form-control" })*@
+                @Html.DropDownList("Shop_ID", new SelectList(ViewBag.Shop_ID, "Value", "Text"), ResourceDisplayName.PaintShop_Selection, new { onchange = "", @class = "form-control" })
+
+                <span id="spanShopId" style="color:red"></span>
+                @Html.ValidationMessage("Shop_ID", null, new { @class = "validation_error" })
+            </div>
+
+            <div class="col-md-12" style="margin-top:1%;">
+                <button type="button" id="genData" class="btn btn-primary order_Supervisor_cred" data-toggle="modal" data-target="#myModal_MarkingData">OK</button>
+
+            </div>
+            <div class="plant-line">
+
+                @*<div class="col-md-1" style="margin-top:1%;">
+                        <button type="button" id="genData" class="btn btn-primary order_Supervisor_cred" data-toggle="modal" data-target="#myModal_MarkingData">OK</button>
+
+                    </div>*@
+
+
+
+
+
+
+
+                <div class="modal fade" id="myModal_MarkingData" role="dialog">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Send Body Out </h4>
+                            </div>
+                            <p id="error_msgParts" style="color:red;font-size:15px;"></p>
+                            <div class="modal-body">
+
+                                <div class="form-horizontal">
+
+                                    <div class="col-md-12" id="vinpopup">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <input type="button" value="Yes" id="IsYes" class="btn btn-primary" />
+                                <input type="button" value="No" id="IsNo" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6" id="divData" style="margin-top: 2rem;width:70vw">
+                <table class="table-responsive" style="text-align:center;overflow-y:auto; width: 85vw;" id="wip_completed">
+                    <thead>
+                        <tr style="font-size:18px;font-weight:bold;background-color:#80808066;border:1px solid black">
+                            <th>Serial No</th>
+                            <th>Model Code</th>
+                            <th>Model Description</th>
+                            <th style="width:10%">Carrier No</th>
+                            <th style="width:10%">Barcode</th>
+                            <th style="width:12%">Paint Shop</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="col-md-6" id="divCompletedData" style="display:block"></div>
+        </div>
+    </div>
+</div>
+<div id="testy" style="margin-top:7%"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @*@Scripts.Render("~/Content/theme/plugins/datatables/js")*@
+    @Scripts.Render("~/fdtheme/notification_js")
+
+
+    @*@Scripts.Render("~/Content/theme/plugins/datatables/css")*@
+    @*<script src="~/Scripts/buttons.flash.min.js"></script>
+        <script src="~/Scripts/buttons.html5.min.js"></script>
+        <script src="~/Scripts/dataTables.buttons.min.js"></script>*@
+    <script src="~/Content/theme/plugins/datatables/jquery.dataTables.min.js"></script>
+}
+@section Styles {
+    @Styles.Render("~/fdtheme/notification_css");
+    @Styles.Render("~/Content/Select2styles")
+    <link href="~/Content/theme/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" />
+}
+ 

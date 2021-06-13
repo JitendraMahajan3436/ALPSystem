@@ -1,0 +1,87 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_PM_Activity_Log>
+@using REIN_MES_System.custom_Helper
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h4 class="position_absolute">Your Open PM Activity :</h4>
+
+<div class="table-responsive no-border">
+    <table class="table table-bordered table-striped datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Lines.Line_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_MT_Machines.Machine_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_PM_Activity.Activity_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Due_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Confirmed)
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Shops.Shop_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Lines.Line_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_Stations.Station_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_MT_Machines.Machine_Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RS_PM_Activity.Activity_Name)
+                </td>
+                <td>
+                    @item.Due_Date.ToShortDateString()
+                </td>
+                <td>
+                    @Html.YesNo(Convert.ToBoolean(item.Is_Confirmed))
+                </td>
+
+
+
+
+                <td>
+                    <a href="@Url.Action("Edit", "PMSoftUser", new { id = item.PM_Activity_Log_ID })"><i class="fa fa-edit" title="Edit" style="color:blueviolet"></i></a>
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

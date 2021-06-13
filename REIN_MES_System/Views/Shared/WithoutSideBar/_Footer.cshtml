@@ -1,0 +1,20 @@
+﻿@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+}
+<footer class="shop-footer">
+    <div class="row container top-bar top-bar2">
+        <div class="shopDataBlock"><p><i class="fa fa-angle-right"></i>NEXT </p><p id="shop-nextseries1"></p></div>
+        <div class="shopDataBlock"><p><i class="fa fa-angle-double-right"></i>NEXT </p><p id="shop-nextseries2"></p></div>
+    </div>
+    <div class="row">
+        <div class="shop-progress-bar col-xs-11">
+            <div class="current-progress"></div>
+        </div>
+        <div class="col-xs-1">
+            <p class="tact-countdown text-center" id="tact-countdown"></p>
+            <button id="pauseBtnhms" style="display:none">Pause</button>
+            <button id="stopBtnhms" style="display:none">Stop</button>
+        </div>
+    </div>
+</footer>

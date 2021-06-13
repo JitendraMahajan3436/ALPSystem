@@ -1,0 +1,32 @@
+﻿@model REIN_MES_System.Models.RS_Major_Sub_Assembly
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<div class="col-md-12 col-sm-12 col-lg-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    @Html.LabelFor(model => model.Sub_Assembly_Name, ResourceDisplayName.Sub_Assembly_Name, htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                    @Html.TextBoxFor(model => model.Sub_Assembly_Name, htmlAttributes:new { @class = "form-control",maxlength="50" } )
+                    @Html.ValidationMessageFor(model => model.Sub_Assembly_Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-offset-0 col-sm-offset-0 col-lg-offset-0 col-md-10 col-sm-10 col-lg-10">
+                    <input type="submit" value="@ResourceGlobal.Save" class="btn btn-success" />
+                    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

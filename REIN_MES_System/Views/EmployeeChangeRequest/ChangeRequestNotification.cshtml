@@ -1,0 +1,145 @@
+﻿@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "ChangeRequestNotification";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+<div class="">
+    <div class="box-body">
+        <div class="row">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Change Request</a></li>
+                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Confirm Request</a></li>
+                    <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Cancel Request</a></li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+
+                        @using (Ajax.BeginForm("getChangeRequest", "EmployeeChangeRequest", new AjaxOptions() { HttpMethod = "POST", LoadingElementId = "loading_global_spinner_image", OnSuccess = "", UpdateTargetId = "added_Change_Request_list", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "frm_show_ChangeRequest" }))
+                        {
+                            <input type="hidden" id="checklistId" class="checklistId" name="checklistId" value="124" />
+
+                        }
+                        <div id="added_Change_Request_list"></div>
+
+
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_2">
+
+                        @using (Ajax.BeginForm("getAcceptRequest", "EmployeeChangeRequest", new AjaxOptions() { HttpMethod = "POST", LoadingElementId = "loading_global_spinner_image", OnSuccess = "", UpdateTargetId = "added_accept_request", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "frm_show_accept_request" }))
+                        {
+                        }
+                        <div id="added_accept_request"></div>
+                    </div><!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_3">
+
+                        @using (Ajax.BeginForm("getRejectRequest", "EmployeeChangeRequest", new AjaxOptions() { HttpMethod = "POST", LoadingElementId = "loading_global_spinner_image", OnSuccess = "", UpdateTargetId = "added_reject_request_list", InsertionMode = InsertionMode.Replace }, new { @class = "", id = "frm_show_reject_request_list" }))
+                        {
+                        }
+                        <div id="added_reject_request_list"></div>
+                    </div><!-- /.tab-pane -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/fdtheme/tinytoggel_js")
+
+    @Styles.Render("~/fdtheme/tinytoggel_css")
+    @Styles.Render("~/fdtheme/spinner_css")
+    @Scripts.Render("~/fdtheme/spinner_js")
+
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Styles.Render("~/Content/Select2styles")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @Styles.Render("~/fdtheme/notification_css");
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadPartalView();
+        $("#added_Change_Request_list").on("click", ".accept", function (e) {        
+            var Row_ID = $(this).data("request-rowid");
+            var url = "/EmployeeChangeRequest/UpdateChangeRequestStatus";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + Row_ID + "&Status=" + 1, UpdateChangeRequestStatus, "json");
+        });
+
+        $("#added_Change_Request_list").on("click", ".reject", function (e) {
+            //alert("Main Reject");
+            var Row_ID = $(this).data("request-rowid");
+            var url = "/EmployeeChangeRequest/UpdateChangeRequestStatus";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + Row_ID + "&Status=" + 2, UpdateChangeRequestStatus_Reject, "json");
+        });
+        //added_accept_request
+
+        $("#added_accept_request").on("click", ".reject", function (e) {           
+            var Row_ID = $(this).data("request-rowid");
+            var url = "/EmployeeChangeRequest/UpdateChangeRequestStatus";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + Row_ID + "&Status=" + 2, UpdateChangeRequestStatus_Reject, "json");
+        });
+
+        $("#added_reject_request_list").on("click", ".accept", function (e) {
+            var Row_ID = $(this).data("request-rowid");
+            var url = "/EmployeeChangeRequest/UpdateChangeRequestStatus";
+            ajaxpack.postAjaxRequest(url, "Row_ID=" + Row_ID + "&Status=" + 1, UpdateChangeRequestStatus, "json");
+        });
+
+    })
+    function UpdateChangeRequestStatus() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                if (jsonRes) {
+                    $("#srlmessage-block").removeClass("bg-error");
+                    $("#srlmessage-block").addClass("bg-success");
+                    $("#srlmessage-block").html("Change request accepted successfully.");
+                    loadPartalView();
+                }
+                else {
+                    $("#srlmessage-block").html("Some issue occured while changing the status.");
+                    $("#srlmessage-block").addClass("bg-error");
+
+                }
+            }
+        }
+    }
+    function UpdateChangeRequestStatus_Reject() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                var jsonRes = $.parseJSON(myajax.responseText);
+                if (jsonRes) {
+                    $("#srlmessage-block").removeClass("bg-error");
+                    $("#srlmessage-block").addClass("bg-success");
+                    $("#srlmessage-block").html("Change request rejected successfully.");
+                    loadPartalView();
+                }
+                else {
+                    $("#srlmessage-block").html("Some issue occured while changing the status.");
+                    $("#srlmessage-block").addClass("bg-error");
+
+                }
+            }
+        }
+    }
+    function loadPartalView() {
+        $('#frm_show_ChangeRequest').submit();
+        setTimeout(function () {
+            $('#frm_show_accept_request').submit();
+        }, 2000);
+        setTimeout(function () {
+            $('#frm_show_reject_request_list').submit();
+        }, 3000);
+    }
+</script>
+

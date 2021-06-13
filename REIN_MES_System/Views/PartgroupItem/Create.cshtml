@@ -1,0 +1,57 @@
+﻿@model REIN_MES_System.Models.RS_PartgroupItem
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+       <div class="col-md-12">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        @Html.Label("PartGroup ItemID", htmlAttributes: new { @class = "" })
+                       @Html.TextBoxFor(model => model.PartgroupItem_ID, new { @Value = ViewBag.partgroupitem_id, onchange = "", @class = "form-control", @readonly = "readonly" })
+                       @Html.ValidationMessageFor(model => model.PartgroupItem_ID)
+                        </div>
+                    </div>
+                </div>
+
+         <div class="row">
+             <div class="col-md-2">
+                 <div class="form-group">
+                     @Html.Label("PartGroup Name", "Partgroup Name", htmlAttributes: new { @class = "" })
+                     @Html.DropDownList("Partgroup_ID", (SelectList)ViewBag.Partgroup_ID, "Select PartGroupItem", new { onchange = "", @class = "form-control" })
+                     @Html.ValidationMessageFor(model => model.Partgroup_ID)
+                 </div>
+             </div>
+             <div class="col-md-2 col-md-offset-1">
+                 <div class="form-group">
+                     @Html.Label("Part Number", htmlAttributes: new { @class = "" })
+
+                     @Html.TextBoxFor(model => model.Part_No,new { onchange = "", @class = "form-control" })
+                     @Html.ValidationMessageFor(model => model.Part_No)
+
+                 </div>
+               </div>
+             </div>
+
+           <div class="row">
+               <div class="col-md-3 col-md-offset-1">
+                   <div class="form-group">
+                       <input type="submit" value="Save" class="btn btn-primary" />
+                       @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                   </div>
+               </div>
+           </div>
+ </div>
+    </div>
+}
+
+        

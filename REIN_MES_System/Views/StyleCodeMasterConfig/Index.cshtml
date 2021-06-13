@@ -1,0 +1,63 @@
+﻿@model IEnumerable<REIN_MES_System.Models.VMStyleCodeMasterConfig>
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<p class="position_absolute">
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <a href="@Url.Action("Create", "Stylecodemasterconfig")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Biw Part No")
+            </th>
+
+         
+            <th>
+                @Html.DisplayName("Style Code")
+            </th>
+           
+          
+            <th>@ResourceGlobal.Action</th>
+        </tr>
+    </thead>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Shop_Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Variant_Code)
+        </td>
+
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Style_Code)
+        </td>
+
+
+        <td>
+            <a href="@Url.Action(ResourceGlobal.Edit, "Stylecodemasterconfig", new { id = item.Row_ID })"><i class="fa fa-edit" title="Edit" style="color:blue"></i></a>
+            <a href="@Url.Action(ResourceGlobal.Details, "Stylecodemasterconfig", new { id = item.Row_ID })"><i class="fa fa-fw fa-laptop" title="Details" style="color:blueviolet"></i></a> 
+            <a href="@Url.Action(ResourceGlobal.Delete, "Stylecodemasterconfig", new { id = item.Row_ID })"><i class="fa fa-trash" title="Delete" style="color:red"></i></a>
+
+        </td>
+    </tr>
+        }
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

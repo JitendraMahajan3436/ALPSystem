@@ -1,0 +1,101 @@
+﻿
+
+@model IEnumerable<REIN_MES_System.Models.RS_AttributionType_Master>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper;
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            @*<th>
+                @Html.DisplayName("Plant Name")
+            </th>*@
+            @*<th>
+                @Html.DisplayName("Attribute ID")
+            </th>*@
+            <th>
+                @Html.DisplayName("Child Part")
+            </th>
+            <th>
+                @Html.DisplayName("Attribute Type")
+            </th>
+            <th>@Html.DisplayName("ToolBox")</th>
+            <th>@Html.DisplayName("ToolBox Position")</th>
+            <th>Active</th>
+            <th>@Html.DisplayName("Action")</th>
+           </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+
+            foreach (var item in Model)
+            {
+
+                <tr>
+                    @{
+//string plant_name = db.RS_Plants.Where(a => a.Plant_ID == item.Plant_ID).Select(a => a.Plant_Name).FirstOrDefault();
+                    @*<td>
+                        @Html.Label(plant_name)
+                    </td>*@
+
+                        @*decimal AttributeId = item.Attribution_ID;
+                    <td>
+                        @Html.Label(Convert.ToString (AttributeId))
+                    </td>*@
+                        string type = item.Attribution_Type;
+                   <td>
+                       @item.RS_Major_Sub_Assembly.Sub_Assembly_Name
+                    </td>
+                    <td>
+                        @*@Html.Label(type)*@
+                        @item.Attribution_Type
+                    </td>
+                            string toolbox = item.ToolBox;
+                    <td>
+                        @if (toolbox != null) {
+                           @item.ToolBox}
+                        
+                    </td>
+                            int toolbox_pos =Convert.ToInt32 (item.ToolBox_Post);
+                    <td>
+                        @if (toolbox_pos != null){
+                             @*@Html.Label(toolbox_pos.ToString())*@ 
+                            @item.ToolBox_Post
+                        }
+                    </td>
+                        string IsActive = "No";
+                        <td>
+                            
+                            @if (item.IsActive == true)
+                            {
+                                IsActive = "Yes";
+                                @IsActive
+                            }
+                            else
+                            {
+                                @IsActive
+                            }
+                        </td>
+                    
+
+                    <td>
+                        <a href="@Url.Action("Edit", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i style="color:blue" class="fa fa-edit"></i></a>
+                        <a href="@Url.Action("Details", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i style="color:blueviolet" class="fa fa-fw fa-laptop"></i></a>
+                        <a href="@Url.Action("Delete", "AttributionTypeMaster", new { id = item.Attribution_ID })"><i style="color:red" class="fa fa-trash"></i></a>
+
+                    </td>
+                    }
+                </tr>
+
+            }
+
+        }
+    </tbody>
+</table>
+

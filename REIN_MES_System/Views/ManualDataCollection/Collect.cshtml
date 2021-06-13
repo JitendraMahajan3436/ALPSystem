@@ -1,0 +1,178 @@
+﻿@model IList<REIN_MES_System.Models.RS_Manual_Data_Collection>
+
+@{
+    ViewBag.Title = "Collect";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var NullData = (List<REIN_MES_System.Models.RS_MT_Shop_Manual_Data_Collection>)TempData["NullData"];
+    var s = Model;
+}
+
+    <div class="col-md-12">
+
+        @using (Html.BeginForm("Collect", "ManualDataCollection", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken();
+
+            if ((ViewBag.Data).Count > 0)
+            {
+                <div class="row">
+                    <table class="table table-bordered table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayName("Shop Name")</th>
+                                <th>@Html.DisplayName("Line Name")</th>
+                                <th>@Html.DisplayName("Station Name")</th>
+                                <th>@Html.DisplayName("Parameter Name")</th>
+                                <th>@Html.DisplayName("Min Val")</th>
+                                <th>@Html.DisplayName("Max Val")</th>
+                                <th>@Html.DisplayName("Current Value")</th>
+                                <th>@Html.DisplayName("Remark")</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ((ViewBag.Data).Count > 0)
+                            {
+                                foreach (var item in ViewBag.Data)
+                                {
+                                    //for (int i = 0; i < item.Frequency; i++)
+                                    //{
+                                    <tr>
+                                        <td>@item.RS_Shops.Shop_Name</td>
+                                        <td>@item.RS_Lines.Line_Name</td>
+                                        <td>@item.RS_Stations.Station_Name</td>
+                                        <td>@item.MM_MT_Parameter.Parameter_Name</td>
+                                        <td>@item.Minimum_Value</td>
+                                        <td>@item.Maximum_Value</td>
+                                        <td>@item.Current_Value</td>
+                                        <td>@item.Remark</td>
+                                    </tr>
+                                    //}
+                                }
+                                if (NullData != null)
+                                {
+                                    foreach (var item in NullData)
+                                    {
+                                        <tr>
+                                            <td>@item.RS_Shops.Shop_Name</td>
+                                            <td>@item.RS_Lines.Line_Name</td>
+                                            <td>@item.RS_Stations.Station_Name</td>
+                                            <td>@item.MM_MT_Parameter.Parameter_Name</td>
+                                            <td>@item.Minimum_Value</td>
+                                            <td>@item.Maximum_Value</td>
+                                            <td>@Html.TextBox("Current_Value", "", new { @class = "IntegerValidation", @maxlength = "5" })</td>
+                                            <td>@Html.TextBox("Remark", "", new { @maxlength = "200" })</td>
+                                        </tr>
+                                    }
+
+
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td align="center" colspan="7"><h3>Today No Data Collected for any parameter. The Ticket has been generated.</h3></td>
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+                if (NullData != null)
+                {
+                    <div class="row">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                }
+            }
+            else if (Model != null && Model.Count > 0)
+            {
+                <div class="row">
+                    <table class="table table-bordered table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayName("Shop Name")</th>
+                                <th>@Html.DisplayName("Line Name")</th>
+                                <th>@Html.DisplayName("Station Name")</th>
+                                <th>@Html.DisplayName("Parameter Name")</th>
+                                <th>@Html.DisplayName("Min Val")</th>
+                                <th>@Html.DisplayName("Max Val")</th>
+                                <th>@Html.DisplayName("Current Value")</th>
+                                <th>@Html.DisplayName("Remark")</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @for (var i = 0; i < Model.Count; i++)
+                            {
+                                for (var j = 0; j < Model[i].Frequency; j++)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(x => x[i].RS_Shops.Shop_Name)</td>
+                                        <td>@Html.DisplayFor(x => x[i].RS_Lines.Line_Name)</td>
+                                        <td>@Html.DisplayFor(x => x[i].RS_Stations.Station_Name)</td>
+                                        <td>@Html.DisplayFor(x => x[i].MM_MT_Parameter.Parameter_Name)</td>
+                                        <td>@Html.DisplayFor(x => x[i].Minimum_Value)</td>
+                                        <td>@Html.DisplayFor(x => x[i].Maximum_Value)</td>
+                                        <td>@Html.TextBox("Current_Value", "",new { @class = "IntegerValidation", @maxlength = "5" })</td>
+                                        <td>@Html.TextBox("Remark", "", new { @maxlength = "200" })</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+            
+            else
+            {
+                <div class="row">
+                    <table class="table table-bordered table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayName("Shop Name")</th>
+                                <th>@Html.DisplayName("Line Name")</th>
+                                <th>@Html.DisplayName("Station Name")</th>
+                                <th>@Html.DisplayName("Parameter Name")</th>
+                                <th>@Html.DisplayName("Min Val")</th>
+                                <th>@Html.DisplayName("Max Val")</th>
+                                <th>@Html.DisplayName("Current Value")</th>
+                                <th>@Html.DisplayName("Remark")</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="center" colspan="7"><h3>Parameters are not Configured for this Station.</h3></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        }
+
+    </div>
+    @section Scripts {
+        @*@Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/shared/Shop")*@
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+        <script>
+
+            $(document).ready(function () {
+               
+
+            });
+
+
+
+        </script>
+    }

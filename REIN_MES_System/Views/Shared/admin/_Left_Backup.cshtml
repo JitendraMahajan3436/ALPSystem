@@ -1,0 +1,831 @@
+﻿@using System.Globalization
+
+@using System.Threading;
+
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+}
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="~/Content/theme/dist/img/user2-160x160_blank.jpg" class="img-circle" alt="User Image" />
+            </div>
+            <div class="pull-left info">
+                <p>@userSession.userName.ToUpperInvariant()</p>
+
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+            </div>
+        </div>
+        <!-- search form -->
+        @*<form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." />
+                    <span class="input-group-btn">
+                        <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>*@
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+
+            @if (userSession.userName == "Bharat_Patil")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>FD</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "PlantProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Jaipur</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Kandivali</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Nagpur</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Rajkot</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Dashboards</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Rudrapur</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Dashboards</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span></span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="@Url.Action("Index", "QualityTracking")"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "Planthead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="@Url.Action("Index", "QualityTracking")"><i class=" fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "MFGDhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href=" @Url.Action("Index", "QualityTracking") "><i class=" fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "SCPCDhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "QTDhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href=" @Url.Action("Index", "QualityTracking") "><i class=" fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "ERNDDhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "ACDhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "MFGhead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="@Url.Action("Index", "QualityTracking")"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "AChead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "SCPChead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "MThead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-male"></i> Associate Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "ENRD_HR")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        @*<li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>*@
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        @*<li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>*@
+                        <li><a href="#"><i class="fa fa-male"></i> associate management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "QThead")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ShopProduction")"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                        <li><a href="@Url.Action("Index", "QualityTracking")"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                        @*<li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>*@
+                        <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                        <li><a href="#"><i class="fa fa-male"></i> Associate management</a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "PDR")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>ZHB</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        @*<li><a href="#"><i class="fa fa-building-o"></i> Production Monitoring</a></li>
+                            <li><a href="#"><i class="fa fa-chevron-down"></i> Quality Monitoring</a></li>
+                            <li><a href="#"><i class="fa fa-circle-o"></i> Lean Management</a></li>
+                            <li><a href="#"><i class="fa fa-usd"></i> Cost Conversion</a></li>
+                            <li><a href="#"><i class="fa fa-gavel"></i> Maintenance Management</a></li>
+                            <li><a href="#"><i class="fa fa-male"></i> associate management</a></li>
+                            <li><a href="#"><i class="fa fa-bar-chart"></i> Reports</a></li>
+                            <li><a href="#"><i class="fa fa-dashboard"></i> Dashboards</a></li>*@
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "MDconfiguser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Plant Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "Plants")"><i class="fa fa-circle-o"></i>Plant</a></li>
+                        <li><a href="@Url.Action("Index","Shop")"><i class="fa fa-circle-o"></i>Shop</a></li>
+                        <li><a href="@Url.Action("Index","Line")"><i class="fa fa-circle-o"></i>Line</a></li>
+                        <li><a href="@Url.Action("Index","Station")"><i class="fa fa-circle-o"></i>Station</a></li>
+
+                        <li><a href="@Url.Action("Index","RouteConfiguration")"><i class="fa fa-circle-o"></i>Route Configuration</a></li>
+                        <li><a href="@Url.Action("RouteMarriageStation","RouteConfiguration")"><i class="fa fa-circle-o"></i>Route Marriage</a></li>
+                        <li><a href="@Url.Action("RouteShopMarriageStationList", "RouteConfiguration")"><i class="fa fa-circle-o"></i>Shop Marriage</a></li>
+                        @*<li><a href="#"><i class="fa fa-circle-o"></i>Route User</a></li>*@
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Model Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index","PartGroup")"><i class="fa fa-circle-o"></i>Part Group</a></li>
+                        <li><a href="@Url.Action("Index","PartMaster")"><i class="fa fa-circle-o"></i>Part Master</a></li>
+                        <li><a href="@Url.Action("Index", "OMConfiguration")"><i class="fa fa-circle-o"></i>Order Configuration Master</a></li>
+                        <li><a href="@Url.Action("Index","ModelMaster")"><i class="fa fa-circle-o"></i>Model Master</a></li>
+                    </ul>
+                </li>
+
+                @*<li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>BOM Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#"><i class="fa fa-circle-o"></i>Model Code</a></li>
+                            <li><a href="#"><i class="fa fa-circle-o"></i>BOM</a></li>
+                        </ul>
+                    </li>*@
+            }
+            else if (userSession.userName == "MTconfiguser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Maintenance Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index","Machines")"><i class="fa fa-circle-o"></i>Machine</a></li>
+                        <li><a href="@Url.Action("Index","Equipment")"><i class="fa fa-circle-o"></i>Equipment</a></li>
+                        <li><a href="@Url.Action("Index","PreventiveMaintenance")"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="@Url.Action("Index","TimeBasedMaintenance")"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("Index","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+                        <li><a href="@Url.Action("Index","ClitaStationMachines")"><i class="fa fa-circle-o"></i>CLITA Machine to Station</a></li>
+                        <li><a href="@Url.Action("Index","Clita")"><i class="fa fa-circle-o"></i>CLITA Items to Machine</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "QTconfiguser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Quality Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        @*<li><a href="#"><i class="fa fa-circle-o"></i>Quality Log</a></li>
+                            <li><a href="#"><i class="fa fa-circle-o"></i>Take In/Take Out</a></li>*@
+                        @*<li><a href="@Url.Action("Index","QualityParts")"><i class="fa fa-circle-o"></i>Quality Parts</a></li>*@
+                        <li><a href="@Url.Action("Index", "QualityDefects")"><i class="fa fa-circle-o"></i>Quality CheckList</a></li>
+                        <li><a href="@Url.Action("Index", "QualityStationList")"><i class="fa fa-circle-o"></i>Quality StationList</a></li>
+                        <li><a href="@Url.Action("Create", "QualityDefectStation")"><i class="fa fa-circle-o"></i>Quality CheckList Station</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "ATconfiguser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Associate Configuration</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Create", "AddUsers")"><i class="fa fa-circle-o"></i>Add Cell Member</a></li>
+                        <li><a href="@Url.Action("Index","ShopManagerConfiguration")"><i class="fa fa-circle-o"></i>Manager</a></li>
+                        <li><a href="@Url.Action("Index", "LineSupervisorConfiguration")"><i class="fa fa-circle-o"></i>Officer</a></li>
+                        <li><a href="@Url.Action("Create", "AssignSupervisorToManager")"><i class="fa fa-circle-o"></i> Manager to Officer</a></li>
+                        @*<li><a href="@Url.Action("Create", "AssignOperatorToSupervisor")"><i class="fa fa-circle-o"></i>Supervisor to Associate</a></li>*@
+                        <li><a href="@Url.Action("Create", "AddCriticalStation")"><i class="fa fa-circle-o"></i>Critical Station</a></li>
+                        <li><a href="@Url.Action("Index", "OperatorStationAllocation")"><i class="fa fa-circle-o"></i>Cell Member Allocation</a></li>
+
+                        <li><a href="@Url.Action("Index", "TrainingConfiguration")"><i class="fa fa-circle-o"></i>Traning Configuration</a></li>
+                        <li><a href="@Url.Action("Index", "TrainingSessions")"><i class="fa fa-circle-o"></i>Adding Session</a></li>
+                        <li><a href="@Url.Action("Index", "AssignGradeBySupervisor")"><i class="fa fa-circle-o"></i>Assign Grade</a></li>
+                        <li><a href="@Url.Action("Index", "AddEmployeeToSession")"><i class="fa fa-circle-o"></i>Add EmployeeToSession</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "PDshopuser")
+            {
+                <!--Production monitoring-->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Engine</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Create","OrderStart")"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="@Url.Action("ShopEngineUserSOP", "SOP")"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="@Url.Action("ShopEngineUserManifest", "Manifest")"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="@Url.Action("Create","Tracebility")"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="@Url.Action("EngineShop","Tracking")"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="@Url.Action("Collect","ManualDataCollection")"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>CV</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Paint</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Tractor</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Create","OrderStart")"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="@Url.Action("ShopTractorUserSOP", "SOP")"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="@Url.Action("ShopTractorUserManifest", "Manifest")"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="@Url.Action("Create","Tracebility")"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="@Url.Action("TractorShop","Tracking")"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="@Url.Action("Collect","ManualDataCollection")"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Trasmission</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Create","OrderStart")"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="@Url.Action("ShopTransmissionUserSOP", "SOP")"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="@Url.Action("ShopTransmissionUserManifest", "Manifest")"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="@Url.Action("Create","Tracebility")"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="@Url.Action("TransmissionShop","Tracking")"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="@Url.Action("Collect","ManualDataCollection")"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>VTU</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Order Start</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>SOP</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manifest</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Error Proofing</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Tracking</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manual Data Collection</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "QTshopuser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span> Engine</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Create","QualityLog")"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="@Url.Action("Index","TakeInTakeOut")"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                        @*<li><a href=""><i class="fa fa-circle-o"></i>Final QA Okay</a></li>*@
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>CV</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Paint</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Tractor</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Transmission</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>VTU</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Defect Capture</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>TakeIN TakeOUT</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "MTshopuser")
+            {
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Engine</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("CBM","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>CV</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("CBM","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Tractor</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("CBM","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Transmission</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("CBM","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>VTU</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Preventive</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Time Based</a></li>
+                        <li><a href="@Url.Action("CBM","ConditionalBasedMaintenance")"><i class="fa fa-circle-o"></i>Conditional Based</a></li>
+
+                    </ul>
+
+                </li>
+            }
+            else if (userSession.userName == "ATshopuser")
+            {
+                <li class="treeview">
+
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Engine</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ManagerAttendance")"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="@Url.Action("Index", "UserAttendance")"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>CV</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Paint</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Tractor</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ManagerAttendance")"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="@Url.Action("Index", "UserAttendance")"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Transmission</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="@Url.Action("Index", "ManagerAttendance")"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="@Url.Action("Index", "UserAttendance")"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>VTU</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Manager Attendance</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Officer Attendance</a></li>
+                    </ul>
+                </li>
+            }
+            else if (userSession.userName == "Reportshopuser")
+            {
+                <li>
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span> Reports</span>
+                    </a>
+                </li>
+            }
+            else if (userSession.userName == "Dashboardshopuser")
+            {
+                <li>
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span> Dashboards</span>
+                    </a>
+                </li>
+            }
+            else if (userSession.userName == "Ppcuser")
+            {
+                <li>
+                    <a href="@Url.Action("Upload","BOM")">
+                        <i class="fa fa-dashboard"></i> <span>BOM Upload</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Create","OrderCreation")">
+                        <i class="fa fa-dashboard"></i> <span>Order Creation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Create","OMOrderRelease")">
+                        <i class="fa fa-dashboard"></i> <span>Order Realease</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","OMOrderPlanning")">
+                        <i class="fa fa-dashboard"></i> <span>Order Planning</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index","ManageOrders")">
+                        <i class="fa fa-dashboard"></i> <span>Hold Order</span>
+                    </a>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Tracking</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="#"><i class="fa fa-circle-o"></i>CV</a></li>
+                        <li><a href="@Url.Action("EngineShop", "Tracking")"><i class="fa fa-circle-o"></i>Engine</a></li>
+                        <li><a href="@Url.Action("TractorShop", "Tracking")"><i class="fa fa-circle-o"></i>Tractor</a></li>
+                        <li><a href="@Url.Action("TransmissionShop", "Tracking")"><i class="fa fa-circle-o"></i>Transmission</a></li>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>VTU</a></li>
+                    </ul>
+                </li>
+            }
+
+
+
+            <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+            @*<li class="header">LABELS</li>*@
+            @{
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                @*<li><a href="/Global/ChangeCurrentCulture/0"><i class="fa fa-circle-o text-red"></i> <span>English</span></a></li>
+                    <li><a href="/Global/ChangeCurrentCulture/1"><i class="fa fa-circle-o text-yellow"></i> <span>Hindi</span></a></li>*@
+                <!-- <li><a href="/Global/ChangeCurrentCulture/2"><i class="fa fa-circle-o text-aqua"></i> <span>Marathi</span></a></li>
+                <li><a href="/Global/ChangeCurrentCulture/3"><i class="fa fa-circle-o text-aqua"></i> <span>Arabic</span></a></li>
+                <li><a href="/Global/ChangeCurrentCulture/4"><i class="fa fa-circle-o text-aqua"></i> <span>Tamils</span></a></li> -->
+            }
+            <br />
+            <br />
+            <br />
+            <br />
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+    @*<div style="text-align: center; position: fixed; background: white none repeat scroll 0% 0%; left: 0px; bottom: 0px; padding: 11px;">
+            <a href="index2.html" class="logo">
+                <img width="208" src="~/Content/theme/dist/img/mestech_logo.png" />
+            </a>
+        </div>*@
+
+</aside>
+
+

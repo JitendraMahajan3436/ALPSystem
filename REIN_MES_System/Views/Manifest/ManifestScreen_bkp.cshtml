@@ -1,0 +1,141 @@
+﻿@{
+    ViewBag.Title = "ManifestScreen";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+<div class="row shopForm-wrapper" id="">
+    <div class="form-horizontal">
+        <div class="row">
+            @if (ViewBag.EFGeneologyParts != null)
+            {
+                <input type="hidden" name="modelCode" id="modelCode" value="@ViewBag.ModelCode" />
+                <input type="hidden" name="MainSerialNo" id="MainSerialNo" value="@ViewBag.SerialNo" />
+
+                int i = 0;
+                foreach (var obj in @ViewBag.EFGeneologyParts)
+                {
+                    i++;
+                    <div id="block_@obj.Part_No">
+                        <label class="control-label col-md-2">@obj.Part_No.ToString()</label>
+                        <div class="col-md-3">
+                            <input type="text" name="@obj.Part_No" data-partno="@obj.Part_No" data-currid="@i" class="form-control scanpart" />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 sop-wrapper">
+        <div class="col-md-12 text-center manifest-images" id="imageDiv">
+            @if (ViewBag.PartsImage != null)
+            {
+                int i = 0;
+                foreach (var item in ViewBag.PartsImage)
+                {
+                    i++;
+                    if (i % 3 == 0)
+                    {
+                        <div class="col-md-4">
+                            <h5>@item.Part_No</h5>
+                            <div class="center-image-wrapper">
+                                <img class="third_zoom_img" src="/Content/images/@item.Image_Name" data-zoom-image="/Content/images/@item.Image_Name" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            <h5>@item.Part_No</h5>
+                            <div class="center-image-wrapper">
+                                <img class="zoom_img" src="/Content/images/@item.Image_Name" data-zoom-image="/Content/images/@item.Image_Name" />
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            }
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/Zooming")
+    <script type="text/javascript">
+        //function move() {
+        //    var bar = $(".current-progress");
+        //    var width = 0;
+        //    var id = setInterval(frame, 500);
+        //    function frame() {
+        //        if (width >= 100) {
+        //            clearInterval(id);
+        //        } else {
+        //            width += 0.1;
+        //            bar.css('width', width + "%");
+        //        }
+        //    }
+        //}
+        $(document).ready(function () {
+            // move();
+
+            $(".zoom_img").elevateZoom({
+                // zoomType : "lens",
+                // lensShape : "round",
+                // zoomType : "inner",
+                // lensSize : 250,
+                // easing : true,
+                scrollZoom: true,
+                easing: true,
+                zoomWindowWidth: 300,
+                zoomWindowHeight: 300
+            });
+            $(".third_zoom_img").elevateZoom({
+                // zoomType : "lens",
+                // lensShape : "round",
+                // zoomType : "inner",
+                // lensSize : 250,
+                // easing : true,
+                scrollZoom: true,
+                easing: true,
+                zoomWindowWidth: 300,
+                zoomWindowHeight: 300,
+                zoomWindowPosition: 10
+            });
+            if ($('*[data-currid="1"]').length) {
+                $('*[data-currid="1"]').focus();
+            }
+            $('.shopForm-wrapper .scanpart').bind('keyup', function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) { //Enter keycode
+                    var serialno = $(this).val();
+
+                    if (serialno.length > 3) {
+                        var partno = $(this).data("partno");
+                        var mcode = $("#modelCode").val();
+                        var mainsrlno = $("#MainSerialNo").val();
+                        var currentID = $(this).data("currid");
+                        currentID++;
+
+                        $.getJSON('/Manifest/isErrorProofingOK', { modelCode: mcode, mainserialNo: mainsrlno, childSerialNo: serialno }, function (data) {
+                            // Ajax success callback function.
+
+                            if (data == "true") {
+                                $("#block_" + partno).prop('readonly', true);
+                                $("#block_" + partno).css('background', 'green');
+
+                            } else {
+                                var inputObj = $('*[data-partno="' + partno + '"]');
+                                inputObj.addClass("EfWrongPart");
+                                inputObj.focus();
+                            }
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            // Ajax fail callback function.
+                            alert('Something went wrong !');
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}

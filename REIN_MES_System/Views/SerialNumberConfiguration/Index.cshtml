@@ -1,0 +1,70 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Serial_Number_Configuration>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "SerialNumberConfiguration")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<table class="table table-bordered table-striped datatable_completes table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Platform Name")
+            </th>
+            <th>
+                @Html.DisplayName("Display Name")
+            </th>
+            <th>
+                @Html.DisplayName("Plant Code")
+            </th>
+            <th>
+                @Html.DisplayName("Running Serial Number")
+            </th>
+            <th>Action</th>
+        </tr>
+</thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var shopname = db.RS_Shops.Where(m => m.Shop_ID == item.Shop_ID).Select(m => m.Shop_Name).FirstOrDefault();
+            var platformName = db.RS_OM_Platform.Where(m => m.Platform_ID == item.Platform_ID).Select(m => m.Platform_Name).FirstOrDefault();
+            <tr>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => shopname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => platformName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Display_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Plant_Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Running_Serial_Number)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "SerialNumberConfiguration", new { id = item.Config_ID })"><i class="fa fa-edit" style="color:blue"></i></a> 
+                    <a href="@Url.Action("Details", "SerialNumberConfiguration", new { id = item.Config_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a> 
+                    @*@Html.ActionLink("Delete", "Delete", new { id=item.Config_ID })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

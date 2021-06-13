@@ -1,0 +1,60 @@
+﻿@model REIN_MES_System.Models.RS_PartID
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<div class="col-md-6">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.RowID)
+
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PartID, new { @class = "" })<i style="color:red">*</i>
+
+                @Html.TextBoxFor(model => model.PartID, htmlAttributes: new { @class = "form-control", @maxlength = "03" })
+                @Html.ValidationMessageFor(model => model.PartID, null, new { @class = "validation_error" })
+
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PartIDDescription, new { @class = "" })
+
+                @Html.TextBoxFor(model => model.PartIDDescription, htmlAttributes: new { @class = "form-control", @maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.PartIDDescription, null, new { @class = "validation_error" })
+                @Html.Hidden("PlantID")
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Active, new { @class = "" }) 
+                @Html.CheckBox("Active")
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <input type="submit" value="@ResourceGlobal.Save" class="btn btn-primary" />
+                @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

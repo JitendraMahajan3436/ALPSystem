@@ -1,0 +1,55 @@
+﻿@model REIN_MES_System.Models.MM_CBM_Parameter_Category
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Edit", "CBMParameterCategory", FormMethod.Post, new { id = "edit_Category", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Category_ID)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.C_ID, "Parameter Category *", htmlAttributes: new { @class = "" })
+            @Html.DropDownListFor(model => model.C_ID,null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.C_ID, null, new { @class = "validation_error" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Image_Content, "Image Name *", htmlAttributes: new { @class = "" })
+            <input type="file" name="files" />
+            <span style="font-size:10px">@ViewBag.FileName</span>
+            @Html.ValidationMessageFor(model => model.Image_Content, null, new { @class = "validation_error" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-success" /> @Html.ActionLink("Show All", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </div>
+    </div>
+}
+<div id="dialog" title="Error"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>
+    <link href="~/Content/theme/plugins/jQueryUI/jquery-ui.css" rel="stylesheet" />
+    
+    <script>
+        $(document).ready(function () {
+            //$("#edit_Category").validate({
+            //    ignore: [],
+            //    rules: {
+            //        Image_Content: "required"
+            //    }
+            //});
+        });
+    </script>
+}
+@section Styles {
+
+}
+   
+
+

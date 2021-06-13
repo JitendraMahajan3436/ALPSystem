@@ -1,0 +1,879 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_MT_Machines>
+@using System.Globalization
+@using REIN_MES_System
+@using System.Threading;
+@{
+    /**/
+
+    ViewBag.Title = "Status";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+}
+
+@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+
+
+
+    <div class="row" style="margin-top:1%">
+        <div class="col-md-12">
+
+            <div class="col-md-2">
+                @Html.Label("Shops_ID", "Shop Name")
+                <button title="Play-Pause" class="btn btn-default" id="playpause" style="width: 41px;height: 32px;
+margin-left: 10px;">
+                    <i id="playpauseActive" class="fa fa-pause"></i>
+                </button>
+
+                @Html.DropDownList("Shops_ID", null, null, new { @class = "form-control" })
+
+            </div>
+
+            <div class="col-md-10">
+                <div class="machine-info-box-header">
+                    <span class="machine-info-box-number" id="shopnamebind" style="margin-top:2%"></span>
+
+                    <span id="MachineStatus" style="width:16%;margin-left:2%;font-size:20px;color:#EFF2F7;font-weight:bold"></span>
+
+
+                    <span style="width:41%;float:right">
+                        <span style="border: 1px solid black; background:rgba(38,168,49, 1); padding-left: 3%;padding-right:3%;font-size:12px;"></span>&nbsp;&nbsp;Running
+                        <span style="border: 1px solid black; background:rgba(210,190,90, 1); padding-left: 3%;padding-right:3%;margin-left:2%;font-size:12px;"></span>&nbsp;&nbsp;Idle
+                        <span style="border: 1px solid black; background:rgba(255,99,71, 1); padding-left: 3%;padding-right:3%;margin-left:2%;font-size:12px;"></span>&nbsp;&nbsp;Faulty
+                        <span style="border: 1px solid black; background: rgba(255, 220, 50, 1); padding-left: 3%;padding-right:3%;margin-left:2%;font-size:12px;"></span>&nbsp;&nbsp;Disconnected
+
+                    </span>
+                </div>
+            </div>
+            <div style="display:none">
+                @Html.TextBox("Plant_ID")
+            </div>
+        </div>
+    </div>
+
+    <section>
+
+        <input type="hidden" id="hdnShop_ID" />
+    </section>
+
+
+    <div class="route_machine_list" id="route_machine_list"></div>
+
+    <div class="row" id="divslider">
+        @*<h4 class="bg-dark text-center pull-left">ShopName : @ViewBag.ShopName </h4>
+            <h4 class="bg-dark text-center pull-right">StationName : @ViewBag.StationName</h4>*@
+        <div class="col-md-12 sop-wrapper">
+            <div class="col-md-12">
+
+                <div class="col-md-12 center-block homeslider">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators hidden">
+                            @if (ViewBag.Shops != null)
+                            {
+
+                                int i = 0;
+                                foreach (var shop in ViewBag.Shops)
+                                {
+                                    if (i == 0)
+                                    {
+                                        <li class="active" data-target="#myCarousel" data-slide-to="0"></li>
+                                    }
+                                    else
+                                    {
+
+                                        <li data-target="#myCarousel" data-slide-to=@i></li>
+                                    }
+                                    i++;
+                                }
+                            }
+
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner col-md-12" role="listbox" style="margin-top:4%">
+
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (dynamic shop in ViewBag.Shops)
+                                {
+
+                                    if (i == 0)
+                                    {
+                                        <div class="item active">
+                                            @*<div class="machine-info-box-header"><span class="machine-info-box-number">@shop.Shop_Name</span></div>*@
+
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-3">
+
+                                                    @*<div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="@machine.Machine_ID">;*@
+                                                    <div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="@machine.Machine_ID">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="item">
+                                            <div class="item active">
+                                                @*<div class="machine-info-box-header"><span class="machine-info-box-number">@shop.Shop_Name</span></div>*@
+                                            </div>
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-3">
+                                                    @*<div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="@machine.Machine_ID">;*@
+                                                    <div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="@machine.Machine_ID">
+
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    i++;
+                                }
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                @*<div class="nav-tabs-custom carousel slide" data-ride="carousel" id="whatIsCarousel">
+
+                        <ul class="nav nav-tabs pull-right carousel-inner">
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (var shop in ViewBag.Shops)
+                                {
+
+                                    i++;
+                                    if (i == 1)
+                                    {
+                                        <li class="active" data-target="#whatIsCarousel" data-slide-to="0"><a href="#shop_@shop.Shop_ID" data-toggle="tab">@shop.Shop_Name</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li data-target="#whatIsCarousel" data-slide-to=@(i-1)><a href="#shop_@shop.Shop_ID" data-toggle="tab">@shop.Shop_Name</a></li>
+                                    }
+                                }
+                            }
+                            <li class="pull-left header"><i class="fa fa-inbox"></i>Machines Status</li>
+                        </ul>
+
+                        <div class="tab-content no-padding panel-body">
+
+                            @if (ViewBag.Shops != null)
+                            {
+                                int i = 0;
+                                foreach (dynamic shop in ViewBag.Shops)
+                                {
+                                    i++;
+                                    if (i == 1)
+                                    {
+
+                                        <div class="tab-pane active" id="shop_@shop.Shop_ID" style="position: relative;">
+
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="info-box" data-id="@machine.Machine_ID">
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="tab-pane" id="shop_@shop.Shop_ID" style="position: relative;">
+                                            @foreach (var machine in Model.Where(x => x.Shop_ID == shop.Shop_ID).ToList())
+                                            {
+                                                <div class="col-md-4">
+                                                    <div class="info-box" data-id="@machine.Machine_ID">
+
+                                                        <div class="info-box-content">
+                                                            <span class="info-box-text">@machine.Machine_Number</span>
+                                                            <span class="info-box-number">@machine.Machine_Name</span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body no-padding">
+                    <div class="row universal-tracking-box" style="height: 130px;">
+
+                        @*<div class="col-md-6">
+                                <table class="table table-bordered station-detail-table">
+                                    <tbody>
+                                        <tr><td class="bg-dark text-right">Serial No.</td><td id="station-Item"></td></tr>
+                                        <tr><td class="bg-dark text-right">Model Series</td><td id="station-ItemModelSeries"></td></tr>
+                                    </tbody>
+                                </table>
+                                @Html.ActionLink("Avix SOS", "DownloadAvixFile", "Tracking", new { documentPath = "" }, htmlAttributes: new { @class = "btn btn-info btn-sm col-md-12 btn-flat" })
+                                <div class="col-md-12" id="associatelist-tracking">
+
+                                </div>
+                            </div>*@
+                        <div class="col-md-12">
+                            <div id="machinelist-tracking">
+                            </div>
+
+                            <div class="col-md-12 text-bold" id="stationSignalsBlock">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="container" id="machineimage">
+
+
+                        <table class="table table-bordered table-condensed tracking-popup" id="defectlist-tracking"></table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+
+        @*<link href="~/Content/theme/base/jquery-ui.css" rel="stylesheet" />
+            <script src="~/Content/theme/base/jquery-ui.js"></script>
+            <script src="~/Content/theme/base/jquery-ui.min.js"></script>*@
+        <script src="~/Scripts/carousel.js"></script>
+        <script type="text/javascript">
+
+            //$(document)
+
+
+
+
+
+            //$(function () {
+            //    $("#tabs").tabs();
+            //});
+            $('#playpause').on('click', function () {
+                debugger;
+                if ($('#playpauseActive').hasClass("fa fa-play")) {
+
+                    $("#page33").html("Machine Status");
+                    //var url = "/MachineStatus/GetFirstShop";
+                    //ajaxpack.getAjaxRequest(url, "", showShopDetail, "json");
+
+
+                    //alert('pause');
+                    $('#playpauseActive').removeClass("fa fa-play");
+                    $('#playpauseActive').addClass("fa fa-pause");
+
+                    $("#Shops_ID").css("display", "none");
+                    //$("#divslider").html("");
+                    $("#route_machine_list").hide();
+                    $('#myCarousel').carousel(0);
+
+                    //var shopid = $("#Shops_ID").val();
+                    //UpdateShop(shopid);
+
+                    $("#divslider").show();
+
+
+                    //$('#myCarousel').carousel('play');
+
+                    //$('#playpause').css("background-color", "red");
+                    //$("#myCarousel").removeClass("active");
+                }
+                else if ($('#playpauseActive').hasClass("fa fa-pause")) {
+
+                    debugger
+                    //$("#page33").html("Machine Status");
+                    //var url = "/MachineStatus/GetFirstShop";
+                    //ajaxpack.getAjaxRequest(url, "", showShopDetail, "json");
+                    //$(".route_machine_list").html("");
+                    $("#divslider").hide();
+
+
+
+
+                    $('#playpauseActive').removeClass("fa fa-pause");
+                    $('#playpauseActive').addClass("fa fa-play");
+                    $("#Shops_ID").css("display", "block");
+
+                    $('#myCarousel').carousel('pause');
+                    var shopid = $("#Shops_ID").val();
+                    UpdateShop(shopid);
+
+                    $("#route_machine_list").show();
+                    // $("#route_machine_list").html("");
+                    //$("#divslider").hide();
+                    //$("#route_machine_list").show();
+                    //  UpdateStatus();
+                    //$("#route_machine_list").show();
+                    //$("#divslider").hide();
+                    //$('#playpause').css("background-color", "green");
+                    //$(".carousel").carousel({
+                    //    interval: 3000;
+                    //});
+                    //alert('play');
+
+                }
+                //$("#btnAssignLoss").attr("style", "display:block");
+
+            })
+
+            $(document).ready(function () {
+                debugger
+                $("#Shops_ID").css("display", "none");
+                window.onload = function () {
+                    debugger
+
+                    var url = "/MachineStatus/GetFirstShop";
+                    ajaxpack.getAjaxRequest(url, "", showShopDetail, "json");
+                    $(".route_machine_list").html("");
+                }
+
+                window.setInterval(UpdateStatus, 20000);
+                function UpdateStatus() {
+                    var ShopID = $("#Shops_ID").val();
+
+                    checkStatus(ShopID);
+                    //$("#divslider").html("");
+                }
+
+                $('[data-toggle="tooltip"]').tooltip();
+
+
+                $('.carousel').carousel({
+                    pause: "false"
+                });
+                $("#Shops_ID").change(function () {
+                    //alert('tets');
+                    var shopid = $("#Shops_ID").val();
+                    UpdateShop(shopid);
+
+                    $("#divslider").hide();
+                    $("#route_machine_list").show();
+                })
+
+            });
+
+            function showShopDetail() {
+
+                var myajax = ajaxpack.ajaxobj
+                var myfiletype = ajaxpack.filetype
+                if (myajax.readyState == 4) {
+                    if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                        var jsonRes = $.parseJSON(myajax.responseText);
+
+                        //$("#shopnamebind").html(jsonRes.Value);
+                        UpdateShop(jsonRes.Id)
+                    }
+                }
+            }
+
+            function blink(selector) {
+                $(selector).fadeOut('slow', function () {
+                    $(this).fadeIn('slow', function () {
+                        blink(this);
+                    });
+                });
+            }
+
+            blink('.blink');
+            function checkStatus(shopid) {
+               
+                $.getJSON('/MachineStatus/getStatus?ShopID=' + shopid, function (data) {
+                    
+                    $("#MachineStatus").html("");
+                    // alert(data);
+                    if (($('#playpauseActive').hasClass("fa fa-play"))) {
+                        $("#page33").html("Machine Status - " + data.ShopName);
+                    }
+
+
+                    if (data.MStatus == false || data.MStatus == null) {
+                        for (var i = 0; i < data.Status.length; i++) {
+                            var machineid = data.Status[i].Machine_ID;
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-grey');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                            $('*[data-id="' + machineid + '"]').children("div").addClass('mt-orange');
+                            // $('*[data-id="' + machineid + '"]').children("div").addClass('mt-yellow');
+                            $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                            $("#MachineStatus").html("OPC Connection Failed");
+                            $("#MachineStatus").css("color", "red");
+                            $("#MachineStatus").addClass("blinker1");
+                        }
+                    }
+
+                    else if (data.MStatus == true && data.Status.length > 0) {
+                        for (var i = 0; i < data.Status.length; i++) {
+
+                            var machineid = data.Status[i].Machine_ID;
+                            var isHealthy = data.Status[i].isHealthy;
+                            var isFaulty = data.Status[i].isFaulty;
+                            var isIdle = data.Status[i].isIdle;
+                            var isHeartBit = data.Status[i].Heart_Bit;
+                            // serialno = serialno.substr(serialno.length - 5);
+                            if (isHeartBit == true) {
+                                if (isHealthy) {
+                                    $('*[data-id="' + machineid + '"]').children("div").addClass('mt-green');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-grey');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                                    //$('*[data-id="' + machineid + '"]').children("div").removeClass('mt-yellow');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                                    //.css("background", "green");
+                                }
+                                else if (isFaulty) {
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-grey');
+                                    $('*[data-id="' + machineid + '"]').children("div").addClass('mt-red');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                                    //$('*[data-id="' + machineid + '"]').children("div").removeClass('mt-yellow');
+                                    $('*[data-id="' + machineid + '"]').children("div").addClass('blinker');
+                                    //  $('*[data-id="' + machineid + '"]').children("div").css("background", "red");
+                                    // blink($('.machine-info-box .blinker'));
+
+                                }
+                                else if (isIdle) {
+
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                                    $('*[data-id="' + machineid + '"]').children("div").addClass('mt-grey');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-orange');
+                                    // $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-yellow');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                                    // $('*[data-id="' + machineid + '"]').children("div").css("background", "orange");
+                                }
+                                else {
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-grey');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                                    $('*[data-id="' + machineid + '"]').children("div").addClass('mt-orange');
+                                    //$('*[data-id="' + machineid + '"]').children("div").removeClass('mt-yellow');
+                                    $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                                    // $('*[data-id="' + machineid + '"]').children("div").css("background", "blue");
+                                    // $("#MachineStatus").html("M/C PLC Connection Fail");
+                                    //  $("#MachineStatus").css("color", "red");
+                                }
+                            }
+                            else {
+                                $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-green');
+                                $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-grey');
+                                $('*[data-id="' + machineid + '"]').children("div").removeClass('mt-red');
+                                $('*[data-id="' + machineid + '"]').children("div").addClass('mt-orange');
+                                //$('*[data-id="' + machineid + '"]').children("div").removeClass('mt-yellow');
+                                $('*[data-id="' + machineid + '"]').children("div").removeClass('blinker');
+                                // $("#MachineStatus").html("M/C PLC Connection Fail");
+                                // $("#MachineStatus").css("color", "red");
+                            }
+                        }
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // Ajax fail callback function.
+                    console.log('Error getting Machine Status !');
+                });
+
+            }
+        </script>
+    }
+
+
+    <script type="text/javascript">
+
+        function UpdateShop(shopid) {
+            debugger
+            if (shopid != "") {
+
+                var url = "/MachineStatus/getmachine"; // we are calling json method
+                ajaxpack.getAjaxRequest(url, "shopid=" + shopid + "", Showmachineslist, "json");
+
+                checkStatus(shopid);
+
+            }
+        }
+
+
+
+        function showLineDetail() {
+
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    $("#shopnamebind").html(jsonRes[0].Value);
+                }
+            }
+
+        }
+
+
+
+
+
+        function Showmachineslist() {
+
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+
+                    var jsonRes = $.parseJSON(myajax.responseText);
+
+                    var res = "";
+                    var count = 0;
+
+                    res += '<div class="machinetst">';
+                    res += '<div class="row">';
+                    //$("#lblStages").html(jsonRes.count);
+                    for (var i = 0; i < jsonRes.length; i++) {
+                        //var res = "";
+                        count++;
+                        //res += ' <div class="row">';
+                        //res += '<div class="col-md-12">';
+                        res += '<div class="col-md-3">';
+                        res += '<div class="machine-info-box" data-toggle="modal" data-target="#myModal" data-id="' + jsonRes[i].machine_Id + '">';
+                        res += '<div class="info-box-content">';
+                        if (jsonRes[i].machine_ip != null)
+                            res += '<span class="info-box-text">' + jsonRes[i].machine_no + '<span style="float:right">' + 'IP Address : ' + jsonRes[i].machine_ip + '</span></span>';
+                        else
+                            res += '<span class="info-box-text">' + jsonRes[i].machine_no + '</span>';
+                        res += '<span class="info-box-number">' + jsonRes[i].machine_name + '</span>';
+
+                        res += '</div>';
+                        res += '</div>';
+                        res += '</div>';
+
+                        //res += '</div>';
+                        //res += '</div>';
+
+                        if (count % 4 == 0 && i > 0) {
+                            res += '</div>';
+                            res += '<div class="row">';
+                        }
+
+                    }
+                    res += '</div>';
+                    res += '</div>';
+                    if ($('#playpauseActive').hasClass("fa fa-play"))
+
+                        $(".route_machine_list").html(res);
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+        $('#myModal').on('shown.bs.modal', function (e) {
+
+            var invokerstation = $(e.relatedTarget);
+            $("#associatelist-tracking").html("");
+            $("#machinelist-tracking").html("");
+
+            $("#ItemPreview").attr("src", "");
+
+            var machine = invokerstation.data("id");
+
+
+
+            $.getJSON('/Tracking/getMachines', { machineid: machine }, function (data) {
+
+                if (data != null) {
+                    if (data.length > 0) {
+                        $.each(data, function (idx, resultDataObj) {
+
+                            $("#machinelist-tracking").append("<div class='details-block machine-detail-block' data-machine-id='" + resultDataObj.Machine_ID + "'>" +
+                                "<h5>" + resultDataObj.Machine_Name + "</h5>" +
+                                "<div class='machine-details-cloud'>" +
+                                "<div class='row text-center'>" +
+                                "<div class='col-md-6'><a target='_blank' href='/CBMDashboard/ShowMachineCBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CBM</a></div>" +
+                                "<div class='col-md-6'><a target='_blank' href='/MinorStoppages/ShowMachineMinorStoppage/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary tbmclass'>Minor Stoppage</a></div>" +
+                                "<div class='col-md-6'><a target='_blank' href='/TBMDashboard/ShowMachineTBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>TBM</a></div>" +
+                                "<div class='col-md-6'><a target='_blank' href='/CLITADailyCheck/ShowMachineDailyCLITA/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CLITA</a></div>" +
+                                //"<div class='col-md-6'><a  href='/CBMDashboard/ShowMachineCBM/" + resultDataObj.Machine_ID + "' class='btn btn-flat btn-primary'>CBM</a></div>" +
+
+                                "</div></div>" +
+                                "</div>");
+
+                        });
+                    } else {
+                        $("#machinelist-tracking").html("<p class='text-center'>No Machines assigned !</p>");
+                    }
+                } else {
+                    $("#machinelist-tracking").html("<p class='text-center'>No Machines assigned !</p>");
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Error getting Machine List !');
+            });
+            setTimeout(function () {
+
+                //var buffer = jsonRes[i].Image_Content;
+                $.ajax({
+                    type: 'POST',
+                    url: "/Tracking/getmachineimage", // we are calling json method
+                    dataType: 'json',
+                    data: { machineid: machine },
+                    success: function (data) {
+
+                        // var imagename1 = "/Content/theme/dist/img/boxed-bg.png";
+
+                        // $("#ItemPreview").attr("src", "data:image/png;base64", +arrayBufferToBase64(data.Imagedata));
+                        //$('#ItemPreview').attr("src", "data:image/png;base64" ,+arrayBufferToBase64(data.Imagedata));
+                        var res = '<div class="">';
+                        if (data.length > 0) {
+                            //$("hideimage").html("");
+
+                            //var byteArray = data[0].Imagedata;
+                            var buffer = data[0].Imagedata;
+                            //var base64 = arrayBufferToBase64(byteArray);
+                            res += '<img id="ItemPreview" alt="machine image" style="width:33em;height:274px;margin-left: 2%" src="data:image/png;base64,' + arrayBufferToBase64(buffer) + '">';
+
+                        }
+                        else {
+                            res += '<img alt="machine image" style="width:33em;height:274px;margin-left: 2%" src="/Content/theme/dist/img/boxed-bg.png">';
+                        }
+                        res += '</div>';
+                        //$("#ItemPreview").attr('src', 'data:image/jpeg;base64,' + base64);
+                        $("#machineimage").html(res);
+                    }
+                    //else {
+                    //    //$("#hideimage").html("There is no image against machine");
+                    //    $("#ItemPreview").attr('src', imagename1);
+
+                    //}
+
+
+                })
+            }
+
+                , 750);
+
+
+
+
+            //$('.tbmclass').click(function () {
+
+            //    $.ajax({
+            //        type: 'POST',
+            //        url: "/TBMDashboard/gettbmimage", // we are calling json method
+            //        dataType: 'json',
+            //        data: { machineid: machine },
+            //        success: function (data) {
+            //            debugger
+            //            // $("#ItemPreview").attr("src", "data:image/png;base64", +arrayBufferToBase64(data.Imagedata));
+            //            //$('#ItemPreview').attr("src", "data:image/png;base64" ,+arrayBufferToBase64(data.Imagedata));
+
+            //            var byteArray = data[0].Imagedata;
+
+            //            var base64 = arrayBufferToBase64(byteArray);
+
+            //            $("#ItemPreview").attr('src', 'data:image/jpeg;base64,' + base64);
+            //        }
+            //    })
+
+            //})
+
+
+        });
+        function arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+                        // Ajax fail callback function.
+                        //alert('Error getting Machine List !');
+
+
+    </script>
+
+    <style type="text/css">
+
+        .machine-info-box {
+            display: block;
+            background: rgba(255, 220, 50, 1);
+            width: 100%;
+            box-shadow: 6px 5px 10px rgba(15, 15, 15, 0.35);
+            border-radius: 2px;
+            margin-bottom: 15px;
+        }
+
+        .machinetst {
+            /*margin-left: 16%;*/
+            padding: 2%;
+        }
+
+        /*.machine-info-box-header {
+            display: block;
+            height: 45px;
+            background: rgba(255,255,255,0.15);
+            width: 80% !important;
+            box-shadow: 05px 12px rgb(166, 127, 127) !important;
+            margin-left: 15%;
+            margin-top: -2.5% !important;
+            border-radius: 2px;
+        }*/
+    </style>
+    <style type="text/css">
+
+
+        .machine-detail-block .machine-details-cloud {
+            display: block;
+        }
+
+
+        .mt-green {
+            background: rgba(38,168,49, 1);
+        }
+
+        .mt-grey {
+            background: rgba(210,190,90, 1);
+        }
+
+        .mt-red {
+            background: rgba(255,99,71, 1);
+        }
+
+        .mt-orange {
+            /*background: rgba(96, 59, 190, 0.33);*/
+            background: rgba(255, 220, 50, 1);
+        }
+
+        .mt-yellow {
+            background: rgba(255, 255, 0, 1);
+        }
+
+        .skin-yellow .wrapper, .skin-yellow .main-sidebar, .skin-yellow .left-side {
+            background-color: white;
+        }
+
+        .main-sidebar, .left-side {
+            position: absolute;
+            top: 12%;
+            left: 0;
+            padding-top: 50px;
+            min-height: 100%;
+            width: 185px;
+            z-index: 810;
+            -webkit-transition: -webkit-transform .3s ease-in-out,width .3s ease-in-out;
+            -moz-transition: -moz-transform .3s ease-in-out,width .3s ease-in-out;
+            -o-transition: -o-transform .3s ease-in-out,width .3s ease-in-out;
+            transition: transform .3s ease-in-out,width .3s ease-in-out;
+        }
+
+        .ShopName {
+            margin-bottom: -0.7%;
+            box-shadow: 0 1px 0px rgba(0,0,0,0.12), 3px 4px 1px rgba(66,59,59,0.24);
+            border: dashed;
+            border: medium;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            margin-top: 2%;
+            background-color: #222d32;
+            /* margin-top: 4.55%; */
+            color: #f6f6f6;
+            width: 81%;
+            margin-left: 19%;
+            position: fixed;
+            z-index: 999;
+            /* margin-top: 50px; */
+            height: 30px;
+        }
+
+        .machine-info-box-header {
+            display: block;
+            /* min-height: 57px; */
+            height: 72px;
+            background: rgba(255,255,255,0.15) !important;
+            /* border: 1px solid; */
+            width: 80% !important;
+            box-shadow: 0 5px 12px rgb(166, 127, 127) !important;
+            border-radius: 2px;
+            margin-bottom: 2%;
+            margin-left: 0%;
+            margin-top: -0.5% !important;
+            position: fixed;
+            z-index: 1000;
+        }
+
+        .machinshop {
+            width: 239px;
+            height: 7px;
+            border: 2px solid black;
+            margin-left: 37%;
+            border-radius: 4px;
+        }
+
+        .info-box-content {
+            height: 55px;
+        }
+
+        .info-box-text {
+            font-size: 12px !important;
+        }
+
+        .info-box-number {
+            font-size: 15px !important;
+        }
+    </style>

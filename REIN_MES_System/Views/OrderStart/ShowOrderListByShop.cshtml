@@ -1,0 +1,48 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_OM_OrderRelease>
+
+
+
+@{
+    var orderCount = 0;
+}
+
+    <table class="table table-bordered table-striped order-start-tbl">
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order_No)
+            </td>
+            <td>
+                @Html.Display("")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.partno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Series.Series_Description)
+            </td>
+            <td>
+                @Html.Display("")
+            </td>
+            <td>
+                @Html.Display("")
+            </td>
+            <td>
+                @Html.Display("")
+            </td>
+            <td>
+                @Html.Display("")
+            </td>
+        </tr>
+    }
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}
+

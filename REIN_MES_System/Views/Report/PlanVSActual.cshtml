@@ -1,0 +1,66 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+@{
+    ViewBag.Title = "PlanVSActualDashboard";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+        </div>
+        @*<br />    <br />    <br />*@
+        @*<center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-sm-12">
+                    <iframe name="ContentFrame" id="ContentFrame" src="http://MMZAHMESPDSDB1/ReportServer/Pages/ReportViewer.aspx?%2fFDReports%2fPLAN_VS_ACTUAL_dASHBOARD" width="100%" height="900px" runat=server></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#siderbarmenu").click();
+    })
+</script>

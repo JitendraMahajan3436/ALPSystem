@@ -1,0 +1,170 @@
+﻿@model IEnumerable<REIN_MES_System.Models.MM_MT_Conditional_Based_Maintenance>
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.custom_Helper;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "ConditionalBasedMaintenance")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a>
+</p>
+<div class="table-responsive no-border">
+    <table class="table table-bordered table-striped table-condensed datatable_completes">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayName("CBM ID")
+                </th>
+                <th>
+                    @Html.DisplayName("Shop Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Machine Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Machine Parameter")
+                </th>
+                <th>
+                    @Html.DisplayName("Category")
+                </th>
+                <th>
+                    @Html.DisplayName("Denominator")
+                </th>
+                <th>
+                    @Html.DisplayName("Dashboard Display Priority")
+                </th>
+                <th>
+                    @Html.DisplayName("Active")
+                </th>
+                <th>
+                    @Html.DisplayName("Min Val")
+                </th>
+                <th>
+                    @Html.DisplayName("Max Val")
+                </th>
+                <th>
+                    @Html.DisplayName("Green Min Val")
+                </th>
+                <th>
+                    @Html.DisplayName("Green Max Val")
+                </th>
+                <th>
+                    @Html.DisplayName("Warning Min Val")
+                </th>
+                <th>
+                    @Html.DisplayName("Warning Max Val")
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var MName = item.MM_MT_MTTUW_Machines.Machine_Name + "(" + item.MM_MT_MTTUW_Machines.Machine_Name + ")";
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CBM_ID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MT_MTTUW_Machines.MM_MTTUW_Shops.Shop_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_MT_MTTUW_Machines.Machine_Name)
+                    </td>
+                    <td>
+                        <span title="@item.CBM_ID">@Html.DisplayFor(modelItem => item.Machine_Parameter)</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MM_Parameter_Category.C_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Scale_Denominator)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sequence_No)
+                    </td>
+                    <td>
+                        @Html.YesNo(item.IsActive) 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Min_Val)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Max_Val)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Green_Min_Val)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Green_Max_Val)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Warning_Min_Val)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Warning_Max_Val)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "ConditionalBasedMaintenance", new { id = item.CBM_ID })"><i class="fa fa-edit" style="color:blue"></i></a>
+                        <a href="@Url.Action("Details", "ConditionalBasedMaintenance", new { id = item.CBM_ID })"><i class="fa fa-fw fa-laptop" style="color:blueviolet"></i></a> 
+                        <a href="@Url.Action("Delete", "ConditionalBasedMaintenance", new { id = item.CBM_ID })"><i class="fa fa-trash" style="color:red"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <td></td>
+                
+            </tr>
+        </tfoot>
+    </table>
+</div>
+@section scripts{
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Scripts.Render("~/Scripts/user_datatable")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.datatable_completes tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('.datatable_completes').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    </script>
+}
+@section Styles{
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+}

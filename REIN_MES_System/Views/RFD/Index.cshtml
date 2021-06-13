@@ -1,0 +1,469 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/WithoutSideBarNoMenu/_Layout.cshtml";
+    REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+}
+
+<style>
+    .table-responsive {
+        margin: 1%;
+        border-spacing: 0;
+    }
+
+        .table-responsive td {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            border: 1px solid #808080;
+            font-size: x-large;
+            /*color: aqua;*/
+            padding: 2px;
+        }
+</style>
+
+
+<div class="col-md-12">
+    <div class="panel" style="border:1px solid darkcyan;margin-top:2%">
+        <div class="panel-body">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                @*@Html.Hidden("Plant_ID")*@
+                <div class="col-md-6 col-lg-6 col-sm-6">
+                    @Html.Label("Station Name", new { @class = "" })
+                    <label style="font-size:23px"> : @ViewBag.Station</label>
+                </div>
+                <div class="col-md-offset-4 col-lg-offset-4 col-sm-offset-4 col-md-2 col-lg-2 col-sm-2">
+                    @*<input type="button" class="btn btn-primary" value="Modelwise Count" onclick="GetModelwiseDispatchCount()" />*@
+                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="GetModelwiseDispatchCount()" data-target="#myModal_ModelwiseData">Modelwise Count</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    @*@Html.Label("Scan Value:", new { @class = "" })*@
+                    <label>Scan Value:</label>
+                    <input type="text" id="ScanValue" class="text-uppercase" autocomplete="off" style="width:50%;height:45px;font-size:26px;font-weight:bold " />
+                    @*@Html.TextBox("ScanValue", null, new { @class = "form-control text-uppercase" })*@
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                    <label id="lblSerial"></label><label style="font-size:26px" id="lblLastSerial"></label>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <label id="lbltotalcount"></label><label style="font-size:26px" id="lbllasttotalcount"></label>
+                </div>
+
+            </div>
+
+
+            
+            <div class="modal fade" id="myModal_ModelwiseData" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" id="CloseModel" @*data-dismiss="modal"*@>&times;</button>
+                            <h4 class="modal-title" style="font-size:25px;text-align:center;font-weight:bold">Modelwise Dispatch Data</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            @*changes*@
+
+                            <div class="form-horizontal">
+
+                                <div class="row">
+
+                                    <div id="tableModlwiseData">
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div id="tableScanData">
+
+    </div>
+
+
+    <div class="panel" style="border:1px solid darkcyan; display:none" id="EngineDetail">
+        <div class="panel-heading" id="EngineId">
+            @*<div id="EngineId"></div>*@
+        </div>
+
+    </div>
+
+
+
+
+    <div id="testy" style="margin-top:7%"></div>
+
+    <br />
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/fdtheme/notification_js")
+    @*<script src="~/Scripts/Traceability.js"></script>*@
+    @Styles.Render("~/fdtheme/notification_css");
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#CloseModel").on('click', function () {
+            $("#myModal_ModelwiseData").modal('hide');
+            $("#ScanValue").val("");
+            $("#ScanValue").focus();
+        });
+
+        $("#ScanValue").on('keypress', function (event) {
+            debugger;
+            var key = event.which;
+            if (key == 13) {
+                var Scan = $("#ScanValue").val();
+                var url = "/RFD/ScanData";
+                ajaxpack.getAjaxRequest(url, "Scanvalue=" + Scan, ScanValueDetail, "json");
+               // $("#ScanValue").focus();
+            }
+        });
+
+        function ScanValueDetail() {
+            var myajax = ajaxpack.ajaxobj
+            var myfiletype = ajaxpack.filetype
+            if (myajax.readyState == 4) {
+                if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+                    var jsonRes = $.parseJSON(myajax.responseText);
+                    debugger;
+                    UpdateCount();
+                    if (jsonRes.Status == true) {
+                        var res = "";
+                        res += '<table class="table-responsive" style="text-align:center">';
+                        res += '<tr style="font-size:18px;font-weight:bold;background-color:grey">';
+                        res += '<td style="width:10%">Sr No</td>';
+                        res += '<td style="width:10%">Model Code</td>';
+                        res += '<td style="width:20%">Model Desc</td>';
+                        res += '<td style="width:20%">Engine Serial No</td>';
+                        res += '<td style="width:20%">SAP Declaration</td>';
+                        res += '<td style="width:20%">Engine Age(HH:mm)</td>';
+                        res += '    </tr>';
+
+                        for (var i = 0; i < jsonRes.Result.length; i++) {
+                            var j = i + 1;
+                            res += '';
+                            debugger;
+
+                            res += '  <tr  style="color:black" style="font-size:16px">';
+
+                            res += '    <td>';
+                            res += '         ' + j;
+                            res += '     </td>';
+                            res += '      <td>';
+                            res += '           ' + jsonRes.Result[i].model_code;
+                            res += '       </td>';
+                            res += '      <td>';
+                            res += '           ' + jsonRes.Result[i].modedesc;
+                            res += '       </td>';
+                            //if (j == 1) {
+                            //    res += '      <td style="background-color:aqua">';
+                            //    res += '           ' + jsonRes.Result[i].Er_No;
+                            //    res += '       </td>';
+                            //}
+                            //else {
+                                res += '      <td>';
+                            res += '           ' + jsonRes.Result[i].Eng_Sr;
+                                res += '       </td>';
+                           // }
+                            var IsSAP = jsonRes.Result[i].IsSAP;
+                            if (IsSAP == "Y") {
+
+                                //res += '      <td style="background-color:lawngreen; font-size:15px; font-weight: 700">';
+                                res += '      <td>';
+                                res += '           Yes';
+                                res += '       </td>';
+                            }
+                            else {
+                                res += '      <td>';
+                                res += '           No';
+                                res += '       </td>';
+                            }
+
+                            res += '      <td>';
+                            res += '           ' + jsonRes.Age[i];
+                            res += '       </td>';
+
+                            res += '    </tr>';
+                        }
+                        res += ' </table>';
+                        $("#tableScanData").html(res);
+                        $("#lblSerial").html("Last Serial Number Scanned : ");
+                        $("#lblLastSerial").html(jsonRes.LastSerialNo);
+                        $("#lblLastSerial").addClass('SerialNoblinker');
+                    }
+
+                    if (jsonRes.Message != null && jsonRes.Status == false) {
+                        $('#testy').toastee({
+                            type: 'eror',
+                            width: '500px',
+                            height: '100px',
+                            message: jsonRes.Message,
+                        });
+                        $("#ScanValue").val("");
+                        $("#ScanValue").focus();
+                    }
+                    else {
+                        if (jsonRes.Fifo == true) {
+                            $('#testy').toastee({
+                                type: 'success',
+                                width: '500px',
+                                height: '100px',
+                                message: jsonRes.Message,
+                            });
+                        }
+                        else {
+                            $('#testy').toastee({
+                                type: 'warning',
+                                width: '500px',
+                                height: '100px',
+                                message: jsonRes.Message,
+                            });
+                        }
+                        
+                        $("#ScanValue").val("");
+                        $("#ScanValue").focus();
+                    }
+                }
+            }
+        }
+
+        
+
+        function UpdateCount() {
+
+            var options = {};
+            options.url = "/RFD/GetCount";
+            options.type = "POST";
+            //options.data = JSON.stringify({ Scanvalue: Scanvalue });
+            options.dataType = "json";
+            options.contentType = "application/json";
+            options.success = function (test) {
+
+                $("#lbltotalcount").html("Plan / Actual : ");
+                $("#lbllasttotalcount").html(test.Plan + "/" + test.Total_Count);
+              
+            };
+
+            options.error = function () { };
+            $.ajax(options);
+        }
+
+        window.onload = function () {
+
+            $.ajax({
+                url: '/RFD/OnLoad',
+                type: 'GET',
+                data: "",
+                contentType: 'application/json;charset-utf-8',
+                success: function (data) {
+                    //alert(data.userhost);
+
+                    if (data.stationcnt == true) {
+
+                        $("#ScanValue").focus();
+                        UpdateCount();
+
+
+                        $.ajax({
+                            type: "GET",
+                            url: '/RFD/GetPresentdetailsOnLoad',
+                            data: JSON,
+                            //data: JSON.stringify({ Scanvalue: Scanvalue }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                debugger;
+                                if (data.Status == true) {
+
+                                    $("#ScanValue").focus();
+                                    //  $("#ScanValue").val("");
+
+                                    var res = "";
+                                    //res += '<div class="col-md-6">';
+                                    res += '<table class="table-responsive" style="text-align:center">';
+                                    res += '<tr style="font-size:18px;font-weight:bold;background-color:#80808066">';
+                                    res += '<td style="width:10%">Sr No</td>';
+                                    res += '<td style="width:10%">Model Code</td>';
+                                    res += '<td style="width:20%">Model Desc</td>';
+                                    res += '<td style="width:20%">Engine Sr No</td>';
+                                    res += '<td style="width:20%">SAP Declaration</td>';
+                                    res += '<td style="width:20%">Engine Age(HH:mm)</td>';
+
+                                    res += '    </tr>';
+
+                                    for (var i = 0; i < data.Result.length; i++) {
+                                        var j = i + 1;
+                                        $("#lblLastSerial").html(data.LastSerialNo.Engine_No);
+                                        res += '';
+
+
+                                        res += '  <tr  style="color:black" style="font-size:16px">';
+
+                                        res += '    <td>';
+                                        res += '         ' + j;
+                                        res += '     </td>';
+
+                                        res += '      <td>';
+                                        res += '           ' + data.Result[i].model_code;
+                                        res += '       </td>';
+
+                                        res += '      <td>';
+                                        res += '           ' + data.Result[i].modedesc;
+                                        res += '       </td>';
+
+                                        //if (j == 1) {
+
+                                        //    //res += '      <td style="background-color:lawngreen; font-size:15px; font-weight: 700">';
+                                        //    res += '      <td style="background-color:aqua" >';
+                                        //    res += '           ' + data.Result[i].Eng_Sr;
+                                        //    res += '       </td>';
+                                        //}
+                                       // else {
+                                            res += '      <td>';
+                                            res += '           ' + data.Result[i].Eng_Sr;
+                                            res += '       </td>';
+                                       // }
+                                        var IsSAP = data.Result[i].IsSAP;
+                                        if (IsSAP == "Y") {
+
+                                            //res += '      <td style="background-color:lawngreen; font-size:15px; font-weight: 700">';
+                                            res += '      <td>';
+                                            res += '           Yes';
+                                            res += '       </td>';
+                                        }
+                                        else {
+                                            res += '      <td>';
+                                            res += '           No';
+                                            res += '       </td>';
+                                        }
+
+                                        res += '      <td>';
+                                        res += '           ' + data.Age[i];
+                                        res += '       </td>';
+                                        res += '    </tr>';
+                                    }
+
+
+                                    res += ' </table>';
+                                    // res += '    </div>';
+                                    $("#tableScanData").html(res);
+                                     $("#lblSerial").html("Last Serial Number Scanned : ");
+                                    //$("#lblLastSerial").html(data.LastSerialNo.toUpperCase());
+                                    $("#lbltotalcount").html("Plan / Actual : ");
+                                    $("#lbllasttotalcount").html(data.Plan + "/" + data.Total_Count);
+                                    $("#lblLastSerial").addClass('SerialNoblinker');
+
+
+                                }
+                            }
+                        });
+
+                    }
+                    else {
+
+                        $("#ScanValue").attr('disabled', 'disabled');
+                        $('#testy').toastee({
+                            type: 'error',
+                            width: '500px',
+                            height: '100px',
+                            message: data.userhost + ' is Not Configured for RFD Scanning... ',
+                        });
+                    }
+                }
+            });
+
+
+
+
+
+        }
+    });
+
+
+    function GetModelwiseDispatchCount() {
+        debugger;
+        var options = {};
+        options.url = "/RFD/GetModelwiseCount";
+        options.type = "POST";
+        //options.data = JSON.stringify({ Scanvalue: Scanvalue });
+        options.dataType = "json";
+        options.contentType = "application/json";
+        options.success = function (data) {
+            debugger;
+            var res = "";
+            //res += '<div class="col-md-6">';
+            res += '<table class="table-responsive" style="text-align:center">';
+            res += '<tr style="font-size:18px;font-weight:bold;background-color:#80808066">';
+            res += '<td style="width:10%">Sr No</td>';
+            res += '<td style="width:20%">Model Code</td>';
+            res += '<td style="width:30%">Model Desc</td>';
+            res += '<td style="width:10%">Count</td>';
+
+            res += '    </tr>';
+
+            if (data.Result.length > 0) {
+
+
+                for (var i = 0; i < data.Result.length; i++) {
+                    var j = i + 1;
+                    res += '';
+
+
+                    res += '  <tr  style="color:black" style="font-size:16px">';
+
+                    res += '    <td>';
+                    res += '         ' + j;
+                    res += '     </td>';
+
+                    res += '      <td>';
+                    res += '           ' + data.Result[i][0].Model_Code;
+                    res += '       </td>';
+
+                    res += '      <td>';
+                    res += '           ' + data.Result[i][0].Model_Desc;
+                    res += '       </td>';
+
+                    res += '      <td>';
+                    res += '           ' + data.Result[i].length;
+                    res += '       </td>';
+                    res += '    </tr>';
+                }
+            }
+            else {
+                res += '';
+
+
+                res += '  <tr  style="color:black" style="font-size:16px">';
+                res += '      <td colspan=4>';
+                res += 'No Data Available';
+                res += '       </td>';
+                res += '    </tr>';
+            }
+
+            res += ' </table>';
+            // res += '    </div>';
+            $("#tableModlwiseData").html(res);
+        };
+
+        options.error = function () { };
+        $.ajax(options);
+    }
+</script>
+
+

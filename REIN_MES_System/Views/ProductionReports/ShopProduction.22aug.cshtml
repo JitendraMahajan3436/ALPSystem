@@ -1,0 +1,656 @@
+﻿@model REIN_MES_System.Models.MM_AM_Training
+@{
+    ViewBag.Title = "ShopProduction";
+    //Layout = "~/Views/Shared/Reports/_Layout.cshtml";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<script src="/Content/theme/plugins/daterangepicker/moment.min.js"></script>
+<script src="/Content/theme/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+@*<script src="/Content/theme/plugins/DateTime/jquery.js"></script>
+    <script src="/Content/theme/plugins/DateTime/jquery.datetimepicker.full.js"></script>*@
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.full.min.js"></script>
+<script src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.js"></script>
+@*<style src="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.css"></style>*@
+<link rel="stylesheet" type="text/css" href="~/Content/theme/plugins/DateTime/jquery.datetimepicker.min.css">
+
+<div class="manager_Line">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal" style="height:30%; display:block;" id="div1">
+
+            @Html.ValidationSummary(true)
+            <div class="row" style="margin-bottom: 6px;">
+
+                <div style="display:none;">
+                    <input type="text" id="FirstShiftStartTime" value="07:00 AM" />
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" })*:
+                    @Html.DropDownList("Shop_ID", null, "-Select Shop-", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Platform_ID", "Platform", htmlAttributes: new { @class = "" }) *:
+                    @Html.DropDownList("Platform_ID", null, "All", new { @class = "form-control", @disabled = "true" })
+                    @Html.ValidationMessage("Platform_ID", null, new { @class = "validation_error", @id = "spanPlatformValidation" })
+
+                </div>
+                <div class="col-md-3">
+                    <label>Order State:*</label>
+
+                    <select id="OrderState" class="form-control" disabled>
+                        <option>Select</option>
+                        <option>ORDER RELATED</option>
+                        <option>BODY IN</option>
+                        <option>SENT TO SAP</option>
+                        <option>SAP DECLARED</option>
+                        <option>BODY BUYOFF</option>
+                        <option>HOLD</option>
+                        @*<option>Select</option>
+                            <option>ORDER RELATED</option>
+                            <option>STARTED</option>
+                            <option>SENT TO SAP</option>
+                            <option>CLOSED</option>
+                            <option>STARTED&HOLD</option>
+                            <option>HOLD</option>*@
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Time Period:</label>
+                    <select class="form-control" id="TimePeriod" disabled>
+                        <option>Today</option>
+                        <option>Yesterday</option>
+                        <option>Custom</option>
+                        <option>Shiftwise</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label>Shift:</label>
+                    <select class="form-control" id="ShiftName">
+                        @*<option>Shift A</option>
+                            <option>Shift B</option>
+                            <option>Shift C</option>*@
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label  id="fromdatelabel">From Date:</label>
+                    <input type="text" id="txtFromDate" name="FromDate" class="form-control" placeholder="FromDate" />
+                </div>
+                <div class="col-md-3">
+                    <label>To Date:</label>
+                    <input type="text" id="txtToDate" name="ToDate" class="form-control" placeholder="ToDate" />
+                </div>
+                <div class="col-md-3">
+                    <br />
+                    <input type="button" id="ShopProductionReportGenerate" value="Generate Report" class="btn btn-primary" /> @Html.ActionLink("Close", "Close", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+            <br />
+
+
+        </div>
+        <center><a href="javascript:hideshow(document.getElementById('div1'))" class="hvr-push" style="font-family: Wingdings;   font-size:small;">u</a></center>
+        @*<br />*@
+        <div class="form-horizontal" style="height:70%;" id="div2">
+            @Html.ValidationSummary(true)
+            <div class="row">
+                <div class=" col-md-12">
+                    @*<iframe src="http://www.w3schools.com" width="100%" height="100%"></iframe>*@
+                    @*<iframe id="sumarry" src='@Url.Action("myaction", "myController")' width="100%"
+                        height="1000" frameborder="0"></iframe>*@
+                    <iframe name="ContentFrame_ShopProduction" id="ContentFrame_ShopProduction" width="100%" height="900px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ReportManagement_file")
+        @Scripts.Render("~/bundles/Select2scripts")
+        @*@Scripts.Render("~/bundles/DateTime")*@
+    }
+    @section Styles {
+
+        @Styles.Render("~/Content/Select2styles")
+
+    }
+
+    <style>
+        iframe {
+            border: 2px #2036a7 solid;
+        }
+    </style>
+</div>
+<script>
+    $(document).ready(function () {
+        //var FromDate = $("#txtFromDate").val();
+        $('#TimePeriod').on('change', function () {
+            var currentSelection = $(this).val();
+            var date1;
+            var date2;
+            var date3;
+            var date4;
+            var strDate;
+            var endDate;
+            var lastDate;
+            var Diffday;
+            var shiftStartTime = $('#FirstShiftStartTime').val();
+            //$("#TimePeriod").on("change", function ()
+            //{
+            //    var ShopNa = $("#SHOPNAME").val();
+            //    if (ShopNa == 'U301_ENG' || ShopNa == 'LTV_ETA' || ShopNa == 'W201_ETA' || ShopNa == 'U321_ETA')
+            //    {
+            //        $("#EntryType").attr("disabled", false);
+            //    }
+            //    else
+            //    {
+            //        $("#EntryType").val('ALL');
+            //        $("#EntryType").attr("disabled", true);
+            //    }
+            //})
+            if (currentSelection == 'Today') {
+                date1 = new Date();
+                date2 = new Date(date1.setDate(date1.getDate()));
+                var date5 = new Date();
+                var date6 = new Date(date5.setDate(date5.getDate() + 1));
+                strDate = moment(date1).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                endDate = moment(date6).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                $('#txtFromDate').val(strDate); 
+                $('#txtToDate').val(endDate);
+                $('#Shiftwise').val();
+                lastDate = endDate;
+                $("#txtFromDate").attr("disabled", true);
+                $("#txtToDate").attr("disabled", true);
+                $("#EntryType").attr("disabled", true);
+                $("#ShiftName").parent().hide();
+                $("#fromdatelabel").html("From Date:");
+                $("#txtFromDate").parent().show();
+                $("#txtToDate").parent().show();
+            } else if (currentSelection == 'Yesterday') {
+                date2 = new Date();
+                date1 = new Date(date2.setDate(date2.getDate() - 1));
+                date3 = new Date();
+                date4 = new Date(date3.setDate(date3.getDate()));
+                strDate = moment(date1).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                endDate = moment(date4).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                $('#txtFromDate').val(strDate);
+                $('#txtToDate').val(endDate);
+                $('#txtFromDate').prop('visible', false);
+                $("#txtFromDate").attr("disabled", true);
+                $("#txtToDate").attr("disabled", true);
+                $("#EntryType").attr("disabled", true);
+                $("#fromdatelabel").html("From Date:");
+                $("#ShiftName").parent().hide();
+                $("#txtFromDate").parent().show();
+                $("#txtToDate").parent().show();
+                $('#Shiftwise').val();
+            } else if (currentSelection == 'Custom') {
+                date1 = new Date();
+                date2 = new Date(date1.setDate(date1.getDate()));
+                var date5 = new Date();
+                var date6 = new Date(date5.setDate(date5.getDate() + 1));
+                var h = date5.getHours();
+                var m = date5.getMinutes();
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                debugger;
+                h = h % 12;
+                h = h ? h : 12; // the hour '0' should be '12'
+                h = checkTime(h);
+                m = checkTime(m);
+
+                strDate = moment(date1).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                endDate = moment(date6).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                $('#txtFromDate').val(strDate);
+                $('#txtToDate').val(endDate);
+                $("#txtFromDate").attr("disabled", false);
+                $("#txtToDate").attr("disabled", false);
+                $("#EntryType").attr("disabled", true);
+                $("#ShiftName").parent().hide();
+                $("#fromdatelabel").html("From Date:");
+                $("#txtFromDate").parent().show();
+                $("#txtToDate").parent().show();
+            }
+            else if (currentSelection == 'Shiftwise') {
+                var Shop_Id = $("#Shop_ID").val();
+
+                $('#ShiftName option').remove();
+                //$("#ShiftName").prepend("<option value='0' selected='selected'>All</option>");
+                if (Shop_Id.length) {
+                    $("#ShiftName").prop('disabled', false);
+                    $.getJSON('/ProductionReports/GetShiftByShop', { Shop_Id: Shop_Id }, function (data) {
+                        if (data.length > 0) {
+                            //$('#Line_ID option').remove();
+
+                            //if (data.length > 1) {
+                            for (i = 0; i < data.length; i++) {
+                                var start_hour = data[i].Shift_Start_Time.Hours;
+                                var start_minute = data[i].Shift_Start_Time.Minutes;
+                                var end_hour = data[i].Shift_End_Time.Hours;
+                                var end_minute = data[i].Shift_End_Time.Minutes;
+
+                                var ampm_start = h >= 12 ? 'PM' : 'AM';
+                                start_hour = start_hour % 12;
+                                start_hour = start_hour ? start_hour : 12; // the hour '0' should be '12'
+                                start_hour = checkTime(start_hour);
+                                start_minute = checkTime(start_minute);
+
+                                var ampm_end = h >= 12 ? 'PM' : 'AM';
+                                end_hour = end_hour % 12;
+                                end_hour = end_hour ? end_hour : 12; // the hour '0' should be '12'
+                                end_hour = checkTime(end_hour);
+                                end_minute = checkTime(end_minute);
+
+
+                                $('#ShiftName').append('<option data-starttime="' + start_hour + ':' + start_minute + ' ' + ampm_start + '" data-endtime="' + end_hour + ':' + end_minute + ' ' + ampm_end + '" value="' + data[i].Shift_ID + '">' + data[i].Shift_Name + '</option>');
+                                }
+                            //} else {
+                            //    for (i = 0; i < data.length; i++) {
+                            //        $('#ShiftName').append('<option value="' +
+                            //                     data[i].Shift_ID + '" selected>' + data[i].Shift_Name + '</option>');
+                            //    }
+                            //}
+                            $("#ShiftName").change();
+                        }
+                        else {
+                            $('#ShiftName option').remove();
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                        //$("#Platform_ID").change();
+                    });
+                }
+                else {
+                    $("#Platform_ID").prop('disabled', true);
+                    $("#OrderState").prop('selectedIndex', 0);
+                    $("#OrderState").prop('disabled', true);
+                    $("#ShiftName").prop('disabled', true);
+
+                }
+
+
+                ////////
+                var date1;
+                var date2;
+                date2 = new Date();
+                date1 = new Date(date2.setDate(date2.getDate()));
+                strDate = moment(date1).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 06:30 AM';
+                endDate = moment(date1).format('MM/DD/YYYY') + ' ' + shiftStartTime;//' 03:10 AM';
+                $('#txtFromDate').val(strDate);
+                $('#txtToDate').val(endDate);
+
+                $("#ShiftName").parent().show();
+                $("#txtFromDate").parent().show();
+
+                $("#fromdatelabel").html("Date:");
+
+                $("#txtToDate").parent().hide();
+                $("#txtFromDate").attr("disabled", false);
+                $('#ShiftName').val('Shift A');
+            }
+        });
+        function checkTime(i) {
+            if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+            return i;
+        }
+        $('#TimePeriod').change();
+
+    }); //end of document.ready
+    function hideshow(which) {
+        if (!document.getElementById)
+            return
+        if (which.style.display == "block") {
+            which.style.display = "none"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+            iFrameID.style.minHeight = 470 + "px";
+        }
+        else {
+            which.style.display = "block"
+            var iFrameID = document.getElementById('ContentFrame');
+            var CFdivID = document.getElementById('div1');
+        }
+    }
+
+
+    $("#Platform_ID").on("change", function () {
+        var Platform_ID = $("#Platform_ID").val();
+        if (Platform_ID.length) {
+            $("#OrderState").prop('disabled', false);
+        }
+        else {
+            $("#OrderState").prop('selectedIndex', 0);
+            $("#OrderState").prop('disabled', true);
+        }
+    });
+    $('#ShopProductionReportGenerate').click(function () {
+        debugger;
+        var FromDate = $("#txtFromDate").val();
+        var Todate = $("#txtToDate").val();
+        var ShiftID = $("#ShiftName").val();
+        var TIMEPRID = $("#TimePeriod").val();
+        var FirstShiftStartTime = $("#FirstShiftStartTime").val();
+        var CURRENTDATE;
+        var SYSDATE = new Date();
+        var a = moment(FromDate, 'M/D/YYYY');
+        var b = moment(Todate, 'M/D/YYYY');
+        //CURRENTDATE = new Date(SYSDATE.setDate(SYSDATE.getDate()));
+        //CURRENTDATE = moment(SYSDATE).format('MM/DD/YYYY') + ' ' + FirstShiftStartTime;
+        var b = moment(CURRENTDATE, 'M/D/YYYY');
+
+
+        var Platform = $("#Platform_ID").val();
+
+        var OrderStatus = $("#OrderState").val();
+
+        var Shopid = $("#Shop_ID").val();
+        var PlatformId = $("#Platform_ID").val();
+       
+      
+        //var OrderStateId = "";
+        
+        
+        if (TIMEPRID == "Shiftwise") { 
+                FromDate = moment(FromDate).format('MM/DD/YYYY') + ' ' + $('select#ShiftName option:selected').attr('data-starttime');
+                Todate = moment(FromDate).format('MM/DD/YYYY') + ' ' + $('select#ShiftName option:selected').attr('data-endtime');
+        }     
+        if (Shopid == '') {
+            alert('Select Shop');
+            return false;
+        }
+        if (!(PlatformId >= 0)) {
+            alert('Please select platform');
+            return false;
+        }
+        if (OrderStatus == 'Select') {
+            alert('Select Otder State');
+            return false;
+        }
+
+        if (PlatformId == 0) {
+            PlatformAll = true;
+        }
+        else {
+            PlatformAll = false;
+        }
+        
+            console.log('http://mmnskoemdb:8092/Reports/Pages/ReportViewer.aspx?%2fDrona+Nashik%2fShop%2fBIW_Production_Report&Shop=' + Shopid + '&OrderStatus=' + OrderStatus + '&FromDate=' + FromDate + '&ToDate=' + Todate + '&PlatformId=' + PlatformId + '&PlatformAll=' + PlatformAll);
+        $('#ContentFrame_ShopProduction').attr('src', 'http://mmnskoemdb:8092/Reports/Pages/ReportViewer.aspx?%2fDrona+Nashik%2fShop%2fBIW_Production_Report&Shop=' + Shopid + '&OrderStatus=' + OrderStatus + '&FromDate=' + FromDate + '&ToDate=' + Todate + '&PlatformId=' + PlatformId + '&PlatformAll='+ PlatformAll);
+
+
+        //start
+        //////var pageURL = $(location).attr("href");
+        //////var ReportName = $('#hdviewname').val();
+        //////var ReportCat = "Production Report";
+        //////$.ajax({
+        //////    url: '/Home/SaveLogData',
+        //////    type: 'POST',
+        //////    data: JSON.stringify({ "ReportName": ReportName, "pageURL": pageURL, "ReportCat": ReportCat }),
+        //////    dataType: "json",
+        //////    contentType: "application/json; charset=utf-8",
+        //////    success: function (result) {
+        //////        //alert("Save");
+        //////    }
+        //////});
+        //End
+
+    });
+    $("#OrderState").on("change", function () {
+        var Status = $("#OrderState").val();
+        if (Status == 'Select') {
+
+            $("#TimePeriod").attr("disabled", true);
+        }
+        else {
+            $("#TimePeriod").attr("disabled", false);
+        }
+    })
+
+    var TimePeriod = $('#TimePeriod').val();
+
+
+    $.datetimepicker.setLocale('en');
+
+    $('.some_class').datetimepicker();
+    var shiftStartTime = $('#FirstShiftStartTime').val();
+    //var FromDate  = moment($("#txtFromDate").val()).format('MM/DD/YYYY');
+    $('#txtFromDate').datetimepicker({
+        format: 'm/d/Y h:i',
+        //format: 'm/d/Y H:i',
+        formatTime: 'h:i',
+        formatDate: 'm/d/Y',
+        minuteIncrement : '2',
+        //defaultTime: shiftStartTime,//'06:30 AM',
+        defaultDate: new Date(),
+        timepickerScrollbar: true,
+        hours12: false,
+    });
+
+    //$('#txtFromDate').datetimepicker({
+    //    ownerDocument: document,
+    //    contentWindow: window,
+
+    //    value: '',
+    //    rtl: false,
+
+    //    format: 'Y/m/d H:i',
+    //    formatTime: 'H:i',
+    //    formatDate: 'Y/m/d',
+
+
+    //    //format: 'm/d/Y h:i A',
+    //    //formatTime: 'H:i',
+    //    //formatDate: 'm/d/Y',
+
+    //    startDate: false, // new Date(), '1986/12/08', '-1970/01/05','-1970/01/05',
+    //    step: 60,
+    //    monthChangeSpinner: true,
+
+    //    closeOnDateSelect: false,
+    //    closeOnTimeSelect: true,
+    //    closeOnWithoutClick: true,
+    //    closeOnInputClick: true,
+    //    openOnFocus: true,
+
+    //    timepicker: true,
+    //    datepicker: true,
+    //    weeks: false,
+
+    //    defaultTime: false, // use formatTime format (ex. '10:00' for formatTime: 'H:i')
+    //    defaultDate: false, // use formatDate format (ex new Date() or '1986/12/08' or '-1970/01/05' or '-1970/01/05')
+
+    //    minDate: false,
+    //    maxDate: false,
+    //    minTime: false,
+    //    maxTime: false,
+    //    minDateTime: false,
+    //    maxDateTime: false,
+
+    //    allowTimes: [],
+    //    opened: false,
+    //    initTime: true,
+    //    inline: false,
+    //    theme: '',
+    //    touchMovedThreshold: 5,
+
+    //    onSelectDate: function () { },
+    //    onSelectTime: function () { },
+    //    onChangeMonth: function () { },
+    //    onGetWeekOfYear: function () { },
+    //    onChangeYear: function () { },
+    //    onChangeDateTime: function () { },
+    //    onShow: function () { },
+    //    onClose: function () { },
+    //    onGenerate: function () { },
+
+    //    withoutCopyright: true,
+    //    inverseButton: false,
+    //    hours12: false,
+    //    next: 'xdsoft_next',
+    //    prev: 'xdsoft_prev',
+    //    dayOfWeekStart: 0,
+    //    parentID: 'body',
+    //    timeHeightInTimePicker: 25,
+    //    bar: true,
+    //    todayButton: true,
+    //    prevButton: true,
+    //    nextButton: true,
+    //    defaultSelect: true,
+
+    //    scrollMonth: true,
+    //    scrollTime: true,
+    //    scrollInput: true,
+
+    //    lazyInit: false,
+    //    mask: false,
+    //    validateOnBlur: true,
+    //    allowBlank: true,
+    //    yearStart: 1950,
+    //    yearEnd: 2050,
+    //    monthStart: 0,
+    //    monthEnd: 11,
+    //    style: '',
+    //    id: '',
+    //    fixed: false,
+    //    roundTime: 'round', // ceil, floor
+    //    className: '',
+    //    weekends: [],
+    //    highlightedDates: [],
+    //    highlightedPeriods: [],
+    //    allowDates: [],
+    //    allowDateRe: null,
+    //    disabledDates: [],
+    //    disabledWeekDays: [],
+    //    yearOffset: 0,
+    //    beforeShowDay: null,
+    //    enterLikeTab: true,
+    //    showApplyButton: false
+    //});
+
+    $('#txtToDate').datetimepicker({
+        format: 'm/d/Y h:i A',
+        defaultTime: shiftStartTime,//'06:29 AM',
+        timepickerScrollbar: false
+    });
+    $('#datetimepicker_dark').datetimepicker({ theme: 'dark' })
+    
+    $("#ShiftName").on("change", function () {
+        var shiftId = $("#ShiftName").val();
+        if (shiftId) {
+            var FromDate = $("#txtFromDate").val();
+            var shiftstartTime = moment(FromDate).format('MM/DD/YYYY') + ' ' + $('select#ShiftName option:selected').attr('data-starttime');
+            var shiftEndTime = moment(FromDate).format('MM/DD/YYYY') + ' ' + $('select#ShiftName option:selected').attr('data-endtime');
+            $("#txtFromDate").val(shiftstartTime);
+            $("#txtToDate").val(shiftEndTime);
+        }
+    });
+
+    $("#Shop_ID").on("change", function () {
+        var Shop_Id = $("#Shop_ID").val();
+
+        $('#Platform_ID option').remove();
+        $("#Platform_ID").prepend("<option value='0' selected='selected'>All</option>");
+        if (Shop_Id.length) {
+            $("#Platform_ID").prop('disabled', false);
+            $("#OrderState").prop('disabled', false);
+            $("#TimePeriod").prop('disabled', false);
+            $.getJSON('/ProductionReports/GetPlatformID', { Shop_Id: Shop_Id }, function (data) {
+                if (data.length > 0) {
+                    //$('#Line_ID option').remove();
+
+                    if (data.length > 1) {
+                        for (i = 0; i < data.length; i++) {
+                            $('#Platform_ID').append('<option value="' +
+                                         data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                        }
+                    } else {
+                        for (i = 0; i < data.length; i++) {
+                            $('#Platform_ID').append('<option value="' +
+                                         data[i].Platform_ID + '" selected>' + data[i].Platform_Name + '</option>');
+                        }
+                    }
+                    $("#Platform_ID").change();
+                    $.getJSON('/ProductionReports/GetFirstShiftTime', { Shop_Id: Shop_Id }, function (data) {
+                        if (data.length > 0) {
+
+                            if (data.length > 1) {
+                                $('#FirstShiftStartTime').val(data);
+                                $('#TimePeriod').change();
+                            } else {
+                                $('#FirstShiftStartTime').val("07:00 AM");
+                            }
+                        }
+                        else {
+                            $('#FirstShiftStartTime').val("07:00 AM");
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        $('#FirstShiftStartTime').val("07:00 AM");
+                    });
+
+                }
+                else {
+                    $('#Platform_ID option').remove();
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                $("#Platform_ID").change();
+            });
+        }
+        else {
+            $("#Platform_ID").prop('disabled', true);
+            $("#OrderState").prop('selectedIndex', 0);
+            $("#OrderState").prop('disabled', true);
+            $("#TimePeriod").prop('disabled', true);
+        }
+
+
+    });
+</script>
+
+<script src="/Content/theme/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- jQuery UI 1.11.2 -->
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    //$.widget.bridge('uibutton', $.ui.button);
+</script>
+<!-- Bootstrap 3.3.2 JS -->
+<script src="/Content/theme/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- Morris.js charts -->
+
+<script src="/Content/theme/plugins/morris/morris.min.js" type="text/javascript"></script>
+<!-- Sparkline -->
+<script src="/Content/theme/plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+<!-- jvectormap -->
+<script src="/Content/theme/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js" type="text/javascript"></script>
+<script src="/Content/theme/plugins/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
+<!-- jQuery Knob Chart -->
+<script src="/Content/theme/plugins/knob/jquery.knob.js" type="text/javascript"></script>
+<!-- daterangepicker -->
+
+<script src="/Content/theme/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- datepicker -->
+<script src="/Content/theme/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="/Content/theme/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
+<!-- Slimscroll -->
+<script src="/Content/theme/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<!-- FastClick -->
+<script src='/Content/theme/plugins/fastclick/fastclick.min.js'></script>
+<!-- AdminLTE App -->
+<script src="/Content/theme/dist/js/app.min.js" type="text/javascript"></script>
+
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+@*<script src="/Content/theme/dist/js/pages/dashboard.js" type="text/javascript"></script>*@
+
+<!-- AdminLTE for demo purposes -->
+<script src="/Content/theme/dist/js/demo.js" type="text/javascript"></script>

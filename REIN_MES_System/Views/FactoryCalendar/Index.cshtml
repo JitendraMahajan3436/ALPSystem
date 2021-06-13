@@ -1,0 +1,285 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/FactoryCalendar/_Layout.cshtml";
+}
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+           
+
+        $("#btnSave").click(function () {
+            var date = $("#calendar").fullCalendar('getDate');
+
+            var day = $("#ddlHoliday :selected").val();
+            if (day == "0")
+            {
+                alert("Please Select Holiday");
+                return;
+            }
+            else{
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var Date1 = convert(firstDay);
+            var txtNotes = $("#EventNote").val();
+            function convert(str) {
+                var date = new Date(str),
+                    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                    day = ("0" + date.getDate()).slice(-2);
+                return [date.getFullYear(), mnth, day].join("-");
+            }
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            var Date2 = convert(lastDay);
+            $('#popupEventForm').hide();
+
+            var dataRow = {
+                'Title': day,
+                'NewDate1': Date1,
+                'NewDate2': Date2
+
+            }
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: "/FactoryCalendar/SaveHoliday",
+                data: dataRow,
+                success: function (response) {
+                    if (response == 'True') {
+                        $('#calendar').fullCalendar('refetchEvents');
+                        alert('New event saved!');
+                    }
+                    else {
+                        alert('Error, could not save event!');
+                    }
+                }
+            });
+
+
+        }
+
+        });
+        var sourceFullView = { url: '/FactoryCalendar/GetDiaryEvents/' };
+        var sourceSummaryView = { url: '/FactoryCalendar/GetDiarySummary/' };
+        var CalLoading = true;
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev',
+                center: 'title',
+                right: 'next'
+            },
+            defaultView: 'month',
+            editable: true,
+            allDaySlot: false,
+            selectable: true,
+            slotMinutes: 15,
+            droppable: false,
+            events: '/FactoryCalendar/GetDiaryEvents/',
+            eventClick: function (calEvent, jsEvent, view) {
+                alert('You clicked on Day : ' + calEvent.id
+                    + "\n Special Notes: " + calEvent.EventNote
+                    + "\nAnd the title is: " + calEvent.title);
+
+            },
+
+            //eventDrop: function (event, dayDelta, minuteDelta, allDay, revertFunc) {
+            //    if (confirm("Confirm move?")) {
+            //        UpdateEvent(event.id, event.start);
+            //    }
+            //    else {
+            //        revertFunc();
+            //    }
+            //},
+
+            //eventResize: function (event, dayDelta, minuteDelta, revertFunc) {
+
+            //    if (confirm("Confirm change appointment length?")) {
+            //        UpdateEvent(event.id, event.start, event.end);
+            //    }
+            //    else {
+            //        revertFunc();
+            //    }
+            //},
+
+
+
+            dayClick: function (date, allDay, jsEvent, view) {
+                $('#eventTitle').val("");
+                $('#eventDate').val($.fullCalendar.formatDate(date, 'yyyy-MM-dd'));
+                $('#eventTime').val($.fullCalendar.formatDate(date, 'HH:mm'));
+                ShowEventPopup(date);
+            },
+
+            viewRender: function (view, element) {
+
+                if (!CalLoading) {
+                    if (view.name == 'month') {
+                        $('#calendar').fullCalendar('removeEventSource', sourceFullView);
+                        $('#calendar').fullCalendar('removeEvents');
+                        $('#calendar').fullCalendar('addEventSource', sourceFullView);
+                    }
+                    else {
+                        $('#calendar').fullCalendar('removeEventSource', sourceSummaryView);
+                        $('#calendar').fullCalendar('removeEvents');
+                        $('#calendar').fullCalendar('addEventSource', sourceFullView);
+                    }
+                }
+            }
+
+        });
+
+        CalLoading = false;
+
+
+    });
+
+
+
+    $('#btnPopupCancel').click(function () {
+        ClearPopupFormValues();
+        $('#popupEventForm').hide();
+    });
+
+    $('#btnPopupSave').click(function () {
+
+        $('#popupEventForm').hide();
+
+        var dataRow = {
+            'Title': $('input[name=daytype]:checked').val(),
+            'NewEventDate': $('#eventDate').val(),
+            'EventNote': $('#EventNote').val(),
+            'NewEventDuration': $('#daytype').val()
+        }
+
+        ClearPopupFormValues();
+
+        $.ajax({
+            type: 'POST',
+            url: "/FactoryCalendar/SaveEvent",
+            data: dataRow,
+            success: function (response) {
+                if (response == 'True') {
+                    $('#calendar').fullCalendar('refetchEvents');
+                    alert('New event saved!');
+                }
+                else {
+                    alert('Error, could not save event!');
+                }
+            }
+        });
+    });
+
+    function ShowEventPopup(date) {
+        ClearPopupFormValues();
+        $('#popupEventForm').show();
+        $('#eventTitle').focus();
+    }
+
+    function ClearPopupFormValues() {
+        $('#eventID').val("");
+        $('#eventTitle').val("");
+        $('#eventDateTime').val("");
+        $('#eventDuration').val("");
+    }
+
+    function UpdateEvent(EventID, EventStart, EventEnd) {
+
+        var dataRow = {
+            'ID': EventID,
+            'NewEventStart': EventStart,
+            'NewEventEnd': EventEnd
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "/FactoryCalendar/UpdateEvent",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(dataRow)
+        });
+    }
+
+    </script>
+
+
+}
+
+
+<div class="container">
+    <div class="manager_Line">
+        <div class="row">
+            <br />
+            <div class="col-md-12" style="display:inline-flex">
+                <div class="col-sm-3" style="padding-top:3px">
+                    @Html.Label("lblHoliday", "Select WeekOff Day  :", htmlAttributes: new { @class = "" })
+                </div>
+                <div class="col-sm-3">
+                    @Html.DropDownList("ddlHoliday", new SelectList(new List<object> { new { value = "0", text = "-Select Day-" }, new { value = "Sunday", text = "Sunday" }, new { value = "Monday", text = "Monday" }, new { value = "Tuesday", text = "Tuesday" }, new { value = "Wedsday", text = "Wedsday" }, new { value = "Thursday", text = "Thursday" }, new { value = "Friday", text = "Friday" }, new { value = "Saturday", text = "Saturday" } }, "value", "text", 0), htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessage("ddlHoliday", null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-sm-3">
+                        @Html.Label("Status", "Status", htmlAttributes: new { @class = "" })
+                        @Html.DropDownList("ddlStatus", new SelectList(new List<object> { new { value = "0", text = "-Select Day-" }, new { value = "1", text = "Working Day" }, new { value = "2", text = "WeekOff" }, new { value = "3", text = "Paid Holiday" } }, "value", "text", 0), htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("ddlHoliday", null, new { @class = "validation_error" })
+                    </div>*@
+                <div class="col-sm-3">
+                    <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                    @Html.ActionLink("Go Back","Index","Homecontroller", new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='calendar' style="width:80%"></div>
+
+</div>
+
+
+<div id="popupEventForm" class="modal hide" style="display: none;">
+    <div class="modal-header"><h3>Select Day Type</h3></div>
+    <div class="modal-body">
+        <form id="EventForm" class="well">
+            <input type="hidden" id="eventID">
+
+            <div class="container">
+                <div style="border:1px solid red;width:100px;background-color:limegreen">
+                    <input type="radio" name="daytype" id="WD" value="1" checked="checked" />  Working Day
+                    <label for="WD"></label>
+                </div>
+                <br />
+                <div style="border:1px solid red;width:100px;background-color:red">
+                    <input type="radio" name="daytype" id="HD" value="2" /> Holiday
+                    <label for="HD"></label>
+                </div>
+                <br />
+                <div style="border:1px solid red;width:100px;background-color:orange">
+                    <input type="radio" name="daytype" id="PH" value="3" /> Paid Holiday
+                    <label for="PH"></label>
+                </div>
+            </div>
+            <br />
+            @*<input type="text" id="eventTitle" placeholder="Title here"><br />*@
+            <label>Scheduled date</label>
+            <input type="text" id="eventDate" readonly="readonly"><br />
+            <label>Special Notes :</label>
+            <input type="text" id="EventNote"><br />
+            @*<label>Appointment length (minutes)</label>
+                <input type="text" id="eventDuration" placeholder="15">*@<br />
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="btnPopupCancel" data-dismiss="modal" class="btn">Cancel</button>
+        <button type="button" id="btnPopupSave" data-dismiss="modal" class="btn btn-primary">Save event</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

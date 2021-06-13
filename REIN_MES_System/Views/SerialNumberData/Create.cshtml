@@ -1,0 +1,115 @@
+﻿@model REIN_MES_System.Models.RS_Serial_Number_Data
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+<div class="col-md-12">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true)
+
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Part_No,"Part Number", htmlAttributes: new { @class = "" })
+                    @Html.DropDownListFor(model => model.Part_No, (IEnumerable<SelectListItem>)ViewBag.Part_No, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Part_No)
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Suffix,"Suffix", htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Suffix, htmlAttributes: new { @class = "form-control",@maxlength="5"})
+                    @Html.ValidationMessageFor(model => model.Suffix)
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Prefix,"Prefix", htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Prefix, htmlAttributes: new { @class = "form-control", @maxlength = "5" })
+                    @Html.ValidationMessageFor(model => model.Prefix)
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Running_Serial, "Running Serial", htmlAttributes: new { @class = "" })
+                    @Html.TextBoxFor(model => model.Running_Serial, htmlAttributes: new { @class = "form-control", @maxlength = "5" })
+                    @Html.ValidationMessageFor(model => model.Running_Serial)
+
+                </div>
+
+            </div>
+
+            <div class="row">
+               
+            </div>
+
+            <div class="row" id="textboxcontainer">
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-md-offset-0 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    <script>
+        $(document).ready(function () {
+            $("#Part_No").select2({
+                allowClear: true,
+                //   multiple: 'multiple',
+                tags: true,
+                placeholder: 'select an Part No',
+                //   tokenSeparators: [',', ';']
+
+            });
+
+            $("#Part_No").on("change", function () {
+                debugger;
+                $("#EQP_ID").html("");
+                //$("#Line_ID").html("");
+                var Part_No = $('#Part_No').val();
+                if (Part_No.length > 0) {
+                    //  alert(Plant_ID);
+                    $.getJSON('/SerialNumberData/GetSerialNoDetails', { partno: Part_No }, function (data) {
+                        // alert(data);
+                        if (data.Result.length > 0 && data.Column != null) {
+                            $('#textboxcontainer div').remove();
+                          
+                            for (var j = 0; j < data.Column.length; j++) {
+                                    AddTextBox(data.Column[j].Item2, data.Column[j].Item1)
+                                }
+                        }
+
+                    });
+                }
+            });
+
+
+        })
+
+        function GetDynamicTextBox(value, name) {
+            return '<Label>' + name + '</Label><input id="' + value + '" name="' + value + '" class="form-control" type="text" Required="Required" maxlength="10" />'
+        }
+
+        function AddTextBox(name, value) {
+            debugger;
+            var div = document.createElement('DIV');
+            div.className = 'col-md-3';
+            //   div.innerHTML =GetDynamiceLabel
+            div.innerHTML = GetDynamicTextBox(value, name);
+            document.getElementById("textboxcontainer").appendChild(div);
+
+        }
+    </script>
+}
+@section Styles {
+    @Styles.Render("~/Content/Select2styles")
+}

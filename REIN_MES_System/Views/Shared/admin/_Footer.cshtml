@@ -1,0 +1,17 @@
+﻿@{
+    var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+    var userSession = (REIN_MES_System.Helper.FDSession)Session["FDSession"];
+}
+<footer class="sm-only">
+    <div class="pull-right hidden-xs">
+    </div>
+    
+    @{
+    
+    if (userSession != null)
+    {
+            <label style="margin-left:1%"> Plant : @userSession.plantName</label>
+    }
+        <label class="footer-username sm-only">Username : @userSession.userName</label>
+    }
+</footer>

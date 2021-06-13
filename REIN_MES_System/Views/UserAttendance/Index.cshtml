@@ -1,0 +1,114 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_User_Attendance_Sheet>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+@*<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</p>*@
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Plant Name")
+            </th>
+            <th>
+                @Html.DisplayName("Shop Name")
+            </th>
+            <th>
+                @Html.DisplayName("Line Name")
+            </th>
+            <th>
+                @Html.DisplayName("Operator Count")
+            </th>
+            @*<th>
+                @Html.DisplayName("Station Name")
+            </th>*@
+           
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Shift_ID)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.In_Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Out_Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Lunch_Time_Out)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Lunch_Time_In)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attendance_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Transfered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Is_Purgeable)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_User_ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Updated_User_ID)
+                </th>*@
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>*@
+
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.Group)   
+        {
+
+            <tr>
+                <td>
+                    @item.plant_id
+                </td>
+                <td>
+                    @item.shop_id
+                </td>
+                <td>
+                    @item.line_id
+                  
+                </td>
+                <td>
+                    @item.user_id
+                </td>
+             
+                @*<td>
+                    @item.station_id
+                </td>*@
+               
+               @* <td>
+    <a href="@Url.Action("Edit", "UserAttendance", new { id = item.SMM_ID })"><i class="fa fa-edit"></i>Edit</a> &nbsp;&nbsp;
+     <a href="@Url.Action("Details", "UserAttendance", new { id = item.SMM_ID })"><i class="fa fa-fw fa-laptop"></i>Details</a> &nbsp;&nbsp;
+     <a href="@Url.Action("Delete", "UserAttendance", new { id = item.SMM_ID })"><i class="fa fa-trash"></i>Delete</a>*@
+
+
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.SMM_ID }) |
+    @Html.ActionLink("Details", "Details", new { id = item.SMM_ID }) |
+    @Html.ActionLink("Delete", "Delete", new { id = item.SMM_ID })
+        </td>*@
+            </tr>
+        }
+        
+    </tbody>
+    @section scripts {
+        @Scripts.Render("~/Content/theme/plugins/datatables/js")
+        @Styles.Render("~/Content/theme/plugins/datatables/css")
+        @Scripts.Render("~/Scripts/user_datatable")
+    }
+</table>

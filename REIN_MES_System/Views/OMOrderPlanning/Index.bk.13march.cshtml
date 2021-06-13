@@ -1,0 +1,1843 @@
+﻿@model REIN_MES_System.Models.RS_OM_OrderRelease
+@using REIN_MES_System.App_LocalResources;
+@using REIN_MES_System.Models
+@using REIN_MES_System.Controllers.OrderManagement;
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<script src="~/obj/Release/Package/PackageTmp/Scripts/jquery.validate.min.js"></script>
+
+<div class="col-md-12">
+    <input type="hidden" id="div_position" name="div_position" />
+    @using (Ajax.BeginForm("loadOrderSequence", "OMOrderPlanning", new AjaxOptions()
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "orderSequenceWrapper",
+        InsertionMode = InsertionMode.Replace,
+        OnBegin = "LoadBegin",
+        OnComplete = "LoadComplete",
+        OnSuccess = "LoadSuccess",
+        OnFailure = "LoadFailure"
+    },
+    new { @class = "", id = "showOrderSequenceForm" }))
+    {
+        <div class="form-horizontal">
+            <div class="row">
+                <div style="display:none;">
+                    @Html.LabelFor(model => model.Plant_ID, "Plant Name", htmlAttributes: new { @class = "" })
+                    @Html.DropDownList("Plant_ID", (SelectList)ViewBag.Plant_ID, null, new { onchange = "", @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+                </div>
+                @*<div class="col-md-2">
+                        @Html.LabelFor(model => model.Order_Type, "Order Type", htmlAttributes: new { @class = "" }) *
+                        @Html.DropDownList("Order_Type", (SelectList)ViewBag.order_type, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Order_Type, null, new { @class = "validation_error" })
+                    </div>*@
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Shop_ID, "Shop Name", htmlAttributes: new { @class = "" }) *
+                    @Html.DropDownList("Shop_ID", Enumerable.Empty<SelectListItem>(), null, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Shop_ID, null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Platform_ID", "Platform", htmlAttributes: new { @class = "" }) *
+
+                    @*@Html.DropDownList("Platform_ID", new SelectList(ViewBag.Platform_ID, "Platform_ID", "Platform_Name"), "Select Platform", new { @class = "form-control", onchange = "", @readonly = "readonly" })*@
+
+                    @Html.DropDownList("Platform_ID", Enumerable.Empty<SelectListItem>(), null, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessage("Platform_ID", null, new { @class = "validation_error", @id = "spanPlatformValidation" })
+                    @*@Html.LabelFor(model => model.Platform_ID, "Platform Name", htmlAttributes: new { @class = "" }) *
+                        @Html.DropDownList("Platform_ID", Enumerable.Empty<SelectListItem>(), null, new { onchange = "", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Platform_ID, null, new { @class = "validation_error", @id = "spanPlatformValidation" })*@
+                </div>
+
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Planned_Date, "Planned Date", htmlAttributes: new { @class = "" })
+                    @*@Html.DropDownList("Planned_Date",(SelectList)ViewBag.Planned_Date, null, new { onchange = "", @class = "form-control"})*@
+                    @Html.DropDownList("Planned_Date", new SelectList(ViewBag.pst), "Select Planned Date *", new { onchange = "", @class = "form-control", @readonly = "readonly" })
+                    @*@Html.TextBoxFor(model => model.Planned_Date, new { onchange = "", @class = "form-control", onClick = "document.getElementById('Planned_Date').readOnly=false", onkeydown = "document.getElementById('Planned_Date').readOnly=true" })*@
+                    @*@Html.ValidationMessageFor(model => model.Planned_Date, null, new { @class = "validation_error" })*@
+                    @Html.ValidationMessage("Planned_Date", "", new { @class = "validation_error", @id = "spanPlannedDateValidation" })
+                </div>
+
+
+
+                <div class="col-md-2">
+                    <button class="btn btn-info unblock-all hideFirst btn-topmargin btn-lg" id="unblockOrders"><i class="fa fa-unlock-alt" aria-hidden="true"></i> <b>UnBlock Blocked Orders</b></button>
+                    <div class="input-group hideFirst" id="blockOrders">
+                        <span class="input-group-addon bg-gray-active text-bold" id="basic-addon1"> Block After Qty</span>
+                        <input type="number" maxlength="3" min="0" pattern="[0-9]$" class="form-control" name="blockAfterSize" value="0" aria-describedby="basic-addon1" required />
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" value="Show" class="btn btn-primary btn-top-margin hideFirst" id="showSequenceBtn" />
+                </div>
+            </div>
+        </div><br />
+    }
+
+    @using (Html.BeginForm("saveOrderSequence", "OMOrderPlanning", FormMethod.Post, new { @class = "", id = "" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Plant_ID, new { @class = "", id = "PlantID" })
+        @Html.HiddenFor(model => model.Shop_ID, new { @class = "", id = "ShopID" })
+        @Html.Hidden("Platform_ID", new { @class = "", id = "Platform_ID" })
+        <input type="hidden" name="BlockQty" id="BlockQty" />
+    }
+    <div class="row" id="sequence-display-wrapper">
+        <div class="col-md-9" id="orderSequenceWrapper">
+
+        </div>
+        @*<div class="col-md-1">
+                <div class="col-md-12 sequenceArrowButtonWrapper">
+                    <button class="btn btn-primary btnSequenceTop" title="Top Position"><i class="fa fa-angle-double-up"></i></button>
+                    <button class="btn btn-primary btnSequenceUp" title="One Position Up"><i class="fa fa-angle-up"></i></button>
+                    <button class="btn btn-primary btnSequenceDown" title="One Position Down"><i class="fa fa-angle-down"></i></button>
+                    <button class="btn btn-primary btnSequenceBottom" title="Bottom Position"><i class="fa fa-angle-double-down"></i></button>
+                </div>
+            </div>*@
+        <div class="right-fixed-options" style="/*height: 85%;*/
+    overflow: auto;
+    background: #FFF;
+    padding: 10px;
+    border: 1px solid #CCC;
+    margin-top: -7.5rem;" id="dvScroll">
+            <div class="row" id=""></div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Shift Production Count", htmlAttributes: new { @class = "" })
+                    <div class="input-group">
+                        <span class="input-group-btn bg-gray-active">
+                            @*<button class="btn btn-primary btnChangeSequence">Change Position</button>*@
+                            @Html.DropDownList("Shift_ID", (SelectList)ViewBag.Shift, "Select Shift", new { @class = "btn btn-success", onchange = "", @readonly = "readonly" })
+                            @Html.ValidationMessage("Shift_ID", null, new { @class = "validation_error" })
+                        </span>
+                        @*<input type="number" maxlength="4" min="0" class="form-control" name="insertRowIndex" aria-describedby="sizing-addon1" />*@
+                        <input type="text" id="shiftProductionCount" name="shiftProductionCount" maxlength="4" , onkeypress="return isNumberKey(event)" onkeydown="enableGenerateTacksheetBtn()" class="form-control" placeholder="Shift Production Count" />
+                    </div>
+                </div>
+                <br />
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12" style="padding-top: 1.5rem;margin-right: 4rem;position:  relative;">
+                    <button class="btn btn-primary btn-lg btnTactSheetPrint" title="Generate Tact Sheet for Selected Shift" style="width: 100%;">&nbsp;<i class="fa fa-print" style="padding-left: 21px; float: left;"><b class="vertical">|</b></i><b>Generate Tact Sheet</b></button>
+
+
+                    @*added by by mukesh chaudhari*@
+                    @if (Session["pDFDownloadLink"] != null)
+                    {
+                        <div style="margin-top: 5px">
+                            @Html.ActionLink("Download Tacksheet", "DownloadPdf", "OMOrderPlanning", new { fileName = Session["pDFDownloadLink"].ToString(), length = Session["pDFDownloadLink"].ToString().Length, @id = "DownloadPdf" }, new { id = "DownloadPdf", @style = "margin-top: 5px;margin-bottom: 5px;width: 100%;", @class = "btn btn-success", target = "_blank", title = "Download Tacksheet", @download = Session["TackSheetFileName"].ToString() })
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="margin-top: 5px">
+                            @Html.ActionLink("Download Pdf", "DownloadPdf", "OMOrderPlanning", new { target = "_blank", @id = "DownloadPdf", @style = "display: none;margin-top: 5px;margin-bottom: 5px;width: 100%;", @class = "btn btn-success", })
+                        </div>
+                    }
+                    @**@
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-lg btn-warning hold-order" id="holdBtn"><i class="fa fa-ban" style="padding-left: 21px; float: left;"> <b class="vertical">|</b></i><b>Hold Order</b></button>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-lg btn-danger delete-order" id="deleteBtn"><i class="fa fa-trash" style="padding-left: 21px; float: left;"><b class="vertical">|</b></i> <b>Delete Order</b></button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-primary hold-order" id="save-unholdBtn"><i class="fa fa-unlock-alt"></i> UnBlock Orders</button>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-12"><button class="btn btn-primary btn-lg refresh-sequence" id="removeSelectionBtn" style="width: 100%;margin-bottom:5px"><i class="fa fa-refresh"style="padding-left: 21px; float: left;"><b class="vertical">|</b></i> <b>Remove Selection</b></button></div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-3 sequenceArrowButtonWrapper">
+                    <button class="btn btn-primary btn-lg btnSequenceTop" title="Top Position" id="upBtn" style="margin-bottom: 4px"><i class="fa fa-angle-double-up"></i></button>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-11" style="margin-left:15px;margin-right:15px;margin-bottom: 4px;" >
+                        <div class="input-group">
+                            <input type="number" maxlength="4" min="0" class="form-control" name="insertRowIndex" aria-describedby="sizing-addon1" />
+                            <span class="input-group-btn bg-gray-active">
+                                <button class="btn btn-primary btnChangeSequence"><b>Change Position</b></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 sequenceArrowButtonWrapper">
+                    <button class="btn btn-primary btn-lg btnSequenceBottom" title="Bottom Position" id="downBtn" style="margin-bottom: 4px"><i class="fa fa-angle-double-down"></i></button>
+                </div>
+
+
+            </div><br />
+
+
+
+            @*<div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-success btn-lg save-sequence" id="saveSequenceBtn"><i class="fa fa-save"></i> Save Sequence</button>
+                    </div>
+                </div>*@<br />
+
+            @*<div class="row dailyPlanWrapper">
+                                @foreach (var item in ViewBag.Shops)
+                        {
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-dark-active">
+                                        @item.Shop_Name  Plan
+                                    </span>
+                                    <input type="number" maxlength="4" min="0" class="form-control planned_@item.Shop_Name" name="plannedQty" aria-describedby=" sizing-addon1" onkeypress="return isNumberKey(event)" id="plannedQty" />
+
+                                </div>
+                                <p class="dailyplan-notify text-center text-bold"></p>
+                            </div>
+                }
+                            </div><br />*@
+            @*<div class="row">
+                    <div class="col-md-12">
+                        <button id="btnPattern" class="btn btn-primary btnPattern">Save Pattern for Main Line</button>
+                    </div>
+                </div>*@
+            @*<div class="row">
+                <div class="form-horizontal">
+                    <div class="col-md-12">
+                        <div id="OrderPattern" class="box" style="display:block">
+                            <table class="table table-striped table-responsive">
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Ratio</th>
+                                </tr>
+                                @{
+                            foreach (OrderPattern item in ViewBag.Platform)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.Platform_Name
+                                    </td>
+                                    <td>
+                                        <label class="showOrderPattern" id="@item.Platform_ID">@item.Ratio</label>
+                                    </td>
+                                </tr>
+                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-6">
+                        @Html.Label("lblTactTime", "Tact Time", htmlAttributes: new { @class = "" }) *
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextBox("Tact_Time", null, new { onchange = "", @class = "form-control", @maxlength = "3", @onkeypress = "return isNumberKey(event)" })
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <br />
+                <div>*@
+            @*---commented start shift----*@
+            @*<div id="showTimeSlot">
+                    <table class="table table-striped table-responsive">
+                        <thead>
+                            <tr>
+
+                                <th colspan="@ViewBag.Shift.Count">
+                                    Shift wise Production target
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="shift">
+                                @{
+                            foreach (Shift item in ViewBag.Shift)
+                            {
+                                <td>
+                                    @item.Shift_Name
+
+
+                                    <input type="text" maxlength="4" min="0" class="form-control mandatoryfield" id=@item.Shift_ID aria-describedby="sizing-addon1" onkeypress="return isNumberKey(event)" onkeydown="enableGenerateTacksheetBtn()" />
+
+                                </td>
+
+                    }
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <span class="input-group-btn bg-gray-active">
+                        <button class="btn btn-primary changeDailyPlan">Save</button>
+                    </span>
+                </div>*@
+            @*----commented end shift----*@
+
+            @*<div class="col-md-6">
+                @*<button id="btnProdTarget" class="btn btn-primary">Shift wise Production target</button>*@
+            @*@Html.Label("lblShiftCount", "Shift wise Production target", htmlAttributes: new { @class = "" }) **@
+            @*</div>*@
+            @*<div class="col-md-6">
+                    @Html.TextBox("Production_target", null, new { onchange = "", @class = "form-control", @maxlength = "4", @onkeypress = "return isNumberKey(event)" })
+                </div>*@
+            @*</div>*@
+
+        </div>
+        @*<div class="row">
+                <div class="col-md-2">
+                    @Html.Label("Remarks", htmlAttributes: new { @class = "" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.TextBox("Remarks", null, new { onchange = "", @class = "form-control" })
+                    @Html.ValidationMessage("Remarks", null, new { @class = "validation_error" })
+                </div>
+                <div class="col-md-5"><button class="btn btn-success save-sequence"><i class="fa fa-save"></i> Save Sequence</button></div>
+            </div><br />*@
+
+    </div>
+</div>
+<button type="button" class="btn btn-primary order_pattern" style="display:none;" data-toggle="modal" data-target="#myModal_Pattern">Add Order</button>
+<div class="row">
+    <div class="col-lg-10">
+        <div class="modal fade" id="myModal_Pattern" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Pattern</h4>
+                    </div>
+                    <p id="error_msgParts" style="color:red;font-size:15px;"></p>
+                    <div class="modal-body">
+                        @*changes*@
+
+                        <div class="form-horizontal">
+
+                            <div id="showTimeSlot" class="box" style="display:block">
+                                <table class="table table-striped table-responsive">
+                                    <tr>
+                                        <th>Platform</th>
+                                        <th>Ratio</th>
+                                    </tr>
+                                    @{
+                                        foreach (OrderPattern item in ViewBag.Platform)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.Platform_Name
+                                                </td>
+                                                <td>
+                                                    @*@Html.TextBox(" ", "", new { @id = item.Platform_ID, @class = "form-control", @maxlength = "3", @onkeypress = "return isNumberKey(event)" })*@
+                                                    <input type="number" maxlength="4" min="0" class="form-control mandatoryfields" id=@item.Platform_ID aria-describedby="sizing-addon1" />
+
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <input type="submit" value="Save" id="SaveOrderPattern" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="loading_global_spinner_image" style="display:none;">
+    @*<img src="~/Content/images/gears.gif" />*@
+</div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/Select2scripts")
+    @Styles.Render("~/Content/Select2styles")
+
+    @*<script src="~/Content/theme/plugins/jQueryUI/jquery-ui.min.js"></script>*@
+
+
+    <script type="text/javascript">
+        function successMessage(msg, headermsg="Success") {
+            $('.content-wrapper div.myalert').remove();
+
+            alertHtml = '<div class="box-body myalert">' +
+                '<div class="alert alert-success alert-dismissable">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i>'+ headermsg+'</h4>' +
+                msg+
+                '</div></div>';
+            $('.content-wrapper .content').before(alertHtml);
+        }
+        function errorMessage(msg,headermsg="Error") {
+            $('.content-wrapper div.myalert').remove();
+            alertHtml = '<div class="box-body myalert">' +
+                '<div class="alert  alert-danger alert-dismissable">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-ban"></i>'+ headermsg +'</h4>' +
+                '<p>' + msg+ '</p>' +
+                '</div></div>';
+            $('.content-wrapper .content').before(alertHtml);
+        }
+        function infoMessage(msg, headermsg="Info") {
+            $('.content-wrapper div.myalert').remove();
+            alertHtml = '<div class="box-body myalert">' +
+                '<div class="alert alert-warning alert-dismissable">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-ban"></i>' + headermsg +'</h4>' +
+                '<p>' + msg + '</p>' +
+                '</div></div>';
+            $('.content-wrapper .content').before(alertHtml);
+        }
+        $("#showSequenceBtn").click(function () {
+            debugger;
+            var plannedDate = $("#Planned_Date").val();
+            var platformId = $("#Platform_ID").val();
+            var res = true;
+            $("#spanPlannedDateValidation").html("");
+            $("#spanPlatformValidation").html("");
+            if (plannedDate == "" || plannedDate == null) {
+                $("#spanPlannedDateValidation").html("Please select Planned Date");
+                res = false;
+            }
+            if (platformId == "" || platformId == null && platformId == undefined) {
+                $("#spanPlatformValidation").html("Please select Platform");
+                res = false;
+            }
+
+
+            return res;
+        })
+
+
+        function enableGenerateTacksheetBtn() {
+
+            $('.btnTactSheetPrint').attr("disabled", false);
+        }
+        function isNumberKey(evt) {
+            // alert(evt.which);
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+                return false;
+            return true;
+        }
+
+        (function ($) {
+            $.fn.fixMe = function () {
+                return this.each(function () {
+                    var $this = $(this),
+                      $t_fixed;
+
+                    function init() {
+                        $this.wrap('<div class="fixed-table-container" />');
+                        $t_fixed = $this.clone();
+                        $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
+                        resizeFixed();
+                    }
+
+                    function resizeFixed() {
+                        $t_fixed.find("th").each(function (index) {
+                            $(this).css("width", $this.find("th").eq(index).outerWidth() + "px");
+                        });
+                    }
+
+                    function scrollFixed() {
+                        var offset = $(this).scrollTop(),
+                          tableOffsetTop = $this.offset().top,
+                          tableOffsetBottom = tableOffsetTop + $this.height() - $this.find("thead").height();
+                        if (offset < tableOffsetTop || offset > tableOffsetBottom)
+                            $t_fixed.hide();
+                        else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && $t_fixed.is(":hidden"))
+                            $t_fixed.show();
+                    }
+                    $(window).resize(resizeFixed);
+                    $(window).scroll(scrollFixed);
+                    init();
+                });
+            };
+        })(jQuery);
+        function LoadBegin() {
+            $("#sequence-display-wrapper").show();
+            $("#orderSequenceWrapper").html("<img class='loading-img' src='@(Url.Content("/Content/images/loader2.GIF"))'/>");
+            $("input[name=insertRowIndex]").val('');
+            $("#deleteBtn").show();
+        }
+        function LoadComplete() {
+            //$("#sequence-display-wrapper #startedOrdersBlock").accordion({
+            //    collapsible: true
+            //});
+            $("#PlantID").val($("#Plant_ID").val());
+            $("#ShopID").val($("#Shop_ID").val());
+            $("#Platform_ID").val($("#Platform_ID").val());
+            $("#BlockQty").val($("input[name=blockAfterSize]").val());
+
+            updateSequenceQty();
+            $("#orderSequenceWrapper table").fixMe();
+            var plant = $("#Plant_ID").val();
+            $.getJSON('/OMOrderPlanning/getPlannedValue', { plantID: plant }, function (data) {
+                $.each(data, function (idx, resultDataObj) {
+                    if (resultDataObj.Planned_Qty != null) {
+                        $(".planned_" + resultDataObj.Shop_Name).val(resultDataObj.Planned_Qty);
+                    } else {
+                        $(".planned_" + resultDataObj.Shop_Name).val(0);
+                    }
+                });
+                $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(0).find("td").eq(6).click();
+            }).fail(function (d, textStatus, errorThrown) {
+                console.log("Failed for getJSON /OMOrderPlanning/getPlannedValue || Text Status:" + textStatus);
+            });
+
+            var platformId = $("#Platform_ID").val();
+            $.getJSON('/OMOrderPlanning/UnLockUnholdTable', { PlatformId: platformId }, function (resultData) {
+                console.log("Unlock Unholded Order Table Result : " + resultData);
+            }).fail(function (d, textStatus, errorThrown) {
+                consolelog("Failed for getJSON /OMOrderPlanning/UnLockUnholdTable || Text Status:" + textStatus);
+            });
+        }
+        function updateSequenceQty() {
+            var cummQty = 0;
+            $("#orderSequenceWrapper table.table-sequence").find(".not-hidden-order").each(function () {
+                var groupname = $(this).data("group");
+                var qty = $("#orderSequenceWrapper table.table-sequence ." + groupname).length;
+                cummQty += qty;
+                $(this).find(".sequence-qty").text(++qty);
+                $(this).find(".cumm-qty").text(++cummQty);
+            });
+        }
+        function LoadSuccess() {
+
+        }
+        function LoadFailure() {
+            location.reload();
+        }
+        function changeSequence(insertRowIndex, persistSelection, isafter) {
+
+            //var newSequenceArr = new Array();
+            var newHtml = "";
+            insertRowIndex = parseInt(insertRowIndex);
+            if (insertRowIndex > 0) {
+                var sequenceId = 0;
+                $("#orderSequenceWrapper table.table-sequence").find(".selected").each(function () {
+                    sequenceId = parseInt($(this).find("td").eq(0).text());
+                    var rowID = $(this).data('rowid');
+                    var orderNo = $(this).data('orderno');
+                    var orderType = $(this).data('ordertype');
+                    var group = ($(this).data('group') == undefined) ? "" : $(this).data('group');
+                    var spillOver = $(this).hasClass("spillover") ? "spillover" : "";
+                    var blocked = $(this).hasClass("blocked") ? "blocked" : "";
+                    debugger;
+                    if (persistSelection == true) {
+                        newHtml += "<tr data-rowid='" + rowID + "' data-orderno ='" + orderNo + "' data-group='' data-ordertype='" + orderType + "' class='newSelected " + blocked + "'>" + $(this).html() + "</tr>";
+
+                    } else {
+                        newHtml += "<tr data-rowid='" + rowID + "' data-orderno ='" + orderNo + "' data-group='' data-ordertype='" + orderType + "' class='" + blocked + "'>" + $(this).html() + "</tr>";
+
+
+                    }
+                });
+
+                if ((isafter == false || isafter == undefined) && insertRowIndex == 1) {
+                   // alert($("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex - 1).find("td").eq(6).text());
+                    $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex - 1).find("td").eq(6).html('');
+                    $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex-1).before(newHtml);
+                }
+                else if ((isafter == false || isafter == undefined) && sequenceId > insertRowIndex) {
+                    $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex-1).before(newHtml);
+                }
+                else if ((isafter == false || isafter == undefined) && sequenceId < insertRowIndex) {
+                    $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex).before(newHtml);
+                }
+                else {
+                    $("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(insertRowIndex).after(newHtml);
+                }
+
+                $("#orderSequenceWrapper .selected").remove();
+                $("#orderSequenceWrapper .newSelected").click();
+                $("#orderSequenceWrapper .newSelected").removeClass("newSelected");
+
+                var newSerial = 0;
+                //newSequenceArr.length = 0;
+                var currentModelCode = "";
+                var groupcntr = 0;
+                var groupName = "";
+                var currentGroupObj = null;
+                var Qty = 1;
+                var cummQty = 0;
+                $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+                    $(this).find("td:first").text(++newSerial);
+                    //newSequenceArr.push($(this).data('rowid'));
+                    var blocked = $(this).hasClass("blocked") ? "blocked" : "";
+                    if (currentModelCode != $(this).find(".sequence-modelcode").text().trim()) {
+                        Qty = 1;
+                        groupcntr++;
+                        currentGroupObj = $(this);
+                        cummQty += Qty;
+                        //groupName = $(this).find(".sequence-modelcode").text().trim() + "_" + groupcntr;
+                        groupName = "group_" + groupcntr;
+                        $(this).removeAttr("class").addClass("not-hidden-order " + blocked);
+                        $(this).attr('data-group', groupName);
+                        $(this).data('group', groupName);
+                        $(this).find("td:nth-child(2)").html('<i class="fa fa-th-list"></i>');
+                        currentGroupObj.find(".sequence-qty").text(Qty);
+                        currentGroupObj.find(".cumm-qty").text(cummQty);
+                    } else {
+
+                        $(this).removeAttr("class").addClass(groupName + " hidden-order " + blocked);
+                        $(this).removeData("group").removeAttr("data-group");
+                        $(this).find(".sequence-qty").text("");
+                        $(this).find("td:nth-child(2)").html('<i class="fa fa-chevron-right"></i>');
+                        currentGroupObj.find(".sequence-qty").text(++Qty);
+                        currentGroupObj.find(".cumm-qty").text(++cummQty);
+                    }
+                    currentModelCode = $(this).find(".sequence-modelcode").text().trim();
+                });
+
+            }
+            //return newSequenceArr;
+        }
+        function updateSequenceArrangement() {
+            var newSerial = 0;
+            var currentModelCode = "";
+            var groupcntr = 0;
+            var groupName = "";
+            var currentGroupObj = null;
+            var Qty = 1;
+            var cummQty = 0;
+            $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+                $(this).find("td:first").text(++newSerial);
+                var blocked = $(this).hasClass("blocked") ? "blocked" : "";
+                if (currentModelCode != $(this).find(".sequence-modelcode").text().trim()) {
+                    Qty = 1;
+                    groupcntr++;
+                    currentGroupObj = $(this);
+                    cummQty += Qty;
+                    //groupName = $(this).find(".sequence-modelcode").text().trim() + "_" + groupcntr;
+                    groupName = "group_" + groupcntr;
+                    $(this).removeAttr("class").addClass("not-hidden-order " + blocked);
+                    $(this).attr('data-group', groupName);
+                    $(this).data('group', groupName);
+                    $(this).find("td:nth-child(2)").html('<i class="fa fa-th-list"></i>');
+                    currentGroupObj.find(".sequence-qty").text(Qty);
+                    currentGroupObj.find(".cumm-qty").text(cummQty);
+                } else {
+                    $(this).removeAttr("class").addClass(groupName + " hidden-order " + blocked);
+                    $(this).removeData("group").removeAttr("data-group");
+                    $(this).find(".sequence-qty").text("");
+                    $(this).find("td:nth-child(2)").html('<i class="fa fa-chevron-right"></i>');
+                    currentGroupObj.find(".sequence-qty").text(++Qty);
+                    currentGroupObj.find(".cumm-qty").text(++cummQty);
+                }
+                currentModelCode = $(this).find(".sequence-modelcode").text().trim();
+            });
+        }
+        $(document).ready(function () {
+            //debugger;
+            $("#orderSequenceWrapper").on("click", ".btn-startedOrders", function () {
+                $(this).text(function (i, text) {
+                    return text === "Show started Orders" ? "Hide started Orders" : "Show started Orders";
+                });
+                var x = document.getElementById("startedOrderstbl");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            });
+            $("#orderSequenceWrapper").on("click", "table.table-sequence > tbody > tr", function () {
+                $(this).toggleClass("bg-green-gradient selected");
+                $("table.table-sequence > tbody > tr.blocked").removeClass("bg-green-gradient selected");
+            });
+            $(".btnChangeSequence").click(function () {
+                var insertRowIndex = parseInt($("input[name=insertRowIndex]").val());
+                var sequenceTableLength = parseInt($("#orderSequenceWrapper table.table-sequence > tbody > tr").length);
+
+                if (sequenceTableLength < insertRowIndex) {
+                    // alert("Invalid Position");
+                    errorMessage("Invalid Position");
+                }
+                else if (insertRowIndex > $("#BlockQty").val()) {
+                    if (sequenceTableLength == insertRowIndex) {
+                        $(".btnSequenceBottom").click();
+                    }
+                    else {
+                    changeSequence(insertRowIndex, false, false);
+                    }
+                } else {
+                    //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                    errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                }
+
+
+            });
+            $("#orderSequenceWrapper").on("contextmenu", ".sequence-index", function (e) {
+                debugger;
+                e.preventDefault();
+                var lastIndex = parseInt($("#orderSequenceWrapper table.table-sequence > tbody > tr").length);
+
+                var insertRowIndex = parseInt($(this).text());
+                if (insertRowIndex > $("#BlockQty").val()) {
+                    if (lastIndex > insertRowIndex) {
+                        changeSequence(insertRowIndex, false, false);
+                    }
+                    else {
+                        changeSequence(insertRowIndex - 1, false, true);
+
+                    }
+                } else {
+                    alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                }
+                return false;
+            });
+
+            //$(".btnSequenceUp").click(function () {
+            //    var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence").find("tr.selected:first").find("td:first").text());
+            //    newSequenceArr = changeSequence(insertRowIndex - 1, true, false);
+            //});
+            //$(".btnSequenceDown").click(function () {
+            //    var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence").find("tr.selected:last").find("td:first").text());
+            //    newSequenceArr = changeSequence(insertRowIndex + 1, true, true);
+            //});
+            $(".btnSequenceTop").click(function () {
+                if (1 > $("#BlockQty").val()) {
+                    changeSequence(1, false, false);
+                } else {
+                    errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                    //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                }
+            });
+            $(".btnSequenceBottom").click(function () {
+                var insertRowIndex = parseInt($("#orderSequenceWrapper table.table-sequence > tbody > tr").length);
+                if (insertRowIndex > $("#BlockQty").val()) {
+                    changeSequence(insertRowIndex-1, false, true);
+                } else {
+                    errorMessage("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                    //alert("Cannot Resequence on this position.This position is Blocked for resequencing !");
+                }
+            });
+            $(".refresh-sequence").click(function () {
+                $("#orderSequenceWrapper table.table-sequence > tbody > .hidden-order.selected").click();
+                //$("#orderSequenceWrapper table.table-sequence > tbody > tr").eq(0).find("td").eq(6).click();
+                $("#orderSequenceWrapper table.table-sequence > tbody > tr.selected").removeClass("bg-green-gradient selected");
+               // $("#orderSequenceWrapper table.table-sequence > tbody > tr.hidden-order").click()
+            });
+
+            $(".changeDailyPlan").click(function () {
+                //var shop = $(this).data("shopid");
+                var isValid = true;
+                debugger;
+                $('.mandatoryfield').each(function () {
+                    var value = $(this).val();
+                    if (value.length == 0) {
+
+                        $(this).addClass('form-control input-validation-error');
+                        // $('#' + $(this).attr('id')).next().text(ErrMsg);
+                        isValid = false;
+                    }
+                    else {
+                        $(this).removeClass('input-validation-error');
+                        //$('#' + $(this).attr('id')).next().text('');
+                    }
+                });
+                if (!isValid) {
+                    infoMessage("Please add Shiftwaise production count!...");
+                    //alert("Please add Shiftwaise production count!...");
+                    return;
+                }
+
+                var shop = $("#Shop_ID").val();
+                //var inputClass = $(this).data("saveinput");
+                //var plannedQty = $("." + inputClass).val();
+                var plannedQty = 1;
+                //to add shift changes Nashik Development
+                var totalShift = [];
+                var prodCount = 0;
+                debugger;
+                //$(".shift").find('input').each(function () {
+                    totalShift.push({
+                        shift_ID: $('#Shift_ID option:selected').val(),
+                        Shift_Name: $('#Shift_ID option:selected').text(),
+                    });
+                    //prodCount += parseInt($(this).val())
+                    prodCount = parseInt($('#Shift_ID option:selected').val());
+                //});
+                var orderCount = 0
+                $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+                    if ($(this).data('ordertype') != 'Spare') {
+                        orderCount++;
+                    }
+                });
+
+                var Plant = $("#Plant_ID").val();
+                var Shop = $("#Shop_ID").val();
+
+                var plannedDate = $('#Planned_Date').val();
+                var platformId = $('#Platform_ID').val();
+                if (Plant.length > 0 && Shop.length > 0 && platformId.length > 0) {
+                    debugger;
+
+                    if (prodCount != orderCount) {
+                                $('.content-wrapper div.myalert').remove();
+                                alertHtml = '<div class="box-body myalert">' +
+                                    '<div class="alert alert-warning alert-dismissable">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                    '<h4><i class="icon fa fa-ban"></i>Production Count Mis-Match</h4>' +
+                                    '<p>Production count does not matches as per planned date</p>' +
+                                    '</div></div>';
+                                $('.content-wrapper .content').before(alertHtml);
+                                $('.btnTactSheetPrint').attr("disabled", true);
+
+                            }
+                            else {
+
+                        if (plannedQty > 0 && shop > 0 && platformId > 0) {
+                                    var thisBtn = $(this);
+                                    thisBtn.text("Loading...");
+                                    var ordertypeArr = new Array();
+                                    var newSequenceArr = new Array();
+                                    ordertypeArr.length = 0;
+                                    newSequenceArr.length = 0;
+                                    $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+
+                                        ordertypeArr.push($(this).data('ordertype'));
+                                        newSequenceArr.push($(this).data('rowid'));
+                                    });
+                                    debugger;
+                                    $.getJSON('/OMOrderPlanning/changeDailyPlan', { shopID: shop, PlatformId: platformId, planned_Qty: plannedQty, allShift: JSON.stringify(totalShift) }, function (data) {
+                                        if (data.result == true) {
+                                            $('.content-wrapper div.myalert').remove();
+                                            alertHtml = '<div class="box-body myalert">' +
+                                                '<div class="alert alert-success">' +
+                                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                '<h4><i class="icon fa  fa-check"></i>Successful</h4>' +
+                                                //'<h4><i class="alert alert-success"></i> Operation Failed </h4>' +
+                                                '<p> Shiftwaise PPC plan saved successfully!...</p>' +
+                                                '</div></div>';
+                                            $('.content-wrapper .content').before(alertHtml);
+
+                                            thisBtn.html('<i class="fa fa-times"></i> Save');
+                                            thisBtn.find('i').fadeIn(1000).delay(2000).fadeOut(1000);
+                                        } else {
+                                            thisBtn.html('<i class="fa fa-check"></i> Save');
+                                            thisBtn.find('i').fadeIn(1000).delay(2000).fadeOut(1000);
+                                        }
+
+                                    }).fail(function (d, textStatus, errorThrown) {
+                                        //alert("Unable to Delete a Order for Series : " + selectedSeries + " ! [Status: " + textStatus + " | Details: " + errorThrown + "]");
+                                        if (errorThrown == "forbidden") {
+                                            $('.content-wrapper div.myalert').remove();
+                                            alertHtml = '<div class="box-body myalert">' +
+                                                '<div class="alert alert-warning alert-dismissable">' +
+                                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                '<h4><i class="icon fa fa-ban"></i> Operation Failed </h4>' +
+                                                'Session Timout ! Please Reload page and try again.' +
+                                                '</div></div>';
+                                            $('.content-wrapper .content').before(alertHtml);
+                                            thisBtn.html('<i class="fa fa-times"> Save');
+                                            thisBtn.find('i').fadeIn(1000).delay(2000).fadeOut(1000);
+
+                                        } else {
+                                            thisBtn.click();
+                                        }
+                                    }).done(function () {
+
+                                    });
+                                }
+                            }
+
+
+                }
+
+            });
+
+            $(".save-sequence").click(function () {
+                var plant = $("#PlantID").val();
+                var shop = $("#ShopID").val();
+                var platformId = $("#Platform_ID").val();
+            {//added by mukesh
+
+                {
+                        alert(platformId + "platfrom");
+                        if (platformId == "" || platformId == null) {
+                        //$("#spanPlannedDateValidation").html("Please select Planned Date");
+                        //alert("Please select Line Name")
+                            infoMessage("Please select Platform Name")
+                        return false;
+                    }
+                }
+                }//
+
+                var remark = new Array();
+                var newSequenceArr = new Array();
+                remark.length = 0;
+
+                newSequenceArr.length = 0;
+                $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+                    remark.push($(this).find("input[name=sequenceRemarks]").val());
+                    newSequenceArr.push($(this).data('rowid'));
+                });
+                $(".loading_global_spinner_image").show();
+                if (plant.length > 0 && shop.length > 0 && platformId.length > 0) {
+                    $('.content-wrapper div.myalert').remove();
+                    //if (remark.length > 0) {
+                    if (newSequenceArr.length > 0) {
+
+                        $.getJSON('/OMOrderPlanning/checkifUnHoldLock', { PlatformId: platformId }, function (dataObj) {
+                            if (dataObj.result == false) {
+
+                                var alertHtml = "";
+                                $.post('/OMOrderPlanning/saveOrderSequence', $.param({ sequenceList: newSequenceArr, plantID: plant, shopID: shop, PlatformId: platformId, remarks: remark }, true), function (data) {
+                                    $(".save-sequence .fa").addClass('fa-spin fa-3x fa-fw');
+                                    if (data == "Success") {
+                                        alertHtml = '<div class="box-body myalert">' +
+                                                   '<div class="alert alert-success alert-dismissable">' +
+                                                   '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                   '<h4><i class="icon fa fa-check"></i>Success</h4>' +
+                                                   'The Sequence was changed Successfully !'+
+                                                   '</div></div>';
+
+                                        //$("#sequence-display-wrapper").hide();
+                                        $(".save-sequence .fa").removeClass('fa-spin fa-3x fa-fw');
+
+
+                                    } else {
+                                        //$(".save-sequence").click();
+                                        alertHtml = '<div class="box-body myalert">' +
+                                                   '<div class="alert alert-danger alert-dismissable">' +
+                                                   '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                   '<h4><i class="icon fa fa-ban"></i>Exception Occurred</h4>' +
+                                                   'The Sequence was not successfully saved .Please Retry !' +
+                                                   '</div></div>';
+                                    }
+                                    $(".loading_global_spinner_image").hide();
+                                    $(".save-sequence .fa").removeClass('fa-spin fa-3x fa-fw');
+                                    $('.content-wrapper .content').before(alertHtml);
+                                }).error(function (d, textStatus, errorThrown) {
+                                    alertHtml = '<div class="box-body myalert">' +
+                                                  '<div class="alert alert-danger alert-dismissable">' +
+                                                  '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                  '<h4><i class="icon fa fa-ban"></i>Operation Failed</h4>' +
+                                                  '<p>The Sequence was not successfully saved .Please Retry !</p>' +
+                                                  '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                                                  '</div></div>';
+                                    $(".save-sequence .fa").removeClass('fa-spin fa-3x fa-fw');
+                                    $(".loading_global_spinner_image").hide();
+                                    $('.content-wrapper .content').before(alertHtml);
+                                    //location.reload();
+                                }).success(function (d) {
+                                    if ($("#BlockQty").val() > 0) {
+                                        $("#save-unholdBtn").click();
+                                    }
+                                });
+                            } else {
+                                if ((dataObj.message).length > 0) {
+                                    $('.content-wrapper div.myalert').remove();
+                                    alertHtml = '<div class="box-body myalert">' +
+                                                '<div class="alert alert-warning alert-dismissable">' +
+                                                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                '<h4><i class="icon fa fa-ban"></i> Operation Failed </h4>' +
+                                                 dataObj.message +
+                                                '</div></div>';
+                                    $(".loading_global_spinner_image").hide();
+                                    $('.content-wrapper .content').before(alertHtml);
+                                } else {
+                                    alert("Some Orders have been unholded by the Shop Floor User.The Screen will Reload to avoid splitting.");
+                                    location.reload();
+                                }
+                            }
+
+                        }).fail(function (d, textStatus, errorThrown) {
+                            //alert("Unable to Delete a Order for Series : " + selectedSeries + " ! [Status: " + textStatus + " | Details: " + errorThrown + "]");
+                            if (errorThrown == "forbidden") {
+                                $('.content-wrapper div.myalert').remove();
+                                alertHtml = '<div class="box-body myalert">' +
+                                            '<div class="alert alert-warning alert-dismissable">' +
+                                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                            '<h4><i class="icon fa fa-ban"></i> Operation Failed </h4>' +
+                                            'Session Timout ! Please Reload page and try again.' +
+                                            '</div></div>';
+                                $('.content-wrapper .content').before(alertHtml);
+                            }
+                        });
+
+                    } else {
+                        alertHtml = '<div class="box-body myalert">' +
+                                           '<div class="alert alert-warning alert-dismissable">' +
+                                           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                           '<h4><i class="icon fa fa-ban"></i> Incomplete Data </h4>' +
+                                           'No Changes made to the Sequence.Please change the sequence and then save !' +
+                                           '</div></div>';
+                        $(".loading_global_spinner_image").hide();
+                        $('.content-wrapper .content').before(alertHtml);
+                    }
+                    //} else {
+                    //    alertHtml = '<div class="box-body myalert">' +
+                    //                            '<div class="alert alert-danger alert-dismissable">' +
+                    //                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    //                            '<h4><i class="icon fa fa-ban"></i> Incomplete Data </h4>' +
+                    //                            'Please Enter remarks !' +
+                    //                            '</div></div>';
+                    //    $(".loading_global_spinner_image").hide();
+                    //    $('.content-wrapper .content').before(alertHtml);
+                    //}
+                }
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+            });
+
+            $("#orderSequenceWrapper").on("click", "table.table-sequence > tbody > tr.not-hidden-order", function (e) {
+                var groupname = $(this).data("group");
+                if ($("#orderSequenceWrapper table.table-sequence ." + groupname + "").length > 0) {
+                    if ($("#orderSequenceWrapper table.table-sequence ." + groupname + "").hasClass("hidden-order")) {
+                        $("#orderSequenceWrapper table.table-sequence ." + groupname + "").removeClass("hidden-order");
+                        $("#orderSequenceWrapper table.table-sequence ." + groupname + "").addClass("bg-green-gradient selected");
+                    } else {
+                        $("#orderSequenceWrapper table.table-sequence ." + groupname + "").addClass("hidden-order");
+                        $("#orderSequenceWrapper table.table-sequence ." + groupname + "").removeClass("bg-green-gradient selected");
+                    }
+                    $(".refresh-sequence").click();
+                }
+                $("table.table-sequence > tbody > tr.blocked").removeClass("bg-green-gradient selected");
+                if (e.shiftKey) {
+                    document.getSelection().removeAllRanges();
+                    var thisObj = $(this);
+                    var checkifAnyPreviousSelected = thisObj.prevAll("#orderSequenceWrapper table.table-sequence > tbody > tr.not-hidden-order.selected:first");
+                    if (checkifAnyPreviousSelected.length != 0) {
+
+                        //thisObj.prevAll("#orderSequenceWrapper table.table-sequence > tbody > tr.not-hidden-order:first").css("background", "red");
+                        var prevObj = thisObj.prevAll("#orderSequenceWrapper table.table-sequence > tbody > tr.not-hidden-order:first");
+                        while (prevObj.hasClass("bg-green-gradient selected") == false) {
+                            //if (prevObj.hasClass("selected") == false) {
+                            prevObj.click();
+                            //}
+                            //prevObj.addClass("bg-green-gradient selected");
+                            prevObj = prevObj.prevAll("#orderSequenceWrapper table.table-sequence > tbody > tr.not-hidden-order:first");
+                            if (prevObj.length == 0) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            });
+            //$("#orderSequenceWrapper").on("click", "table.table-sequence > tbody > tr.not-hidden-order", function (e) {
+            //});
+            $("#deleteBtn").click(function () {
+                //debugger;
+                var shop = $("#ShopID").val();
+                var platformId = $("#Platform_ID").val();
+                var selectedOrders = $("#orderSequenceWrapper table.table-sequence tbody").find("tr.selected");
+                if (selectedOrders.length > 0) {
+                    var remarks = prompt("Please enter Remark for Deleting the Orders");
+                    //if (confirm("Do you want to Delete all selected Orders ? ")) {
+                    if (remarks != null) {
+                        var i = 0;
+                        var j = 0;
+                        var k = 0;
+                        selectedOrders.each(function () {
+                            var $this = $(this);
+                            var rowid = $this.data("rowid");
+                            var selectedSeries = $this.find('.sequence-series').text();
+                            var orderType = $this.data("ordertype");
+                            var deletePath = "";
+
+                            if (shop == 4) {
+                                deletePath = '/OMOrderPlanning/DeleteTractorOrder';
+                            } else {
+                                //if (orderType == "S") {
+                                deletePath = '/OMOrderPlanning/DeleteOrder';
+                                //} else {
+                                //    k++;
+                                //    return true;
+                                //}
+                            }
+                            if (deletePath.length > 0) {
+
+                                $.getJSON(deletePath, { orderRowid: rowid, remark: remarks }, function (data) {
+                                    if (data.result == false) {
+                                        //alert(data.message);
+                                        errorMessage(data.message);
+                                        j++;
+                                    } else {
+                                        i++;
+                                        $this.remove();
+                                    }
+                                    updateSequenceArrangement();
+                                    $('#showSequenceBtn').click();
+                                }).fail(function (d, textStatus, errorThrown) {
+                                    //alert("Unable to Delete a Order for Series : " + selectedSeries + " ! [Status: " + textStatus + " | Details: " + errorThrown + "]");
+                                    if (errorThrown == "forbidden") {
+                                        $('.content-wrapper div.myalert').remove();
+                                        alertHtml = '<div class="box-body myalert">' +
+                                                               '<div class="alert alert-warning alert-dismissable">' +
+                                                               '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                               '<h4><i class="icon fa fa-ban"></i> Deletion Failed </h4>' +
+                                                               'Session Timout ! Please Reload page and try again.' +
+                                                               '</div></div>';
+                                        $('.content-wrapper .content').before(alertHtml);
+                                    } else {
+                                        $("#deleteBtn").click();
+                                    }
+                                    return false;
+                                }).done(function () {
+                                    $('.content-wrapper div.myalert').remove();
+
+                                    alertHtml = '<div class="box-body myalert">' +
+                                                       '<div class="alert alert-success alert-dismissable">' +
+                                                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                       '<h4><i class="icon fa fa-check"></i>Deletion Completed</h4>' +
+                                                       i + ' Orders Deleted ! ' +
+                                                       '</div></div>';
+
+                                    $('.content-wrapper .content').before(alertHtml);
+                                });
+                            }
+                        });
+                        if (i == 0 && k > 0) {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                               '<div class="alert alert-success alert-dismissable">' +
+                                               '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                               '<h4><i class="icon fa fa-check"></i>No Orders Deleted</h4>' +
+                                               '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                        }
+                    }
+                } else {
+                    //$('.content-wrapper div.myalert').remove();
+                    //alertHtml = '<div class="box-body myalert">' +
+                    //                       '<div class="alert alert-warning alert-dismissable">' +
+                    //                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    //                       '<h4><i class="icon fa fa-ban"></i> Incomplete Data </h4>' +
+                    //                       'Please Select Orders.No Orders are Selected for Deletion.' +
+                    //                       '</div></div>';
+                    //$('.content-wrapper .content').before(alertHtml);
+                }
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+            });
+
+            $("#holdBtn").click(function () {
+                var selectedOrders = $("#orderSequenceWrapper table.table-sequence tbody").find("tr.selected");
+                if (selectedOrders.length > 0) {
+                    var remarks = prompt("Please enter Remark for Holding the Orders");
+                    //if (confirm("Do you want to Hold all selected Orders ? ")) {
+                    if (remarks != null) {
+                        var i = 0;
+                        selectedOrders.each(function () {
+
+                            var $this = $(this);
+                            var rowid = $(this).data("rowid");
+                            var selectedSeries = $this.find('.sequence-series').text();
+                            $.getJSON('/OMOrderPlanning/HoldTractorOrder', { orderRowid: rowid, remark: remarks }, function (data) {
+                                if (data.result == false) {
+                                    alert(data.message);
+
+                                } else {
+                                    i++;
+                                    $this.remove();
+                                }
+                                updateSequenceArrangement();
+                                $('#showSequenceBtn').click();
+                                $("html, body").animate({ scrollTop: 0 }, "slow");
+                            }).fail(function (d, textStatus, errorThrown) {
+                                if (errorThrown == "forbidden") {
+                                    $('.content-wrapper div.myalert').remove();
+                                    alertHtml = '<div class="box-body myalert">' +
+                                                           '<div class="alert alert-warning alert-dismissable">' +
+                                                           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                           '<h4><i class="icon fa fa-ban"></i> Holding Orders Failed </h4>' +
+                                                           'Session Timout ! Please Reload page and try again.' +
+                                                           '</div></div>';
+                                    $('.content-wrapper .content').before(alertHtml);
+                                } else {
+                                    $("#holdBtn").click();
+                                }
+                                return false;
+                            }).done(function () {
+                                $('.content-wrapper div.myalert').remove();
+                                alertHtml = '<div class="box-body myalert">' +
+                                                       '<div class="alert alert-success alert-dismissable">' +
+                                                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                       '<h4><i class="icon fa fa-check"></i>Success</h4>' +
+                                                       i + ' Orders are Holded successfully !' +
+                                                       '</div></div>';
+                                $('.content-wrapper .content').before(alertHtml);
+                            });
+                        });
+                    }
+                } else {
+                    //$('.content-wrapper div.myalert').remove();
+                    //alertHtml = '<div class="box-body myalert">' +
+                    //                       '<div class="alert alert-warning alert-dismissable">' +
+                    //                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    //                       '<h4><i class="icon fa fa-ban"></i> Incomplete Data </h4>' +
+                    //                       'Please Select Orders.No Orders are Selected for Holding.' +
+                    //                       '</div></div>';
+                    //$('.content-wrapper .content').before(alertHtml);
+                }
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+            });
+
+            $("#save-unholdBtn").click(function (e) {
+                e.preventDefault();
+                var plant = $("#PlantID").val();
+                var shop = $("#ShopID").val();
+                var platformId = $("#Platform_ID").val();
+                if (plant.length > 0 && shop.length > 0 && platformId.length > 0 && $("#BlockQty").val() > 0) {
+                    $.getJSON('/OMOrderPlanning/UnBlockOrders', { shopID: shop, PlatformId: platformId }, function (data) {
+                        if (data.result) {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                                   '<div class="alert alert-success alert-dismissable">' +
+                                                   '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                   '<h4><i class="icon fa fa-check"></i>Success</h4>' +
+                                                   'All Orders UnBlocked Successfully !' +
+                                                   '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                            $("#unblockOrders").hide();
+                            $("#blockOrders").show();
+                            $("#showSequenceBtn").show();
+                            $("#sequence-display-wrapper").hide();
+                        } else {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                       '<div class="alert alert-warning alert-dismissable">' +
+                                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                       '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                                       '<p>Unable to UnBlock Orders.Please ReTry!</p>' +
+                                       '<p><small> Details: ' + data.message + '</small></p>' +
+                                       '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                        }
+                        $("input[name=blockAfterSize]").val(0);
+                    }).fail(function (d, textStatus, errorThrown) {
+                        if (errorThrown == "forbidden") {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                                   '<div class="alert alert-warning alert-dismissable">' +
+                                                   '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                   '<h4><i class="icon fa fa-ban"></i> UnBlocking Orders Failed </h4>' +
+                                                   'Session Timout ! Please Reload page and try again.' +
+                                                   '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                        } else {
+                            $("#save-unholdBtn").click();
+                        }
+                        //$('.content-wrapper div.myalert').remove();
+                        //alertHtml = '<div class="box-body myalert">' +
+                        //           '<div class="alert alert-warning alert-dismissable">' +
+                        //           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        //           '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                        //           '<p>Unable to UnBlock Orders.Please ReTry!</p>' +
+                        //           '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                        //           '</div></div>';
+                        //$('.content-wrapper .content').before(alertHtml);
+
+                    });
+                } else {
+                    $("#unblockOrders").hide();
+                    $("#blockOrders").show();
+                    $("#showSequenceBtn").show();
+                    $("#sequence-display-wrapper").hide();
+                }
+            });
+
+
+            $("#unblockOrders").click(function (e) {
+                e.preventDefault();
+                var plant = $("#Plant_ID").val();
+                var shop = $("#Shop_ID").val();
+                var platformId = $("#Platform_ID").val();
+                if (plant.length > 0 && shop.length > 0 && platformId.length > 0) {
+                    $.getJSON('/OMOrderPlanning/UnBlockOrders', { shopID: shop, PlatformId: platformId }, function (data) {
+                        if (data.result) {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                                   '<div class="alert alert-success alert-dismissable">' +
+                                                   '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                                   '<h4><i class="icon fa fa-check"></i>UnBlocking Successfull</h4>' +
+                                                   'All Orders UnBlocked Successfully !' +
+                                                   '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                            $("#unblockOrders").hide();
+                            $("#blockOrders").show();
+                            $("#showSequenceBtn").show();
+                        } else {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                       '<div class="alert alert-warning alert-dismissable">' +
+                                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                       '<h4><i class="icon fa fa-ban"></i>UnBlocking Orders Failed </h4>' +
+                                       '<p>Unable to UnBlock Orders.Please ReTry!</p>' +
+                                       '<p><small> Details: ' + data.message + '</small></p>' +
+                                       '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                            $("input[name=blockAfterSize]").val(0);
+                            $("input[name=blockAfterSize]").focus();
+                        }
+                    }).fail(function (d, textStatus, errorThrown) {
+
+                        if (errorThrown == "forbidden") {
+                            $('.content-wrapper div.myalert').remove();
+                            alertHtml = '<div class="box-body myalert">' +
+                                       '<div class="alert alert-warning alert-dismissable">' +
+                                       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                       '<h4><i class="icon fa fa-ban"></i>UnBlocking Orders Failed </h4>' +
+                                       '<p>Session Timout ! Please Reload page and try again!</p>' +
+                                       '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                                       '</div></div>';
+                            $('.content-wrapper .content').before(alertHtml);
+                        } else {
+                            $("#unblockOrders").click();
+                        }
+
+                    });
+                }
+            });
+
+            $("#orderSequenceWrapper").on("click", ".selected input[name=sequenceRemarks]", function () {
+                $(this).parent().parent().click();
+            });
+            //commented to stop auto duplicating typed remark in all orders
+            //$("#orderSequenceWrapper").on("keyup", ".not-hidden-order input[name=sequenceRemarks]", function () {
+            //    var thisVal = $(this).val();
+            //    $(this).val(thisVal);
+            //    $(this).attr('value', thisVal);
+            //    var groupname = $(this).parent().parent().data("group");
+
+            //    var inputsObj = $("#orderSequenceWrapper table.table-sequence ." + groupname + "").find("input[name=sequenceRemarks]");
+            //    inputsObj.attr('value', thisVal);
+            //    inputsObj.val(thisVal);
+            //});
+
+            $("#orderSequenceWrapper").on("keyup", "input[name=sequenceRemarks]", function () {
+                $(this).attr('value', $(this).val());
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        //Order_Type
+        $(document).ready(function () {
+            ////debugger;
+
+            var Order_type = $("#Order_Type").val();
+            //if (Order_type.length > 0) {
+            $.getJSON('/OMOrderPlanning/GetShopMode', { order_type: Order_type }, function (data) {
+                if (data.length > 0) {
+                    $('#Shop_ID option').remove();
+                    //$('#Shop_ID').append('<option value=" "></option>');
+
+                    for (i = 0; i < data.length; i++) {
+                        $('#Shop_ID').append('<option value="' +
+                            data[i].Id + '">' + data[i].Value + '</option>');
+                    }
+                    $("#Shop_ID").change();
+                }
+                else {
+                    $('#Shop_ID option').remove();
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                $("#Order_Type").change();
+            });
+            //}
+
+            //$("#Order_Type").on("change", function () {
+            //    var Order_type = $("#Order_Type").val();
+            //    $("#sequence-display-wrapper").hide();
+            //    $('#Line_ID option').remove();
+            //    $("#Shop_ID option").remove();
+            //    if (Order_type.length > 0) {
+
+            //        $.getJSON('/OMOrderPlanning/GetShopMode', { order_type: Order_type }, function (data) {
+
+            //            if (data.length > 0) {
+            //                $('#Shop_ID option').remove();
+            //                for (i = 0; i < data.length; i++) {
+            //                    $('#Shop_ID').append('<option value="' +
+            //                                 data[i].Id + '">' + data[i].Value + '</option>');
+            //                }
+            //                $("#Shop_ID").change();
+            //            }
+            //            else {
+            //                $('#Shop_ID option').remove();
+            //            }
+            //        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //            //$('.content-wrapper div.myalert').remove();
+            //            //alertHtml = '<div class="box-body myalert">' +
+            //            //           '<div class="alert alert-warning alert-dismissable">' +
+            //            //           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            //            //           '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+            //            //           '<p>Unable to populate Shop Selection.Please ReTry !</p>' +
+            //            //           '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+            //            //           '</div></div>';
+            //            //$('.content-wrapper .content').before(alertHtml);
+            //            $("#Order_Type").change();
+            //        });
+            //    }
+            //});
+        });
+
+        // find Order number
+        $("#Shop_ID").on("change", function () {
+            debugger;
+            $("#sequence-display-wrapper").hide();
+            var Plant = $("#Plant_ID").val();
+            var Shop = $("#Shop_ID").val();
+
+            if (Plant.length > 0 && Shop.length > 0) {
+                $('#Platform_ID option').remove();
+                $.getJSON('/OMOrderPlanning/GetPlatformID', { Shop_id: Shop }, function (data) {
+                    if (data.length > 0) {
+                        $('#Platform_ID option').remove();
+
+                        if (data.length > 1) {
+                            $("#Platform_ID").prepend("<option value='' selected='selected'>Select Platform</option>");
+                            for (i = 0; i < data.length; i++) {
+                                $('#Platform_ID').append('<option value="' +
+                                    data[i].Platform_ID + '">' + data[i].Platform_Name + '</option>');
+                            }
+                        } else {
+                            for (i = 0; i < data.length; i++) {
+                                $('#Platform_ID').append('<option value="' +
+                                    data[i].Platform_ID + '" selected>' + data[i].Platform_Name + '</option>');
+                            }
+                        }
+                        $("#Platform_ID").change();
+                    }
+                    else {
+                        $('#Platform_ID option').remove();
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    //$('.content-wrapper div.myalert').remove();
+                    //alertHtml = '<div class="box-body myalert">' +
+                    //           '<div class="alert alert-warning alert-dismissable">' +
+                    //           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    //           '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                    //           '<p>Unable to populate Line Selection.Please ReTry!</p>' +
+                    //           '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                    //           '</div></div>';
+                    //$('.content-wrapper .content').before(alertHtml);
+                    //location.reload();
+                    $("#Shop_ID").change();
+                });
+            }
+        }); // Shop Select Change Event End
+
+
+        $("#Platform_ID").on("change", function () {
+            $("#sequence-display-wrapper").hide();
+            var Plant = $("#Plant_ID").val();
+            var Shop = $("#Shop_ID").val();
+            var platformId = $('#Platform_ID').val();
+
+            if (Plant.length > 0 && Shop.length) {
+                $.getJSON('/OMOrderPlanning/getBlockUnBlockData', { plantId: Plant, shopId: Shop, PlatformId: platformId }, function (data) {
+                    if (data.result == true && data.message == "Blocked") {
+                        $("#unblockOrders").show();
+                        $("#blockOrders").hide();
+                        $("#showSequenceBtn").hide();
+                    } else if (data.result == true && data.message == "UnBlocked") {
+                        $("#unblockOrders").hide();
+                        $("#blockOrders").show();
+                        $("input[name=blockAfterSize]").val(0);
+                        $("input[name=blockAfterSize]").focus();
+                        $("#showSequenceBtn").show();
+                    } else {
+                        $('.content-wrapper div.myalert').remove();
+                        alertHtml = '<div class="box-body myalert">' +
+                            '<div class="alert alert-warning alert-dismissable">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                            '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                            '<p>' + data.message + '<p>' +
+                            '</div></div>';
+                        $('.content-wrapper .content').before(alertHtml);
+                        $("#showSequenceBtn").hide();
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    //$('.content-wrapper div.myalert').remove();
+                    //alertHtml = '<div class="box-body myalert">' +
+                    //           '<div class="alert alert-warning alert-dismissable">' +
+                    //           '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    //           '<h4><i class="icon fa fa-ban"></i>Operation Failed </h4>' +
+                    //           '<p>Unable to populate Block.UnBlock Data.Please ReTry!</p>' +
+                    //           '<p><small>Status: ' + textStatus + ' | Details: ' + errorThrown + '</small></p>' +
+                    //           '</div></div>';
+                    //$('.content-wrapper .content').before(alertHtml);
+                    $("#Platform_ID").change();
+                });
+            } else {
+                $('.content-wrapper div.myalert').remove();
+                alertHtml = '<div class="box-body myalert">' +
+                    '<div class="alert alert-warning alert-dismissable">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-ban"></i>Data Incomplete </h4>' +
+                    '<p>Please Select all the options. </p>' +
+                    '</div></div>';
+                $('.content-wrapper .content').before(alertHtml);
+            }
+        });
+
+
+        //added by ketan Date 26-09-2017
+        $('#btnPattern').click(function () {
+            //$('#showTimeSlot').attr('style', 'Display:block');
+            $(".order_pattern").trigger("click");
+
+        });
+
+
+        $(document).keyup(function (e) {
+            if (e.keyCode == 27) {
+                $("#myModal_Pattern .close").trigger("click");
+            }
+        });
+
+        $(document).on('click', '#SaveOrderPattern', function () {
+            var isValid = true
+            $('.mandatoryfields').each(function () {
+                var value = $(this).val();
+                if (value.length == 0) {
+
+                    $(this).addClass('form-control input-validation-error');
+                    // $('#' + $(this).attr('id')).next().text(ErrMsg);
+                    isValid = false;
+                }
+                else {
+                    $(this).removeClass('input-validation-error');
+                    //$('#' + $(this).attr('id')).next().text('');
+                }
+            });
+            if (isValid) {
+                //debugger;
+                var dataModal = [];
+                $('.mandatoryfields').each(function () {
+                    dataModal.push({
+                        platform_ID: $(this).attr('id'),
+                        Ratio: $(this).val(),
+                        Planned_Date: $('#Planned_Date').val()
+                    });
+                });
+                $.ajax({
+                    type: "POST",
+                    url: '/OMOrderPlanning/SaveOrderpattern',
+                    data: JSON.stringify({ dataModal: JSON.stringify(dataModal) }),
+                    contentType: 'application/json',
+                    processData: false,
+                    success: function (response) {
+                        if (response.status == true) {
+                            //alert(response.message);
+                            //window.location.href = "/NewModelMaster/index";
+                            closepopup();
+                            if (response.dataModal != null) {
+                                var ModelData = [];
+                                ModelData = JSON.parse(response.dataModal);
+                                $('.showOrderPattern').each(function () {
+                                    var value = $(this).attr('id');
+                                    for (var i = 0; i < ModelData.length; i++) {
+                                        if (ModelData[i].platform_ID == value) {
+
+                                            $('#' + $(this).attr('id')).text(ModelData[i].Ratio);
+                                        }
+                                        else {
+                                            //$('#' + $(this).attr('id')).val('');
+                                        }
+                                    }
+
+                                });
+                            }
+                        }
+                    },
+                    error: function (error) {
+
+                        alert("errror");
+                    }
+                });
+            }
+        });
+
+        function closepopup() {
+            $("#myModal_Pattern .close").trigger("click");
+        }
+
+
+        $('.btnTactSheetPrint').click(function () {
+            //saving sequence
+            $('#saveSequenceBtn').click();
+            //
+
+            debugger;
+            //$('#showTimeSlot').attr('style', 'Display:block');
+            //$(".order_pattern").trigger("click");
+            //to check shift wise production count
+            var isValid = true;
+            var shiftId = $('#Shift_ID option:selected').val();
+            var shiftProdCount = $('#shiftProductionCount').val();
+            if (shiftId == null || shiftId != undefined && shiftId == "") {
+                infoMessage("Please Select Shift")
+                return false;
+            }
+            if (shiftProdCount == null || shiftProdCount == undefined || shiftProdCount == "") {
+                infoMessage("Please add Shiftwaise production count!...")
+                $('#shiftProductionCount').focus;
+                $('#shiftProductionCount').addClass('form-control input-validation-error');
+                return false;
+            }
+            else {
+                $('#shiftProductionCount').removeClass('input-validation-error');
+                //$('#' + $(this).attr('id')).next().text('');
+            }
+
+
+            if ($('#Tact_Time').val().length == 0) {
+                $('#Tact_Time').focus();
+                //$('#Tact_Time').addClass('form-control input-validation-error');
+                //alert("Please add Tact time to generate Tact Sheet");
+                infoMessage("Please add Tact time to generate Tact Sheet");
+                //var scrollPos = errorDiv.offset().top;
+                //$(window).scrollTop(scrollPos);
+                return;
+            }
+
+
+            else {
+
+                var totalShift = [];
+                var prodCount = 0;
+                //$(".shift").find('input').each(function () {
+                totalShift.push({
+                    shift_ID: $('#Shift_ID option:selected').val(),
+                    Shift_Name: $('#Shift_ID option:selected').text(),
+                });
+                //prodCount += parseInt($(this).val())
+                prodCount = $('#shiftProductionCount').val();
+                //});
+
+                $('#Tact_Time').removeClass('input-validation-error');
+                $(".loading_global_spinner_image").show();
+                var dataModal = [];
+                var platformNameArray = [];
+                //$('.showOrderPattern').each(function () {
+                //    dataModal.push({
+                //        platform_ID: $(this).attr('id'),
+                //        Ratio: $(this).text(),
+                //        Tact_Time: $('#Tact_Time').val(),
+                //        Platform_Name: $(this).closest('td').prev('td').text().trim(),
+                //        Production_Count: $('#Production_target').val(),
+                //    });
+                //});//sequence-ColorName
+                $("#orderSequenceWrapper table.table-sequence tbody").find("tr").each(function () {
+                    //debugger;
+                    var pfname = $(this).find(".sequence-platformName").text().trim();
+                    var Qty = $(this).find(".sequence-qty").text().trim();
+                    var mdCode = $(this).find(".sequence-modelcode").text().trim();
+                    var color = $(this).find(".sequence-color").text().trim();
+                    if (platformNameArray.indexOf($(this).find(".sequence-modelcode").text().trim()) == -1) {
+                        //if (!$.inArray($(this).find(".sequence-modelcode").text().trim(), matches) == -1)
+                        platformNameArray.push($(this).find(".sequence-modelcode").text().trim());
+                        $('.showOrderPattern').each(function () {
+                            if (pfname == $(this).closest('td').prev('td').text().trim()) {
+                                dataModal.push({
+                                    platform_ID: $(this).attr('id'),
+                                    Ratio: $(this).text(),
+                                    Tact_Time: $('#Tact_Time').val(),
+                                    Platform_Name: pfname,
+                                    OrderQty: Qty,
+                                    ModelCode: mdCode,
+                                    Color: color,
+                                    Planned_Date: $('#Planned_Date').val(),
+                                    shopID: $('#Shop_ID').val(),
+
+                                });
+                            }
+
+                        });
+                    }
+                });
+
+                $(".loading_global_spinner_image").hide();
+                var platform_Id = $('#Platform_ID').val();
+                var Shop_Id = $('#Shop_ID').val();
+                $.ajax({
+                    type: "POST",
+                    url: '/OMOrderPlanning/GenerateTactSheet',
+                    data: JSON.stringify({ dataModal: JSON.stringify(dataModal), allShift: JSON.stringify(totalShift), platform_Id: platform_Id, ShopID: Shop_Id, prodCount: prodCount }),
+                    contentType: 'application/json',
+                    processData: false,
+                    success: function (response) {
+                        //alert(response.type);
+                        if (response.status == true) {
+                            if (response.type != null) {
+                                //alert(response.message);
+                                $(".loading_global_spinner_image").hide();
+                                document.getElementById("DownloadPdf").removeAttribute("style");
+                                //$('#DownloadPdf').attr("style", "display:block");
+
+                                $('#DownloadPdf').attr("class", "btn btn-success");
+                                $('#DownloadPdf').attr('href', '');
+                                document.getElementById("DownloadPdf").removeAttribute("href");
+                                $('#DownloadPdf').attr('href', '/OMOrderPlanning/DownloadPdf?Length=15&fileName=' + response.type)
+                                $('#DownloadPdf').attr('download', '');
+                                document.getElementById("DownloadPdf").removeAttribute("download");
+                                var tacksheet = $('#DownloadPdf').attr('href');
+                                var fileNameIndex = tacksheet.lastIndexOf("\\") + 1;
+                                var filename = tacksheet.substr(fileNameIndex);
+
+                                $('#DownloadPdf').attr('download', filename)
+                                successMessage(response.message, "TackSheet Generated Successfully");
+                                //alert(filename);
+                            }
+                        }
+                        else {
+                            errorMessage(response.message);
+                            //alert(response.message);
+                            $(".loading_global_spinner_image").hide();
+                        }
+                    },
+                    error: function (error) {
+                        $(".loading_global_spinner_image").hide();
+                        errorMessage("Error")
+                        //alert("errror");
+                    }
+                });
+
+
+            }
+        });
+
+        $("#showOrderSequenceForm").validate({
+            focusInvalid: false,
+            invalidHandler: function (form, validator) {
+
+                if (!validator.numberOfInvalids())
+                    return;
+
+                $('html, body').animate({
+                    scrollTop: $(validator.errorList[0].element).offset().top
+                }, 1000);
+
+            }
+        });
+        $("#Tact_Time, #plannedQty,#showTimeSlot table tbody tr:first-child, #showTimeSlot table tbody tr:nth-child(2), #showTimeSlot table tbody tr:nth-child(3), #showTimeSlot table tbody tr:nth-child(4)").on("keypress", function (evt) {
+            var keycode = evt.charCode || evt.keyCode;
+            if (keycode == 46 || keycode == 45) {
+                return false;
+            }
+        });
+
+        //check validation for production count and total order created.
+        //$("#Production_target").on("change", function () {
+        //    //    var Plant = $("#Plant_ID").val();
+        //    //    var Shop = $("#Shop_ID").val();
+        //    //    var Line = $("#Line_ID").val();
+        //    //    var plannedDate = $('#Planned_Date').val();
+        //    //    var productionCount = $('#Production_target').val();
+        //    //    if (Plant.length > 0 && Shop.length > 0 && Line.length>0) {
+        //    //        $.getJSON('/OMOrderPlanning/ValidProductionCountAsPerPlannedDate', { plant_ID: Plant, Shop_ID: Shop, Line_ID: Line, PlannedDate: plannedDate, prodCount: productionCount }, function (data) {
+        //    //            if (data!= null) {
+        //    //                if (data.status==false) {
+        //    //                    $('.content-wrapper div.myalert').remove();
+        //    //                    alertHtml = '<div class="box-body myalert">' +
+        //    //                               '<div class="alert alert-warning alert-dismissable">' +
+        //    //                               '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+        //    //                               '<h4><i class="icon fa fa-ban"></i>Production Count Mis-Match</h4>' +
+        //    //                               '<p>'+data.message+'</p>' +
+        //    //                               '</div></div>';
+        //    //                    $('.content-wrapper .content').before(alertHtml);
+        //    //                }
+        //    //                else {
+        //    //                    $('.content-wrapper div.myalert').remove();
+        //    //                }
+        //    //            }
+        //    //            else {
+        //    //                $('.content-wrapper div.myalert').remove();
+        //    //            }
+        //    //        }).fail(function (jqXHR, textStatus, errorThrown) {
+        //    //        });
+        //    //    }
+        //    //ValidateProductionCountAsperPlannedDate();
+        //});
+
+
+
+        $('#Platform_ID').change(function () {
+            var shopId = $('#Shop_ID').val();
+            var platformId = $('#Platform_ID').val();
+            if (platformId != "" && platformId != null) {
+                $('#Planned_Date option').remove();
+                $('#Planned_Date').append('<option value="">Select Planned Date</option>');
+
+                $.getJSON("OMOrderPlanning/GetPlannedDateByPlatform", { PlatformId: platformId, shopID: shopId }, function (data) {
+                    if (data.length > 0) {
+                        for (var i = 0; data.length > i; i++) {
+                            $('#Planned_Date').append('<option value="' + data[i] + '">' + data[i] + '</option>');
+
+                        }
+                    }
+                }
+                );
+            }
+
+
+        });
+
+    </script>
+
+
+
+}
+@*added by mukesh chaudhari*@
+@*showing error msg on clicking on button(HOLD ORDER, DELETE ORDER, REMOVE SELECTION, UP, and DOWN Button)  without selecting order*@
+<script>
+    ///
+    $(document).ready(function () {
+        $("#holdBtn, #deleteBtn, #upBtn, #downBtn, #removeSelectionBtn").click(function () {
+            if (!$("tr").hasClass("selected")) {
+                alert("Please Select Order");
+            }
+        });
+    });
+
+
+</script>
+
+@section Styles
+{
+    <link href="~/Content/theme/OrderSequencing.css" rel="stylesheet" />
+    @Styles.Render("~/Content/Select2styles")
+}
+<style>
+    .box-body {
+        padding: 10px 10px 0px 10px !important;
+    }
+    .vertical{
+        margin:20px;
+    }
+</style>
+@*<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Planned_Date").datepicker(
+     {
+         format: 'yyyy-mm-dd',
+         startDate: '+0d',
+         autoclose: true
+     })
+        })
+    </script>*@

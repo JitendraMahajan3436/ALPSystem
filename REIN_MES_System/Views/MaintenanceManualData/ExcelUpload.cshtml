@@ -1,0 +1,183 @@
+﻿@model REIN_MES_System.Models.ExcelMaintenanceManualData
+@using REIN_MES_System.Models;
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "AllConfigurationExcelUpload";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+<style>
+    .dataTables_wrapper {
+        overflow-x: scroll;
+    }
+</style>
+<div class="col-md-6 show_family_quality plant_line_configuration">
+    @using (Ajax.BeginForm("ExcelUpload", "MaintenanceManualData", new AjaxOptions
+    {//GetPatients is name of method in PatientController
+        InsertionMode = InsertionMode.Replace, //target element(#patientList) will be replaced
+
+        UpdateTargetId = "QualityChecklist",
+        LoadingElementId = "loader" // div with .gif loader - that is shown when data are loading
+    }, new { @class = "", id = "upload_bom_form", enctype = "multipart/form-data" }))
+    {
+
+        
+
+        
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            @Html.TextBoxFor(m => m.Excel_File, new { type = "file", @onchange = "checkfile(this);", @id = "file" })@*<input type="file" name="Excel_File" />*@
+            @Html.ValidationMessage("Excel_File", null, new { @class = "validation_error", @id = "excelReq" })
+            <span id="lblExcelmsg" style="color:red;"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @*@Html.ActionLink("Download Sample Template", "Download", new { ImageName = "RS_All_Configuration.xlsx", @class = "btn btn-primary" })*@
+
+            <a href="/MaintenanceManualData/Download" download class="btn btn-primary">
+                Download Sample Template
+            </a>
+        </div>
+    }
+
+    <div id="QualityChecklist"></div>
+</div>
+
+
+
+<div class="clearfix"></div>
+@{
+    MaintenanceManualDataRecords[] MaintenanceManualDataRecords = (MaintenanceManualDataRecords[])ViewBag.MaintenanceManualDataRecords;
+
+    if (ViewBag.MaintenanceManualDataRecords != null)
+    {
+        <table class="table table-bordered table-striped datatable_completes">
+            <thead>
+                <tr style="background-color:aqua;color:white;font-weight:bold">
+                    <th>Plant Name</th>
+                    <th>Shop Name</th>
+                    <th>Line Name</th>
+                    <th>Station Name</th>
+                    <th>Machine No</th>
+                    <th>Break Down Date</th>
+                    <th>Down Time</th>
+                    <th>Repair Time</th>
+                    <th>Problem</th>
+                    <th>Root Cause</th>
+                    <th>Correction</th>
+                    <th>Corrective Action</th>
+                    <th>Preventive Action</th>
+                    <th>Repaired Date</th>
+                    <th>Owner</th>
+                    <th>Remark</th>
+                    <th>Sucess/Failure Message</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in (IEnumerable<REIN_MES_System.Models.MaintenanceManualDataRecords>)ViewBag.MaintenanceManualDataRecords)
+            {
+                if (item.SS_Error_Sucess != null)
+                {
+                    if (item.SS_Error_Sucess != "Record Added Successfully")
+                    {
+                        <tr style="background-color:red;color:white">
+                            <td>@Html.DisplayFor(modelItem => item.Plant_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Shop_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Line_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Station_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Machine_No)</td>
+                            <td>@Html.DisplayFor(modelItem => item.BreakDown_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DownTime)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RepairTime)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Problem)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Root_Cause)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Correction)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Corrective_Action)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Preventive_Action)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Repaired_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Owner)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Remark)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Plant_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Shop_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Line_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Station_Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Machine_No)</td>
+                            <td>@Html.DisplayFor(modelItem => item.BreakDown_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DownTime)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RepairTime)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Problem)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Root_Cause)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Correction)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Corrective_Action)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Preventive_Action)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Repaired_Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Owner)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Remark)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SS_Error_Sucess)</td>
+                        </tr>
+                    }
+                }
+
+            }
+        </table>
+    }
+}
+
+
+
+
+@section scripts {
+@Scripts.Render("~/Content/theme/plugins/datatables/js")
+@Styles.Render("~/Content/theme/plugins/datatables/css")
+@Scripts.Render("~/Scripts/user_datatable")
+    @Scripts.Render("~/bundles/plant_line_configuration")
+    @*@Scripts.Render("~/Scripts/user_datatable")*@
+}
+
+<script src="~/Content/theme/plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Content/theme/plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript">
+    function checkfile(sender) {
+        var validExts = new Array(".xlsx", ".xls");
+        var fileExt = sender.value;
+        fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+        if (validExts.indexOf(fileExt) < 0) {
+            //alert("Invalid file selected, valid files are of " +
+            //         validExts.toString() + " types.");
+            $('#lblExcelmsg').html("Invalid file selected, valid files are of " +
+                     validExts.toString() + " types.");
+            $('#excelReq').hide();
+            $('#file').val('');
+            return false;
+        }
+        else {
+            $('#lblExcelmsg').html('');
+            return true;
+        }
+    }
+    $(document).ready(function () {
+        $("#FromDate").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                start: new Date()
+            });
+        $("#ToDate").datepicker(
+            {
+                format: 'dd/mm/yyyy',
+                start: new Date()
+            });
+    });
+</script>
+
+
+
+
+
+
+

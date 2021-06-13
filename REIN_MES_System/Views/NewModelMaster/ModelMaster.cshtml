@@ -1,0 +1,81 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_AttributionType_Master>
+@using REIN_MES_System.Models
+@using REIN_MES_System.Helper;
+
+@{
+    REIN_SOLUTIONEntities db = new REIN_SOLUTIONEntities();
+}
+
+@foreach (var item in Model)
+{
+    <td>
+        @Html.DisplayFor(modelItem => item.Attribution_Type)
+    </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToolBox)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToolBox_Post)
+        </td>
+
+}
+
+<div class="row">
+    <div id="TextBoxContainer">
+
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @*@Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")*@
+
+   
+}
+@*<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        alert("Hi MVC");
+    });
+</script>*@
+
+@*<script type="text/javascript">
+    $(document).ready(function()
+    {
+        alert("Hi MVC");
+        var div = $("<div/>");
+
+        div.html(GetDyanamicTextBox(""));
+
+        $("#TextBoxContainer").append(div);
+    });
+
+    
+</script>*@
+
+@*<script>
+    var cnt = 0;
+    var obj = "";
+    function GetDyanamicTextBox(value)
+    {
+        //var type = $('#drop :selected').text();
+        var type = "Label";
+        alert(type);
+        cnt = cnt + 1;
+        if (type == "DropDownList")
+        {
+            return '<select  id="' + cnt + '" />'
+            }
+        else
+        {
+            return '<input name="GetDyanamicTextBox" type="' + type + '" id="' + cnt + '" value="' + cnt + '" />'
+        }
+    }
+</script>*@
+

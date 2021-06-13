@@ -1,0 +1,64 @@
+﻿@model REIN_MES_System.Models.RS_MT_Clita_Log
+
+@{
+    ViewBag.Title = "Complete";
+    Layout = "~/Views/Shared/WithoutSideBar/_Layout.cshtml";
+}
+
+<h2>Complete</h2>
+
+<div>
+  
+   
+    <dl class="dl-horizontal">
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Stations.Station_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Stations.Station_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_MT_Machines.Machine_Number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_MT_Machines.Machine_Number)
+        </dd>
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Clita_Item)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clita_Item)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Is_Maintenance_Done)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Is_Maintenance_Done)
+        </dd>
+        
+       
+    </dl>
+</div>

@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/fdtheme/bootstrap")
+    <!-- Font Awesome Icons -->
+    <link href="~/Content/theme/fonts/font-awesome.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link href="~/Content/theme/fonts/ionicons.min.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+    <!-- Ionicons -->
+    <!-- <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" /> -->
+    @Styles.Render("~/fdtheme/Font_Icons")
+
+    @Styles.Render("~/fdtheme/css")
+
+    @Styles.Render("~/Content/site")
+
+    @Styles.Render("~/Content/shopfloor")
+
+    @Scripts.Render("~/fdtheme/js")
+
+    @Scripts.Render("~/fdtheme/ajaxroutine")
+
+    <!-- Bootslidemenu -->
+    @Styles.Render("~/fdtheme/bootslidemenu_css")
+
+    @Scripts.Render("~/fdtheme/bootslidemenu_js")
+
+    @Scripts.Render("~/fdtheme/bootslidemenu_shop_js")
+    @{
+        var globalData = (REIN_MES_System.Models.GlobalData)ViewData["GlobalDataModel"];
+        //@item.FileName  // instead .FileName use property which u used in ur model class
+        REIN_MES_System.Models.REIN_SOLUTIONEntities db = new REIN_MES_System.Models.REIN_SOLUTIONEntities();
+
+    }
+    <style>
+        .q-strip {
+            margin-bottom: -0.7%;
+            box-shadow: 0 1px 0px rgba(0, 0, 0, 0.12), 3px 4px 1px rgba(66, 59, 59, 0.24);
+            border: dashed;
+            border: medium;
+            text-align: center;
+            font-weight: BOLD;
+            font-size: 15px;
+            margin-top: 5px;
+            background-color: rgb(243, 156, 18);
+            margin-top: 4.55%;
+            color: #f6f6f6;
+            width: 105%;
+            margin-left: -1%;
+            position: absolute;
+            z-index: 999;
+            margin-top: -25px;
+            height: 30px;
+        }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="skin-yellow layout-top-nav ">
+    <div class="wrapper">
+            <!-- TOP NAVIGATIONS -->
+        @Html.Partial("WithoutSideBarNoMenuNew/_Header")
+            @*@Html.Partial("WithoutSideBar/_Header")*@
+            <!-- =============================================== -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <div class="container-fluid no-padding">
+                    <!-- Main content -->
+                    <section class="content padding-top-only">
+                        <section class="content-header">
+                            @{
+                                if (globalData != null)
+                                {
+                                    <input type="hidden" id="hdnRoleID" />
+                                    <input type="hidden" id="hdnMenuID" />
+                                    <div class="q-strip">
+                                        <div style="float:left">
+                                            <ol class="breadcrumb" style="background-color:#222d3200;padding: 4px; font-size: 12px;margin-top: 6px;text-align: center;">
+                                                @*<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>*@
+
+                                                <li><label style="font-size:12px" id="hdnRole"></label></li>
+                                                <li><label style="font-size:12px" id="hdnMenu"></label></li>
+                                            </ol>
+
+                                        </div>
+                                        <label class="center-block" id="page33">
+                                            @globalData.pageTitle
+                                            @*<small>@globalData.subTitle</small>*@
+                                        </label>
+
+
+                                    </div>
+                                }
+                            }
+                        </section>
+                          @RenderBody()
+
+                    </section><!-- /.content -->
+                </div><!-- /.container -->
+            </div><!-- /.content-wrapper -->
+    </div>
+
+
+    @*<div id="shop_help_support">
+        <div class="list-group">
+            <a href="#" class="list-group-item active">Cras justo odio</a>
+            <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+
+        </div>
+    </div>*@
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        function centerTable() {
+            var tableContainer = $('.tracking-container');
+            var table = $('.tracking-container .tracking-table');
+            $('.tracking-container').css('min-height', $(window).height() - 84);
+            $('.tracking-container .tracking-table').css('margin-top', ((tableContainer.height() - table.height()) / 3) + 'px');
+        }
+        function getCurrentShift() {
+            
+            $.getJSON('/Shift/getRunningShift', function (data) {
+                if (data != null) {
+                    $("#shop-shift").html(data);
+                }
+                else {
+                    $("#shop-shift").html("Genral");
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                // Ajax fail callback function.
+                //alert('Faild to get shift details');
+            });
+        }
+        $(document).ready(function () {
+
+            window.setInterval(function () {
+                $.getJSON('/Base/IsSession', function (data) {
+
+                    if (data == false) {
+                        location.href = "/User/Index";
+                    }
+                });
+            }, 7000);
+
+            centerTable();
+            //get current shift
+            getCurrentShift();
+            //end
+            $(window).resize(centerTable);
+
+            $("#srchsrl").click(function () {
+                $('.station-body').removeClass("serialHighlight");
+                var srno = $("#srlno").val();
+                if (srno.length > 2) {
+                    $('.station-body').filter(function () { return $(this).text().toLowerCase() === srno; }).addClass("serialHighlight");
+                }
+            });
+            $('.btnback').click(function () {
+                parent.history.back();
+                return false;
+            });
+
+        });
+
+    </script>
+    <script type="text/javascript">
+
+    var subMenuId = sessionStorage.getItem("subMenuId");
+    var MenuID = sessionStorage.getItem("MenuID");
+
+    $("#hdnRoleID").val(MenuID);
+    $("#hdnMenuID").val(subMenuId);
+    
+    if (subMenuId != null && MenuID != null) {
+        var url = "/User/GetMenuRoleData";
+        ajaxpack.getAjaxRequest(url, "MenuID=" + subMenuId + "&RoleID=" + MenuID + "", showLineStationID, "json");
+
+    }
+
+    function showLineStationID() {
+        var myajax = ajaxpack.ajaxobj
+        var myfiletype = ajaxpack.filetype
+        if (myajax.readyState == 4) {
+            if (myajax.status == 200 || window.location.href.indexOf("http") == -1) { //if request was successful or running script locally
+              
+                var jsonRes = $.parseJSON(myajax.responseText);
+                $("#hdnMenu").html(jsonRes.Menu);
+                $("#hdnRole").html(jsonRes.Role);
+            }
+        }
+    }
+
+    var url = window.location;
+
+    // for sidebar menu entirely but not cover treeview
+    $('ul.sidebar-menu a').filter(function () {
+        return this.href == url;
+    }).parent().addClass('active');
+
+    // for treeview
+    $('ul.treeview-menu a').filter(function () {
+        return this.href == url;
+    }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
+
+    if (subMenuId != "") {
+            $("#treeview_" + subMenuId).addClass('active');
+            $("#li_" + MenuID).addClass('active');
+            $("#treeview_menu_" + subMenuId).addClass('menu-open');
+    }
+
+    function updateMenu(MenuID, subMenuId) {
+
+        sessionStorage.setItem("subMenuId", subMenuId);
+        sessionStorage.setItem("MenuID", MenuID);
+    }
+
+    function UpdateMainMenu(id)
+    {
+        setTimeout(function () {
+            if (subMenuId == id) {
+                $("#treeview_" + subMenuId).addClass('active');
+                $("#treeview_menu_" + subMenuId).addClass('menu-open');
+                $("#li_" + MenuID).addClass('active');
+            }
+        }, 500);
+
+    }
+    //function updateExpandRow(id)
+    //{
+    //    sessionStorage.setItem("ExpandMenu", id);
+
+    //}
+    </script>
+</body>
+</html>

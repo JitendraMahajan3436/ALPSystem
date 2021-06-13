@@ -1,0 +1,50 @@
+﻿@model REIN_MES_System.Models.RS_OM_Configuration
+@using REIN_MES_System.App_LocalResources
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RS_OM_Configuration</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OMconfig_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OMconfig_Desc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Partgroup.Partgrup_Desc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RS_Shops.Shop_Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(ResourceGlobal.Edit, "Edit", new { id = Model.OMconfig_ID }) |
+    @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+</p>

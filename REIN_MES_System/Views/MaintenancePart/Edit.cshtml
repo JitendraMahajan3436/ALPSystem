@@ -1,0 +1,59 @@
+﻿@model REIN_MES_System.Models.RS_Maintenance_Part
+@using REIN_MES_System.App_LocalResources;
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Maintenance_Part_ID)
+        <div class="row">
+            <div class="col-md-4" style="display:none">
+                @Html.LabelFor(model => model.Plant_ID, htmlAttributes: new { @class = "" }) *
+                @Html.DropDownListFor(model => model.Plant_ID, (SelectList)ViewBag.Plant_ID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Plant_ID, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Part_Name, "Part Name", htmlAttributes: new { @class = "" })<i style="color:red">*</i>
+                @Html.TextBoxFor(model => model.Part_Name, new {@class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Part_Name, null, new { @class = "validation_error" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Part_Desscription,"Part Description", htmlAttributes: new { @class = " " })
+                @Html.TextBoxFor(model => model.Part_Desscription, new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Part_Desscription, null, new { @class = "validation_error" })
+            </div>
+
+            @*<div class="col-md-4">
+                @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = " " }) *
+                @Html.TextBoxFor(model => model.Qty, new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Qty, null, new { @class = "validation_error" })
+            </div>*@
+            </div>
+        <div class="row">
+           
+        </div>
+
+        <br />
+        
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+
+                <input type="submit" value="Save" class="btn btn-primary" />  @Html.ActionLink(ResourceGlobal.Show_All, "Index", null, new { @class = "btn btn-primary" })
+
+            </div>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

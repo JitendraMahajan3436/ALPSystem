@@ -1,0 +1,80 @@
+﻿@model REIN_MES_System.Models.RS_Dashboard_Master
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+
+    <dl class="dl-horizontal">
+        
+        <dt>
+            @Html.DisplayName("Shop Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shops.Shop_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Line Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Lines.Line_Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Shift Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RS_Shift.Shift_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("Dashboard Name")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Dashboard_Name)
+        </dd>
+        <dt>
+            @Html.DisplayName("IP Address")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Host_Name)
+        </dd>
+
+
+
+
+
+        @*<dt>
+                @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RS_Plants.Plant_Name)
+            </dd>*@
+
+
+
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-primary" /> @Html.ActionLink("Show All", "Index", null, new { @class = "btn btn-primary" })
+            @*@Html.ActionLink("Back to List", "Index")*@
+        </div>
+    }
+</div>
+

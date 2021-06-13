@@ -1,0 +1,113 @@
+﻿@model IEnumerable<REIN_MES_System.Models.RS_Ctrl_Machine_Alarm_Types>
+@using REIN_MES_System.App_LocalResources;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/admin/_Layout.cshtml";
+}
+
+
+
+<p class="position_absolute">
+    <a href="@Url.Action("Create", "MachineAlarmTypes")" class="btn btn-social btn-linkedin"><i class="fa fa-fw fa-plus-circle"></i> @ResourceGlobal.Create_New</a> @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<table class="table table-bordered table-striped datatable_completes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName(ResourceMachineAlarmType.Machine_Alarm_Type_Label_Type)
+            </th>
+            <th>
+                @Html.DisplayName(ResourceMachineAlarmType.Machine_Alarm_Type_Label_Fault_Background_Color)
+            </th>
+            <th>
+                @Html.DisplayName(ResourceMachineAlarmType.Machine_Alarm_Type_Label_Fault_Forground_Color)
+            </th>
+            <th>
+                @Html.DisplayName(ResourceMachineAlarmType.Machine_Alarm_Type_Label_Healthy_Background_Color)
+            </th>
+            <th>
+                @Html.DisplayName(ResourceMachineAlarmType.Machine_Alarm_Type_Label_Healthy_Forground_Color)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Inserted_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Inserted_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Host)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee.Employee_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RS_Employee1.Employee_Name)
+                </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.RS_Plants.Plant_Name)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Alarm_Type_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault_Background_Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault_Forground_Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Healthy_Background_Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Healthy_Forground_Color)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Inserted_Host)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inserted_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_Host)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Employee.Employee_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RS_Employee1.Employee_Name)
+            </td>*@
+            @*<td>
+                @Html.DisplayFor(modelItem => item.RS_Plants.Plant_Name)
+            </td>*@
+            <td>
+
+                <a href="@Url.Action("Edit", "MachineAlarmTypes", new { id = item.Alarm_Type_ID })"><i class="fa fa-edit" title="Edit"></i></a> &nbsp;&nbsp;
+                <a href="@Url.Action("Details", "MachineAlarmTypes", new { id = item.Alarm_Type_ID })"><i class="fa fa-fw fa-laptop" title="Details"></i></a> &nbsp;&nbsp;
+                <a href="@Url.Action("Delete", "MachineAlarmTypes", new { id = item.Alarm_Type_ID })"><i class="fa fa-trash" title="Delete"></i></a>
+
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Alarm_Type_ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Alarm_Type_ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Alarm_Type_ID })*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts {
+    @Scripts.Render("~/Content/theme/plugins/datatables/js")
+    @Styles.Render("~/Content/theme/plugins/datatables/css")
+    @Scripts.Render("~/Scripts/user_datatable")
+}

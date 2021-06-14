@@ -252,16 +252,16 @@ namespace REIN_MES_System.Controllers.WorkInstruction
             try
             {
                 int StationId = Decimal.ToInt32(((FDSession)this.Session["FDSession"]).stationId);
-                bool isOrderStartStation = db.RS_Stations.Any(c=>c.Station_ID==StationId && c.Is_Sub_Assembly_OS==true);
+                //bool isOrderStartStation = db.RS_Stations.Any(c=>c.Station_ID==StationId && c.Is_Sub_Assembly_OS==true);
                 bool order = db.RS_OM_SubAssembly_Order_List.Any(c => c.Order_No.ToUpper() == orderno.ToUpper().Trim() && c.Part_No.ToUpper()== partNo.Trim().ToUpper());
-                if(!isOrderStartStation)
+                //if(!isOrderStartStation)
+                //{
+                if (!order)
                 {
-                    if (!order)
-                    {
-                        return Json(new { status = false, message = "Order No not available" }, JsonRequestBehavior.AllowGet);
-                    }
+                    return Json(new { status = false, message = "Order No not available" }, JsonRequestBehavior.AllowGet);
                 }
-               
+                //}
+
                 //checking curation time
                 var CurrentCuration = db.RS_Station_Curation_Master.Where(c => c.Current_Station_ID == StationId).ToList();
                 int cnt = CurrentCuration.Count();
@@ -979,8 +979,11 @@ namespace REIN_MES_System.Controllers.WorkInstruction
 
                 if(station.Is_Punching_Station)
                 {
-
-                    GenerateXML(obj.Order_No, obj.Model_Code, "", "pass");
+                    bool isAllok= db.RS_WorkInstruction_Submitted.Any(c =>c.Status==true && c.Model_Code == obj.Model_Code && c.Order_No == obj.Order_No && c.Station_ID == obj.Station_ID);
+                    if(isAllok)
+                    {
+                        GenerateXML(obj.Order_No, obj.Model_Code, "", "pass");
+                    }
                 }
             }
             return true;

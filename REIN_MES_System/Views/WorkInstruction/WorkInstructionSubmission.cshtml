@@ -282,9 +282,18 @@
 
             </div>
             <div class="modal-footer">
-                <button data-dismiss="modal" type="button"  class="btn btn-danger closedbtn">No</button>
-                <input type="submit" id="OrderCreate" value="Order Create" class="btn btn-primary" />
-            </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        @*<button data-dismiss="modal" type="button" class="btn btn-danger closedbtn">No</button>*@
+                        <input style="width: 100%;" type="submit"  value="Close" class="btn btn-danger closedbtn" />
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" id="OrderCreate" style="width: 100%;"  value="Order Create" class="btn btn-primary" />
+                    </div>
+                </div>                    
+                </div>
         </div>
     </div>
 </div>
@@ -319,8 +328,18 @@
 
             </div>
             <div class="modal-footer">
-                <button data-dismiss="modal" type="button"  class="btn btn-danger closedbtn">No</button>
-                <input type="submit" id="OrderStart" value="Order Start"  class="btn btn-primary" />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @*<button data-dismiss="modal" type="button" class="btn btn-danger closedbtn">No</button>*@
+                        <input style="width: 100%;" type="submit" value="Close" class="btn btn-danger closedbtn" />
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit"  style="width: 100%;" id="OrderStart" value="Order Start" class="btn btn-primary" />
+                    </div>
+                </div>               
             </div>
         </div>
     </div>
@@ -421,7 +440,7 @@
                     <div class="col-md-12">
                         <div class="col-md-9">
                             <div class="form-group">
-                                <h4>Do you want to submit?</h4>
+                                <h4>How do you want to submit?</h4>
                               
                             </div>
                         </div>
@@ -432,9 +451,25 @@
 
             </div>
             <div class="modal-footer">
-                <button data-dismiss="modal" type="button" class="btn btn-info" id="resubmissionid">Resubmission</button>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @*<button data-dismiss="modal" type="button" class="btn btn-danger closedbtn">No</button>*@
+                        @*<input style="width: 100%;" type="submit" value="Close" class="btn btn-danger closedbtn" />*@
+                        <input type="button" style="width: 100%;" value="Permanant" id="updateAllSubmit" class="btn btn-danger" />
+                       
+                    </div>
+                    <div class="col-md-4">
+                        <input data-dismiss="modal" style="width: 100%;" type="button" value="ReSubmit" class="btn btn-info" id="resubmissionid"/>
+                    </div>
+                    <div class="col-md-4">
+                        <button data-dismiss="modal" style="width: 100%;" type="button" class="btn btn-primary closedbtn">Temporary</button>
+                    </div>
+                </div>
+ 
+                @*<button data-dismiss="modal" type="button" class="btn btn-info" id="resubmissionid">Resubmission</button>
                 <button data-dismiss="modal" type="button" class="btn btn-danger closedbtn">No</button>
-                <input type="button" value="Submit" id="updateAllSubmit" class="btn btn-primary" />
+                <input type="button" value="Submit" id="updateAllSubmit" class="btn btn-primary" />*@
             </div>
         </div>
     </div>
@@ -1294,6 +1329,8 @@
                 var vendorbarcodelists = vendorbarcode.split("|");
                 var orderNo = vendorbarcodelists[6];
                 var partNo = vendorbarcodelists[0];
+                var IsSubAssmbly = $("#Is_Sub_Assembly_Line").val();
+                var IsMainAssmbly = $("#Is_Main_Assembly_Line").val();
                 var MainOrder_No = $("#Order_No").val();
                 if (currentWIID) {
 
@@ -1315,7 +1352,27 @@
                             { MainOrder_No: MainOrder_No, orderno: orderNo, partNo: partNo, currentWIID: currentWIID },
                             function (data) {
                                 if (data.status == true) {
-                                    captureworkInstruction("SUBEP", "", partNo + ":" + orderNo, "")
+                                    if (IsMainAssmbly == true || IsMainAssmbly == "true") {
+                                        $.getJSON('/WorkInstruction/CheckSubAssemblyCurationTime',
+                                            { orderno: orderNo, partNo: partNo },
+                                            function (data) {
+                                                if (data.status == true) {
+                                                    //OrderNo
+                                                    debugger
+                                                    //captureworkInstruction("CT", "", "", Order_No)
+                                                    captureworkInstruction("SUBEP", "", partNo + ":" + orderNo, "")
+                                                }
+                                                else if (data.status == false) {
+                                                    $('.message-block').html("");
+                                                    $('.message-block').html(data.message);
+                                                    $('.message-block').removeClass('bg-error bg-correct');
+                                                    $('.message-block').addClass('bg-error');
+                                                    $("#scanSUBEPpart").val("");
+                                                    setTimeout(function () { $("#scanSUBEPpart").focus(); }, 1000);
+                                                }
+                                            });
+                                    }
+                                    
                                    
                                 }
                                 else if (data.status == false) {
